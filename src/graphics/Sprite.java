@@ -9,14 +9,11 @@ public class Sprite {
 	private SpriteSheet sheet;
 	private static final Random rand = new Random();
 
-	
-	
-	//TERRAIN
+	// TERRAIN
 	public static Sprite water = new Sprite(16, 0, 0, SpriteSheet.tiles);
 	public static Sprite grass = new Sprite(16, 5, 0, SpriteSheet.tiles);
 	public static Sprite voidSprite = new Sprite(16);
 	public static Sprite darkGrass = new Sprite(16, 0, 5, SpriteSheet.tiles);
-	public static Sprite villager1 = new Sprite(16, 1, 0, SpriteSheet.entities);
 	public static Sprite grass2 = new Sprite(16, 5, 1, SpriteSheet.tiles);
 	public static Sprite dirt = new Sprite(16, 6, 0, SpriteSheet.tiles);
 	public static Sprite dirt2 = new Sprite(16, 6, 1, SpriteSheet.tiles);
@@ -27,25 +24,26 @@ public class Sprite {
 	public static Sprite beigeWallVertical = new Sprite(16, 15, 13, SpriteSheet.tiles);
 	public static Sprite treebottom = new Sprite(16, 13, 11, SpriteSheet.tiles);
 	public static Sprite treetop = new Sprite(16, 13, 10, SpriteSheet.tiles);
-	
-	
-	//ORE
+
+	// MOBS
+	public static Sprite villager1 = new Sprite(16, 1, 0, SpriteSheet.entities);
+	public static Sprite villager2 = new Sprite(16, 1, 1, SpriteSheet.entities);
+	public static Sprite villager3 = new Sprite(16, 1, 2, SpriteSheet.entities);
+
+	// ORE
 	public static Sprite coalOre = new Sprite(16, 0, 23, SpriteSheet.tiles);
 	public static Sprite ironOre = new Sprite(16, 0, 24, SpriteSheet.tiles);
 	public static Sprite copperOre = new Sprite(16, 0, 25, SpriteSheet.tiles);
 	public static Sprite goldOre = new Sprite(16, 1, 25, SpriteSheet.tiles);
-	
-	//ITEMS
+
+	// ITEMS
 	public static Sprite logs = new Sprite(16, 41, 10, SpriteSheet.tiles);
 	public static Sprite ironBar = new Sprite(16, 42, 10, SpriteSheet.tiles);
 	public static Sprite goldBar = new Sprite(16, 43, 10, SpriteSheet.tiles);
 	public static Sprite ironChunk = new Sprite(16, 44, 10, SpriteSheet.tiles);
 	public static Sprite goldChunk = new Sprite(16, 45, 10, SpriteSheet.tiles);
-	
-	
-	
-	
-	//CLOTHES
+
+	// CLOTHES
 	public static Sprite blacktrousers = new Sprite(16, 4, 0, SpriteSheet.entities);
 	public static Sprite brownShirt1 = new Sprite(16, 6, 0, SpriteSheet.entities);
 	public static Sprite brownShirt2 = new Sprite(16, 7, 0, SpriteSheet.entities);
@@ -84,6 +82,17 @@ public class Sprite {
 
 	public static Sprite getDirt() {
 		return rand.nextBoolean() ? dirt : dirt2;
+	}
+
+	public static Sprite getPerson() {
+		byte n = (byte) rand.nextInt(3);
+		if (n == 0)
+			return Sprite.villager1;
+		if (n == 1)
+			return Sprite.villager2;
+		if (n == 2)
+			return Sprite.villager3;
+		return null;
 	}
 
 	public static Sprite getSand() {

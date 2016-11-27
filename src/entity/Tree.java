@@ -28,8 +28,8 @@ public class Tree extends Entity {
 		} else {
 			remove();
 			level.entities.remove(this);
-			level.getTile(x, y).setSolid(false);
-			level.entities.add(new Item("Logs", this.x, this.y, Sprite.logs, "Wooden logs", true));
+			level.items.add(new Item("Logs", this.x, this.y, Sprite.logs, "Wooden logs", true));
+			level.getTile(x>>4, y>>4).setSolid(false);
 			return true;
 		}
 

@@ -9,6 +9,7 @@ import entity.Entity;
 import entity.Ore;
 import entity.OreType;
 import entity.Tree;
+import entity.item.Item;
 import graphics.Screen;
 import graphics.Sprite;
 
@@ -17,6 +18,7 @@ public class Map {
 	public int width, height;
 	private final Random random;
 	public List<Entity> entities;
+	public List<Item> items;
 
 	public Map(int height, int width) {
 		this.width = width;
@@ -24,7 +26,7 @@ public class Map {
 		tiles = new Tile[width * height];
 		random = new Random();
 		entities = new ArrayList<Entity>();
-		// generateRandomLevel();
+		items = new ArrayList<Item>();
 		generateLevel();
 
 	}
@@ -103,6 +105,11 @@ public class Map {
 
 	public void renderEntites(Screen screen) {
 		for (Entity i : entities) {
+			i.render(screen);
+		}
+	}
+	public void renderItems(Screen screen) {
+		for (Item i : items) {
 			i.render(screen);
 		}
 	}

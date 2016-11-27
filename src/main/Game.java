@@ -64,7 +64,7 @@ public class Game extends Canvas implements Runnable {
 		Sound.initSound();
 		keyboard = new Keyboard();
 		mouse = new Mouse(this);
-		level = new Map(50, 50);
+		level = new Map(100, 100);
 		mobs = new ArrayList<Mob>();
 		vil = new Villager(60, 50, level);
 		vil.addClothing(new Clothing("Brown Shirt", vil.x, vil.y, Sprite.brownShirt1, "A brown tshirt", true));
@@ -176,6 +176,7 @@ public class Game extends Canvas implements Runnable {
 		}
 		screen.clear();
 		level.render(xScroll, yScroll, screen);
+		level.renderItems(screen);
 		renderMobs();
 		level.renderEntites(screen);
 

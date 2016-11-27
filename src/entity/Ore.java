@@ -42,8 +42,8 @@ public class Ore extends Entity {
 		} else {
 			remove();
 			level.entities.remove(this);
-			level.getTile(x, y).setSolid(false);
-			level.entities.add(new Item(type.name().toLowerCase() + " ore", this.x, this.y, itemSprite, true));
+			level.getTile(x>>4, y>>4).setSolid(false);
+			level.items.add(new Item(type.name().toLowerCase() + " ore", this.x, this.y, itemSprite, true));
 			return true;
 		}
 	}

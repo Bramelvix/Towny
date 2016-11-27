@@ -31,7 +31,7 @@ public class Villager extends Mob {
 
 	public Villager(int x, int y, Map level) {
 		super(level);
-		this.sprite = Sprite.villager1;
+		this.sprite = Sprite.getPerson();
 		wearing = new ArrayList<Item>();
 		initHair(true);
 		this.x = x;
