@@ -13,6 +13,7 @@ public class Tree extends Entity {
 		super(x, y);
 		sprite1 = Sprite.treebottom;
 		sprite2 = Sprite.treetop;
+		setVisible(true);
 	}
 
 	public void render(Screen screen) {
@@ -28,7 +29,7 @@ public class Tree extends Entity {
 		} else {
 			remove();
 			level.entities.remove(this);
-			level.items.add(new Item("Logs", this.x, this.y, Sprite.logs, "Wooden logs", true));
+			level.items.add(new Item("Logs", this.x, this.y, Sprite.logs, "Wooden logs", true, 4));
 			level.getTile(x>>4, y>>4).setSolid(false);
 			return true;
 		}

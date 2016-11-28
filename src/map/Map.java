@@ -30,6 +30,15 @@ public class Map {
 		generateLevel();
 
 	}
+	public boolean isClearTile(int x, int y) {
+		for (Entity e : entities) {
+			if (e.x==x && e.y == y) return false;
+		}
+		for (Item e : items) {
+			if (e.x==x && e.y == y) return false;
+		}
+		return !getTile(x, y).solid();
+	}
 
 	private void generateBorder() {
 		for (int y = 0; y < height; y++) {
@@ -105,11 +114,13 @@ public class Map {
 
 	public void renderEntites(Screen screen) {
 		for (Entity i : entities) {
+			if (i.isVisible())
 			i.render(screen);
 		}
 	}
 	public void renderItems(Screen screen) {
 		for (Item i : items) {
+			if (i.isVisible())
 			i.render(screen);
 		}
 	}

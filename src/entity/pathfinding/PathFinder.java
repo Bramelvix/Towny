@@ -36,6 +36,10 @@ public class PathFinder implements AStarHeuristic {
 	}
 
 	public Path findPath(int sx, int sy, int tx, int ty) {
+		if (sx < 0 || sx > level.width || sy < 0 || sy > level.height || tx < 0 || tx > level.width || ty < 0
+				|| ty > level.height) {
+			return null;
+		}
 		if (level.tiles[tx + ty * level.width].solid()) {
 			return null;
 

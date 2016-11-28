@@ -10,7 +10,7 @@ import input.Mouse;
 import map.Map;
 
 public abstract class Mob extends Entity {
-	protected Sprite sprite;
+	public Sprite sprite;
 	protected Direction dir;
 	protected boolean moving = false;
 	private PathFinder finder;

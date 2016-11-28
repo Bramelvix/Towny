@@ -9,6 +9,7 @@ import javax.sound.sampled.Clip;
 public class Sound {
 	public static Clip woodChopping;
 	public static Clip stoneMining;
+	public static Clip drill;
 
 	public static void speelGeluid(Clip clip) {
 		clip.setFramePosition(0);
@@ -25,6 +26,11 @@ public class Sound {
 			URL stoneminingurl = Sound.class.getResource("/res/sound/stoneMining.wav");
 			inputStream = AudioSystem.getAudioInputStream(stoneminingurl);
 			stoneMining.open(inputStream);
+			drill = AudioSystem.getClip();
+			URL drillurl = Sound.class.getResource("/res/sound/drill.wav");
+			inputStream = AudioSystem.getAudioInputStream(drillurl);
+			drill.open(inputStream);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 

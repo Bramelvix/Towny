@@ -21,10 +21,17 @@ public class Sprite {
 	public static Sprite stone2 = new Sprite(16, 7, 1, SpriteSheet.tiles);
 	public static Sprite sand = new Sprite(16, 8, 0, SpriteSheet.tiles);
 	public static Sprite sand2 = new Sprite(16, 8, 1, SpriteSheet.tiles);
-	public static Sprite beigeWallVertical = new Sprite(16, 15, 13, SpriteSheet.tiles);
+	
+	//TREES
 	public static Sprite treebottom = new Sprite(16, 13, 11, SpriteSheet.tiles);
 	public static Sprite treetop = new Sprite(16, 13, 10, SpriteSheet.tiles);
 
+	
+	//WALLS
+	public static Sprite beigeWallVertical = new Sprite(16, 15, 13, SpriteSheet.tiles);
+	public static Sprite woodenWallHorizontal = new Sprite(16, 35, 12, SpriteSheet.tiles);
+	
+	
 	// MOBS
 	public static Sprite villager1 = new Sprite(16, 1, 0, SpriteSheet.entities);
 	public static Sprite villager2 = new Sprite(16, 1, 1, SpriteSheet.entities);

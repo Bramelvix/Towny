@@ -13,6 +13,7 @@ public class Ore extends Entity {
 	public Ore(int x, int y, OreType type) {
 		super(x, y);
 		this.type = type;
+		setVisible(true);
 		getSprite();
 	}
 
@@ -43,7 +44,7 @@ public class Ore extends Entity {
 			remove();
 			level.entities.remove(this);
 			level.getTile(x>>4, y>>4).setSolid(false);
-			level.items.add(new Item(type.name().toLowerCase() + " ore", this.x, this.y, itemSprite, true));
+			level.items.add(new Item(type.name().toLowerCase() + " ore", this.x, this.y, itemSprite, true, 2));
 			return true;
 		}
 	}

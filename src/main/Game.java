@@ -10,11 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
+
+import entity.Wall;
 import entity.item.Clothing;
 import entity.mob.Mob;
 import entity.mob.Villager;
 import graphics.Screen;
 import graphics.Sprite;
+import graphics.ui.icon.UiIcons;
 import input.Keyboard;
 import input.Mouse;
 import map.Map;
@@ -63,10 +66,11 @@ public class Game extends Canvas implements Runnable {
 		frame.setVisible(true);
 		Sound.initSound();
 		keyboard = new Keyboard();
+		UiIcons.init();
 		mouse = new Mouse(this);
 		level = new Map(100, 100);
 		mobs = new ArrayList<Mob>();
-		vil = new Villager(60, 50, level);
+		vil = new Villager(64, 64, level);
 		vil.addClothing(new Clothing("Brown Shirt", vil.x, vil.y, Sprite.brownShirt1, "A brown tshirt", true));
 		mobs.add(vil);
 		addKeyListener(keyboard);
@@ -123,25 +127,52 @@ public class Game extends Canvas implements Runnable {
 		updateMobs();
 		updateMouse();
 		moveCamera();
+		UiIcons.update(mouse);
 
 	}
 
 	private void updateMouse() {
-		if (mouse.getButton() == 3 && (level.selectTree(mouse.getX(), mouse.getY()) != null)) {
+		if ((((mouse.getButton() == 1 && UiIcons.isWoodSelected()) && !UiIcons.isWoodHover())
+				|| vil.isSelected() && mouse.getButton() == 3)
+				&& (level.selectTree(mouse.getX(), mouse.getY()) != null)) {
 			vil.resetMove();
 			vil.movement = vil.getShortest(level.selectTree(mouse.getX(), mouse.getY()));
-			vil.setJob(level.selectTree(mouse.getX(), mouse.getY()), vil.movement);
+			vil.setJob(level.selectTree(mouse.getX(), mouse.getY()));
+			vil.setSelected(false);
 		}
-		if (mouse.getButton() == 3 && (level.selectOre(mouse.getX(), mouse.getY()) != null)) {
+		if ((((mouse.getButton() == 1 && UiIcons.isMiningSelected()) && !UiIcons.isMiningHover())
+				|| vil.isSelected() && mouse.getButton() == 3)
+				&& (level.selectOre(mouse.getX(), mouse.getY()) != null)) {
 			vil.resetMove();
 			vil.movement = vil.getShortest(level.selectOre(mouse.getX(), mouse.getY()));
-			vil.setJob(level.selectOre(mouse.getX(), mouse.getY()), vil.movement);
+			vil.setJob(level.selectOre(mouse.getX(), mouse.getY()));
+			vil.setSelected(false);
+
+		}
+		if ((mouse.getButton() == 1 && UiIcons.isTrowelSelected() && !UiIcons.isTrowelHover())
+				&& level.isClearTile(mouse.getTileX(), mouse.getTileY())) {
+			vil.resetMove();
+			vil.movement = vil.getShortest(mouse.getTileX(), mouse.getTileY());
+			vil.setJob(new Wall(mouse.getTileX(), mouse.getTileY(), false), true);
+			vil.setSelected(false);
 
 		}
 		if (mouse.getButton() == 1) {
+			if (vil.hoverOn(mouse)) {
+				vil.setSelected(true);
+			} else {
+				vil.setSelected(false);
+			}
+		}
+		if (mouse.getButton() == 3 && vil.isSelected()) {
 			vil.resetMove();
 			vil.movement = vil.getPath(vil.x >> 4, vil.y >> 4, mouse.getTileX(), mouse.getTileY());
+			vil.setSelected(false);
 		}
+		if (mouse.getButton() == 1) {
+			UiIcons.select();
+		}
+
 	}
 
 	private void moveCamera() {
@@ -179,6 +210,7 @@ public class Game extends Canvas implements Runnable {
 		level.renderItems(screen);
 		renderMobs();
 		level.renderEntites(screen);
+		UiIcons.render(screen);
 
 		for (int i = 0; i < pixels.length; i++) {
 			pixels[i] = screen.pixels[i];
