@@ -64,6 +64,9 @@ public class Map {
 					tiles[x + y * width] = new Tile(Sprite.getDirt(), false);
 					randOre(x, y);
 				}
+				if (x == 4 && y == 4) {
+					tiles[x + y * width] = new Tile(Sprite.getGrass(), false);
+				}
 			}
 		}
 

@@ -6,7 +6,7 @@ import graphics.Sprite;
 import map.Map;
 import sound.Sound;
 
-public class Tree extends Entity {
+public class Tree extends WorkableEntity {
 	private float chopped = 100;
 
 	public Tree(int x, int y) {
@@ -21,7 +21,7 @@ public class Tree extends Entity {
 		screen.renderEntity(x, y - 16, extraSprite);
 	}
 
-	public boolean chop(Map level) {
+	public boolean work(Map level) {
 		if (chopped > 0) {
 			if (chopped%20==0) Sound.speelGeluid(Sound.woodChopping);
 			chopped--;

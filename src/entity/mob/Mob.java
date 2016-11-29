@@ -6,7 +6,6 @@ import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
 import graphics.Screen;
 import graphics.Sprite;
-import input.Mouse;
 import map.Map;
 
 public abstract class Mob extends Entity {
@@ -52,9 +51,7 @@ public abstract class Mob extends Entity {
 
 	}
 
-	public void update(Mouse mouse) {
-
-	}
+	public abstract void update();
 
 	public Mob(Map level) {
 		this.level = level;
@@ -67,16 +64,20 @@ public abstract class Mob extends Entity {
 	}
 
 	private boolean collision() {
-		if ((dir != Direction.OMLAAG&& dir != Direction.LINKS_OMLAAG && dir != Direction.RECHTS_OMLAAG) && !level.getTile((x >> 4), (y + 1 >> 4)).solid()) {
+		if ((dir != Direction.OMLAAG && dir != Direction.LINKS_OMLAAG && dir != Direction.RECHTS_OMLAAG)
+				&& !level.getTile((x >> 4), (y + 1 >> 4)).solid()) {
 			return false;
 		}
-		if ((dir != Direction.OMHOOG && dir != Direction.LINKS_OMHOOG && dir!=Direction.RECHTS_OMHOOG) && !level.getTile((x >> 4), (y - 1 >> 4)).solid()) {
+		if ((dir != Direction.OMHOOG && dir != Direction.LINKS_OMHOOG && dir != Direction.RECHTS_OMHOOG)
+				&& !level.getTile((x >> 4), (y - 1 >> 4)).solid()) {
 			return false;
 		}
-		if ((dir != Direction.LINKS && dir != Direction.LINKS_OMHOOG && dir != Direction.LINKS_OMLAAG) && !level.getTile((x - 1 >> 4), (y >> 4)).solid()) {
+		if ((dir != Direction.LINKS && dir != Direction.LINKS_OMHOOG && dir != Direction.LINKS_OMLAAG)
+				&& !level.getTile((x - 1 >> 4), (y >> 4)).solid()) {
 			return false;
 		}
-		if ((dir != Direction.RECHTS && dir != Direction.RECHTS_OMHOOG && dir != Direction.RECHTS_OMLAAG) && !level.getTile((x + 1 >> 4), (y >> 4)).solid()) {
+		if ((dir != Direction.RECHTS && dir != Direction.RECHTS_OMHOOG && dir != Direction.RECHTS_OMLAAG)
+				&& !level.getTile((x + 1 >> 4), (y >> 4)).solid()) {
 			return false;
 		}
 
@@ -84,8 +85,6 @@ public abstract class Mob extends Entity {
 
 	}
 
-	public void render(Screen screen) {
-
-	}
+	public abstract void render(Screen screen);
 
 }

@@ -5,7 +5,7 @@ import graphics.Sprite;
 import map.Map;
 import sound.Sound;
 
-public class Ore extends Entity {
+public class Ore extends WorkableEntity {
 	private float mined = 100;
 	private Sprite itemSprite;
 	private OreType type;
@@ -35,7 +35,7 @@ public class Ore extends Entity {
 		}
 	}
 
-	public boolean mine(Map level) {
+	public boolean work(Map level) {
 		if (mined > 0){
 			if (mined%20==0) Sound.speelGeluid(Sound.stoneMining);
 			mined--;

@@ -7,6 +7,7 @@ import entity.Entity;
 import entity.Ore;
 import entity.Tree;
 import entity.Wall;
+import entity.WorkableEntity;
 import entity.item.Item;
 import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
@@ -26,17 +27,14 @@ public class Villager extends Mob {
 	public Item holding;
 	private Sprite hair;
 	private int hairnr;
-	private boolean hasJob = false;
-	private Entity jobEntity;
-	private boolean onJobLoc;
 	private boolean selected;
-	private boolean itemNeeded;
-	private Item material;
+	private List<Job> jobs;
 
 	public Villager(int x, int y, Map level) {
 		super(level);
 		this.sprite = Sprite.getPerson();
 		wearing = new ArrayList<Item>();
+		jobs = new ArrayList<Job>();
 		initHair(true);
 		this.x = x;
 		this.y = y;
@@ -72,8 +70,6 @@ public class Villager extends Mob {
 		for (int i = 0; i < level.items.size(); i++) {
 			if (level.items.get(i).getName().equals(name)) {
 				closest = level.items.get(i);
-				System.out.println(
-						(x >> 4) + " / " + (y >> 4) + " ////// " + (closest.x >> 4) + " / " + (closest.y >> 4));
 				path = getPath(x >> 4, y >> 4, closest.x >> 4, closest.y >> 4);
 			}
 		}
@@ -91,62 +87,45 @@ public class Villager extends Mob {
 		return closest;
 	}
 
-	public void work(Entity e) {
-		work(e, null);
-
-	}
-
-	public void work(Entity e, Item i) {
-		if (!(i == null)) {
-			if (itemNeeded) {
-				pickUp(i);
-			} else {
-				drop(i);
-			}
-		}
-		if (movement != null) {
-			if (!movement.isArrived()) {
-				move();
-			}
-		} else {
-			if (onJobLoc) {
-				if (jobEntity instanceof Tree) {
-					hasJob = !((Tree) e).chop(level);
-				} else {
-					if (jobEntity instanceof Ore) {
-						hasJob = !((Ore) e).mine(level);
-					} else {
-						if (jobEntity instanceof Wall) {
-							// System.out.println((((Wall)
-							// (jobEntity)).condition) + " / " + i);
-							if (((Wall) (jobEntity)).condition == 0 && i != null) {
-								((Wall) jobEntity).initWall(i, level);
-							}
-							hasJob = !((Wall) e).build();
-						}
-					}
-				}
-				if (!hasJob) {
-					jobEntity = null;
-					movement = null;
-				}
+	public void work() {
+		if (jobs.get(0) != null && !jobs.get(0).completed) {
+			jobs.get(0).execute();
+			if (jobs.get(0).completed) {
+				jobs.remove(0);
 			}
 		}
 
 	}
 
-	public void pickUp(Item e) {
+	public boolean aroundSpot(int startx, int starty, int endx, int endy) {
+		return aroundTile(startx >> 4, starty >> 4, endx >> 4, endy >> 4);
+
+	}
+
+	public boolean aroundTile(int startx, int starty, int endx, int endy) {
+		return ((startx <= endx + 1 && startx >= endx - 1) && (starty >= endy - 1 && starty <= endy + 1));
+
+	}
+
+	public boolean pickUp(Item e) {
 		movement = getShortest(e);
+		if (aroundSpot(x, y, e.x, e.y)) {
+			level.items.remove(e);
+			holding = e;
+			return true;
+		}
 		if (!(movement == null)) {
 			if (!movement.isArrived()) {
 				move();
+				return false;
 			} else {
-				itemNeeded = false;
-				setJob(jobEntity);
+				level.items.remove(e);
+				holding = e;
+				return true;
 			}
-			level.items.remove(e);
-			holding = e;
+
 		}
+		return false;
 
 	}
 
@@ -155,51 +134,39 @@ public class Villager extends Mob {
 		holding = null;
 	}
 
-	public void setJob(Entity e) {
+	public void addJob(WorkableEntity e) {
 		if (e != null) {
-			jobEntity = e;
-			movement = getShortest(e);
-			hasJob = true;
+			addJob(new Job(e, this));
 		}
 	}
 
-	public void setJob(Entity e, boolean itemneeded) {
-		setJob(e);
-		this.itemNeeded = itemneeded;
-		material = getNearestItemOfType("Logs");
+	public void addBuildJob(int x, int y) {
+		addJob(new Job(x, y, getNearestItemOfType("Logs"), this));
+	}
+
+	private void addJob(Job e) {
+		jobs.add(e);
 	}
 
 	public Path getShortest(Entity e) {
-		if (e != null) {
-			movement = getShortest(e.x >> 4, e.y >> 4);
-		} else {
-			movement = null;
-		}
-		return movement;
+		if (e != null)
+			return getShortest(e.x >> 4, e.y >> 4);
+		return null;
 	}
 
 	public Path getShortest(int x, int y) {
-		movement = PathFinder.getShortest(
+		return PathFinder.getShortest(
 				new Path[] { getPath(this.x >> 4, this.y >> 4, x - 1, y), getPath(this.x >> 4, this.y >> 4, x + 1, y),
 						getPath(this.x >> 4, this.y >> 4, x, y - 1), getPath(this.x >> 4, this.y >> 4, x, y + 1) });
-		return movement;
 	}
 
-	public void update(Mouse mouse) {
-		if (hasJob) {
-			if (material != null) {
-				work(jobEntity, material);
-			} else {
-				work(jobEntity);
-			}
+	public void update() {
+		if (jobs.size() != 0) {
+			work();
 		} else {
 			move();
 		}
 
-	}
-
-	public void setJob(boolean job) {
-		hasJob = job;
 	}
 
 	public void addClothing(Item item) {
@@ -215,9 +182,6 @@ public class Villager extends Mob {
 		}
 		if (movement.getLength() == counter) {
 			counter = 0;
-			if (hasJob && !itemNeeded) {
-				onJobLoc = true;
-			}
 			movement = null;
 			arrived = false;
 			return;
@@ -238,11 +202,10 @@ public class Villager extends Mob {
 		counter = 0;
 		arrived = false;
 		movement = null;
-		hasJob = false;
-		jobEntity = null;
 	}
 
-	public void moveTo(int x, int y) {
+	public void moveTo(int x, int y) { // DO NOT USE. SET DESTINATION ON
+										// MOVEMENT AND USE move()!!!
 		int xmov, ymov;
 		if (this.x > x) {
 			xmov = -1;

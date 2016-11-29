@@ -10,7 +10,7 @@ import map.Map;
 public abstract class Entity {
 	public int x, y;
 	private boolean removed = false;
-	protected Map level;
+	public Map level;
 	protected final Random random = new Random();
 	public Sprite sprite;
 	public Sprite extraSprite;

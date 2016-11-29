@@ -137,7 +137,7 @@ public class Game extends Canvas implements Runnable {
 				&& (level.selectTree(mouse.getX(), mouse.getY()) != null)) {
 			vil.resetMove();
 			vil.movement = vil.getShortest(level.selectTree(mouse.getX(), mouse.getY()));
-			vil.setJob(level.selectTree(mouse.getX(), mouse.getY()));
+			vil.addJob(level.selectTree(mouse.getX(), mouse.getY()));
 			vil.setSelected(false);
 		}
 		if ((((mouse.getButton() == 1 && UiIcons.isMiningSelected()) && !UiIcons.isMiningHover())
@@ -145,7 +145,7 @@ public class Game extends Canvas implements Runnable {
 				&& (level.selectOre(mouse.getX(), mouse.getY()) != null)) {
 			vil.resetMove();
 			vil.movement = vil.getShortest(level.selectOre(mouse.getX(), mouse.getY()));
-			vil.setJob(level.selectOre(mouse.getX(), mouse.getY()));
+			vil.addJob(level.selectOre(mouse.getX(), mouse.getY()));
 			vil.setSelected(false);
 
 		}
@@ -153,7 +153,7 @@ public class Game extends Canvas implements Runnable {
 				&& level.isClearTile(mouse.getTileX(), mouse.getTileY())) {
 			vil.resetMove();
 			vil.movement = vil.getShortest(mouse.getTileX(), mouse.getTileY());
-			vil.setJob(new Wall(mouse.getTileX(), mouse.getTileY(), false), true);
+			vil.addBuildJob(mouse.getX(), mouse.getY());
 			vil.setSelected(false);
 
 		}
@@ -180,7 +180,7 @@ public class Game extends Canvas implements Runnable {
 			yScroll -= 2;
 		if (keyboard.down && yScroll < (level.height * Tile.SIZE) - 1 - height)
 			yScroll += 2;
-		if (keyboard.left  && xScroll > 0)
+		if (keyboard.left && xScroll > 0)
 			xScroll -= 2;
 		if (keyboard.right && xScroll < (level.width * Tile.SIZE) - width - 1)
 			xScroll += 2;
@@ -188,15 +188,11 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	private void updateMobs() {
-		for (Mob i : mobs) {
-			i.update(mouse);
-		}
+		mobs.forEach((Mob i) -> i.update());
 	}
 
 	private void renderMobs() {
-		for (Mob i : mobs) {
-			i.render(screen);
-		}
+		mobs.forEach((Mob i) -> i.render(screen));
 	}
 
 	private void render() {
