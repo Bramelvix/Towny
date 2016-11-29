@@ -180,7 +180,7 @@ public class Game extends Canvas implements Runnable {
 			yScroll -= 2;
 		if (keyboard.down && yScroll < (level.height * Tile.SIZE) - 1 - height)
 			yScroll += 2;
-		if (keyboard.left && xScroll > 0)
+		if (keyboard.left  && xScroll > 0)
 			xScroll -= 2;
 		if (keyboard.right && xScroll < (level.width * Tile.SIZE) - width - 1)
 			xScroll += 2;

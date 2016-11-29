@@ -62,7 +62,7 @@ public class Villager extends Mob {
 	private void initHair(boolean generate) {
 		if (generate)
 			hairnr = random.nextInt(HairSprite.maleHair.length);
-		hair = HairSprite.getHair(HairSprite.maleHair, hairnr);
+		hair = HairSprite.maleHair[hairnr];
 
 	}
 
@@ -275,12 +275,12 @@ public class Villager extends Mob {
 		if (wearing != null) {
 			for (int i = 0; i < wearing.size(); i++) {
 				if (wearing.get(i) != null) {
-					screen.renderEntity(x, y, wearing.get(i).sprite1);
+					screen.renderEntity(x, y, wearing.get(i).sprite);
 				}
 			}
 		}
 		if (holding != null) {
-			screen.renderEntity(x, y, holding.sprite1);
+			screen.renderEntity(x, y, holding.sprite);
 		}
 		screen.renderEntity(x, y, hair);
 

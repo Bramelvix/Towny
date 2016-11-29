@@ -10,8 +10,8 @@ public class Wall extends Entity {
 	private boolean visible;
 
 	public Wall(int x, int y, boolean visible) {
-		this.x = x;
-		this.y = y;
+		this.x = x << 4;
+		this.y = y << 4;
 		setVisible(visible);
 		condition = 0;
 	}
@@ -19,13 +19,21 @@ public class Wall extends Entity {
 	public void initWall(Item material, Map level) {
 		System.out.println(x + "////////////////////" + y);
 		this.level = level;
-		if (material.quantity == 0) {
-			level.items.remove(material);
-		} else {
+		if (material==null) {
+			return;
+		}
+		System.out.println(material.quantity);
+		if (material.quantity > 0) {
 			material.quantity--;
 		}
+		if (material.quantity == 0) {
+			level.items.remove(material);
+			material = null;
+			return;
+		}
+		System.out.println(material==null);
 		if (material.getName().equals("Logs")) {
-			sprite1 = Sprite.woodenWallHorizontal;
+			sprite = Sprite.woodenWallHorizontal;
 		}
 		level.entities.add(this);
 
@@ -33,7 +41,7 @@ public class Wall extends Entity {
 
 	public boolean build() {
 		if (condition < 100) {
-			if (condition==1)
+			if (condition == 1)
 				Sound.speelGeluid(Sound.drill);
 			condition++;
 			return false;

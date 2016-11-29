@@ -12,8 +12,8 @@ public abstract class Entity {
 	private boolean removed = false;
 	protected Map level;
 	protected final Random random = new Random();
-	public Sprite sprite1;
-	public Sprite sprite2;
+	public Sprite sprite;
+	public Sprite extraSprite;
 	private boolean visible;
 
 	public void remove() {
@@ -46,6 +46,6 @@ public abstract class Entity {
 	}
 
 	public void render(Screen screen) {
-		screen.renderEntity(x, y, sprite1);
+		screen.renderEntity(x, y, sprite);
 	}
 }

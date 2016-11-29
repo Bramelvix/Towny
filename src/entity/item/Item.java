@@ -2,6 +2,7 @@ package entity.item;
 
 import entity.Entity;
 import graphics.Sprite;
+import graphics.Screen;
 
 public class Item extends Entity {
 	private String name;
@@ -11,9 +12,10 @@ public class Item extends Entity {
 
 	public Item(String name, int x, int y, Sprite sprite, String tooltip, boolean visible, int quantity) {
 		super(x, y);
-		this.sprite1 = sprite;
+		this.sprite = sprite;
 		setVisible(visible);
 		this.name = name;
+		this.quantity = quantity;
 		this.tooltip = tooltip;
 	}
 

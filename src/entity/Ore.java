@@ -20,18 +20,18 @@ public class Ore extends Entity {
 	private void getSprite() {
 		switch (type) {
 		case IRON:
-			sprite1 = Sprite.ironOre;
+			sprite = Sprite.ironOre;
 			itemSprite = Sprite.ironChunk;
 			break;
 		case GOLD:
-			sprite1 = Sprite.goldOre;
+			sprite = Sprite.goldOre;
 			itemSprite = Sprite.goldChunk;
 			break;
 		case COAL:
-			sprite1 = Sprite.coalOre;
+			sprite = Sprite.coalOre;
 			break;
 		default:
-			sprite1 = null;
+			sprite = null;
 		}
 	}
 

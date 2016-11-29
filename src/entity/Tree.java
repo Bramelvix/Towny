@@ -11,14 +11,14 @@ public class Tree extends Entity {
 
 	public Tree(int x, int y) {
 		super(x, y);
-		sprite1 = Sprite.treebottom;
-		sprite2 = Sprite.treetop;
+		sprite = Sprite.treebottom;
+		extraSprite = Sprite.treetop;
 		setVisible(true);
 	}
 
 	public void render(Screen screen) {
-		screen.renderEntity(x, y, sprite1);
-		screen.renderEntity(x, y - 16, sprite2);
+		screen.renderEntity(x, y, sprite);
+		screen.renderEntity(x, y - 16, extraSprite);
 	}
 
 	public boolean chop(Map level) {
@@ -29,7 +29,7 @@ public class Tree extends Entity {
 		} else {
 			remove();
 			level.entities.remove(this);
-			level.items.add(new Item("Logs", this.x, this.y, Sprite.logs, "Wooden logs", true, 4));
+			level.items.add(new Item("Logs", this.x, this.y, Sprite.logs, "Wooden logs", true, 5));
 			level.getTile(x>>4, y>>4).setSolid(false);
 			return true;
 		}
