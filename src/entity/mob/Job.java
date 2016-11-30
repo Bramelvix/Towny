@@ -53,14 +53,14 @@ public class Job {
 
 	private void checkItem() {
 		if (worker.holding != null && needsMaterial) {
-			if (worker.holding.getName().equals("Logs"))
+			if (worker.holding.getName().equals("Logs")) {
 				hasMaterial = true;
+			}
 
 		}
 	}
 
 	public void execute() {
-
 		if (!completed) {
 			checkItem();
 			if (needsMaterial && !hasMaterial) {
@@ -71,14 +71,9 @@ public class Job {
 				return;
 			}
 			if (!worker.aroundSpot(worker.x, worker.y, xloc, yloc) && worker.movement != null) {
-				if (needsMaterial) {
-					if (hasMaterial) {
-						worker.move();
-						return;
-					} else {
-						completed = true;
-						return;
-					}
+				if (needsMaterial && hasMaterial) {
+					worker.move();
+					return;
 				} else {
 					worker.move();
 					return;
