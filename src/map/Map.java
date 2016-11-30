@@ -18,7 +18,7 @@ public class Map {
 	public int width, height;
 	private final Random random;
 	public List<Entity> entities;
-	public List<Item> items;
+	private List<Item> items;
 
 	public Map(int height, int width) {
 		this.width = width;
@@ -30,14 +30,28 @@ public class Map {
 		generateLevel();
 
 	}
+	public List<Item> getItemList() {
+		return items;
+	}
+	public void addItem(Item e) {
+		Item o = new Item(e);
+		items.add(o);
+	}
+	public Item getItem(int index) {
+		return items.get(index);
+	}
+	public void removeItem(Item e) {
+		if (items.contains(e))
+		items.remove(e);
+	}
 
 	public boolean isClearTile(int x, int y) {
 		for (Entity e : entities) {
-			if (e.x == x && e.y == y)
+			if (e.x>>4 == x && e.y>>4 == y)
 				return false;
 		}
 		for (Item e : items) {
-			if (e.x == x && e.y == y)
+			if (e.x>>4 == x && e.y>>4 == y)
 				return false;
 		}
 		return !getTile(x, y).solid();
@@ -58,14 +72,14 @@ public class Map {
 		for (int y = 1; y < height - 1; y++) {
 			for (int x = 1; x < height - 1; x++) {
 				if (random.nextInt(2) == 1) {
-					tiles[x + y * width] = new Tile(Sprite.getGrass(), false);
+					tiles[x + y * width] = new Tile(Sprite.getGrass(), false,x,y);
 					randForest(x, y);
 				} else {
-					tiles[x + y * width] = new Tile(Sprite.getDirt(), false);
+					tiles[x + y * width] = new Tile(Sprite.getDirt(), false,x,y);
 					randOre(x, y);
 				}
 				if (x == 4 && y == 4) {
-					tiles[x + y * width] = new Tile(Sprite.getGrass(), false);
+					tiles[x + y * width] = new Tile(Sprite.getGrass(), false,x,y);
 				}
 			}
 		}
@@ -107,11 +121,11 @@ public class Map {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				if (diamond[x][y] < 0f) {
-					tiles[x + y * width] = new Tile(Sprite.grass, false);
+					tiles[x + y * width] = new Tile(Sprite.grass, false,x,y);
 					randForest(x, y);
 				}
 				if (diamond[x][y] >= -0f) {
-					tiles[x + y * width] = new Tile(Sprite.water, false);
+					tiles[x + y * width] = new Tile(Sprite.water, false,x,y);
 				}
 			}
 		}

@@ -14,24 +14,20 @@ public class Wall extends BuildableEntity {
 		condition = 0;
 	}
 
-	public void initialise(Item material, Map level) {
+	public boolean initialise(Item material, Map level) {
 		this.level = level;
 		if (material == null) {
-			return;
+			return false;
 		}
 		if (material.quantity > 0) {
 			material.quantity--;
-		}
-		if (material.quantity == 0) {
-			level.items.remove(material);
-			material = null;
-			return;
 		}
 		if (material.getName().equals("Logs")) {
 			sprite = Sprite.woodenWallHorizontal;
 		}
 		level.entities.add(this);
 		initialised = true;
+		return true;
 
 	}
 
@@ -44,8 +40,7 @@ public class Wall extends BuildableEntity {
 				return false;
 			} else {
 				this.setVisible(true);
-				System.out.println(level.getTile(x, y));
-				level.getTile(x, y).setSolid(true);
+				level.getTile(x >> 4, y >> 4).setSolid(true);
 				return true;
 			}
 

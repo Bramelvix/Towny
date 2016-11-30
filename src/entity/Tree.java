@@ -29,7 +29,7 @@ public class Tree extends WorkableEntity {
 		} else {
 			remove();
 			level.entities.remove(this);
-			level.items.add(new Item("Logs", this.x, this.y, Sprite.logs, "Wooden logs", true, 5));
+			level.addItem(new Item("Logs", this.x, this.y, Sprite.logs, "Wooden logs", true, 5));
 			level.getTile(x>>4, y>>4).setSolid(false);
 			return true;
 		}

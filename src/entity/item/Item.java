@@ -22,7 +22,13 @@ public class Item extends Entity {
 	public Item(String name, int x, int y, Sprite sprite, boolean visible, int quantity) {
 		this(name, x, y, sprite, "", visible, quantity);
 	}
+	public Item(Item o) {
+		this(o.getName(), o.x, o.y, o.sprite, o.getToolTip(),o.isVisible(), o.quantity);
+	}
 
+	public String getToolTip() {
+		return tooltip;
+	}
 	public String getName() {
 		return name;
 	}

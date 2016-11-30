@@ -9,6 +9,6 @@ public abstract class BuildableEntity extends Entity {
 		super(x, y);
 	}
 	public abstract boolean build();
-	public abstract void initialise(Item material, Map level);
+	public abstract boolean initialise(Item material, Map level);
 
 }

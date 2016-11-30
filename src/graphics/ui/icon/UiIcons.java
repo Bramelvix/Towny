@@ -20,6 +20,9 @@ public class UiIcons {
 		}
 
 	}
+	public static boolean hoverOnAnyIcon() {
+		return isMiningHover() || isTrowelHover() || isWoodHover();
+	}
 
 	public static void update(Mouse mouse) {
 		for (Icon i : icons) {

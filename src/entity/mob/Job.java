@@ -1,5 +1,7 @@
 package entity.mob;
 
+import java.util.logging.Level;
+
 import entity.BuildableEntity;
 import entity.Wall;
 import entity.WorkableEntity;
@@ -24,16 +26,21 @@ public class Job {
 		worker.movement = worker.getShortest(xloc >> 4, yloc >> 4);
 		needsMaterial = false;
 	}
-	
 
 	public Job(int xloc, int yloc, Item mat, Villager worker) {
-		this(xloc,yloc,worker);
-		needsMaterial = true;
-		buildJobObj = new Wall(xloc, yloc);
-		material = mat;
-		buildJob = true;
-		if (material == null) {
+		this(xloc, yloc, worker);
+		if (worker.getShortest(xloc >> 4, yloc >> 4) == null) {
 			completed = true;
+		} else {
+			needsMaterial = true;
+			int xtussen = xloc >> 4;
+			int ytussen = yloc >> 4;
+			buildJobObj = new Wall(xtussen << 4, ytussen << 4);
+			material = mat;
+			buildJob = true;
+			if (material == null) {
+				completed = true;
+			}
 		}
 
 	}
@@ -44,8 +51,18 @@ public class Job {
 
 	}
 
+	private void checkItem() {
+		if (worker.holding != null && needsMaterial) {
+			if (worker.holding.getName().equals("Logs"))
+				hasMaterial = true;
+
+		}
+	}
+
 	public void execute() {
+
 		if (!completed) {
+			checkItem();
 			if (needsMaterial && !hasMaterial) {
 				if (worker.pickUp(material)) {
 					worker.movement = worker.getShortest(xloc >> 4, yloc >> 4);
@@ -53,11 +70,21 @@ public class Job {
 				}
 				return;
 			}
-			if (!worker.aroundSpot(worker.x, worker.y,xloc,yloc) && worker.movement != null) {
-				worker.move();
-				return;
+			if (!worker.aroundSpot(worker.x, worker.y, xloc, yloc) && worker.movement != null) {
+				if (needsMaterial) {
+					if (hasMaterial) {
+						worker.move();
+						return;
+					} else {
+						completed = true;
+						return;
+					}
+				} else {
+					worker.move();
+					return;
+				}
 			} else {
-				if (worker.aroundSpot(worker.x, worker.y,xloc,yloc)) {
+				if (worker.aroundSpot(worker.x, worker.y, xloc, yloc)) {
 					if (jobObj != null) {
 						if (jobObj.work(worker.level))
 							completed = true;
@@ -65,10 +92,17 @@ public class Job {
 					} else {
 						if (buildJob && buildJobObj != null) {
 							if (!buildJobObj.initialised) {
-								buildJobObj.initialise(material, worker.level);
+								if (!buildJobObj.initialise(material, worker.level))
+									completed = true;
 							}
 							if (buildJobObj.build())
 								completed = true;
+
+							if (material.quantity <= 0) {
+								worker.holding = null;
+							} else {
+								worker.drop();
+							}
 							return;
 
 						}

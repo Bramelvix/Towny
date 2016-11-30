@@ -10,16 +10,18 @@ public class Tile {
 	private boolean visible;
 	public static final int SIZE = 16;
 
-	public static Tile darkGrass = new Tile(Sprite.darkGrass, true);
-	public static Tile voidTile = new Tile(Sprite.voidSprite, true);
+	public static Tile darkGrass = new Tile(Sprite.darkGrass, true,0,0);
+	public static Tile voidTile = new Tile(Sprite.voidSprite, true,0,0);
 
-	public Tile(Sprite sprite, boolean solid) {
+	public Tile(Sprite sprite, boolean solid, int x, int y) {
+		this.x = x;
+		this.y = y;
 		this.solid = solid;
 		this.sprite = sprite;
 	}
 
-	public Tile(Sprite sprite, boolean solid, boolean visible) {
-		this(sprite, solid);
+	public Tile(Sprite sprite, boolean solid, boolean visible, int x, int y) {
+		this(sprite, solid, x,y);
 		this.visible = visible;
 	}
 

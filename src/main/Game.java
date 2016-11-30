@@ -106,7 +106,7 @@ public class Game extends Canvas implements Runnable {
 
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer = System.currentTimeMillis();
-				frame.setTitle("Towns - fps: " + frames + " , updates: " + updates);
+				frame.setTitle("Towny - fps: " + frames + " , updates: " + updates);
 				updates = 0;
 				frames = 0;
 			}
@@ -132,27 +132,24 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	private void updateMouse() {
-		if ((((mouse.getButton() == 1 && UiIcons.isWoodSelected()) && !UiIcons.isWoodHover())
+		if ((((mouse.getButton() == 1 && UiIcons.isWoodSelected()) && !UiIcons.hoverOnAnyIcon())
 				|| vil.isSelected() && mouse.getButton() == 3)
 				&& (level.selectTree(mouse.getX(), mouse.getY()) != null)) {
 			vil.resetMove();
-			vil.movement = vil.getShortest(level.selectTree(mouse.getX(), mouse.getY()));
 			vil.addJob(level.selectTree(mouse.getX(), mouse.getY()));
 			vil.setSelected(false);
 		}
-		if ((((mouse.getButton() == 1 && UiIcons.isMiningSelected()) && !UiIcons.isMiningHover())
+		if ((((mouse.getButton() == 1 && UiIcons.isMiningSelected()) && !UiIcons.hoverOnAnyIcon())
 				|| vil.isSelected() && mouse.getButton() == 3)
 				&& (level.selectOre(mouse.getX(), mouse.getY()) != null)) {
 			vil.resetMove();
-			vil.movement = vil.getShortest(level.selectOre(mouse.getX(), mouse.getY()));
 			vil.addJob(level.selectOre(mouse.getX(), mouse.getY()));
 			vil.setSelected(false);
 
 		}
-		if ((mouse.getButton() == 1 && UiIcons.isTrowelSelected() && !UiIcons.isTrowelHover())
+		if ((mouse.getButton() == 1 && UiIcons.isTrowelSelected() && !UiIcons.hoverOnAnyIcon())
 				&& level.isClearTile(mouse.getTileX(), mouse.getTileY())) {
 			vil.resetMove();
-			vil.movement = vil.getShortest(mouse.getTileX(), mouse.getTileY());
 			vil.addBuildJob(mouse.getX(), mouse.getY());
 			vil.setSelected(false);
 

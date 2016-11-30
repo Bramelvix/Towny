@@ -67,16 +67,16 @@ public class Villager extends Mob {
 	private Item getNearestItemOfType(String name) {
 		Item closest = null;
 		Path path = null;
-		for (int i = 0; i < level.items.size(); i++) {
-			if (level.items.get(i).getName().equals(name)) {
-				closest = level.items.get(i);
+		for (int i = 0; i < level.getItemList().size(); i++) {
+			if (level.getItem(i).getName().equals(name)) {
+				closest = level.getItem(i);
 				path = getPath(x >> 4, y >> 4, closest.x >> 4, closest.y >> 4);
 			}
 		}
 		if (closest == null || path == null) {
 			return null;
 		}
-		for (Item i : level.items) {
+		for (Item i : level.getItemList()) {
 			if (i.getName().equals(name)) {
 				if (path.getLength() > getPath(x >> 4, y >> 4, i.x >> 4, i.y >> 4).getLength()) {
 					closest = i;
@@ -90,9 +90,9 @@ public class Villager extends Mob {
 	public void work() {
 		if (jobs.get(0) != null && !jobs.get(0).completed) {
 			jobs.get(0).execute();
-			if (jobs.get(0).completed) {
-				jobs.remove(0);
-			}
+		}
+		if (jobs.get(0).completed) {
+			jobs.remove(0);
 		}
 
 	}
@@ -110,7 +110,7 @@ public class Villager extends Mob {
 	public boolean pickUp(Item e) {
 		movement = getShortest(e);
 		if (aroundSpot(x, y, e.x, e.y)) {
-			level.items.remove(e);
+			level.removeItem(e);
 			holding = e;
 			return true;
 		}
@@ -119,7 +119,7 @@ public class Villager extends Mob {
 				move();
 				return false;
 			} else {
-				level.items.remove(e);
+				level.removeItem(e);
 				holding = e;
 				return true;
 			}
@@ -129,8 +129,10 @@ public class Villager extends Mob {
 
 	}
 
-	public void drop(Item e) {
-		level.items.add(e);
+	public void drop() {
+		if (holding != null) {
+			level.addItem(holding);
+		}
 		holding = null;
 	}
 

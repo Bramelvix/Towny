@@ -44,7 +44,7 @@ public class Ore extends WorkableEntity {
 			remove();
 			level.entities.remove(this);
 			level.getTile(x>>4, y>>4).setSolid(false);
-			level.items.add(new Item(type.name().toLowerCase() + " ore", this.x, this.y, itemSprite, true, 2));
+			level.addItem(new Item(type.name().toLowerCase() + " ore", this.x, this.y, itemSprite, true, 2));
 			return true;
 		}
 	}
