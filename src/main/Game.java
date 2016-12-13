@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
-import entity.Wall;
 import entity.item.Clothing;
 import entity.mob.Mob;
 import entity.mob.Villager;
@@ -58,7 +57,7 @@ public class Game extends Canvas implements Runnable {
 		screen = new Screen(width, height);
 		frame = new JFrame();
 		frame.setResizable(false);
-		frame.setTitle("Towns");
+		frame.setTitle("Towny");
 		frame.add(this);
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

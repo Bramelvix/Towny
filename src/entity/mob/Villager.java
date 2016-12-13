@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.Entity;
-import entity.Ore;
-import entity.Tree;
-import entity.Wall;
-import entity.WorkableEntity;
+import entity.Resource;
 import entity.item.Item;
 import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
@@ -15,7 +12,6 @@ import entity.pathfinding.Point;
 import graphics.HairSprite;
 import graphics.Screen;
 import graphics.Sprite;
-import input.Mouse;
 import map.Map;
 
 public class Villager extends Mob {
@@ -76,7 +72,6 @@ public class Villager extends Mob {
 				}
 			}
 		}
-		System.out.println(closest);
 		if (closest == null && path == null) {
 			return null;
 		}
@@ -141,7 +136,7 @@ public class Villager extends Mob {
 		holding = null;
 	}
 
-	public void addJob(WorkableEntity e) {
+	public void addJob(Resource e) {
 		if (e != null) {
 			addJob(new Job(e, this));
 		}

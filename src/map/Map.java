@@ -9,6 +9,7 @@ import entity.Entity;
 import entity.Ore;
 import entity.OreType;
 import entity.Tree;
+import entity.Wall;
 import entity.item.Item;
 import graphics.Screen;
 import graphics.Sprite;
@@ -30,31 +31,44 @@ public class Map {
 		generateLevel();
 
 	}
+
 	public List<Item> getItemList() {
 		return items;
 	}
+
 	public void addItem(Item e) {
 		Item o = new Item(e);
 		items.add(o);
 	}
+
 	public Item getItem(int index) {
 		return items.get(index);
 	}
+
 	public void removeItem(Item e) {
 		if (items.contains(e))
-		items.remove(e);
+			items.remove(e);
 	}
 
 	public boolean isClearTile(int x, int y) {
 		for (Entity e : entities) {
-			if (e.x>>4 == x && e.y>>4 == y)
+			if (e.x >> 4 == x && e.y >> 4 == y)
 				return false;
 		}
 		for (Item e : items) {
-			if (e.x>>4 == x && e.y>>4 == y)
+			if (e.x >> 4 == x && e.y >> 4 == y)
 				return false;
 		}
 		return !getTile(x, y).solid();
+	}
+
+	public Wall getWallOn(int x, int y) {
+		for (Entity e : entities) {
+			if ((e.x == x) && (e.y == y) && e instanceof Wall) {
+				return (Wall) e;
+			}
+		}
+		return null;
 	}
 
 	private void generateBorder() {
@@ -72,14 +86,14 @@ public class Map {
 		for (int y = 1; y < height - 1; y++) {
 			for (int x = 1; x < height - 1; x++) {
 				if (random.nextInt(2) == 1) {
-					tiles[x + y * width] = new Tile(Sprite.getGrass(), false,x,y);
+					tiles[x + y * width] = new Tile(Sprite.getGrass(), false, x, y);
 					randForest(x, y);
 				} else {
-					tiles[x + y * width] = new Tile(Sprite.getDirt(), false,x,y);
+					tiles[x + y * width] = new Tile(Sprite.getDirt(), false, x, y);
 					randOre(x, y);
 				}
 				if (x == 4 && y == 4) {
-					tiles[x + y * width] = new Tile(Sprite.getGrass(), false,x,y);
+					tiles[x + y * width] = new Tile(Sprite.getGrass(), false, x, y);
 				}
 			}
 		}
@@ -121,11 +135,11 @@ public class Map {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				if (diamond[x][y] < 0f) {
-					tiles[x + y * width] = new Tile(Sprite.grass, false,x,y);
+					tiles[x + y * width] = new Tile(Sprite.grass, false, x, y);
 					randForest(x, y);
 				}
 				if (diamond[x][y] >= -0f) {
-					tiles[x + y * width] = new Tile(Sprite.water, false,x,y);
+					tiles[x + y * width] = new Tile(Sprite.water, false, x, y);
 				}
 			}
 		}
