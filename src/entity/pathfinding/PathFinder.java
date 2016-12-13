@@ -22,7 +22,13 @@ public class PathFinder implements AStarHeuristic {
 
 	public static Path getShortest(Path[] paths) {
 		if (paths != null) {
-			Path shortest = paths[0];
+			Path shortest = null;
+			for (int i = 0; i < paths.length; i++) {
+				if (paths[i] != null) {
+					shortest = paths[i];
+					break;
+				}
+			}
 			for (Path p : paths) {
 				if (p != null && shortest != null)
 					if (p.getLength() < shortest.getLength()) {
