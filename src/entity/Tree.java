@@ -6,7 +6,7 @@ import graphics.Sprite;
 import map.Map;
 import sound.Sound;
 
-public class Tree extends WorkableEntity {
+public class Tree extends Resource {
 	private float chopped = 100;
 
 	public Tree(int x, int y) {

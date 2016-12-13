@@ -31,7 +31,21 @@ public class Sprite {
 	
 	//WALLS
 	public static Sprite beigeWallVertical = new Sprite(15, 13, SpriteSheet.tiles);
-	public static Sprite woodenWallHorizontal = new Sprite(35, 12, SpriteSheet.tiles);
+	public static Sprite woodenWallHorizontalRight = new Sprite(34, 12, SpriteSheet.tiles);
+	public static Sprite woodenWallHorizontalBoth = new Sprite(35, 12, SpriteSheet.tiles);
+	public static Sprite woodenWallHorizontalLeft = new Sprite(36, 12, SpriteSheet.tiles);
+	public static Sprite woodenWallVerticalBottom = new Sprite(34, 13, SpriteSheet.tiles);
+	public static Sprite woodenWall4sides = new Sprite(35, 13, SpriteSheet.tiles);
+	public static Sprite woodenWallVerticalBoth = new Sprite(36, 13, SpriteSheet.tiles);
+	public static Sprite woodenWallCornerTopRight = new Sprite(37, 13, SpriteSheet.tiles);
+	public static Sprite woodenWallCornerTopLeft = new Sprite(38, 13, SpriteSheet.tiles);
+	public static Sprite woodenWallVerticalTop = new Sprite(34, 14, SpriteSheet.tiles);
+	public static Sprite woodenWallCornerBottomRight = new Sprite(37, 12, SpriteSheet.tiles);
+	public static Sprite woodenWallCornerBottomLeft = new Sprite(38, 12, SpriteSheet.tiles);
+	public static Sprite woodenWallTRight = new Sprite(39, 12, SpriteSheet.tiles);
+	public static Sprite woodenWallTTop = new Sprite(40, 12, SpriteSheet.tiles);
+	public static Sprite woodenWallTLeft = new Sprite(39, 13, SpriteSheet.tiles);
+	public static Sprite woodenWallTBottom = new Sprite(40, 13, SpriteSheet.tiles);
 	
 	
 	// MOBS

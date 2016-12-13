@@ -1,10 +1,8 @@
 package entity.mob;
 
-import java.util.logging.Level;
 
-import entity.BuildableEntity;
+import entity.Resource;
 import entity.Wall;
-import entity.WorkableEntity;
 import entity.item.Item;
 
 public class Job {
@@ -14,9 +12,9 @@ public class Job {
 	private boolean hasMaterial;
 	private boolean needsMaterial;
 	private Villager worker;
-	private WorkableEntity jobObj;
+	private Resource jobObj;
 	private boolean buildJob;
-	private BuildableEntity buildJobObj;
+	private Wall buildJobObj;
 
 	private Job(int xloc, int yloc, Villager worker) {
 		completed = false;
@@ -45,7 +43,7 @@ public class Job {
 
 	}
 
-	public Job(WorkableEntity e, Villager worker) {
+	public Job(Resource e, Villager worker) {
 		this(e.x, e.y, worker);
 		jobObj = e;
 

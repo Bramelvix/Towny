@@ -5,7 +5,7 @@ import graphics.Sprite;
 import map.Map;
 import sound.Sound;
 
-public class Ore extends WorkableEntity {
+public class Ore extends Resource {
 	private float mined = 100;
 	private Sprite itemSprite;
 	private OreType type;
