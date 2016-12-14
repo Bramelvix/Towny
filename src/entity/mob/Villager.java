@@ -244,10 +244,10 @@ public class Villager extends Mob {
 				}
 			}
 		}
+		screen.renderEntity(x, y, hair);
 		if (holding != null) {
 			screen.renderEntity(x, y, holding.sprite);
 		}
-		screen.renderEntity(x, y, hair);
 
 	}
 
