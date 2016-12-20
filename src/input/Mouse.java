@@ -15,6 +15,8 @@ public class Mouse implements MouseInputListener {
 	private int mouseTileY = -1;
 	private int trueX = -1;
 	private int trueY = -1;
+	private int trueXpixels = -1;
+	private int trueYpixels = -1;
 
 	public Mouse(Game game) {
 		this.game = game;
@@ -71,6 +73,8 @@ public class Mouse implements MouseInputListener {
 	public void mouseDragged(MouseEvent arg0) {
 		trueX = arg0.getX() /3;
 		trueY = arg0.getY() / 3;
+		trueXpixels = arg0.getX();
+		trueYpixels = arg0.getY();
 		mouseX = trueX + game.xScroll;
 		mouseY = trueY + game.yScroll;
 		mouseTileX = mouseX >> 4;
@@ -84,6 +88,8 @@ public class Mouse implements MouseInputListener {
 		trueY = arg0.getY() / 3;
 		mouseX = trueX + game.xScroll;
 		mouseY = trueY + game.yScroll;
+		trueXpixels = arg0.getX();
+		trueYpixels = arg0.getY();
 		mouseTileX = mouseX >> 4;
 		mouseTileY = mouseY >> 4;
 
@@ -93,6 +99,12 @@ public class Mouse implements MouseInputListener {
 	}
 	public int getTrueY() {
 		return trueY;
+	}
+	public int getTrueXPixels() {
+		return trueXpixels;
+	}
+	public int getTrueYPixels() {
+		return trueYpixels;
 	}
 
 }

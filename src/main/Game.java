@@ -16,6 +16,7 @@ import entity.mob.Mob;
 import entity.mob.Villager;
 import graphics.Screen;
 import graphics.Sprite;
+import graphics.ui.Ui;
 import graphics.ui.icon.UiIcons;
 import input.Keyboard;
 import input.Mouse;
@@ -29,14 +30,14 @@ public class Game extends Canvas implements Runnable {
 	private static int width = 400;
 	private static int height = width / 16 * 9;
 	private Thread thread;
-	private int scale = 3;
+	private static final int SCALE = 3;
 	private Map level;
 	private JFrame frame;
 	private boolean running = false;
 	private Mouse mouse;
 	private Keyboard keyboard;
 	public List<Mob> mobs;
-	Villager vil;
+	private Villager vil;
 
 	public int xScroll = 10;
 	public int yScroll = 10;
@@ -52,7 +53,7 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	public Game() {
-		Dimension size = new Dimension(width * scale, height * scale);
+		Dimension size = new Dimension(width * SCALE, height * SCALE);
 		setPreferredSize(size);
 		screen = new Screen(width, height);
 		frame = new JFrame();
@@ -65,7 +66,7 @@ public class Game extends Canvas implements Runnable {
 		frame.setVisible(true);
 		Sound.initSound();
 		keyboard = new Keyboard();
-		UiIcons.init();
+		Ui.init();
 		mouse = new Mouse(this);
 		level = new Map(100, 100);
 		mobs = new ArrayList<Mob>();
@@ -166,6 +167,7 @@ public class Game extends Canvas implements Runnable {
 			vil.setSelected(false);
 		}
 		if (mouse.getButton() == 1) {
+			Ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels());
 			UiIcons.select();
 		}
 
@@ -202,7 +204,6 @@ public class Game extends Canvas implements Runnable {
 		level.renderItems(screen);
 		renderMobs();
 		level.renderEntites(screen);
-		UiIcons.render(screen);
 
 		for (int i = 0; i < pixels.length; i++) {
 			pixels[i] = screen.pixels[i];
@@ -210,6 +211,10 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+		
+		
+		Ui.render(g);
+
 		g.dispose();
 		bs.show();
 

@@ -67,7 +67,7 @@ public class Villager extends Mob {
 			if (level.getItem(i).getName().equals(name)) {
 				closest = level.getItem(i);
 				path = getPath(x >> 4, y >> 4, closest.x >> 4, closest.y >> 4);
-				if (closest.x>>4 == x>>4 && y>>4 == closest.y >>4) {
+				if (closest.x >> 4 == x >> 4 && y >> 4 == closest.y >> 4) {
 					return closest;
 				}
 			}
@@ -201,13 +201,24 @@ public class Villager extends Mob {
 	}
 
 	public void resetMove() {
+		if (holding != null) {
+			drop();
+		}
+		//jobsLeeg(); //WIP
 		counter = 0;
 		arrived = false;
 		movement = null;
 	}
 
-	public void moveTo(int x, int y) { // DO NOT USE. SET DESTINATION ON
-										// MOVEMENT AND USE move()!!!
+	private void jobsLeeg() {
+			for (Job i : jobs) {
+				jobs.remove(i);
+			
+		}
+	}
+
+	private void moveTo(int x, int y) { // DO NOT USE. SET DESTINATION ON
+										// MOVEMENT AND USE move()!! DO NOT USE!!!
 		int xmov, ymov;
 		if (this.x > x) {
 			xmov = -1;
@@ -248,6 +259,7 @@ public class Villager extends Mob {
 		if (holding != null) {
 			screen.renderEntity(x, y, holding.sprite);
 		}
+		screen.renderSelection(x, y, this);
 
 	}
 

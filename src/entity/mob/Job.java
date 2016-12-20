@@ -1,6 +1,5 @@
 package entity.mob;
 
-
 import entity.Resource;
 import entity.Wall;
 import entity.item.Item;
@@ -37,6 +36,7 @@ public class Job {
 			material = mat;
 			buildJob = true;
 			if (material == null) {
+				worker.movement = null;
 				completed = true;
 			}
 		}

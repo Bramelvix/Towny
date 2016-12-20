@@ -1,6 +1,6 @@
 package graphics;
 
-import entity.Entity;
+
 import entity.mob.Villager;
 import graphics.ui.icon.Icon;
 import map.Tile;
@@ -52,17 +52,32 @@ public class Screen {
 					break;
 				if (xa < 0)
 					xa = 0;
-				int col = 0;
-				if (e.isSelected() && (x == 0 || x == 16 - 1 || y == 0 || y == 16 - 1)) {
-					col = 0xf44242;
-				} else {
-					col = e.sprite.pixels[x + y * 16];
-				}
+				int col = e.sprite.pixels[x + y * 16];
 				if (col != 0xffff00ff)
 					pixels[xa + ya * width] = col;
 			}
 		}
 
+	}
+
+	public void renderSelection(int xp, int yp, Villager e) {
+		xp -= xOffset;
+		yp -= yOffset;
+		for (int y = 0; y < 16; y++) {
+			int ya = y + yp;
+			for (int x = 0; x < 16; x++) {
+				int xa = x + xp;
+				if (xa < -16 || xa >= width || ya < 0 || ya >= height)
+					break;
+				if (xa < 0)
+					xa = 0;
+				if (e.isSelected() && (x == 0 || x == 16 - 1 || y == 0 || y == 16 - 1)) {
+					pixels[xa + ya * width] = 0xf44242;
+
+				}
+
+			}
+		}
 	}
 
 	public void renderEntity(int xp, int yp, Sprite sprite) {
@@ -84,19 +99,20 @@ public class Screen {
 	}
 
 	public void renderIcon(int xp, int yp, Icon i) {
-		for (int y = 0; y < i.HEIGHT; y++) {
+		for (int y = 0; y < i.getHeight(); y++) {
 			int ya = y + yp;
-			for (int x = 0; x < i.WIDTH; x++) {
+			for (int x = 0; x < i.getWidth(); x++) {
 				int xa = x + xp;
 				if (xa < -16 || xa >= width || ya < 0 || ya >= height)
 					break;
 				if (xa < 0)
 					xa = 0;
 				int col = 0;
-				if ((i.hoverOn()||i.selected()) && (x == 0 || x == i.WIDTH - 1 || y == 0 || y == i.HEIGHT - 1)) {
+				if ((i.hoverOn() || i.selected())
+						&& (x == 0 || x == i.getWidth() - 1 || y == 0 || y == i.getHeight() - 1)) {
 					col = 0xff0000;
 				} else {
-					col = i.pixels[x + y * i.WIDTH];
+					col = i.pixels[x + y * i.getWidth()];
 				}
 				if (col != 0xffff00ff)
 					pixels[xa + ya * width] = col;
