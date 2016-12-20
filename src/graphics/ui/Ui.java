@@ -7,32 +7,46 @@ import graphics.ui.icon.UiIcons;
 import input.Mouse;
 
 public class Ui {
-	private static Menu menu;
+	private Menu menu;
 
-	public static void render(Graphics g) {
+	public void render(Graphics g) {
 		UiIcons.render(g);
 		menu.render(g);
 
 	}
 
-	public static void init() {
+	public void init() {
 		UiIcons.init();
 		menu = new Menu();
 	}
+	public Ui() {
+		init();
+	}
 
-	public static void showMenuOn(int x, int y) {
+	public void showMenuOn(int x, int y) {
 		menu.setX(x);
 		menu.setY(y);
 		MenuItem item = new MenuItem("Test", menu);
-		menu.addItem(item);
+		// menu.addItem(item);
 		menu.setVisible(true);
 	}
 
-	public static void hoverOnMenu(Mouse mouse) {
+	private void hoverOnMenu(Mouse mouse) {
 		menu.setVisible((((mouse.getTrueXPixels()) >= menu.getX())
 				&& ((mouse.getTrueXPixels()) <= menu.getX() + (menu.getWidth()))
 				&& ((mouse.getTrueYPixels()) >= menu.getY())
 				&& ((mouse.getTrueYPixels()) <= menu.getY() + (menu.getHeight()))));
+	}
+
+	public void update(Mouse mouse) {
+		UiIcons.update(mouse);
+		hoverOnMenu(mouse);
+		updateMenu();
+	}
+	private void updateMenu() {
+		if (!menu.isVisible()&&!menu.isReset()) {
+			menu = new Menu();
+		}
 	}
 
 }

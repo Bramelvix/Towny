@@ -38,6 +38,7 @@ public class Game extends Canvas implements Runnable {
 	private Keyboard keyboard;
 	public List<Mob> mobs;
 	private Villager vil;
+	private Ui ui;
 
 	public int xScroll = 10;
 	public int yScroll = 10;
@@ -66,7 +67,7 @@ public class Game extends Canvas implements Runnable {
 		frame.setVisible(true);
 		Sound.initSound();
 		keyboard = new Keyboard();
-		Ui.init();
+		ui = new Ui();
 		mouse = new Mouse(this);
 		level = new Map(100, 100);
 		mobs = new ArrayList<Mob>();
@@ -127,7 +128,7 @@ public class Game extends Canvas implements Runnable {
 		updateMobs();
 		updateMouse();
 		moveCamera();
-		UiIcons.update(mouse);
+		ui.update(mouse);
 
 	}
 
@@ -167,7 +168,7 @@ public class Game extends Canvas implements Runnable {
 			vil.setSelected(false);
 		}
 		if (mouse.getButton() == 1) {
-			Ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels());
+			ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels());
 			UiIcons.select();
 		}
 
@@ -212,8 +213,7 @@ public class Game extends Canvas implements Runnable {
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 		
-		
-		Ui.render(g);
+		ui.render(g);
 
 		g.dispose();
 		bs.show();
