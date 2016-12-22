@@ -36,6 +36,8 @@ public class Game extends Canvas implements Runnable {
 	private boolean running = false;
 	private Mouse mouse;
 	private Keyboard keyboard;
+	public List<Villager> vills;
+	public List<Villager> sols;
 	public List<Mob> mobs;
 	private Villager vil;
 	private Ui ui;
@@ -71,13 +73,30 @@ public class Game extends Canvas implements Runnable {
 		mouse = new Mouse(this);
 		level = new Map(100, 100);
 		mobs = new ArrayList<Mob>();
+		vills = new ArrayList<Villager>();
+		sols = new ArrayList<Villager>();
 		vil = new Villager(64, 64, level);
 		vil.addClothing(new Clothing("Brown Shirt", vil.x, vil.y, Sprite.brownShirt1, "A brown tshirt", true));
-		mobs.add(vil);
+		addVillager(vil);
 		addKeyListener(keyboard);
 		addMouseListener(mouse);
 		addMouseMotionListener(mouse);
 		start();
+	}
+
+	private void addVillager(Villager vil) {
+		if (!vills.contains(vil)) {
+			if (sols.contains(vil)) sols.remove(vil);
+			vills.add(vil);
+			ui.updateCounts(sols.size(), vills.size());
+		}
+	}
+	private void addSoldier(Villager vil) {
+		if(!sols.contains(vil)) {
+			if (vills.contains(vil)) vills.remove(vil);
+			sols.add(vil);
+			ui.updateCounts(sols.size(), vills.size());
+		}
 	}
 
 	public synchronized void start() {
@@ -139,6 +158,7 @@ public class Game extends Canvas implements Runnable {
 			vil.resetMove();
 			vil.addJob(level.selectTree(mouse.getX(), mouse.getY()));
 			vil.setSelected(false);
+			ui.deSelectIcons();
 		}
 		if ((((mouse.getButton() == 1 && UiIcons.isMiningSelected()) && !UiIcons.hoverOnAnyIcon())
 				|| vil.isSelected() && mouse.getButton() == 3)
@@ -146,6 +166,7 @@ public class Game extends Canvas implements Runnable {
 			vil.resetMove();
 			vil.addJob(level.selectOre(mouse.getX(), mouse.getY()));
 			vil.setSelected(false);
+			ui.deSelectIcons();
 
 		}
 		if ((mouse.getButton() == 1 && UiIcons.isTrowelSelected() && !UiIcons.hoverOnAnyIcon())
@@ -153,6 +174,7 @@ public class Game extends Canvas implements Runnable {
 			vil.resetMove();
 			vil.addBuildJob(mouse.getX(), mouse.getY());
 			vil.setSelected(false);
+			ui.deSelectIcons();
 
 		}
 		if (mouse.getButton() == 1) {
@@ -160,16 +182,14 @@ public class Game extends Canvas implements Runnable {
 				vil.setSelected(true);
 			} else {
 				vil.setSelected(false);
+				ui.deSelectIcons();
 			}
 		}
 		if (mouse.getButton() == 3 && vil.isSelected()) {
 			vil.resetMove();
 			vil.movement = vil.getPath(vil.x >> 4, vil.y >> 4, mouse.getTileX(), mouse.getTileY());
 			vil.setSelected(false);
-		}
-		if (mouse.getButton() == 1) {
-			ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels());
-			UiIcons.select();
+			ui.deSelectIcons();
 		}
 
 	}
@@ -188,10 +208,14 @@ public class Game extends Canvas implements Runnable {
 
 	private void updateMobs() {
 		mobs.forEach((Mob i) -> i.update());
+		vills.forEach((Villager i) -> i.update());
+		sols.forEach((Villager i) -> i.update());
 	}
 
 	private void renderMobs() {
 		mobs.forEach((Mob i) -> i.render(screen));
+		vills.forEach((Villager i) -> i.render(screen));
+		sols.forEach((Villager i) -> i.render(screen));
 	}
 
 	private void render() {
@@ -212,7 +236,7 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-		
+
 		ui.render(g);
 
 		g.dispose();

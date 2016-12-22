@@ -1,6 +1,5 @@
 package graphics;
 
-
 import entity.mob.Villager;
 import graphics.ui.icon.Icon;
 import map.Tile;
@@ -92,28 +91,6 @@ public class Screen {
 				if (xa < 0)
 					xa = 0;
 				int col = sprite.pixels[x + y * 16];
-				if (col != 0xffff00ff)
-					pixels[xa + ya * width] = col;
-			}
-		}
-	}
-
-	public void renderIcon(int xp, int yp, Icon i) {
-		for (int y = 0; y < i.getHeight(); y++) {
-			int ya = y + yp;
-			for (int x = 0; x < i.getWidth(); x++) {
-				int xa = x + xp;
-				if (xa < -16 || xa >= width || ya < 0 || ya >= height)
-					break;
-				if (xa < 0)
-					xa = 0;
-				int col = 0;
-				if ((i.hoverOn() || i.selected())
-						&& (x == 0 || x == i.getWidth() - 1 || y == 0 || y == i.getHeight() - 1)) {
-					col = 0xff0000;
-				} else {
-					col = i.pixels[x + y * i.getWidth()];
-				}
 				if (col != 0xffff00ff)
 					pixels[xa + ya * width] = col;
 			}

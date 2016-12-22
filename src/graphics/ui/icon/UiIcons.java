@@ -31,6 +31,7 @@ public class UiIcons {
 					&& ((mouse.getTrueXPixels()) <= i.getX() + (i.getWidth())) && ((mouse.getTrueYPixels()) >= i.getY())
 					&& ((mouse.getTrueYPixels()) <= i.getY() + (i.getHeight()))));
 		}
+		setSelected(mouse);
 
 	}
 
@@ -46,12 +47,6 @@ public class UiIcons {
 		return icons[2].hoverOn();
 	}
 
-	public static void select() {
-		for (Icon i : icons) {
-			i.setSelect(i.hoverOn());
-		}
-	}
-
 	public static boolean isWoodSelected() {
 		return icons[0].selected();
 	}
@@ -64,16 +59,17 @@ public class UiIcons {
 		return icons[2].selected();
 	}
 
-	public static void setMiningSelected(boolean select) {
-		icons[1].setSelect(select);
+	public static void setSelected(Mouse mouse) {
+		for (Icon i : icons) {
+			if (mouse.getButton() == 1 && i.hoverOn())
+				i.setSelect(true);
+		}
 	}
 
-	public static void setWoodSelected(boolean select) {
-		icons[0].setSelect(select);
-	}
-
-	public static void setTrowelSelected(boolean select) {
-		icons[2].setSelect(select);
+	public static void deSelect() {
+		for (Icon i : icons) {
+			i.setSelect(false);
+		}
 	}
 
 }

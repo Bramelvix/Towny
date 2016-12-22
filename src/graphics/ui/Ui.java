@@ -2,25 +2,32 @@ package graphics.ui;
 
 import java.awt.Graphics;
 
-import graphics.ui.icon.Icon;
 import graphics.ui.icon.UiIcons;
 import input.Mouse;
 
 public class Ui {
 	private Menu menu;
+	private TopBar top;
 
 	public void render(Graphics g) {
 		UiIcons.render(g);
 		menu.render(g);
+		top.render(g);
 
 	}
 
 	public void init() {
 		UiIcons.init();
 		menu = new Menu();
+		top = new TopBar(540, 15);
 	}
+
 	public Ui() {
 		init();
+	}
+
+	public void deSelectIcons() {
+		UiIcons.deSelect();
 	}
 
 	public void showMenuOn(int x, int y) {
@@ -43,8 +50,13 @@ public class Ui {
 		hoverOnMenu(mouse);
 		updateMenu();
 	}
+
+	public void updateCounts(int solcount, int vilcount) {
+		top.updateCounts(solcount, vilcount);
+	}
+
 	private void updateMenu() {
-		if (!menu.isVisible()&&!menu.isReset()) {
+		if (!menu.isVisible() && !menu.isReset()) {
 			menu = new Menu();
 		}
 	}

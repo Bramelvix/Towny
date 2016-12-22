@@ -12,7 +12,6 @@ public class Icon {
 	private String path;
 	private final int WIDTH;
 	private final int HEIGHT;
-	public int[] pixels;
 	private boolean selected;
 	private Image image;
 
