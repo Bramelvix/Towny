@@ -8,6 +8,7 @@ import input.Mouse;
 public class Ui {
 	private Menu menu;
 	private TopBar top;
+	public boolean paused;
 
 	public void render(Graphics g) {
 		UiIcons.render(g);
@@ -49,6 +50,15 @@ public class Ui {
 		UiIcons.update(mouse);
 		hoverOnMenu(mouse);
 		updateMenu();
+		if (top.clickedOnPause(mouse)) {
+			if (!paused) {
+				paused = true;
+			} else {
+				paused = false;
+			}
+			top.setPaused(paused);
+		}
+
 	}
 
 	public void updateCounts(int solcount, int vilcount) {

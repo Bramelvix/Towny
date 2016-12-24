@@ -41,6 +41,8 @@ public class Game extends Canvas implements Runnable {
 	public List<Mob> mobs;
 	private Villager vil;
 	private Ui ui;
+	private boolean paused = false;
+	private double ns = 1000000000.0 / 60.0;
 
 	public int xScroll = 10;
 	public int yScroll = 10;
@@ -86,14 +88,17 @@ public class Game extends Canvas implements Runnable {
 
 	private void addVillager(Villager vil) {
 		if (!vills.contains(vil)) {
-			if (sols.contains(vil)) sols.remove(vil);
+			if (sols.contains(vil))
+				sols.remove(vil);
 			vills.add(vil);
 			ui.updateCounts(sols.size(), vills.size());
 		}
 	}
+
 	private void addSoldier(Villager vil) {
-		if(!sols.contains(vil)) {
-			if (vills.contains(vil)) vills.remove(vil);
+		if (!sols.contains(vil)) {
+			if (vills.contains(vil))
+				vills.remove(vil);
 			sols.add(vil);
 			ui.updateCounts(sols.size(), vills.size());
 		}
@@ -107,7 +112,6 @@ public class Game extends Canvas implements Runnable {
 
 	public void run() {
 		long lastTime = System.nanoTime();
-		final double ns = 1000000000.0 / 60.0;
 		long timer = System.currentTimeMillis();
 		double delta = 0;
 		int updates = 0;
@@ -117,8 +121,11 @@ public class Game extends Canvas implements Runnable {
 			delta += (now - lastTime) / ns;
 			lastTime = now;
 			while (delta >= 1) {
-				update();
-				updates++;
+				if (!paused) {
+					update();
+					updates++;
+				}
+				updateUI();
 				delta--;
 			}
 			render();
@@ -146,8 +153,13 @@ public class Game extends Canvas implements Runnable {
 	private void update() {
 		updateMobs();
 		updateMouse();
-		moveCamera();
+
+	}
+
+	private void updateUI() {
 		ui.update(mouse);
+		moveCamera();
+		paused = ui.paused;
 
 	}
 
