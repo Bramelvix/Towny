@@ -8,9 +8,9 @@ public class UiIcons {
 
 	public static void init() {
 		icons = new Icon[3];
-		icons[0] = new Icon(30, 570, "/res/icons/wood-axe.png", 60, 60);
-		icons[1] = new Icon(120, 570, "/res/icons/mining.png", 60, 60);
-		icons[2] = new Icon(210, 570, "/res/icons/trowel.png", 60, 60);
+		icons[0] = new Icon(50, 700, "/res/icons/wood-axe.png", 60, 60);
+		icons[1] = new Icon(150, 700, "/res/icons/mining.png", 60, 60);
+		icons[2] = new Icon(250, 700, "/res/icons/trowel.png", 60, 60);
 
 	}
 

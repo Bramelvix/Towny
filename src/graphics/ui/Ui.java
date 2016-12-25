@@ -1,30 +1,36 @@
 package graphics.ui;
 
 import java.awt.Graphics;
+import java.util.List;
 
+import entity.mob.Villager;
 import graphics.ui.icon.UiIcons;
 import input.Mouse;
+import map.Map;
 
 public class Ui {
 	private Menu menu;
 	private TopBar top;
+	private Minimap map;
 	public boolean paused;
 
 	public void render(Graphics g) {
 		UiIcons.render(g);
 		menu.render(g);
 		top.render(g);
+		map.render(g);
 
 	}
 
-	public void init() {
+	public void init(Map level) {
 		UiIcons.init();
 		menu = new Menu();
-		top = new TopBar(540, 15);
+		map = new Minimap(1290, 8, level);
+		top = new TopBar(700, 15);
 	}
 
-	public Ui() {
-		init();
+	public Ui(Map level) {
+		init(level);
 	}
 
 	public void deSelectIcons() {
@@ -39,6 +45,10 @@ public class Ui {
 		menu.setVisible(true);
 	}
 
+	public void setOffset(int x, int y) {
+		map.setOffset(x, y);
+	}
+
 	private void hoverOnMenu(Mouse mouse) {
 		menu.setVisible((((mouse.getTrueXPixels()) >= menu.getX())
 				&& ((mouse.getTrueXPixels()) <= menu.getX() + (menu.getWidth()))
@@ -49,6 +59,7 @@ public class Ui {
 	public void update(Mouse mouse) {
 		UiIcons.update(mouse);
 		hoverOnMenu(mouse);
+		map.init();
 		updateMenu();
 		if (top.clickedOnPause(mouse)) {
 			if (!paused) {

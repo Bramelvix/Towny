@@ -158,6 +158,16 @@ public class Map {
 
 	}
 
+	public Entity getEntityOn(int x, int y) {
+		for (int s = 0; s < entities.size(); s++) {
+			Entity i = entities.get(s);
+			if (i.x >> 4 == x >> 4 && i.y >> 4 == y >> 4)
+				return i;
+		}
+		return null;
+
+	}
+
 	private void randForest(int x, int y) {
 		int rand = random.nextInt(10);
 		if (rand == 1) {

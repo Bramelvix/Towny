@@ -27,7 +27,7 @@ import sound.Sound;
 public class Game extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 1L;
-	private static int width = 400;
+	private static int width = 500;
 	private static int height = width / 16 * 9;
 	private Thread thread;
 	private static final int SCALE = 3;
@@ -44,8 +44,8 @@ public class Game extends Canvas implements Runnable {
 	private boolean paused = false;
 	private double ns = 1000000000.0 / 60.0;
 
-	public int xScroll = 10;
-	public int yScroll = 10;
+	public int xScroll = 0;
+	public int yScroll = 0;
 
 	private Screen screen;
 
@@ -71,12 +71,12 @@ public class Game extends Canvas implements Runnable {
 		frame.setVisible(true);
 		Sound.initSound();
 		keyboard = new Keyboard();
-		ui = new Ui();
 		mouse = new Mouse(this);
 		level = new Map(100, 100);
 		mobs = new ArrayList<Mob>();
 		vills = new ArrayList<Villager>();
 		sols = new ArrayList<Villager>();
+		ui = new Ui(level);
 		vil = new Villager(64, 64, level);
 		vil.addClothing(new Clothing("Brown Shirt", vil.x, vil.y, Sprite.brownShirt1, "A brown tshirt", true));
 		addVillager(vil);
@@ -248,9 +248,8 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-
+		ui.setOffset(xScroll,yScroll);
 		ui.render(g);
-
 		g.dispose();
 		bs.show();
 
