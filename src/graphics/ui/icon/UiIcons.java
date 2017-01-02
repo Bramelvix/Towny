@@ -60,9 +60,9 @@ public class UiIcons {
 	}
 
 	public static void setSelected(Mouse mouse) {
-		for (Icon i : icons) {
-			if (mouse.getButton() == 1 && i.hoverOn())
-				i.setSelect(true);
+		for (int i = 0; i < 2; i++) {
+			if (mouse.getButton() == 1 && icons[i].hoverOn())
+				icons[i].setSelect(true);
 		}
 	}
 

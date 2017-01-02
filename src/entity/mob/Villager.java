@@ -25,6 +25,7 @@ public class Villager extends Mob {
 	private int hairnr;
 	private boolean selected;
 	private List<Job> jobs;
+	private int idletimer = getIdleTimer();
 
 	public Villager(int x, int y, Map level) {
 		super(level);
@@ -36,9 +37,29 @@ public class Villager extends Mob {
 		this.y = y;
 
 	}
+	private int getIdleTimer() {
+		return random.nextInt(5)*60;
+	}
+
+	private boolean idleTime() {
+		if (idletimer <= 0) {
+			idletimer = getIdleTimer();
+			return true;
+		} else {
+			idletimer = idletimer - 1;
+			return false;
+		}
+	}
 
 	public void setSelected(boolean selected) {
 		this.selected = selected;
+	}
+
+	public void idle() {
+		if (movement == null) {
+			movement = getPath(x >> 4, y >> 4, (x >> 4) + random.nextInt(4) - 2, (y >> 4) + random.nextInt(4) - 2);
+		}
+
 	}
 
 	public boolean isSelected() {
@@ -166,9 +187,17 @@ public class Villager extends Mob {
 		if (jobs.size() != 0) {
 			work();
 		} else {
+			// IDLE
+			if (idleTime()) {
+				idle();
+			}
 			move();
+
 		}
 
+	}
+	public int getJobSize() {
+		return jobs.size();
 	}
 
 	public void addClothing(Item item) {
@@ -204,21 +233,22 @@ public class Villager extends Mob {
 		if (holding != null) {
 			drop();
 		}
-		//jobsLeeg(); //WIP
+		// jobsLeeg(); //WIP
 		counter = 0;
 		arrived = false;
 		movement = null;
 	}
 
 	private void jobsLeeg() {
-			for (Job i : jobs) {
-				jobs.remove(i);
-			
+		for (Job i : jobs) {
+			jobs.remove(i);
+
 		}
 	}
 
 	private void moveTo(int x, int y) { // DO NOT USE. SET DESTINATION ON
-										// MOVEMENT AND USE move()!! DO NOT USE!!!
+										// MOVEMENT AND USE move()!! DO NOT
+										// USE!!!
 		int xmov, ymov;
 		if (this.x > x) {
 			xmov = -1;

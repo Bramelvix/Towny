@@ -18,6 +18,7 @@ import graphics.Screen;
 import graphics.Sprite;
 import graphics.ui.Ui;
 import graphics.ui.icon.UiIcons;
+import graphics.ui.menu.MenuItemType;
 import input.Keyboard;
 import input.Mouse;
 import map.Map;
@@ -39,10 +40,10 @@ public class Game extends Canvas implements Runnable {
 	public List<Villager> vills;
 	public List<Villager> sols;
 	public List<Mob> mobs;
-	private Villager vil;
 	private Ui ui;
 	private boolean paused = false;
 	private double ns = 1000000000.0 / 60.0;
+	private Villager selectedvill;
 
 	public int xScroll = 0;
 	public int yScroll = 0;
@@ -77,13 +78,24 @@ public class Game extends Canvas implements Runnable {
 		vills = new ArrayList<Villager>();
 		sols = new ArrayList<Villager>();
 		ui = new Ui(level);
-		vil = new Villager(64, 64, level);
-		vil.addClothing(new Clothing("Brown Shirt", vil.x, vil.y, Sprite.brownShirt1, "A brown tshirt", true));
-		addVillager(vil);
+		spawnvills();
+
 		addKeyListener(keyboard);
 		addMouseListener(mouse);
 		addMouseMotionListener(mouse);
 		start();
+	}
+
+	private void spawnvills() {
+		Villager vil = new Villager(64, 64, level);
+		vil.addClothing(new Clothing("Brown Shirt", vil.x, vil.y, Sprite.brownShirt1, "A brown tshirt", true));
+		addVillager(vil);
+		Villager vil2 = new Villager(32, 64, level);
+		vil2.addClothing(new Clothing("Green Shirt", vil2.x, vil2.y, Sprite.greenShirt1, "A green tshirt", true));
+		addVillager(vil2);
+		Villager vil3 = new Villager(32, 32, level);
+		vil3.addClothing(new Clothing("Green Shirt", vil2.x, vil2.y, Sprite.greenShirt2, "A green tshirt", true));
+		addVillager(vil3);
 	}
 
 	private void addVillager(Villager vil) {
@@ -163,46 +175,130 @@ public class Game extends Canvas implements Runnable {
 
 	}
 
+	private Villager getIdlestVil() {
+		Villager lowest = vills.get(0);
+		for (Villager i : vills) {
+			if (i.getJobSize() < lowest.getJobSize())
+				return i;
+		}
+		return lowest;
+	}
+
+	private Villager anyVillHoverOn(Mouse mouse) {
+		for (Villager i : vills) {
+			if (i.hoverOn(mouse))
+				return i;
+		}
+		return null;
+	}
+
+	private void deselectAllVills() {
+		for (Villager i : vills) {
+			i.setSelected(false);
+		}
+	}
+
 	private void updateMouse() {
-		if ((((mouse.getButton() == 1 && UiIcons.isWoodSelected()) && !UiIcons.hoverOnAnyIcon())
-				|| vil.isSelected() && mouse.getButton() == 3)
+		if ((mouse.getButton() == 1 && UiIcons.isWoodSelected()) && !UiIcons.hoverOnAnyIcon()
 				&& (level.selectTree(mouse.getX(), mouse.getY()) != null)) {
-			vil.resetMove();
-			vil.addJob(level.selectTree(mouse.getX(), mouse.getY()));
-			vil.setSelected(false);
+			Villager idle = getIdlestVil();
+			idle.resetMove();
+			idle.addJob(level.selectTree(mouse.getX(), mouse.getY()));
 			ui.deSelectIcons();
+			return;
 		}
-		if ((((mouse.getButton() == 1 && UiIcons.isMiningSelected()) && !UiIcons.hoverOnAnyIcon())
-				|| vil.isSelected() && mouse.getButton() == 3)
+		if (((mouse.getButton() == 1 && UiIcons.isMiningSelected()) && !UiIcons.hoverOnAnyIcon())
 				&& (level.selectOre(mouse.getX(), mouse.getY()) != null)) {
-			vil.resetMove();
-			vil.addJob(level.selectOre(mouse.getX(), mouse.getY()));
-			vil.setSelected(false);
+			Villager idle = getIdlestVil();
+			idle.resetMove();
+			idle.addJob(level.selectOre(mouse.getX(), mouse.getY()));
 			ui.deSelectIcons();
+			return;
 
 		}
-		if ((mouse.getButton() == 1 && UiIcons.isTrowelSelected() && !UiIcons.hoverOnAnyIcon())
-				&& level.isClearTile(mouse.getTileX(), mouse.getTileY())) {
-			vil.resetMove();
-			vil.addBuildJob(mouse.getX(), mouse.getY());
-			vil.setSelected(false);
+		if (anyVillHoverOn(mouse) != null) {
+			if (mouse.getButton() == 1) {
+				selectedvill = anyVillHoverOn(mouse);
+				selectedvill.setSelected(true);
+			}
 			ui.deSelectIcons();
-
+			return;
 		}
-		if (mouse.getButton() == 1) {
-			if (vil.hoverOn(mouse)) {
-				vil.setSelected(true);
+		if (!ui.menuVisible() && UiIcons.isTrowelHover() && mouse.getClicked()) {
+			ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(),
+					new MenuItemType[] { MenuItemType.BUILD_WALL, MenuItemType.CANCEL });
+		}
+
+		if (mouse.getButton() == 3) {
+			if (selectedvill != null) {
+				if (level.selectTree(mouse.getX(), mouse.getY()) != null) {
+					ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(),
+							new MenuItemType[] { MenuItemType.CHOP, MenuItemType.MOVE, MenuItemType.CANCEL });
+				} else {
+					if (level.selectOre(mouse.getX(), mouse.getY()) != null) {
+						ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(),
+								new MenuItemType[] { MenuItemType.MINE, MenuItemType.MOVE, MenuItemType.CANCEL });
+					} else {
+
+						ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(),
+								new MenuItemType[] { MenuItemType.MOVE, MenuItemType.CANCEL });
+					}
+				}
+
 			} else {
-				vil.setSelected(false);
-				ui.deSelectIcons();
+				ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(), MenuItemType.CANCEL);
 			}
 		}
-		if (mouse.getButton() == 3 && vil.isSelected()) {
-			vil.resetMove();
-			vil.movement = vil.getPath(vil.x >> 4, vil.y >> 4, mouse.getTileX(), mouse.getTileY());
-			vil.setSelected(false);
+		if (ui.outlineIsVisible() && !ui.menuVisible() && mouse.getClicked()
+				&& !level.getTile(ui.getOutlineX() >> 4, ui.getOutlineY() >> 4).solid()) {
+			Villager idle = getIdlestVil();
+			idle.resetMove();
+			idle.addBuildJob(ui.getOutlineX(), ui.getOutlineY());
+			ui.removeBuildSquare();
 			ui.deSelectIcons();
 		}
+		if (ui.menuVisible()) {
+			if (ui.getMenu().clickedOnItem(MenuItemType.CANCEL, mouse)) {
+				ui.getMenu().hide();
+				ui.deSelectIcons();
+				return;
+			}
+			if (ui.getMenu().clickedOnItem(MenuItemType.MOVE, mouse)) {
+				selectedvill.resetMove();
+				selectedvill.movement = selectedvill.getPath(selectedvill.x >> 4, selectedvill.y >> 4, mouse.getTileX(),
+						mouse.getTileY());
+				if (selectedvill.movement == null) {
+					selectedvill.movement = selectedvill.getShortest(level.getEntityOn(mouse.getX(), mouse.getY()));
+				}
+				selectedvill.setSelected(false);
+				ui.deSelectIcons();
+				ui.getMenu().hide();
+				return;
+			}
+			if (ui.getMenu().clickedOnItem(MenuItemType.CHOP, mouse)) {
+				selectedvill.resetMove();
+				selectedvill.addJob(level.selectTree(mouse.getX(), mouse.getY()));
+				selectedvill.setSelected(false);
+				ui.deSelectIcons();
+				ui.getMenu().hide();
+				return;
+			}
+			if (ui.getMenu().clickedOnItem(MenuItemType.MINE, mouse)) {
+				selectedvill.resetMove();
+				selectedvill.addJob(level.selectOre(mouse.getX(), mouse.getY()));
+				selectedvill.setSelected(false);
+				ui.deSelectIcons();
+				ui.getMenu().hide();
+				return;
+			}
+			if (ui.getMenu().clickedOnItem(MenuItemType.BUILD_WALL, mouse) && !ui.outlineIsVisible()) {
+				ui.showBuildSquare();
+				ui.deSelectIcons();
+				ui.getMenu().hide();
+				return;
+			}
+		}
+		return;
 
 	}
 
@@ -248,7 +344,7 @@ public class Game extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-		ui.setOffset(xScroll,yScroll);
+		ui.setOffset(xScroll, yScroll);
 		ui.render(g);
 		g.dispose();
 		bs.show();

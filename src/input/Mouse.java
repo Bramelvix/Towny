@@ -1,12 +1,13 @@
 package input;
 
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.event.MouseInputListener;
 
 import main.Game;
 
-public class Mouse implements MouseInputListener {
+public class Mouse extends MouseAdapter implements MouseInputListener {
 	private Game game;
 	private int mouseX = -1;
 	private int mouseY = -1;

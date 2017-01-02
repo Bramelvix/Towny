@@ -26,7 +26,6 @@ public class Minimap {
 		width = 200;
 		height = 200;
 		pixels = new int[(width) * (height)];
-		System.out.println(pixels.length);
 		this.map = map;
 		init();
 
