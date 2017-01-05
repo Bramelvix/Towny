@@ -68,11 +68,10 @@ public class TopBar {
 	}
 
 	public boolean clickedOnPause(Mouse mouse) {
-		System.out.println(mouse.getClicked());
 		return (mouse.getTrueXPixels() >= x + (width / 3) + 25
 				&& mouse.getTrueXPixels() <= x + (width / 3) + 25 + pauseimg.getWidth(null)
 				&& mouse.getTrueYPixels() >= (y + 30) && mouse.getTrueYPixels() <= (y + 30) + pauseimg.getHeight(null)
-				&& mouse.getClicked());
+				&& mouse.clicked);
 	}
 	public void setPaused(boolean paused) {
 		this.paused = paused;

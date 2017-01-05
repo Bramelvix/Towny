@@ -18,7 +18,7 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 	private int trueY = -1;
 	private int trueXpixels = -1;
 	private int trueYpixels = -1;
-	private boolean clicked;
+	public boolean clicked;
 
 	public Mouse(Game game) {
 		this.game = game;
@@ -82,7 +82,6 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 		mouseY = trueY + game.yScroll;
 		mouseTileX = mouseX >> 4;
 		mouseTileY = mouseY >> 4;
-		clicked = false;
 
 	}
 
@@ -90,7 +89,6 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 	public void mouseMoved(MouseEvent arg0) {
 		trueX = arg0.getX() / 3;
 		trueY = arg0.getY() / 3;
-		clicked = false;
 		mouseX = trueX + game.xScroll;
 		mouseY = trueY + game.yScroll;
 		trueXpixels = arg0.getX();
@@ -114,14 +112,6 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 
 	public int getTrueYPixels() {
 		return trueYpixels;
-	}
-
-	public boolean getClicked() {
-		if (clicked) {
-			clicked = false;
-			return true;
-		}
-		return false;
 	}
 
 }

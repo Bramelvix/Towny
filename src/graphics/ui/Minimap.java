@@ -50,9 +50,9 @@ public class Minimap {
 	public void render(Graphics g) {
 		g.drawImage(img, x, y, null);
 		g.setColor(COL);
-		float xloc = (x + (xoff / 3) / 3) + 1;
-		float yloc = (y + (yoff / 3) / 3) + 1;
-		g.fillRect((int) xloc, (int) yloc, (625 / 3) / 3, (400 / 3) / 3);
+		float xloc = (x + (xoff / 3) / 3);
+		float yloc = (y + (yoff / 3) / 3);
+		g.fillRect((int) xloc+1, (int) yloc+1, 31*3, 17*3);
 
 	}
 

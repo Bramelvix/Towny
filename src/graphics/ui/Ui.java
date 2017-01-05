@@ -39,12 +39,12 @@ public class Ui {
 		init(level);
 	}
 
-	public int getOutlineX() {
-		return outline.getTileX();
+	public int getOutlineXS() {
+		return outline.getTileXS();
 	}
 
-	public int getOutlineY() {
-		return outline.getTileY();
+	public int getOutlineYS() {
+		return outline.getTileYS();
 	}
 
 	public boolean outlineIsVisible() {
@@ -85,8 +85,8 @@ public class Ui {
 		map.setOffset(x, y);
 	}
 
-	public void showBuildSquare() {
-		outline.show();
+	public void showBuildSquare(Mouse mouse) {
+		outline.show(mouse);
 	}
 
 	public void removeBuildSquare() {
@@ -105,7 +105,7 @@ public class Ui {
 			}
 			top.setPaused(paused);
 		}
-		outline.update(mouse.getTileX(), mouse.getTileY());
+		outline.update(mouse.getTileX(), mouse.getTileY(), mouse);
 
 	}
 
