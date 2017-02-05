@@ -7,10 +7,11 @@ public class UiIcons {
 	public static Icon[] icons;
 
 	public static void init() {
-		icons = new Icon[3];
+		icons = new Icon[4];
 		icons[0] = new Icon(50, 700, "/res/icons/wood-axe.png", 60, 60);
 		icons[1] = new Icon(150, 700, "/res/icons/mining.png", 60, 60);
 		icons[2] = new Icon(250, 700, "/res/icons/trowel.png", 60, 60);
+		icons[3] = new Icon(350, 700, "/res/icons/sickle.png", 60, 60);
 
 	}
 
@@ -25,7 +26,7 @@ public class UiIcons {
 		return isMiningHover() || isTrowelHover() || isWoodHover();
 	}
 
-	public static void update(Mouse mouse) {
+	public static void update(Mouse mouse, boolean forceInvis) {
 		for (Icon i : icons) {
 			i.setHoverOn((((mouse.getTrueXPixels()) >= i.getX())
 					&& ((mouse.getTrueXPixels()) <= i.getX() + (i.getWidth())) && ((mouse.getTrueYPixels()) >= i.getY())
@@ -47,6 +48,10 @@ public class UiIcons {
 		return icons[2].hoverOn();
 	}
 
+	public static boolean isSickleHover() {
+		return icons[3].hoverOn();
+	}
+
 	public static boolean isWoodSelected() {
 		return icons[0].selected();
 	}
@@ -59,6 +64,10 @@ public class UiIcons {
 		return icons[2].selected();
 	}
 
+	public static boolean isSickleSelected() {
+		return icons[3].selected();
+	}
+
 	public static void setSelected(Mouse mouse) {
 		for (int i = 0; i < 2; i++) {
 			if (mouse.getButton() == 1 && icons[i].hoverOn())
@@ -69,6 +78,11 @@ public class UiIcons {
 	public static void deSelect() {
 		for (Icon i : icons) {
 			i.setSelect(false);
+		}
+	}
+	public static void deHover() {
+		for (Icon i : icons) {
+			i.setHoverOn(false);
 		}
 	}
 

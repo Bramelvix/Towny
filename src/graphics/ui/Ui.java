@@ -1,10 +1,6 @@
 package graphics.ui;
 
-import java.awt.Color;
 import java.awt.Graphics;
-import java.util.List;
-
-import entity.mob.Villager;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.Menu;
 import graphics.ui.menu.MenuItemType;
@@ -39,6 +35,10 @@ public class Ui {
 		init(level);
 	}
 
+	public int[][] getOutlineCoords() {
+		return outline.getSquareCoords();
+	}
+
 	public int getOutlineXS() {
 		return outline.getTileXS();
 	}
@@ -60,21 +60,27 @@ public class Ui {
 	}
 
 	public void showMenuOn(int x, int y, MenuItemType[] items) {
-		showMenuOn(x, y);
-		menu.addItems(items);
-		menu.show();
+		if (!outline.isVisible()) {
+			showMenuOn(x, y);
+			menu.addItems(items);
+			menu.show();
+		}
 	}
 
 	private void showMenuOn(int x, int y) {
-		menu = new Menu();
-		menu.setX(x);
-		menu.setY(y);
+		if (!outline.isVisible()) {
+			menu = new Menu();
+			menu.setX(x);
+			menu.setY(y);
+		}
 	}
 
 	public void showMenuOn(int x, int y, MenuItemType item) {
-		showMenuOn(x, y);
-		menu.addItem(item);
-		menu.show();
+		if (!outline.isVisible()) {
+			showMenuOn(x, y);
+			menu.addItem(item);
+			menu.show();
+		}
 	}
 
 	public boolean menuVisible() {
@@ -93,9 +99,9 @@ public class Ui {
 		outline.remove();
 	}
 
-	public void update(Mouse mouse) {
-		menu.update(mouse);
-		UiIcons.update(mouse);
+	public void update(Mouse mouse, int xOff, int yOff) {
+		menu.update(mouse, outline.isVisible());
+		UiIcons.update(mouse, outline.isVisible());
 		// map.init();
 		if (top.clickedOnPause(mouse)) {
 			if (!paused) {
@@ -105,7 +111,7 @@ public class Ui {
 			}
 			top.setPaused(paused);
 		}
-		outline.update(mouse.getTileX(), mouse.getTileY(), mouse);
+		outline.update(mouse, xOff, yOff);
 
 	}
 

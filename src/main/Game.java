@@ -139,7 +139,7 @@ public class Game extends Canvas implements Runnable {
 					updates++;
 				}
 				delta--;
-				mouse.clicked = false;
+				mouse.reset();
 			}
 			render();
 			frames++;
@@ -170,7 +170,7 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	private void updateUI() {
-		ui.update(mouse);
+		ui.update(mouse, xScroll, yScroll);
 		moveCamera();
 		paused = ui.paused;
 
@@ -200,7 +200,7 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	private void updateMouse() {
-		if ((mouse.getButton() == 1 && UiIcons.isWoodSelected()) && !UiIcons.hoverOnAnyIcon()
+		if ((mouse.getClicked() && UiIcons.isWoodSelected()) && !UiIcons.hoverOnAnyIcon()
 				&& (level.selectTree(mouse.getX(), mouse.getY()) != null)) {
 			Villager idle = getIdlestVil();
 			idle.resetMove();
@@ -209,7 +209,7 @@ public class Game extends Canvas implements Runnable {
 			ui.deSelectIcons();
 			return;
 		}
-		if (((mouse.getButton() == 1 && UiIcons.isMiningSelected()) && !UiIcons.hoverOnAnyIcon())
+		if (((mouse.getClicked() && UiIcons.isMiningSelected()) && !UiIcons.hoverOnAnyIcon())
 				&& (level.selectOre(mouse.getX(), mouse.getY()) != null)) {
 			Villager idle = getIdlestVil();
 			idle.resetMove();
@@ -220,15 +220,15 @@ public class Game extends Canvas implements Runnable {
 
 		}
 		if (anyVillHoverOn(mouse) != null) {
-			if (mouse.clicked) {
+			if (mouse.getClicked()&&!ui.outlineIsVisible()) {
 				deselectAllVills();
 				selectedvill = anyVillHoverOn(mouse);
 				selectedvill.setSelected(true);
+				ui.deSelectIcons();
 			}
-			ui.deSelectIcons();
 			return;
 		}
-		if (!ui.menuVisible() && UiIcons.isTrowelHover() && mouse.clicked) {
+		if (!ui.menuVisible() && UiIcons.isTrowelHover() && mouse.getClicked()) {
 			deselectAllVills();
 			ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(),
 					new MenuItemType[] { MenuItemType.BUILD_WALL, MenuItemType.CANCEL });
@@ -254,11 +254,15 @@ public class Game extends Canvas implements Runnable {
 				ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(), MenuItemType.CANCEL);
 			}
 		}
-		if (ui.outlineIsVisible() && !ui.menuVisible() && mouse.clicked && !UiIcons.hoverOnAnyIcon()
-				&& !level.getTile(ui.getOutlineXS() >> 4, ui.getOutlineYS() >> 4).solid()) {
-			Villager idle = getIdlestVil();
-			idle.resetMove();
-			idle.addBuildJob(ui.getOutlineXS(), ui.getOutlineYS());
+		if (ui.outlineIsVisible() && !ui.menuVisible() && mouse.getReleased() && !UiIcons.hoverOnAnyIcon()) {
+			int[][] coords = ui.getOutlineCoords();
+			for (int[] blok : coords) {
+				if (!level.getTile(blok[0] >> 4, blok[1] >> 4).solid()) {
+					Villager idle = getIdlestVil();
+					idle.resetMove();
+					idle.addBuildJob(blok[0], blok[1]);
+				}
+			}
 			ui.removeBuildSquare();
 			deselectAllVills();
 			ui.deSelectIcons();

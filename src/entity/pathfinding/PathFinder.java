@@ -99,6 +99,7 @@ public class PathFinder implements AStarHeuristic {
 			return null;
 		}
 		Path path = new Path();
+		path.setDest(tx, ty);
 		Point target = nodes[tx][ty];
 		while (!target.equals(nodes[sx][sy])) {
 			path.prependStep(target.x, target.y);

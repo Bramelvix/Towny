@@ -5,7 +5,14 @@ import java.util.ArrayList;
 public class Path {
 	private ArrayList<Point> steps = new ArrayList<Point>();
 	private boolean arrived = false;
-
+	private int xdest, ydest;
+	
+	public int getXdest() {
+		return xdest;
+	}
+	public int getYdest() {
+		return ydest;
+	}
 	public int getX(int index) {
 		return steps.get(index).x;
 	}
@@ -33,6 +40,10 @@ public class Path {
 		} else {
 			return null;
 		}
+	}
+	public void setDest(int x, int y) {
+		xdest = x;
+		ydest = y;
 	}
 
 	public int getLength() {

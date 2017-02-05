@@ -71,7 +71,7 @@ public class TopBar {
 		return (mouse.getTrueXPixels() >= x + (width / 3) + 25
 				&& mouse.getTrueXPixels() <= x + (width / 3) + 25 + pauseimg.getWidth(null)
 				&& mouse.getTrueYPixels() >= (y + 30) && mouse.getTrueYPixels() <= (y + 30) + pauseimg.getHeight(null)
-				&& mouse.clicked);
+				&& mouse.getClicked());
 	}
 	public void setPaused(boolean paused) {
 		this.paused = paused;

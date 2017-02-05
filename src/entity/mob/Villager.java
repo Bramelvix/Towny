@@ -56,7 +56,7 @@ public class Villager extends Mob {
 	}
 
 	public void idle() {
-		if (movement == null) {
+		while (movement == null) {
 			movement = getPath(x >> 4, y >> 4, (x >> 4) + random.nextInt(4) - 2, (y >> 4) + random.nextInt(4) - 2);
 		}
 
@@ -129,14 +129,19 @@ public class Villager extends Mob {
 	}
 
 	public boolean pickUp(Item e) {
+		if (!e.isReservedVil(this)) {
+			return false;
+		}
 		movement = getShortest(e);
 		if (aroundSpot(x, y, e.x, e.y)) {
+			e.setReservedVil(this);
 			level.removeItem(e);
 			holding = e;
 			return true;
 		}
 		if (!(movement == null)) {
 			if (!movement.isArrived()) {
+				e.setReservedVil(this);
 				move();
 				return false;
 			} else {
@@ -152,6 +157,7 @@ public class Villager extends Mob {
 
 	public void drop() {
 		if (holding != null) {
+			holding.setReservedVil(null);
 			level.addItem(holding);
 		}
 		holding = null;
@@ -164,7 +170,7 @@ public class Villager extends Mob {
 	}
 
 	public void addBuildJob(int x, int y) {
-		addJob(new Job(x, y, getNearestItemOfType("Logs"), this));
+		addJob(new Job(x, y, getNearestItemOfType("Logs"), this, level));
 	}
 
 	private void addJob(Job e) {
@@ -219,6 +225,12 @@ public class Villager extends Mob {
 		} else {
 			if (!arrived) {
 				Point step = movement.getStep(counter);
+				if (!level.isClearTile(step.x, step.y)) {
+					int destx = movement.getXdest();
+					int desty = movement.getYdest();
+					movement = getShortest(destx, desty);
+					return;
+				}
 				moveTo(step.x << 4, step.y << 4);
 				if (x == step.x << 4 && y == step.y << 4) {
 					arrived = true;

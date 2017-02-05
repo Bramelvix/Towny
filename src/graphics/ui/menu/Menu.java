@@ -39,19 +39,31 @@ public class Menu {
 		}
 	}
 
+	public void hide() {
+		setVisible(false);
+		this.width = 0;
+		this.height = 0;
+	}
+
 	public void addItems(MenuItemType[] items) {
 		for (MenuItemType i : items) {
 			addItem(i);
 		}
 	}
 
-	public void update(Mouse mouse) {
-		for (MenuItem i : items) {
-			i.update(mouse);
+	public void update(Mouse mouse, boolean forceinvisible) {
+		if (forceinvisible) {
+		hide();
+			return;
+		} else {
+			for (MenuItem i : items) {
+				i.update(mouse);
+			}
+			setVisible((((mouse.getTrueXPixels()) >= getX() - 10)
+					&& ((mouse.getTrueXPixels()) <= getX() + (getWidth() + 10))
+					&& ((mouse.getTrueYPixels()) >= getY() - 10)
+					&& ((mouse.getTrueYPixels()) <= getY() + (getHeight() + 10))));
 		}
-		setVisible((((mouse.getTrueXPixels()) >= getX() - 10)
-				&& ((mouse.getTrueXPixels()) <= getX() + (getWidth() + 10)) && ((mouse.getTrueYPixels()) >= getY() - 10)
-				&& ((mouse.getTrueYPixels()) <= getY() + (getHeight() + 10))));
 	}
 
 	public Menu() {
@@ -76,10 +88,6 @@ public class Menu {
 			}
 		}
 		return false;
-	}
-
-	public void hide() {
-		visible = false;
 	}
 
 	public void addItem(MenuItemType i) {
