@@ -37,8 +37,9 @@ public class Villager extends Mob {
 		this.y = y;
 
 	}
+
 	private int getIdleTimer() {
-		return random.nextInt(5)*60;
+		return random.nextInt(5) * 60;
 	}
 
 	private boolean idleTime() {
@@ -202,6 +203,7 @@ public class Villager extends Mob {
 		}
 
 	}
+
 	public int getJobSize() {
 		return jobs.size();
 	}
@@ -211,8 +213,10 @@ public class Villager extends Mob {
 	}
 
 	public void move() {
-		if (movement == null)
+		if (movement == null) {
+			counter = 0;
 			return;
+		}
 		if (arrived) {
 			counter++;
 			arrived = false;
@@ -225,7 +229,7 @@ public class Villager extends Mob {
 		} else {
 			if (!arrived) {
 				Point step = movement.getStep(counter);
-				if (!level.isClearTile(step.x, step.y)) {
+				if (step==null || !level.isClearTile(step.x, step.y)) {
 					int destx = movement.getXdest();
 					int desty = movement.getYdest();
 					movement = getShortest(destx, desty);
