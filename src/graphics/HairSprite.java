@@ -2,10 +2,12 @@ package graphics;
 
 public class HairSprite extends Sprite {
 
+	//constructor
 	public HairSprite(int x, int y, SpriteSheet sheet) {
 		super(x, y, sheet);
 	}
-
+	
+	//list of all the hair sprites in the game. Static so they are loaded only once and reused
 	private static Sprite brownHair1 = new Sprite(19, 0, SpriteSheet.entities);
 	private static Sprite brownHair2 = new Sprite(20, 0, SpriteSheet.entities);
 	private static Sprite brownHairBeard1 = new Sprite(21, 0, SpriteSheet.entities);
@@ -67,6 +69,7 @@ public class HairSprite extends Sprite {
 	private static Sprite whiteHair8 = new Sprite(21, 10, SpriteSheet.entities);
 	private static Sprite whiteHair9 = new Sprite(22, 10, SpriteSheet.entities);
 
+	//array of male hair sprites (so a random number can get a random sprite)
 	public static Sprite[] maleHair = { brownHair1, brownHairBeard1, brownHairBeard2, lightBrownHair1,
 			lightBrownHairBeard1, lightBrownHairBeard2, brownHair3, lightBrownHair3, brownHairBeard3, brownHair7,
 			brownHair8, brownHair9, lightBrownHairBeard3, lightBrownHair7, lightBrownHair8, lightBrownHair9,
@@ -74,6 +77,7 @@ public class HairSprite extends Sprite {
 			blackHair3, blondeHairBeard3, blondeHair7, blondeHair8, blondeHair9, blackHairBeard3, blackHair7,
 			blackHair8, blackHair9, whiteHair1, whiteHairBeard1, whiteHairBeard2, whiteHair3, whiteHairBeard3,
 			whiteHair7, whiteHair8, whiteHair9 };
+	//same thing for female hair
 	public static Sprite[] femaleHair = { brownHair2, lightBrownHair2, brownHair4, brownHair5, brownHair6,
 			lightBrownHair4, lightBrownHair5, lightBrownHair6, blondeHair2, blackHair2, blondeHair4, blondeHair5,
 			blondeHair6, blackHair4, blackHair5, blackHair6, whiteHair2, whiteHair4, whiteHair5, whiteHair6 };

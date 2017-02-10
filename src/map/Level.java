@@ -3,7 +3,6 @@ package map;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.SynchronousQueue;
 
 import entity.Entity;
 import entity.Ore;
@@ -14,14 +13,15 @@ import entity.item.Item;
 import graphics.Screen;
 import graphics.Sprite;
 
-public class Map {
-	public Tile[] tiles;
-	public int width, height;
-	private final Random random;
-	public List<Entity> entities;
-	private List<Item> items;
+public class Level {
+	public Tile[] tiles; // array of tiles on the map
+	public int width, height; // map with and height
+	private final Random random; // random used for generating
+	public List<Entity> entities; // list of entities on the map
+	private List<Item> items; // list of items on the map
 
-	public Map(int height, int width) {
+	// basic constructor
+	public Level(int height, int width) {
 		this.width = width;
 		this.height = height;
 		tiles = new Tile[width * height];
@@ -32,45 +32,59 @@ public class Map {
 
 	}
 
+	// getters
 	public List<Item> getItemList() {
 		return items;
-	}
-
-	public void addItem(Item e) {
-		Item o = new Item(e);
-		items.add(o);
 	}
 
 	public Item getItem(int index) {
 		return items.get(index);
 	}
+	
+	//adding an item to the list
+	public void addItem(Item e) {
+		Item o = new Item(e);
+		items.add(o);
+	}
 
+	//removing an item from the list
 	public void removeItem(Item e) {
 		if (items.contains(e))
 			items.remove(e);
 	}
 
+	//is the tile on X and Y clear (No items or entities or walls blocking it)
 	public boolean isClearTile(int x, int y) {
-		for (Entity e : entities) {
-			if (e.x >> 4 == x && e.y >> 4 == y)
+		for (Item e : items) {
+			if (e.getX() >> 4 == x && e.getY() >> 4 == y)
 				return false;
 		}
-		for (Item e : items) {
-			if (e.x >> 4 == x && e.y >> 4 == y)
-				return false;
+		if (!isWalkAbleTile(x, y)) {
+			return false;
 		}
 		return !getTile(x, y).solid();
 	}
 
+	//is the tile on X and Y walkable (items can still be there)
+	public boolean isWalkAbleTile(int x, int y) {
+		for (Entity e : entities) {
+			if (e.getX() >> 4 == x && e.getY() >> 4 == y)
+				return false;
+		}
+		return true;
+	}
+
+	//if there is a wall on x and y, return it
 	public Wall getWallOn(int x, int y) {
 		for (Entity e : entities) {
-			if ((e.x == x) && (e.y == y) && e instanceof Wall) {
+			if ((e.getX() == x) && (e.getY() == y) && e instanceof Wall) {
 				return (Wall) e;
 			}
 		}
 		return null;
 	}
 
+	//generate the green border around the map
 	private void generateBorder() {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
@@ -81,6 +95,7 @@ public class Map {
 		}
 	}
 
+	//generates a shitty random level
 	private void generateLevel() {
 		generateBorder();
 		for (int y = 1; y < height - 1; y++) {
@@ -100,11 +115,12 @@ public class Map {
 
 	}
 
+	//if there is a tree on X and Y, return it
 	public Tree selectTree(int x, int y) {
 		for (int s = 0; s < entities.size(); s++) {
 			Entity i = entities.get(s);
 			if (i instanceof Tree) {
-				if (i.x >> 4 == x >> 4 && i.y >> 4 == y >> 4)
+				if (i.getX() >> 4 == x >> 4 && i.getY() >> 4 == y >> 4)
 					return (Tree) i;
 			}
 		}
@@ -112,11 +128,12 @@ public class Map {
 
 	}
 
+	//if there is ore on X and Y, return it
 	public Ore selectOre(int x, int y) {
 		for (int s = 0; s < entities.size(); s++) {
 			Entity i = entities.get(s);
 			if (i instanceof Ore) {
-				if (i.x >> 4 == x >> 4 && i.y >> 4 == y >> 4)
+				if (i.getX() >> 4 == x >> 4 && i.getY() >> 4 == y >> 4)
 					return (Ore) i;
 			}
 		}
@@ -124,6 +141,7 @@ public class Map {
 
 	}
 
+	//doesnt work
 	private void generateRandomLevel() {
 		float[][] diamond = new float[width][height];
 		float frequency = 1.0f / width;
@@ -146,28 +164,28 @@ public class Map {
 
 	}
 
+	//render the entities
 	public void renderEntites(Screen screen) {
 		entities.forEach((Entity i) -> i.render(screen));
 	}
 
+	//render the items
 	public void renderItems(Screen screen) {
 		items.forEach((Item i) -> i.render(screen));
 	}
-
-	private void loadLevel(String path) {
-
-	}
-
+	
+	//if there is an entity on X and Y, return it
 	public Entity getEntityOn(int x, int y) {
 		for (int s = 0; s < entities.size(); s++) {
 			Entity i = entities.get(s);
-			if (i.x >> 4 == x >> 4 && i.y >> 4 == y >> 4)
+			if (i.getX() >> 4 == x >> 4 && i.getY() >> 4 == y >> 4)
 				return i;
 		}
 		return null;
 
 	}
 
+	//10% chance of there being a tree on each grass tile
 	private void randForest(int x, int y) {
 		int rand = random.nextInt(10);
 		if (rand == 1) {
@@ -177,6 +195,7 @@ public class Map {
 
 	}
 
+	//10% chance of there being ore on a dirt tile
 	private void randOre(int x, int y) {
 		int rand = random.nextInt(20);
 		if (rand == 1) {
@@ -192,12 +211,13 @@ public class Map {
 
 	}
 
+	//render the tiles
 	public void render(int xScroll, int yScroll, Screen screen) {
 		screen.setOffset(xScroll, yScroll);
 		int x0 = xScroll >> 4;
-		int x1 = (xScroll + screen.width + 16) >> 4;
+		int x1 = (xScroll + screen.width + Sprite.SIZE) >> 4;
 		int y0 = yScroll >> 4;
-		int y1 = (yScroll + screen.height + 16) >> 4;
+		int y1 = (yScroll + screen.height + Sprite.SIZE) >> 4;
 
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
@@ -207,6 +227,7 @@ public class Map {
 
 	}
 
+	//return the tile on x and y
 	public Tile getTile(int x, int y) {
 		if (x < 0 || x >= width || y < 0 || y >= height) {
 			return Tile.voidTile;

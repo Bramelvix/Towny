@@ -1,5 +1,6 @@
 package map;
 
+//WIP
 public class Generator {
 	public static float Generate(float x) {
 		int i0 = FastFloor(x);

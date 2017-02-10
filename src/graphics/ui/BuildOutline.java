@@ -4,31 +4,29 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import input.Mouse;
-import map.Map;
+import map.Level;
 
+//the green or red outline used to select where to build things
 public class BuildOutline {
-	private Color buildable = new Color(78, 244, 66, 210); // groen
-	private Color notbuildable = new Color(244, 66, 66, 210); // rood
-	private int buildSquareXS = 0; // x coördinaat van de start in de game
-									// wereld
-	private int buildSquareXSTeken; // x coördinaat van de start op het scherm
-	private int buildSquareYSTeken; // y coördinaat van de start op het scherm
-	private int buildSquareYS = 0; // y coördinaat van de start in de game
-									// wereld
-	private int buildSquareXE = 0; // x coördinaat van het einde in de game
-									// wereld
-	private int buildSquareYE = 0; // y coördinaat van het einde in de game
-									// wereld
-	private final int WIDTH = 48; // breedte van een vierkant in pixels
-	private int squarewidth = 0; // breedte van de outline in blokken
-	private int squareheight = 0; // hoogte van de outline in blokken
-	private boolean visible;
-	private Map level;
+	private Color buildable = new Color(78, 244, 66, 210); // green
+	private Color notbuildable = new Color(244, 66, 66, 210); // red
+	private int buildSquareXS; // x coord of the start in the game world
+	private int buildSquareYS; // y coord of the start in the game world
+	private int buildSquareXSTeken; // x coord of the start on the screen
+	private int buildSquareYSTeken; // y coord of the start on the screen
+	private int buildSquareXE; // x coord of the end in the game world
+	private int buildSquareYE; // y coord of the end in the game world
+	private final int WIDTH = 48; // width of a square IN REAL PIXELS (3*16)
+	private int squarewidth; // width of the outline in squares
+	private int squareheight; // height of the outline in squares
+	private boolean visible; // is the outline visible
+	private Level level; // the map is needed to decide if a square is empty
 
+	// rendering the outline
 	public void render(Graphics g) {
 		if (visible) {
 			if (buildSquareXE == 0 && buildSquareYE == 0) {
-				if (nietBouwbaar(((buildSquareXS / 3) >> 4), (buildSquareYS / 3) >> 4)) {
+				if (notBuildable(((buildSquareXS / 3) >> 4), (buildSquareYS / 3) >> 4)) {
 					g.setColor(notbuildable);
 				} else {
 					g.setColor(buildable);
@@ -41,7 +39,7 @@ public class BuildOutline {
 															// EIND == SLEEP
 															// NAAR RECHTS
 					for (int i = 0; i < squarewidth; i++) {
-						if (nietBouwbaar(((buildSquareXS / 3) >> 4) + i, ((buildSquareYS / 3) >> 4))) {
+						if (notBuildable(((buildSquareXS / 3) >> 4) + i, ((buildSquareYS / 3) >> 4))) {
 							g.setColor(notbuildable);
 						} else {
 							g.setColor(buildable);
@@ -51,7 +49,7 @@ public class BuildOutline {
 					return;
 				} else { // START RECHTS VAN EIND == SLEEP NAAR LINKS
 					for (int i = 0; i < squarewidth; i++) {
-						if (nietBouwbaar((((buildSquareXS - (WIDTH * (squarewidth - 1))) / 3) >> 4) + i,
+						if (notBuildable((((buildSquareXS - (WIDTH * (squarewidth - 1))) / 3) >> 4) + i,
 								((buildSquareYS / 3) >> 4))) {
 							g.setColor(notbuildable);
 						} else {
@@ -66,7 +64,7 @@ public class BuildOutline {
 				if (buildSquareYSTeken < buildSquareYE) { // START BOVEN EIND ==
 															// SLEEP NAAR ONDER
 					for (int i = 0; i < squareheight; i++) {
-						if (nietBouwbaar(((buildSquareXS / 3) >> 4), ((buildSquareYS / 3) >> 4) + i)) {
+						if (notBuildable(((buildSquareXS / 3) >> 4), ((buildSquareYS / 3) >> 4) + i)) {
 							g.setColor(notbuildable);
 						} else {
 							g.setColor(buildable);
@@ -77,7 +75,7 @@ public class BuildOutline {
 					return;
 				} else { // START ONDER EIND == SLEEP NAAR BOVEN
 					for (int i = 0; i < squareheight; i++) {
-						if (nietBouwbaar(((buildSquareXS / 3) >> 4),
+						if (notBuildable(((buildSquareXS / 3) >> 4),
 								(((buildSquareYS - (WIDTH * (squareheight - 1))) / 3) >> 4) + i)) {
 							g.setColor(notbuildable);
 						} else {
@@ -93,11 +91,13 @@ public class BuildOutline {
 		}
 	}
 
-	private boolean nietBouwbaar(int x, int y) {
+	// is the tile empty
+	private boolean notBuildable(int x, int y) {
 		return (level.getTile(x, y).solid());
 
 	}
 
+	// getters
 	public int getTileXS() {
 		return (buildSquareXS / 3);
 	}
@@ -154,6 +154,10 @@ public class BuildOutline {
 		}
 	}
 
+	public boolean isVisible() {
+		return visible;
+	}
+
 	public int getTileYS() {
 		return (buildSquareYS / 3);
 	}
@@ -166,8 +170,9 @@ public class BuildOutline {
 		return (buildSquareYE / 3);
 	}
 
-	public void update(Mouse mouse, int xOff, int yOff) {
-		if (visible) {
+	// update the outline
+	public void update(Mouse mouse, int xOff, int yOff, boolean force) {
+		if (visible || force) {
 			if (mouse.getDrag()) {
 				buildSquareXE = (mouse.getTileX() << 4) * 3;
 				buildSquareYE = (mouse.getTileY() << 4) * 3;
@@ -192,12 +197,19 @@ public class BuildOutline {
 		}
 	}
 
-	public BuildOutline(Map level) {
+	public void update(Mouse mouse, int xOff, int yOff) {
+		update(mouse, xOff, yOff, false);
+	}
+
+	// constructor
+	public BuildOutline(Level level) {
 		this.level = level;
 	}
 
-	public void show(Mouse mouse) {
+	// show the outline
+	public void show(Mouse mouse, int xoff, int yoff) {
 		if (!visible) {
+			update(mouse, xoff, yoff, true);
 			visible = true;
 			buildSquareXS = (mouse.getTileX() << 4) * 3;
 			buildSquareYS = (mouse.getTileY() << 4) * 3;
@@ -206,13 +218,10 @@ public class BuildOutline {
 		}
 	}
 
+	// hide the outline
 	public void remove() {
 		if (visible) {
 			visible = false;
 		}
-	}
-
-	public boolean isVisible() {
-		return visible;
 	}
 }

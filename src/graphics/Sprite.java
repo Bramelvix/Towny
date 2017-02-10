@@ -4,12 +4,13 @@ import java.util.Random;
 
 import map.Tile;
 
+//sprites in the game
 public class Sprite {
-	private int x, y;
-	public static final int SIZE = Tile.SIZE;
-	public int[] pixels;
-	private SpriteSheet sheet;
-	private static final Random rand = new Random();
+	private int x, y; // x and y on the spritesheet
+	public static final int SIZE = Tile.SIZE; // 16
+	public int[] pixels; // pixels array
+	private SpriteSheet sheet; // spritesheet
+	private static final Random rand = new Random(); //random object used for random distribution of sprites
 
 	// TERRAIN
 	public static Sprite water = new Sprite(0, 0, SpriteSheet.tiles);
@@ -82,7 +83,7 @@ public class Sprite {
 	public static Sprite greyShirt3 = new Sprite(16, 0, SpriteSheet.entities);
 	public static Sprite greyShirt4 = new Sprite(17, 0, SpriteSheet.entities);
 
-	public Sprite(int x, int y, SpriteSheet sheet)  {
+	protected Sprite(int x, int y, SpriteSheet sheet)  {
 		this.x = x * SIZE + (x * sheet.margin);
 		this.y = y * SIZE + (y * sheet.margin);
 		this.sheet = sheet;
@@ -90,22 +91,26 @@ public class Sprite {
 		load();
 	}
 
-	public Sprite() {
+	private Sprite() {
 		pixels = new int[SIZE * SIZE];
 	}
 
+	//return random grass sprite
 	public static Sprite getGrass() {
 		return rand.nextBoolean() ? grass : grass2;
 	}
 
+	//return random stone sprite
 	public static Sprite getStone() {
 		return rand.nextBoolean() ? stone : stone2;
 	}
 
+	//return random dirt sprite
 	public static Sprite getDirt() {
 		return rand.nextBoolean() ? dirt : dirt2;
 	}
 
+	//returns random skin color sprite
 	public static Sprite getPerson() {
 		byte n = (byte) rand.nextInt(3);
 		if (n == 0)
@@ -117,10 +122,12 @@ public class Sprite {
 		return Sprite.voidSprite;
 	}
 
+	//return random sand sprite
 	public static Sprite getSand() {
 		return rand.nextBoolean() ? sand : sand2;
 	}
 
+	//load a sprites pixels into the pixel array
 	private void load() {
 		for (int y = 0; y < SIZE; y++) {
 			for (int x = 0; x < SIZE; x++) {

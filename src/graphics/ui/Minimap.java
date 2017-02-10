@@ -8,19 +8,20 @@ import java.awt.image.ColorModel;
 import java.awt.image.DataBufferInt;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
-import map.Map;
+import map.Level;
 
 public class Minimap {
 
-	private int width, height;
-	private int x, y;
-	public int[] pixels;
-	private Map map;
-	private Image img;
-	private static final Color COL = new Color(91, 94, 99, 110);
-	private int xoff, yoff;
+	private int width, height; //width and height of the minimap
+	private int x, y; // x and y of the top left corner
+	public int[] pixels; // pixels array
+	private Level map; //map being shown
+	private Image img; // image being rendered
+	private static final Color COL = new Color(91, 94, 99, 110); // colour of the small rectangle on the minimap showing where the screen is 
+	private int xoff, yoff; //offset
 
-	public Minimap(int x, int y, Map map) {
+	//constructor
+	public Minimap(int x, int y, Level map) {
 		this.x = x;
 		this.y = y;
 		width = 200;
@@ -31,7 +32,8 @@ public class Minimap {
 
 	}
 
-	public void init() {
+	//intialise the image
+	private void init() {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
@@ -47,6 +49,7 @@ public class Minimap {
 
 	}
 
+	//render the minimap
 	public void render(Graphics g) {
 		g.drawImage(img, x, y, null);
 		g.setColor(COL);
@@ -56,12 +59,14 @@ public class Minimap {
 
 	}
 
+	//setter
 	public void setOffset(int x, int y) {
 		xoff = x;
 		yoff = y;
 	}
 
-	public static Image getImageFromArray(int[] pixels, int width, int height) {
+	//gets an image from an array of pixels
+	private static Image getImageFromArray(int[] pixels, int width, int height) {
 		DataBufferInt buffer = new DataBufferInt(pixels, pixels.length);
 		int[] bandMasks = { 0xFF0000, 0xFF00, 0xFF, 0xFF000000 };
 		WritableRaster raster = Raster.createPackedRaster(buffer, width, height, width, bandMasks, null);

@@ -8,9 +8,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JFrame;
-
 import entity.item.Clothing;
 import entity.mob.Mob;
 import entity.mob.Villager;
@@ -18,10 +16,10 @@ import graphics.Screen;
 import graphics.Sprite;
 import graphics.ui.Ui;
 import graphics.ui.icon.UiIcons;
-import graphics.ui.menu.MenuItemType;
+import graphics.ui.menu.MenuItem;
 import input.Keyboard;
 import input.Mouse;
-import map.Map;
+import map.Level;
 import map.Tile;
 import sound.Sound;
 
@@ -32,7 +30,7 @@ public class Game extends Canvas implements Runnable {
 	private static int height = width / 16 * 9;
 	private Thread thread;
 	private static final int SCALE = 3;
-	private Map level;
+	private Level level;
 	private JFrame frame;
 	private boolean running = false;
 	private Mouse mouse;
@@ -73,7 +71,7 @@ public class Game extends Canvas implements Runnable {
 		Sound.initSound();
 		keyboard = new Keyboard();
 		mouse = new Mouse(this);
-		level = new Map(100, 100);
+		level = new Level(100, 100);
 		mobs = new ArrayList<Mob>();
 		vills = new ArrayList<Villager>();
 		sols = new ArrayList<Villager>();
@@ -88,13 +86,16 @@ public class Game extends Canvas implements Runnable {
 
 	private void spawnvills() {
 		Villager vil = new Villager(144, 144, level);
-		vil.addClothing(new Clothing("Brown Shirt", vil.x, vil.y, Sprite.brownShirt1, "A brown tshirt", true));
+		vil.addClothing(
+				new Clothing("Brown Shirt", vil.getX(), vil.getY(), Sprite.brownShirt1, "A brown tshirt", true));
 		addVillager(vil);
 		Villager vil2 = new Villager(144, 158, level);
-		vil2.addClothing(new Clothing("Green Shirt", vil2.x, vil2.y, Sprite.greenShirt1, "A green tshirt", true));
+		vil2.addClothing(
+				new Clothing("Green Shirt", vil2.getX(), vil2.getY(), Sprite.greenShirt1, "A green tshirt", true));
 		addVillager(vil2);
 		Villager vil3 = new Villager(158, 144, level);
-		vil3.addClothing(new Clothing("Green Shirt", vil2.x, vil2.y, Sprite.greenShirt2, "A green tshirt", true));
+		vil3.addClothing(
+				new Clothing("Green Shirt", vil2.getX(), vil2.getY(), Sprite.greenShirt2, "A green tshirt", true));
 		addVillager(vil3);
 	}
 
@@ -172,7 +173,7 @@ public class Game extends Canvas implements Runnable {
 	private void updateUI() {
 		ui.update(mouse, xScroll, yScroll);
 		moveCamera();
-		paused = ui.paused;
+		paused = ui.getPaused();
 
 	}
 
@@ -220,7 +221,7 @@ public class Game extends Canvas implements Runnable {
 
 		}
 		if (anyVillHoverOn(mouse) != null) {
-			if (mouse.getClicked()&&!ui.outlineIsVisible()) {
+			if (mouse.getClicked() && !ui.outlineIsVisible()) {
 				deselectAllVills();
 				selectedvill = anyVillHoverOn(mouse);
 				selectedvill.setSelected(true);
@@ -231,27 +232,27 @@ public class Game extends Canvas implements Runnable {
 		if (!ui.menuVisible() && UiIcons.isTrowelHover() && mouse.getClicked()) {
 			deselectAllVills();
 			ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(),
-					new MenuItemType[] { MenuItemType.BUILD_WALL, MenuItemType.CANCEL });
+					new String[] { MenuItem.BUILD + " wall", MenuItem.CANCEL });
 		}
 
 		if (mouse.getButton() == 3) {
 			if (selectedvill != null) {
 				if (level.selectTree(mouse.getX(), mouse.getY()) != null) {
 					ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(),
-							new MenuItemType[] { MenuItemType.CHOP, MenuItemType.MOVE, MenuItemType.CANCEL });
+							new String[] { MenuItem.CHOP, MenuItem.MOVE, MenuItem.CANCEL });
 				} else {
 					if (level.selectOre(mouse.getX(), mouse.getY()) != null) {
 						ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(),
-								new MenuItemType[] { MenuItemType.MINE, MenuItemType.MOVE, MenuItemType.CANCEL });
+								new String[] { MenuItem.MINE, MenuItem.MOVE, MenuItem.CANCEL });
 					} else {
 
 						ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(),
-								new MenuItemType[] { MenuItemType.MOVE, MenuItemType.CANCEL });
+								new String[] { MenuItem.MOVE, MenuItem.CANCEL });
 					}
 				}
 
 			} else {
-				ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(), MenuItemType.CANCEL);
+				ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(), MenuItem.CANCEL);
 			}
 		}
 		if (ui.outlineIsVisible() && !ui.menuVisible() && mouse.getReleased() && !UiIcons.hoverOnAnyIcon()) {
@@ -268,15 +269,15 @@ public class Game extends Canvas implements Runnable {
 			ui.deSelectIcons();
 		}
 		if (ui.menuVisible()) {
-			if (ui.getMenu().clickedOnItem(MenuItemType.CANCEL, mouse)) {
+			if (ui.getMenu().clickedOnItem(MenuItem.CANCEL, mouse)) {
 				ui.getMenu().hide();
 				ui.deSelectIcons();
 				return;
 			}
-			if (ui.getMenu().clickedOnItem(MenuItemType.MOVE, mouse)) {
+			if (ui.getMenu().clickedOnItem(MenuItem.MOVE, mouse)) {
 				selectedvill.resetMove();
-				selectedvill.movement = selectedvill.getPath(selectedvill.x >> 4, selectedvill.y >> 4, mouse.getTileX(),
-						mouse.getTileY());
+				selectedvill.movement = selectedvill.getPath(selectedvill.getX() >> 4, selectedvill.getY() >> 4,
+						mouse.getTileX(), mouse.getTileY());
 				if (selectedvill.movement == null) {
 					selectedvill.movement = selectedvill.getShortest(level.getEntityOn(mouse.getX(), mouse.getY()));
 				}
@@ -285,7 +286,7 @@ public class Game extends Canvas implements Runnable {
 				ui.getMenu().hide();
 				return;
 			}
-			if (ui.getMenu().clickedOnItem(MenuItemType.CHOP, mouse)) {
+			if (ui.getMenu().clickedOnItem(MenuItem.CHOP, mouse)) {
 				selectedvill.resetMove();
 				selectedvill.addJob(level.selectTree(mouse.getX(), mouse.getY()));
 				selectedvill.setSelected(false);
@@ -293,7 +294,7 @@ public class Game extends Canvas implements Runnable {
 				ui.getMenu().hide();
 				return;
 			}
-			if (ui.getMenu().clickedOnItem(MenuItemType.MINE, mouse)) {
+			if (ui.getMenu().clickedOnItem(MenuItem.MINE, mouse)) {
 				selectedvill.resetMove();
 				selectedvill.addJob(level.selectOre(mouse.getX(), mouse.getY()));
 				selectedvill.setSelected(false);
@@ -301,8 +302,8 @@ public class Game extends Canvas implements Runnable {
 				ui.getMenu().hide();
 				return;
 			}
-			if (ui.getMenu().clickedOnItem(MenuItemType.BUILD_WALL, mouse) && !ui.outlineIsVisible()) {
-				ui.showBuildSquare(mouse);
+			if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " Wall", mouse) && !ui.outlineIsVisible()) {
+				ui.showBuildSquare(mouse, xScroll, yScroll);
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;

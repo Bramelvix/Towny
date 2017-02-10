@@ -7,15 +7,18 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 public class Sound {
-	public static Clip woodChopping;
+	//3 sound clips
+	public static Clip woodChopping; 
 	public static Clip stoneMining;
 	public static Clip drill;
 
+	//plays a soundclip
 	public static void speelGeluid(Clip clip) {
 		clip.setFramePosition(0);
 		clip.loop(0);
 	}
 
+	//inits the soundclips
 	public static void initSound() {
 		try {
 			URL woodsoundurl = Sound.class.getResource("/res/sound/woodChopping.wav");

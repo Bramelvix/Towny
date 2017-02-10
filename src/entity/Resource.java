@@ -1,14 +1,15 @@
 package entity;
 
-import map.Map;
+import map.Level;
 
+//superclass of gatherable resources such as trees and ore
 public class Resource extends Entity implements Workable{
 	
 	public Resource(int x, int y) {
 		super(x,y);
 	}
 
-	public boolean work(Map level) {
+	public boolean work(Level level) {
 		return false;
 	}
 

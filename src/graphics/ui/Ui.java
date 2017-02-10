@@ -3,17 +3,19 @@ package graphics.ui;
 import java.awt.Graphics;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.Menu;
-import graphics.ui.menu.MenuItemType;
 import input.Mouse;
-import map.Map;
+import map.Level;
 
+//main class used to manage the ui
 public class Ui {
+	//different ui elements
 	private Menu menu;
 	private TopBar top;
 	private Minimap map;
-	public boolean paused;
+	//public boolean paused;
 	private BuildOutline outline;
 
+	//rendering the ui
 	public void render(Graphics g) {
 		UiIcons.render(g);
 		menu.render(g);
@@ -23,7 +25,7 @@ public class Ui {
 
 	}
 
-	public void init(Map level) {
+	public void init(Level level) {
 		UiIcons.init();
 		menu = new Menu();
 		map = new Minimap(1290, 8, level);
@@ -31,7 +33,7 @@ public class Ui {
 		outline = new BuildOutline(level);
 	}
 
-	public Ui(Map level) {
+	public Ui(Level level) {
 		init(level);
 	}
 
@@ -59,7 +61,7 @@ public class Ui {
 		UiIcons.deSelect();
 	}
 
-	public void showMenuOn(int x, int y, MenuItemType[] items) {
+	public void showMenuOn(int x, int y, String[] items) {
 		if (!outline.isVisible()) {
 			showMenuOn(x, y);
 			menu.addItems(items);
@@ -75,7 +77,7 @@ public class Ui {
 		}
 	}
 
-	public void showMenuOn(int x, int y, MenuItemType item) {
+	public void showMenuOn(int x, int y, String item) {
 		if (!outline.isVisible()) {
 			showMenuOn(x, y);
 			menu.addItem(item);
@@ -91,8 +93,8 @@ public class Ui {
 		map.setOffset(x, y);
 	}
 
-	public void showBuildSquare(Mouse mouse) {
-		outline.show(mouse);
+	public void showBuildSquare(Mouse mouse, int xoff, int yoff) {
+		outline.show(mouse, xoff, yoff);
 	}
 
 	public void removeBuildSquare() {
@@ -104,15 +106,13 @@ public class Ui {
 		UiIcons.update(mouse, outline.isVisible());
 		// map.init();
 		if (top.clickedOnPause(mouse)) {
-			if (!paused) {
-				paused = true;
-			} else {
-				paused = false;
-			}
-			top.setPaused(paused);
+			top.togglePause();
 		}
 		outline.update(mouse, xOff, yOff);
 
+	}
+	public boolean getPaused() {
+		return top.getPaused();
 	}
 
 	public void updateCounts(int solcount, int vilcount) {

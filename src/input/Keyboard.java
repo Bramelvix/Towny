@@ -5,7 +5,8 @@ import java.awt.event.KeyListener;
 
 public class Keyboard implements KeyListener {
 
-	public boolean up, down, right, left;
+	//the keyboard class is used to register keys
+	public boolean up, down, right, left; 
 	private boolean[] keys = new boolean[120];
 
 	public void update() {

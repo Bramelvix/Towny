@@ -2,28 +2,35 @@ package entity;
 
 import entity.item.Item;
 import graphics.Sprite;
-import map.Map;
+import map.Level;
+import map.Tile;
 import sound.Sound;
 
 public class Wall extends Entity implements Buildable {
-	public int condition = 0;
-	public boolean initialised = false;
-	private boolean topHasWall;
-	private boolean bottomHasWall;
-	private boolean leftHasWall;
-	private boolean rightHasWall;
+	public int condition = 0; // condition of the wall (0=not built , 100= done)
+	public boolean initialised = false; // is the wall initialised
+	private boolean topHasWall; // is there a wall above this wall
+	private boolean bottomHasWall; // is there a wall below this wall
+	private boolean leftHasWall; // is there a wall to the left of this wall
+	private boolean rightHasWall; // is there a wall to the right of this wall
 
+	// basic constructor
 	public Wall(int x, int y) {
 		super(x, y);
 		setVisible(false);
 		condition = 0;
 	}
 
+	// checks the 4 sides of this wall to see if there are walls next to it. The
+	// sprite is decided based on this.
+	// this method has a boolean that stops the walls next to this wall to
+	// retrigger checking the sides of this wall, which would create an infinite
+	// loop of walls checking eachother again and again
 	public void checkSides(boolean eerstekeer) {
-		Wall left = (level.getWallOn((x - 16), y));
-		Wall right = (level.getWallOn((x + 16), y));
-		Wall up = (level.getWallOn(x, (y - 16)));
-		Wall down = (level.getWallOn(x, (y + 16)));
+		Wall left = (level.getWallOn((x - Tile.SIZE), y));
+		Wall right = (level.getWallOn((x + Tile.SIZE), y));
+		Wall up = (level.getWallOn(x, (y - Tile.SIZE)));
+		Wall down = (level.getWallOn(x, (y + Tile.SIZE)));
 		leftHasWall = false;
 		rightHasWall = false;
 		topHasWall = false;
@@ -52,11 +59,13 @@ public class Wall extends Entity implements Buildable {
 
 	}
 
+	// Checksides method for the walls around this wall
 	public void checkSides() {
 		checkSides(true);
 	}
 
-	public boolean initialise(Item material, Map level) {
+	//called by villagers when they start building the wall.
+	public boolean initialise(Item material, Level level) {
 		this.level = level;
 		if (material == null) {
 			return false;
@@ -73,6 +82,7 @@ public class Wall extends Entity implements Buildable {
 
 	}
 
+	//decide the sprite for the wall, depending on the other 4 sides next to the wall
 	private void decideSprite() {
 		sprite = null;
 		sprite = Sprite.woodenWallVerticalTop;
@@ -131,6 +141,7 @@ public class Wall extends Entity implements Buildable {
 
 	}
 
+	//build method called by villagers when building
 	public boolean build() {
 		if (initialised) {
 			if (condition < 100) {

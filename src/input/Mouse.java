@@ -8,24 +8,27 @@ import javax.swing.event.MouseInputListener;
 import main.Game;
 
 public class Mouse extends MouseAdapter implements MouseInputListener {
+	//used to register the mouse on the screen
 	private Game game;
-	private int mouseX = -1;
+	private int mouseX = -1; // x and y coord on the screen, in ingame pixels (/3), WITH OFFSET
 	private int mouseY = -1;
-	private int mouseB = -1;
-	private int mouseTileX = -1;
+	private int mouseB = -1; // the mouse button pressed
+	private int mouseTileX = -1; // the x and y of the tiles in the game that the mouse is on
 	private int mouseTileY = -1;
-	private int trueX = -1;
+	private int trueX = -1; // x and y coord on the screen, in ingame pixels (/3), WITHOUT OFFSET
 	private int trueY = -1;
-	private int trueXpixels = -1;
+	private int trueXpixels = -1; // x and y coord on the screen, in acutal pixels, WITHOUT OFFSET
 	private int trueYpixels = -1;
-	private boolean clicked;
-	private boolean drag;
-	private boolean released;
+	private boolean clicked; // has the mouse been clicked
+	private boolean drag; // has the mouse been dragged
+	private boolean released; // has the mouse been released
 
+	//constructor
 	public Mouse(Game game) {
 		this.game = game;
 	}
 
+	//getters
 	public int getX() {
 		return mouseX;
 	}
@@ -94,10 +97,10 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
 		drag = true;
-		trueX = arg0.getX() / 3;
-		trueY = arg0.getY() / 3;
 		trueXpixels = arg0.getX();
 		trueYpixels = arg0.getY();
+		trueX = trueXpixels / 3;
+		trueY = trueYpixels / 3;
 		mouseX = trueX + game.xScroll;
 		mouseY = trueY + game.yScroll;
 		mouseTileX = mouseX >> 4;
@@ -107,12 +110,12 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
-		trueX = arg0.getX() / 3;
-		trueY = arg0.getY() / 3;
-		mouseX = trueX + game.xScroll;
-		mouseY = trueY + game.yScroll;
 		trueXpixels = arg0.getX();
 		trueYpixels = arg0.getY();
+		trueX = trueXpixels / 3;
+		trueY = trueYpixels / 3;
+		mouseX = trueX + game.xScroll;
+		mouseY = trueY + game.yScroll;
 		mouseTileX = mouseX >> 4;
 		mouseTileY = mouseY >> 4;
 

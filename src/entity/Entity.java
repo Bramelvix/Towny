@@ -5,46 +5,47 @@ import java.util.Random;
 import graphics.Screen;
 import graphics.Sprite;
 import input.Mouse;
-import map.Map;
+import map.Level;
 
 public abstract class Entity {
-	public int x, y;
-	private boolean removed = false;
-	public Map level;
-	protected final Random random = new Random();
-	public Sprite sprite;
-	public Sprite extraSprite;
-	private boolean visible;
+	protected int x, y; // x and y of the entity
+	public Level level; // level in which the entity is placed
+	protected final Random random = new Random(); // random needed for various
+													// chance calculations
+	public Sprite sprite; // the entity's sprite
+	public Sprite extraSprite; // extra sprite for large entities (like trees)
+	private boolean visible; // is the entity visible or not
 
-	public void remove() {
-		removed = true;
-	}
+	// setter
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
+
+	// getters
 	public boolean isVisible() {
 		return visible;
 	}
 
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	// basic constructor
 	public Entity(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
-
+	//does the mouse hover over the entity
 	public boolean hoverOn(Mouse mouse) {
-		return ((mouse.getX()) >= x && ((mouse.getX()) <= x + 16)
-				&& ((mouse.getY()) >= y && ((mouse.getY()) <= y + 16)));
-	}
-	
-
-	public Entity() {
-
+		return ((mouse.getX()) >= x && ((mouse.getX()) <= x + Sprite.SIZE)
+				&& ((mouse.getY()) >= y && ((mouse.getY()) <= y + Sprite.SIZE)));
 	}
 
-	public boolean IsRemoved() {
-		return removed;
-	}
-
+	//render method
 	public void render(Screen screen) {
 		screen.renderEntity(x, y, sprite);
 	}

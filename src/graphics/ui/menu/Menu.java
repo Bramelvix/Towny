@@ -7,14 +7,18 @@ import java.util.List;
 
 import input.Mouse;
 
-public class Menu {
-	private int x, y;
-	private int width = 70;
+public class Menu { // the menu is the little options menu that shows up when
+					// you right click
+	private int x, y; // x and y of the top left corner
+	private int width = 70; // width and height hardcoded
 	private int height = 20;
-	public List<MenuItem> items;
-	private boolean visible;
-	Color colour = new Color(91, 94, 99, 210);
+	public List<MenuItem> items; // list of items on the menu
+	private boolean visible; // is the item visible
+	private Color colour = new Color(91, 94, 99, 210); // the grey-blue colour
+														// of the background of
+														// the menu
 
+	// render method
 	public void render(Graphics g) {
 		if (visible) {
 			g.setColor(colour);
@@ -25,35 +29,41 @@ public class Menu {
 		}
 	}
 
+	// showing the menu
 	public void show() {
 		visible = true;
 	}
 
+	// getter
 	public boolean isVisible() {
 		return visible;
 	}
 
+	// setter
 	public void setVisible(boolean vis) {
 		if (visible) {
 			visible = vis;
 		}
 	}
 
+	// hiding the menu
 	public void hide() {
 		setVisible(false);
 		this.width = 0;
 		this.height = 0;
 	}
 
-	public void addItems(MenuItemType[] items) {
-		for (MenuItemType i : items) {
+	// adding items to the menu
+	public void addItems(String[] items) {
+		for (String i : items) {
 			addItem(i);
 		}
 	}
 
+	// updating the menu
 	public void update(Mouse mouse, boolean forceinvisible) {
 		if (forceinvisible) {
-		hide();
+			hide();
 			return;
 		} else {
 			for (MenuItem i : items) {
@@ -66,6 +76,7 @@ public class Menu {
 		}
 	}
 
+	// constructor
 	public Menu() {
 		x = 0;
 		y = 0;
@@ -73,31 +84,13 @@ public class Menu {
 		setVisible(false);
 	}
 
+	// getters
 	public int getWidth() {
 		return width;
 	}
 
 	public int getHeight() {
 		return height;
-	}
-
-	public boolean clickedOnItem(MenuItemType type, Mouse mouse) {
-		for (MenuItem i : items) {
-			if (i.equals(type)) {
-				return i.clicked(mouse);
-			}
-		}
-		return false;
-	}
-
-	public void addItem(MenuItemType i) {
-		if (i != null) {
-			MenuItem o = new MenuItem(i, this);
-			if (!(items.contains(o))) {
-				items.add(o);
-				height = height + 10;
-			}
-		}
 	}
 
 	public int getYLocForMenuItem() {
@@ -112,6 +105,27 @@ public class Menu {
 		return y;
 	}
 
+	public boolean clickedOnItem(String type, Mouse mouse) {
+		for (MenuItem i : items) {
+			if (i.equals(type)) {
+				return i.clicked(mouse);
+			}
+		}
+		return false;
+	}
+
+	// adding an item to the menu
+	public void addItem(String i) {
+		if (i != null) {
+			MenuItem o = new MenuItem(i, this);
+			if (!(items.contains(o))) {
+				items.add(o);
+				height = height + 15;
+			}
+		}
+	}
+
+	// setter
 	public void setX(int x) {
 		this.x = x;
 	}

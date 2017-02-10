@@ -1,16 +1,17 @@
 package entity.pathfinding;
 
 import java.util.ArrayList;
-import map.Map;
+import map.Level;
 
+//pathfinder I found on the internet
 public class PathFinder implements AStarHeuristic {
 	private final int MAXDIST = 500;
 	private ArrayList<Point> closed = new ArrayList<Point>();
 	private ArrayList<Point> open = new ArrayList<Point>();
-	private Map level;
+	private Level level;
 	private Point[][] nodes;
 
-	public PathFinder(Map level) {
+	public PathFinder(Level level) {
 		this.level = level;
 		nodes = new Point[level.width][level.height];
 		for (int x = 0; x < level.width; x++) {

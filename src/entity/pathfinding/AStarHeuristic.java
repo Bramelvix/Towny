@@ -1,8 +1,6 @@
 package entity.pathfinding;
 
-import entity.mob.Mob;
-import map.Map;
-
+//method to calculate the cost of moving over a tile (can be higher for mud for instance)
 public interface AStarHeuristic {
 	public float getCost(int x, int y, int tx, int ty);
 
