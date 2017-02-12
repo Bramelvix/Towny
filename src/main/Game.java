@@ -9,6 +9,8 @@ import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
+
+import entity.Tree;
 import entity.item.Clothing;
 import entity.mob.Mob;
 import entity.mob.Villager;
@@ -89,11 +91,11 @@ public class Game extends Canvas implements Runnable {
 		vil.addClothing(
 				new Clothing("Brown Shirt", vil.getX(), vil.getY(), Sprite.brownShirt1, "A brown tshirt", true));
 		addVillager(vil);
-		Villager vil2 = new Villager(144, 158, level);
+		Villager vil2 = new Villager(144, 160, level);
 		vil2.addClothing(
 				new Clothing("Green Shirt", vil2.getX(), vil2.getY(), Sprite.greenShirt1, "A green tshirt", true));
 		addVillager(vil2);
-		Villager vil3 = new Villager(158, 144, level);
+		Villager vil3 = new Villager(160, 160, level);
 		vil3.addClothing(
 				new Clothing("Green Shirt", vil2.getX(), vil2.getY(), Sprite.greenShirt2, "A green tshirt", true));
 		addVillager(vil3);
@@ -201,13 +203,41 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	private void updateMouse() {
-		if ((mouse.getClicked() && UiIcons.isWoodSelected()) && !UiIcons.hoverOnAnyIcon()
-				&& (level.selectTree(mouse.getX(), mouse.getY()) != null)) {
-			Villager idle = getIdlestVil();
-			idle.resetMove();
-			deselectAllVills();
-			idle.addJob(level.selectTree(mouse.getX(), mouse.getY()));
-			ui.deSelectIcons();
+		if ((UiIcons.isWoodSelected()) && !UiIcons.hoverOnAnyIcon()) {
+			if (mouse.getButton() == 1) {
+				ui.showSelectionSquare(mouse);
+				int x = ui.getSelectionX();
+				int y = ui.getSelectionY();
+				int width = ui.getSelectionWidth();
+				int height = ui.getSelectionHeight();
+				for (int xs = x; xs < (x + width); xs += 16) {
+					for (int ys = y; ys < (y + height); ys += 16) {
+						Tree tree = level.selectTree(xs, ys);
+						if (tree != null) {
+							tree.setSelected(true);
+						}
+					}
+				}
+			}
+			if (mouse.getReleased()) {
+				int x = ui.getSelectionX();
+				int y = ui.getSelectionY();
+				int width = ui.getSelectionWidth();
+				int height = ui.getSelectionHeight();
+				for (int xs = x; xs < (x + width); xs += 16) {
+					for (int ys = y; ys < (y + height); ys += 16) {
+						Tree tree = level.selectTree(xs, ys);
+						if (tree != null) {
+							Villager idle = getIdlestVil();
+							idle.resetMove();
+							idle.addJob(tree);
+						}
+					}
+				}
+				ui.resetSelection();
+				ui.deSelectIcons();
+
+			}
 			return;
 		}
 		if (((mouse.getClicked() && UiIcons.isMiningSelected()) && !UiIcons.hoverOnAnyIcon())
@@ -232,7 +262,7 @@ public class Game extends Canvas implements Runnable {
 		if (!ui.menuVisible() && UiIcons.isTrowelHover() && mouse.getClicked()) {
 			deselectAllVills();
 			ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(),
-					new String[] { MenuItem.BUILD + " wall", MenuItem.CANCEL });
+					new String[] { MenuItem.BUILD + " Wall", MenuItem.CANCEL });
 		}
 
 		if (mouse.getButton() == 3) {

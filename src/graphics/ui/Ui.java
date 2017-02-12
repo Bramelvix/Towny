@@ -8,26 +8,28 @@ import map.Level;
 
 //main class used to manage the ui
 public class Ui {
-	//different ui elements
+	// different ui elements
 	private Menu menu;
 	private TopBar top;
 	private Minimap map;
-	//public boolean paused;
 	private BuildOutline outline;
+	private SelectionSquare selection;
 
-	//rendering the ui
+	// rendering the ui
 	public void render(Graphics g) {
 		UiIcons.render(g);
 		menu.render(g);
 		top.render(g);
 		map.render(g);
 		outline.render(g);
+		selection.render(g);
 
 	}
 
 	public void init(Level level) {
 		UiIcons.init();
 		menu = new Menu();
+		selection = new SelectionSquare();
 		map = new Minimap(1290, 8, level);
 		top = new TopBar(700, 15);
 		outline = new BuildOutline(level);
@@ -93,6 +95,29 @@ public class Ui {
 		map.setOffset(x, y);
 	}
 
+	public void showSelectionSquare(Mouse mouse) {
+		selection.show(mouse);
+	}
+	public void resetSelection() {
+		selection.reset();
+	}
+
+	public int getSelectionX() {
+		return selection.getX();
+	}
+
+	public int getSelectionY() {
+		return selection.getY();
+	}
+
+	public int getSelectionWidth() {
+		return selection.getWidth();
+	}
+
+	public int getSelectionHeight() {
+		return selection.getHeight();
+	}
+
 	public void showBuildSquare(Mouse mouse, int xoff, int yoff) {
 		outline.show(mouse, xoff, yoff);
 	}
@@ -109,8 +134,10 @@ public class Ui {
 			top.togglePause();
 		}
 		outline.update(mouse, xOff, yOff);
+		selection.update(mouse);
 
 	}
+
 	public boolean getPaused() {
 		return top.getPaused();
 	}

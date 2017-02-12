@@ -75,7 +75,7 @@ public class UiIcons {
 	// selecting an icon
 	public static void setSelected(Mouse mouse) {
 		for (int i = 0; i < 3; i++) {
-			if (mouse.getButton() == 1 && icons[i].hoverOn())
+			if (mouse.getClicked() && icons[i].hoverOn())
 				icons[i].setSelect(true);
 		}
 	}

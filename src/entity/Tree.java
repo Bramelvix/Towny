@@ -20,8 +20,7 @@ public class Tree extends Resource {
 
 	//render method to render onto the screen
 	public void render(Screen screen) {
-		screen.renderEntity(x, y, sprite);
-		screen.renderEntity(x, y - Tile.SIZE, extraSprite);
+		screen.renderTree(x, y, this);
 	}
 
 	//work method (same as in the Ore class)

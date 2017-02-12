@@ -25,7 +25,6 @@ public class Villager extends Mob {
 	private Sprite hair; // hair sprite
 	private int hairnr; // hair number (needed for the hair sprite to be
 						// decided)
-	private boolean selected; // is the villager selected
 	private List<Job> jobs; // jobs the villager needs to do
 	private int idletimer = getIdleTimer(); // timer for the villager to idle
 
@@ -58,10 +57,6 @@ public class Villager extends Mob {
 		return jobs.size();
 	}
 
-	public boolean isSelected() {
-		return selected;
-	}
-
 	// logic for the villager to idle
 	private boolean idleTime() {
 		if (idletimer <= 0) {
@@ -71,11 +66,6 @@ public class Villager extends Mob {
 			idletimer = idletimer - 1;
 			return false;
 		}
-	}
-
-	// setter
-	public void setSelected(boolean selected) {
-		this.selected = selected;
 	}
 
 	// the villager moves to a random location nearby if he has nothing to do.
@@ -308,18 +298,18 @@ public class Villager extends Mob {
 
 	// render onto the screen
 	public void render(Screen screen) {
-		screen.renderEntity(x, y, this.sprite); // renders the body
+		screen.renderSprite(x, y, this.sprite); // renders the body
 		if (wearing != null) {
 			for (int i = 0; i < wearing.size(); i++) {
 				if (wearing.get(i) != null) {
-					screen.renderEntity(x, y, wearing.get(i).sprite); // renders
+					screen.renderSprite(x, y, wearing.get(i).sprite); // renders
 																		// clothing
 				}
 			}
 		}
-		screen.renderEntity(x, y, hair); // renders the hair
+		screen.renderSprite(x, y, hair); // renders the hair
 		if (holding != null) {
-			screen.renderEntity(x, y, holding.sprite); // renders the item the
+			screen.renderSprite(x, y, holding.sprite); // renders the item the
 														// villager is holding
 		}
 		screen.renderSelection(x, y, this); // render the red square around

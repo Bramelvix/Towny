@@ -14,11 +14,16 @@ public abstract class Entity {
 													// chance calculations
 	public Sprite sprite; // the entity's sprite
 	public Sprite extraSprite; // extra sprite for large entities (like trees)
-	private boolean visible; // is the entity visible or not
+	protected boolean visible; // is the entity visible or not
+	protected boolean selected = false;
 
-	// setter
+	// setters
 	public void setVisible(boolean visible) {
 		this.visible = visible;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 
 	// getters
@@ -34,19 +39,24 @@ public abstract class Entity {
 		return y;
 	}
 
+	public boolean isSelected() {
+		return selected;
+	}
+
 	// basic constructor
 	public Entity(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
-	//does the mouse hover over the entity
+
+	// does the mouse hover over the entity
 	public boolean hoverOn(Mouse mouse) {
 		return ((mouse.getX()) >= x && ((mouse.getX()) <= x + Sprite.SIZE)
 				&& ((mouse.getY()) >= y && ((mouse.getY()) <= y + Sprite.SIZE)));
 	}
 
-	//render method
+	// render method
 	public void render(Screen screen) {
-		screen.renderEntity(x, y, sprite);
+		screen.renderEntity(x, y, this);
 	}
 }
