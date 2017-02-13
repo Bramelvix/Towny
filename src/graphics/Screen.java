@@ -106,19 +106,21 @@ public class Screen {
 					pixels[xa + ya * width] = col;
 			}
 		}
-		renderSprite(xp, yp - Tile.SIZE, e.extraSprite, e.isSelected());
+		renderSprite(xp, yp - Tile.SIZE, e.extraSprite, e.isSelected(), false);
 
 	}
 
 	// render sprites
 	public void renderSprite(int xp, int yp, Sprite e) {
-		renderSprite(xp, yp, e, false);
+		renderSprite(xp, yp, e, false, true);
 
 	}
 
-	public void renderSprite(int xp, int yp, Sprite e, boolean selected) {
-		xp -= xOffset;
-		yp -= yOffset;
+	public void renderSprite(int xp, int yp, Sprite e, boolean selected, boolean forceOffset) {
+		if (forceOffset) {
+			xp -= xOffset;
+			yp -= yOffset;
+		}
 		for (int y = 0; y < Sprite.SIZE; y++) {
 			int ya = y + yp;
 			for (int x = 0; x < Sprite.SIZE; x++) {

@@ -25,7 +25,7 @@ public abstract class Mob extends Entity {
 				dir = Direction.RECHTS_OMLAAG;
 			} else {
 				if (ya < 0) {
-					dir = Direction.LINKS_OMHOOG;
+					dir = Direction.RECHTS_OMHOOG;
 				} else {
 					dir = Direction.RECHTS;
 				}
