@@ -50,8 +50,8 @@ public class Game extends Canvas implements Runnable {
 
 	private Screen screen;
 
-	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+	private BufferedImage image;
+	private int[] pixels;
 
 	public static void main(String[] args) {
 		new Game();
@@ -61,7 +61,9 @@ public class Game extends Canvas implements Runnable {
 	public Game() {
 		Dimension size = new Dimension(width * SCALE, height * SCALE);
 		setPreferredSize(size);
-		screen = new Screen(width, height);
+		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+		screen = new Screen(width,height, pixels);
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setTitle("Towny");

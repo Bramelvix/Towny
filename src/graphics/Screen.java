@@ -13,10 +13,10 @@ public class Screen {
 	public int xOffset, yOffset; // the offset of the screen
 
 	// constructor
-	public Screen(int width, int height) {
+	public Screen(int width, int height, int[] pixels) {
+		this.pixels = pixels;
 		this.width = width;
 		this.height = height;
-		pixels = new int[width * height];
 	}
 
 	// empties the pixels array
