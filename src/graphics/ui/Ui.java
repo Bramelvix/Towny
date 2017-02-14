@@ -26,6 +26,10 @@ public class Ui {
 
 	}
 
+	public byte getSpeed() {
+		return top.getSpeed();
+	}
+
 	public void init(Level level) {
 		UiIcons.init();
 		menu = new Menu();
@@ -98,6 +102,7 @@ public class Ui {
 	public void showSelectionSquare(Mouse mouse) {
 		selection.show(mouse);
 	}
+
 	public void resetSelection() {
 		selection.reset();
 	}
@@ -129,17 +134,14 @@ public class Ui {
 	public void update(Mouse mouse, int xOff, int yOff) {
 		menu.update(mouse, outline.isVisible());
 		UiIcons.update(mouse, outline.isVisible());
-		// map.init();
-		if (top.clickedOnPause(mouse)) {
-			top.togglePause();
-		}
 		outline.update(mouse, xOff, yOff);
 		selection.update(mouse);
+		top.update(mouse);
 
 	}
 
-	public boolean getPaused() {
-		return top.getPaused();
+	public boolean isPaused() {
+		return top.isPaused();
 	}
 
 	public void updateCounts(int solcount, int vilcount) {

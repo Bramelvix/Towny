@@ -2,7 +2,6 @@ package graphics;
 
 import entity.Entity;
 import entity.Tree;
-import entity.mob.Villager;
 import map.Tile;
 
 //the game screen (the game world and the items in it, NOT INCLUDING THE UI)
@@ -34,10 +33,7 @@ public class Screen {
 			int ya = y + yp;
 			for (int x = 0; x < Sprite.SIZE; x++) {
 				int xa = x + xp;
-				if (xa < -Sprite.SIZE || xa >= width || ya < 0 || ya >= height)
-					break;
-				if (xa < 0)
-					xa = 0;
+				if (xa < 0|| xa >= width || ya < 0 || ya >= height) continue;
 				int col = tile.sprite.pixels[x + y * Sprite.SIZE];
 				if (col != 0xffff00ff)
 					pixels[xa + ya * width] = col;
@@ -53,10 +49,7 @@ public class Screen {
 			int ya = y + yp;
 			for (int x = 0; x < Sprite.SIZE; x++) {
 				int xa = x + xp;
-				if (xa < -Sprite.SIZE || xa >= width || ya < 0 || ya >= height)
-					break;
-				if (xa < 0)
-					xa = 0;
+				if (xa < 0|| xa >= width || ya < 0 || ya >= height) continue;
 				if (e.isSelected() && (x == 0 || x == Sprite.SIZE - 1 || y == 0 || y == Sprite.SIZE - 1)) {
 					pixels[xa + ya * width] = 0xf44242;
 
@@ -74,10 +67,7 @@ public class Screen {
 			int ya = y + yp;
 			for (int x = 0; x < Sprite.SIZE; x++) {
 				int xa = x + xp;
-				if (xa < -Sprite.SIZE || xa >= width || ya < 0 || ya >= height)
-					break;
-				if (xa < 0)
-					xa = 0;
+				if (xa < 0|| xa >= width || ya < 0 || ya >= height) continue;
 				int col = e.sprite.pixels[x + y * Sprite.SIZE];
 				if (col != 0xffff00ff)
 					pixels[xa + ya * width] = col;
@@ -94,10 +84,7 @@ public class Screen {
 			int ya = y + yp;
 			for (int x = 0; x < Sprite.SIZE; x++) {
 				int xa = x + xp;
-				if (xa < -Sprite.SIZE || xa >= width || ya < 0 || ya >= height)
-					break;
-				if (xa < 0)
-					xa = 0;
+				if (xa < 0|| xa >= width || ya < 0 || ya >= height) continue;
 				int col = e.sprite.pixels[x + y * Sprite.SIZE];
 				if (e.isSelected() && (x == 0 || x == Sprite.SIZE - 1 || y == Sprite.SIZE - 1)) {
 					col = 0xf44242;
@@ -125,10 +112,7 @@ public class Screen {
 			int ya = y + yp;
 			for (int x = 0; x < Sprite.SIZE; x++) {
 				int xa = x + xp;
-				if (xa < -Sprite.SIZE || xa >= width || ya < 0 || ya >= height)
-					break;
-				if (xa < 0)
-					xa = 0;
+				if (xa < 0|| xa >= width || ya < 0 || ya >= height) continue;
 				int col = e.pixels[x + y * Sprite.SIZE];
 				if (selected && (x == 0 || x == Sprite.SIZE - 1 || y == 0)) {
 					col = 0xf44242;

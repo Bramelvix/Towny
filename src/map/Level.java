@@ -141,29 +141,6 @@ public class Level {
 
 	}
 
-	//doesnt work
-	private void generateRandomLevel() {
-		float[][] diamond = new float[width][height];
-		float frequency = 1.0f / width;
-		for (int x = 0; x < width - 1; x++) {
-			for (int y = 0; y < height - 1; y++) {
-				diamond[x][y] = Generator.Generate(x * frequency, y * frequency);
-			}
-		}
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
-				if (diamond[x][y] < 0f) {
-					tiles[x + y * width] = new Tile(Sprite.grass, false, x, y);
-					randForest(x, y);
-				}
-				if (diamond[x][y] >= -0f) {
-					tiles[x + y * width] = new Tile(Sprite.water, false, x, y);
-				}
-			}
-		}
-
-	}
-
 	//render the entities
 	public void renderEntites(Screen screen) {
 		entities.forEach((Entity i) -> i.render(screen));

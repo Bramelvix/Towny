@@ -1,6 +1,8 @@
 package graphics.ui.icon;
 
 import java.awt.Graphics;
+import java.security.AllPermission;
+
 import input.Mouse;
 
 public class UiIcons {
@@ -9,10 +11,10 @@ public class UiIcons {
 	// initialising the icons
 	public static void init() {
 		icons = new Icon[4];
-		icons[0] = new Icon(50, 700, "/res/icons/wood-axe.png", 60, 60);
-		icons[1] = new Icon(150, 700, "/res/icons/mining.png", 60, 60);
-		icons[2] = new Icon(250, 700, "/res/icons/trowel.png", 60, 60);
-		icons[3] = new Icon(350, 700, "/res/icons/sickle.png", 60, 60);
+		icons[0] = new Icon(50, 700, "/res/icons/tools/wood-axe.png", 60, 60);
+		icons[1] = new Icon(150, 700, "/res/icons/tools/mining.png", 60, 60);
+		icons[2] = new Icon(250, 700, "/res/icons/tools/trowel.png", 60, 60);
+		icons[3] = new Icon(350, 700, "/res/icons/tools/sickle.png", 60, 60);
 
 	}
 
@@ -71,11 +73,19 @@ public class UiIcons {
 		setSelected(mouse);
 
 	}
+	//checks if all icons (other than the one provided in num) are unselected
+	private static boolean allOtherIconsNotSelected(int num) { 
+		for (int i = 0; i <icons.length; i++) {
+			if (i==num) continue;
+			if (icons[i].isSelected()) return false;
+		}
+		return true;
+	}
 
 	// selecting an icon
 	public static void setSelected(Mouse mouse) {
 		for (int i = 0; i < 3; i++) {
-			if (mouse.getClicked() && icons[i].hoverOn())
+			if (mouse.getClicked() && icons[i].hoverOn()&&allOtherIconsNotSelected(i))
 				icons[i].setSelect(true);
 		}
 	}

@@ -34,15 +34,17 @@ public class Villager extends Mob {
 		this.sprite = Sprite.getPerson();
 		wearing = new ArrayList<Item>();
 		jobs = new ArrayList<Job>();
+		male = random.nextBoolean();
 		initHair(true);
 		this.x = x;
 		this.y = y;
 
 	}
 
-	public Villager(int x, int y, Level level, int hairnr, List<Item> wearing, Item holding) {
+	public Villager(int x, int y, Level level, int hairnr, List<Item> wearing, Item holding, boolean male) {
 		this(x, y, level);
 		this.hairnr = hairnr;
+		this.male = male;
 		initHair(false);
 		this.wearing = wearing;
 		this.holding = holding;
@@ -78,9 +80,18 @@ public class Villager extends Mob {
 
 	// initialise the hairsprite
 	private void initHair(boolean generate) {
-		if (generate)
-			hairnr = random.nextInt(HairSprite.maleHair.length);
-		hair = HairSprite.maleHair[hairnr];
+		if (generate) {
+			if (male) {
+				hairnr = random.nextInt(HairSprite.maleHair.length);
+			} else {
+				hairnr = random.nextInt(HairSprite.femaleHair.length);
+			}
+		}
+		if (male) {
+			hair = HairSprite.maleHair[hairnr];
+		} else {
+			hair = HairSprite.femaleHair[hairnr];
+		}
 
 	}
 
@@ -117,13 +128,14 @@ public class Villager extends Mob {
 
 	// is the villager on or around a location (x and y in pixels)
 	public boolean aroundSpot(int startx, int starty, int endx, int endy) {
-		return aroundTile(startx >> 4, starty >> 4, endx >> 4, endy >> 4);
+		return aroundTile(startx, starty, endx, endy);
 
 	}
 
 	// is the villager around a tile (x and y in tile numbers)
 	public boolean aroundTile(int startx, int starty, int endx, int endy) {
-		return ((startx <= endx + 1 && startx >= endx - 1) && (starty >= endy - 1 && starty <= endy + 1));
+		return ((startx <= ((endx + 16))) && (startx >= ((endx - 16)))
+				&& ((starty >= ((endy - 16))) && (starty <= ((endy + 16)))));
 
 	}
 
@@ -252,18 +264,16 @@ public class Villager extends Mob {
 		if (holding != null) {
 			drop();
 		}
-		// jobsLeeg(); //WIP
+		jobsLeeg();
 		counter = 0;
 		arrived = false;
 		movement = null;
 	}
 
-	// empties the jobs list (WIP)
+	// empties the jobs list
 	private void jobsLeeg() {
-		for (Job i : jobs) {
-			jobs.remove(i);
+		jobs.clear();
 
-		}
 	}
 
 	// DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()!! DO NOT

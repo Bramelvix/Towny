@@ -3,6 +3,7 @@ package main;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -42,14 +43,12 @@ public class Game extends Canvas implements Runnable {
 	public List<Mob> mobs;
 	private Ui ui;
 	private boolean paused = false;
-	private double ns = 1000000000.0 / 60.0;
+	private byte speed = 6;
+	private double ns = 100000000.0 / speed;
 	private Villager selectedvill;
-
 	public int xScroll = 0;
 	public int yScroll = 0;
-
 	private Screen screen;
-
 	private BufferedImage image;
 	private int[] pixels;
 
@@ -63,7 +62,7 @@ public class Game extends Canvas implements Runnable {
 		setPreferredSize(size);
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
-		screen = new Screen(width,height, pixels);
+		screen = new Screen(width, height, pixels);
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setTitle("Towny");
@@ -132,9 +131,10 @@ public class Game extends Canvas implements Runnable {
 		long timer = System.currentTimeMillis();
 		double delta = 0;
 		int updates = 0;
+		long now = 0;
 		int frames = 0;
 		while (running) {
-			long now = System.nanoTime();
+			now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			lastTime = now;
 			while (delta >= 1) {
@@ -177,7 +177,13 @@ public class Game extends Canvas implements Runnable {
 	private void updateUI() {
 		ui.update(mouse, xScroll, yScroll);
 		moveCamera();
-		paused = ui.getPaused();
+		if (paused != ui.isPaused()) {
+			paused = ui.isPaused();
+		}
+		if (speed != ui.getSpeed()) {
+			speed = ui.getSpeed();
+			ns = 100000000.0 / speed;
+		}
 
 	}
 
@@ -220,6 +226,7 @@ public class Game extends Canvas implements Runnable {
 						}
 					}
 				}
+				return;
 			}
 			if (mouse.getReleased()) {
 				int x = ui.getSelectionX();
@@ -238,11 +245,12 @@ public class Game extends Canvas implements Runnable {
 				}
 				ui.resetSelection();
 				ui.deSelectIcons();
+				return;
 
 			}
 			return;
 		}
-		if (((mouse.getClicked() && UiIcons.isMiningSelected()) && !UiIcons.hoverOnAnyIcon())
+		if (((UiIcons.isMiningSelected()) && !UiIcons.hoverOnAnyIcon() && mouse.getClicked())
 				&& (level.selectOre(mouse.getX(), mouse.getY()) != null)) {
 			Villager idle = getIdlestVil();
 			idle.resetMove();
@@ -252,16 +260,14 @@ public class Game extends Canvas implements Runnable {
 			return;
 
 		}
-		if (anyVillHoverOn(mouse) != null) {
-			if (mouse.getClicked() && !ui.outlineIsVisible()) {
-				deselectAllVills();
-				selectedvill = anyVillHoverOn(mouse);
-				selectedvill.setSelected(true);
-				ui.deSelectIcons();
-			}
+		if (mouse.getClicked() && anyVillHoverOn(mouse) != null && !ui.outlineIsVisible()) {
+			deselectAllVills();
+			selectedvill = anyVillHoverOn(mouse);
+			selectedvill.setSelected(true);
+			ui.deSelectIcons();
 			return;
 		}
-		if (!ui.menuVisible() && UiIcons.isTrowelHover() && mouse.getClicked()) {
+		if (UiIcons.isTrowelHover() && !ui.menuVisible() && mouse.getClicked()) {
 			deselectAllVills();
 			ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(),
 					new String[] { MenuItem.BUILD + " Wall", MenuItem.CANCEL });
@@ -346,13 +352,13 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	private void moveCamera() {
-		if (keyboard.up && yScroll > 0)
+		if (Keyboard.getKeyPressed(KeyEvent.VK_UP) && yScroll > 0)
 			yScroll -= 2;
-		if (keyboard.down && yScroll < (level.height * Tile.SIZE) - 1 - height)
+		if (Keyboard.getKeyPressed(KeyEvent.VK_DOWN) && yScroll < (level.height * Tile.SIZE) - 1 - height)
 			yScroll += 2;
-		if (keyboard.left && xScroll > 0)
+		if (Keyboard.getKeyPressed(KeyEvent.VK_LEFT) && xScroll > 0)
 			xScroll -= 2;
-		if (keyboard.right && xScroll < (level.width * Tile.SIZE) - width - 1)
+		if (Keyboard.getKeyPressed(KeyEvent.VK_RIGHT) && xScroll < (level.width * Tile.SIZE) - width - 1)
 			xScroll += 2;
 
 	}
