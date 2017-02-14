@@ -269,28 +269,33 @@ public class Game extends Canvas implements Runnable {
 		}
 		if (UiIcons.isTrowelHover() && !ui.menuVisible() && mouse.getClicked()) {
 			deselectAllVills();
-			ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(),
-					new String[] { MenuItem.BUILD + " Wall", MenuItem.CANCEL });
+			ui.showMenuOn(mouse, new String[] { MenuItem.BUILD + " Wall", MenuItem.CANCEL });
+			return;
 		}
 
 		if (mouse.getButton() == 3) {
 			if (selectedvill != null) {
+				List<String> options = new ArrayList<String>();
+				if (selectedvill.holding != null) {
+					options.add(MenuItem.DROP + selectedvill.holding.getName());
+				}
 				if (level.selectTree(mouse.getX(), mouse.getY()) != null) {
-					ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(),
-							new String[] { MenuItem.CHOP, MenuItem.MOVE, MenuItem.CANCEL });
+					options.add(MenuItem.CHOP);
 				} else {
 					if (level.selectOre(mouse.getX(), mouse.getY()) != null) {
-						ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(),
-								new String[] { MenuItem.MINE, MenuItem.MOVE, MenuItem.CANCEL });
+						options.add(MenuItem.MINE);
 					} else {
-
-						ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(),
-								new String[] { MenuItem.MOVE, MenuItem.CANCEL });
+						if (level.getItemOn(mouse.getX(), mouse.getY()) != null) {
+							options.add(MenuItem.PICKUP + " " + level.getItemOn(mouse.getX(), mouse.getY()).getName());
+						}
 					}
 				}
+				options.add(MenuItem.MOVE);
+				options.add(MenuItem.CANCEL);
+				ui.showMenuOn(mouse, options.toArray(new String[0]));
 
 			} else {
-				ui.showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels(), MenuItem.CANCEL);
+				ui.showMenuOn(mouse, MenuItem.CANCEL);
 			}
 		}
 		if (ui.outlineIsVisible() && !ui.menuVisible() && mouse.getReleased() && !UiIcons.hoverOnAnyIcon()) {
@@ -342,6 +347,21 @@ public class Game extends Canvas implements Runnable {
 			}
 			if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " Wall", mouse) && !ui.outlineIsVisible()) {
 				ui.showBuildSquare(mouse, xScroll, yScroll);
+				ui.deSelectIcons();
+				ui.getMenu().hide();
+				return;
+			}
+			if (ui.getMenu().clickedOnItem(MenuItem.PICKUP, mouse) && !ui.outlineIsVisible()) {
+				selectedvill.resetMove();
+				if (level.getItemOn(ui.getMenuIngameX(), ui.getMenuIngameY()) != null)
+					selectedvill.pickUp(level.getItemOn(ui.getMenuIngameX(), ui.getMenuIngameY()));
+				ui.deSelectIcons();
+				ui.getMenu().hide();
+				return;
+			}
+			if (ui.getMenu().clickedOnItem(MenuItem.DROP, mouse) && !ui.outlineIsVisible()) {
+				selectedvill.resetMove();
+				selectedvill.drop();
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;

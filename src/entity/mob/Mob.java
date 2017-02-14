@@ -14,6 +14,8 @@ public abstract class Mob extends Entity {
 	protected Direction dir;
 	protected boolean moving = false;
 	private static PathFinder finder;
+	private int health = 100;
+	private int armour = 0;
 
 	// move a mob with a combination of x
 	// direction and y direction (both
@@ -70,6 +72,12 @@ public abstract class Mob extends Entity {
 	public Path getPath(int sx, int sy, int tx, int ty) {
 		return finder.findPath(sx, sy, tx, ty);
 
+	}
+	public int getHealth() {
+		return health;
+	}
+	public void hit(int damage) {
+		health -= (damage-armour);
 	}
 
 	//calculates collision

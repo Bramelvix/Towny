@@ -40,20 +40,20 @@ public class Level {
 	public Item getItem(int index) {
 		return items.get(index);
 	}
-	
-	//adding an item to the list
+
+	// adding an item to the list
 	public void addItem(Item e) {
 		Item o = new Item(e);
 		items.add(o);
 	}
 
-	//removing an item from the list
+	// removing an item from the list
 	public void removeItem(Item e) {
 		if (items.contains(e))
 			items.remove(e);
 	}
 
-	//is the tile on X and Y clear (No items or entities or walls blocking it)
+	// is the tile on X and Y clear (No items or entities or walls blocking it)
 	public boolean isClearTile(int x, int y) {
 		for (Item e : items) {
 			if (e.getX() >> 4 == x && e.getY() >> 4 == y)
@@ -65,7 +65,7 @@ public class Level {
 		return !getTile(x, y).solid();
 	}
 
-	//is the tile on X and Y walkable (items can still be there)
+	// is the tile on X and Y walkable (items can still be there)
 	public boolean isWalkAbleTile(int x, int y) {
 		for (Entity e : entities) {
 			if (e.getX() >> 4 == x && e.getY() >> 4 == y)
@@ -74,7 +74,7 @@ public class Level {
 		return true;
 	}
 
-	//if there is a wall on x and y, return it
+	// if there is a wall on x and y, return it
 	public Wall getWallOn(int x, int y) {
 		for (Entity e : entities) {
 			if ((e.getX() == x) && (e.getY() == y) && e instanceof Wall) {
@@ -84,7 +84,17 @@ public class Level {
 		return null;
 	}
 
-	//generate the green border around the map
+	public Item getItemOn(int x, int y) {
+		for (Item e : items) {
+			System.out.println((x>>4) + " / " + (y>>4) + " //// " + (e.getX()>>4) + " / " + (e.getY()>>4));
+			if ((e.getX()>>4 == x>>4) && (e.getY()>>4 == y>>4)) {
+				return e;
+			}
+		}
+		return null;
+	}
+
+	// generate the green border around the map
 	private void generateBorder() {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
@@ -95,7 +105,7 @@ public class Level {
 		}
 	}
 
-	//generates a shitty random level
+	// generates a shitty random level
 	private void generateLevel() {
 		generateBorder();
 		for (int y = 1; y < height - 1; y++) {
@@ -115,7 +125,7 @@ public class Level {
 
 	}
 
-	//if there is a tree on X and Y, return it
+	// if there is a tree on X and Y, return it
 	public Tree selectTree(int x, int y) {
 		for (int s = 0; s < entities.size(); s++) {
 			Entity i = entities.get(s);
@@ -128,7 +138,7 @@ public class Level {
 
 	}
 
-	//if there is ore on X and Y, return it
+	// if there is ore on X and Y, return it
 	public Ore selectOre(int x, int y) {
 		for (int s = 0; s < entities.size(); s++) {
 			Entity i = entities.get(s);
@@ -141,17 +151,17 @@ public class Level {
 
 	}
 
-	//render the entities
+	// render the entities
 	public void renderEntites(Screen screen) {
 		entities.forEach((Entity i) -> i.render(screen));
 	}
 
-	//render the items
+	// render the items
 	public void renderItems(Screen screen) {
 		items.forEach((Item i) -> i.render(screen));
 	}
-	
-	//if there is an entity on X and Y, return it
+
+	// if there is an entity on X and Y, return it
 	public Entity getEntityOn(int x, int y) {
 		for (int s = 0; s < entities.size(); s++) {
 			Entity i = entities.get(s);
@@ -162,7 +172,7 @@ public class Level {
 
 	}
 
-	//10% chance of there being a tree on each grass tile
+	// 10% chance of there being a tree on each grass tile
 	private void randForest(int x, int y) {
 		int rand = random.nextInt(10);
 		if (rand == 1) {
@@ -172,7 +182,7 @@ public class Level {
 
 	}
 
-	//10% chance of there being ore on a dirt tile
+	// 10% chance of there being ore on a dirt tile
 	private void randOre(int x, int y) {
 		int rand = random.nextInt(20);
 		if (rand == 1) {
@@ -188,7 +198,7 @@ public class Level {
 
 	}
 
-	//render the tiles
+	// render the tiles
 	public void render(int xScroll, int yScroll, Screen screen) {
 		screen.setOffset(xScroll, yScroll);
 		int x0 = xScroll >> 4;
@@ -204,7 +214,7 @@ public class Level {
 
 	}
 
-	//return the tile on x and y
+	// return the tile on x and y
 	public Tile getTile(int x, int y) {
 		if (x < 0 || x >= width || y < 0 || y >= height) {
 			return Tile.voidTile;

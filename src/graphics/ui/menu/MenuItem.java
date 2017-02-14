@@ -18,6 +18,9 @@ public class MenuItem {
 	public static final String CHOP = "Chop";
 	public static final String MINE = "Mine";
 	public static final String BUILD = "Build";
+	public static final String PICKUP = "Pick Up";
+	public static final String DROP = "Drop";
+
 
 	//constructor
 	public MenuItem(String type, Menu menu) {
@@ -52,7 +55,10 @@ public class MenuItem {
 
 	//the menuitem is equal to other menuitems with the same text
 	public boolean equals(String i) {
-		return text.equals(i);
+		return text.contains(i);
+	}
+	public String getText() {
+		return text;
 	}
 
 }

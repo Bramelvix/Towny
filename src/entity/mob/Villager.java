@@ -184,7 +184,8 @@ public class Villager extends Mob {
 	}
 
 	private void addJob(Job e) {
-		jobs.add(e);
+		if (e != null)
+			jobs.add(e);
 	}
 
 	// add a buildjob
@@ -261,9 +262,6 @@ public class Villager extends Mob {
 
 	// resets the villager's path
 	public void resetMove() {
-		if (holding != null) {
-			drop();
-		}
 		jobsLeeg();
 		counter = 0;
 		arrived = false;

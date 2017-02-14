@@ -67,12 +67,25 @@ public class Ui {
 		UiIcons.deSelect();
 	}
 
-	public void showMenuOn(int x, int y, String[] items) {
+	public void showMenuOn(Mouse mouse, String[] items) {
 		if (!outline.isVisible()) {
-			showMenuOn(x, y);
+			showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels());
 			menu.addItems(items);
-			menu.show();
+			menu.show(mouse);
 		}
+	}
+	public void showMenuOn(Mouse mouse, String item) {
+		if (!outline.isVisible()) {
+			showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels());
+			menu.addItem(item);
+			menu.show(mouse);
+		}
+	}
+	public int getMenuIngameY() {
+		return menu.getIngameY();
+	}
+	public int getMenuIngameX() {
+		return menu.getIngameX();
 	}
 
 	private void showMenuOn(int x, int y) {
@@ -80,14 +93,6 @@ public class Ui {
 			menu = new Menu();
 			menu.setX(x);
 			menu.setY(y);
-		}
-	}
-
-	public void showMenuOn(int x, int y, String item) {
-		if (!outline.isVisible()) {
-			showMenuOn(x, y);
-			menu.addItem(item);
-			menu.show();
 		}
 	}
 

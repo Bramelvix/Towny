@@ -10,6 +10,7 @@ import input.Mouse;
 public class Menu { // the menu is the little options menu that shows up when
 					// you right click
 	private int x, y; // x and y of the top left corner
+	private int ingameX, ingameY;
 	private int width = 70; // width and height hardcoded
 	private int height = 20;
 	public List<MenuItem> items; // list of items on the menu
@@ -22,6 +23,11 @@ public class Menu { // the menu is the little options menu that shows up when
 	public void render(Graphics g) {
 		if (visible) {
 			g.setColor(colour);
+			for (MenuItem i : items) {
+				if (i.getText().length() > 10) {
+					width = 100;
+				}
+			}
 			g.fillRect(x, y, width, height);
 			for (MenuItem i : items) {
 				i.render(g);
@@ -30,8 +36,10 @@ public class Menu { // the menu is the little options menu that shows up when
 	}
 
 	// showing the menu
-	public void show() {
+	public void show(Mouse mouse) {
 		visible = true;
+		ingameX = mouse.getX();
+		ingameY = mouse.getY();
 	}
 
 	// getter
@@ -95,6 +103,12 @@ public class Menu { // the menu is the little options menu that shows up when
 
 	public int getYLocForMenuItem() {
 		return y + (items.size() * 15);
+	}
+	public int getIngameX() {
+		return ingameX;
+	}
+	public int getIngameY() {
+		return ingameY;
 	}
 
 	public int getX() {
