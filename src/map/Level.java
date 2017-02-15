@@ -86,7 +86,6 @@ public class Level {
 
 	public Item getItemOn(int x, int y) {
 		for (Item e : items) {
-			System.out.println((x>>4) + " / " + (y>>4) + " //// " + (e.getX()>>4) + " / " + (e.getY()>>4));
 			if ((e.getX()>>4 == x>>4) && (e.getY()>>4 == y>>4)) {
 				return e;
 			}

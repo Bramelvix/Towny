@@ -15,6 +15,7 @@ import entity.Tree;
 import entity.item.Clothing;
 import entity.mob.Mob;
 import entity.mob.Villager;
+import entity.mob.work.MoveItemJob;
 import graphics.Screen;
 import graphics.Sprite;
 import graphics.ui.Ui;
@@ -89,16 +90,13 @@ public class Game extends Canvas implements Runnable {
 
 	private void spawnvills() {
 		Villager vil = new Villager(144, 144, level);
-		vil.addClothing(
-				new Clothing("Brown Shirt", vil.getX(), vil.getY(), Sprite.brownShirt1, "A brown tshirt", true));
+		vil.addClothing(new Clothing("Brown Shirt", vil, Sprite.brownShirt1, "A brown tshirt"));
 		addVillager(vil);
 		Villager vil2 = new Villager(144, 160, level);
-		vil2.addClothing(
-				new Clothing("Green Shirt", vil2.getX(), vil2.getY(), Sprite.greenShirt1, "A green tshirt", true));
+		vil2.addClothing(new Clothing("Green Shirt", vil, Sprite.greenShirt1, "A green tshirt"));
 		addVillager(vil2);
 		Villager vil3 = new Villager(160, 160, level);
-		vil3.addClothing(
-				new Clothing("Green Shirt", vil2.getX(), vil2.getY(), Sprite.greenShirt2, "A green tshirt", true));
+		vil3.addClothing(new Clothing("Green Shirt", vil3, Sprite.greenShirt2, "A green tshirt"));
 		addVillager(vil3);
 	}
 
@@ -319,8 +317,7 @@ public class Game extends Canvas implements Runnable {
 			}
 			if (ui.getMenu().clickedOnItem(MenuItem.MOVE, mouse)) {
 				selectedvill.resetMove();
-				selectedvill.movement = selectedvill.getPath(selectedvill.getX() >> 4, selectedvill.getY() >> 4,
-						mouse.getTileX(), mouse.getTileY());
+				selectedvill.movement = selectedvill.getPath(mouse.getTileX(), mouse.getTileY());
 				if (selectedvill.movement == null) {
 					selectedvill.movement = selectedvill.getShortest(level.getEntityOn(mouse.getX(), mouse.getY()));
 				}
@@ -354,15 +351,17 @@ public class Game extends Canvas implements Runnable {
 			if (ui.getMenu().clickedOnItem(MenuItem.PICKUP, mouse) && !ui.outlineIsVisible()) {
 				selectedvill.resetMove();
 				if (level.getItemOn(ui.getMenuIngameX(), ui.getMenuIngameY()) != null)
-					selectedvill.pickUp(level.getItemOn(ui.getMenuIngameX(), ui.getMenuIngameY()));
+					selectedvill.addJob(new MoveItemJob(level.getItemOn(ui.getMenuIngameX(), ui.getMenuIngameY()), selectedvill));
 				ui.deSelectIcons();
+				selectedvill.setSelected(false);
 				ui.getMenu().hide();
 				return;
 			}
 			if (ui.getMenu().clickedOnItem(MenuItem.DROP, mouse) && !ui.outlineIsVisible()) {
 				selectedvill.resetMove();
-				selectedvill.drop();
+				selectedvill.addJob(new MoveItemJob(ui.getMenuIngameX(), ui.getMenuIngameY(), selectedvill));
 				ui.deSelectIcons();
+				selectedvill.setSelected(false);
 				ui.getMenu().hide();
 				return;
 			}

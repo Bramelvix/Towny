@@ -69,8 +69,8 @@ public abstract class Mob extends Entity {
 	public abstract void update();
 
 	// pathfinder method
-	public Path getPath(int sx, int sy, int tx, int ty) {
-		return finder.findPath(sx, sy, tx, ty);
+	public Path getPath(int tx, int ty) {
+		return finder.findPath(x>>4, y>>4, tx, ty);
 
 	}
 	public int getHealth() {

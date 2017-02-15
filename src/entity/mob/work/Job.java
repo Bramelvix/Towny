@@ -1,18 +1,19 @@
-package entity.mob;
+package entity.mob.work;
 
 import entity.Resource;
 import entity.Wall;
 import entity.item.Item;
+import entity.mob.Villager;
 import map.Level;
 
-public class Job {
-	public boolean completed; // is the job done
-	private Item material; // what materials are needed for the job (like logs
+public class Job implements Workable {
+	protected boolean completed; // is the job done
+	protected Item material; // what materials are needed for the job (like logs
 							// for a wall)
-	private int xloc, yloc; // the x and y location of the job
+	protected int xloc, yloc; // the x and y location of the job
 	private boolean hasMaterial; // does the worker have the materials needed
 	private boolean needsMaterial; // does the worker still need the materials
-	private Villager worker; // the villager doing the job
+	protected Villager worker; // the villager doing the job
 	private Resource jobObj; // the resource the worker needs to gather
 	private boolean buildJob; // is the job a buildjob
 	private Wall buildJobObj; // the buildable entity the worker needs to build
@@ -20,12 +21,18 @@ public class Job {
 
 	// constructors
 	private Job(int xloc, int yloc, Villager worker) {
+		this(worker);
 		completed = false;
 		this.xloc = xloc;
-		this.worker = worker;
 		this.yloc = yloc;
 		worker.movement = worker.getShortest(xloc >> 4, yloc >> 4);
 		needsMaterial = false;
+	}
+	protected Job(Villager worker) {
+		this.worker = worker;
+	}
+	public boolean isCompleted() {
+		return completed;
 	}
 
 	public Job(int xloc, int yloc, Item mat, Villager worker, Level level) {
@@ -40,7 +47,8 @@ public class Job {
 										// round down numbers undevidable by 16.
 										// (example: pixel 260 x => divide by 16
 										// rounded down to get 16 => multiply up
-										// by 16 to get 256). Items are always placed exactly on tile borders.
+										// by 16 to get 256). Items are always
+										// placed exactly on tile borders.
 			int ytussen = yloc >> 4;
 			buildJobObj = new Wall(xtussen << 4, ytussen << 4);
 			material = mat;
@@ -59,17 +67,17 @@ public class Job {
 
 	}
 
-	//checks if the worker has or still needs the item
+	// checks if the worker has or still needs the item
 	private void checkItem() {
 		if (worker.holding != null && needsMaterial) {
-			if (worker.holding.getName().equals("Logs")) {
+			if (worker.holding.equals(material)) {
 				hasMaterial = true;
 			}
 
 		}
 	}
 
-	//execute the job
+	// execute the job
 	public void execute() {
 		if (!completed) {
 			checkItem();
@@ -80,11 +88,11 @@ public class Job {
 				}
 				return;
 			}
-			if (!worker.aroundSpot(worker.getX(), worker.getY(), xloc, yloc) && worker.movement != null) {
+			if (!worker.aroundSpot(xloc, yloc) && worker.movement != null) {
 				worker.move();
 				return;
 			} else {
-				if (worker.aroundSpot(worker.getX(), worker.getY(), xloc, yloc)) {
+				if (worker.aroundSpot(xloc, yloc)) {
 					if (jobObj != null) {
 						if (jobObj.work(worker.level))
 							completed = true;
@@ -93,7 +101,8 @@ public class Job {
 						if (buildJob && buildJobObj != null) {
 							if (!level.isClearTile(buildJobObj.getX() >> 4, buildJobObj.getY() >> 4)
 									&& !buildJobObj.initialised) {
-								// wait if the buildLocation is blocked by an item or entity
+								// wait if the buildLocation is blocked by an
+								// item or entity
 								return;
 							}
 							if (!buildJobObj.initialised) {

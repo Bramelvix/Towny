@@ -6,6 +6,7 @@ import java.util.List;
 import entity.Entity;
 import entity.Resource;
 import entity.item.Item;
+import entity.mob.work.Job;
 import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
 import entity.pathfinding.Point;
@@ -70,10 +71,17 @@ public class Villager extends Mob {
 		}
 	}
 
+	public boolean holding(Item item) {
+		if (holding != null) {
+			return holding.equals(item);
+		}
+		return false;
+	}
+
 	// the villager moves to a random location nearby if he has nothing to do.
 	public void idle() {
 		while (movement == null) {
-			movement = getPath(x >> 4, y >> 4, (x >> 4) + random.nextInt(4) - 2, (y >> 4) + random.nextInt(4) - 2);
+			movement = getPath((x >> 4) + random.nextInt(4) - 2, (y >> 4) + random.nextInt(4) - 2);
 		}
 
 	}
@@ -102,7 +110,7 @@ public class Villager extends Mob {
 		for (int i = 0; i < level.getItemList().size(); i++) {
 			if (level.getItem(i).getName().equals(name) && level.getItem(i).isReservedVil(this)) {
 				closest = level.getItem(i);
-				path = getPath(x >> 4, y >> 4, closest.getX() >> 4, closest.getY() >> 4);
+				path = getPath(closest.getX() >> 4, closest.getY() >> 4);
 				if (closest.getX() >> 4 == x >> 4 && y >> 4 == closest.getY() >> 4) {
 					return closest;
 				}
@@ -116,10 +124,10 @@ public class Villager extends Mob {
 
 	// work method for the villager to execute his jobs
 	public void work() {
-		if (jobs.get(0) != null && !jobs.get(0).completed) {
+		if (jobs.get(0) != null && !jobs.get(0).isCompleted()) {
 			jobs.get(0).execute();
 		} else {
-			if (jobs.get(0).completed) {
+			if (jobs.get(0).isCompleted()) {
 				jobs.remove(0);
 			}
 		}
@@ -127,41 +135,25 @@ public class Villager extends Mob {
 	}
 
 	// is the villager on or around a location (x and y in pixels)
-	public boolean aroundSpot(int startx, int starty, int endx, int endy) {
-		return aroundTile(startx, starty, endx, endy);
+	public boolean aroundSpot(int endx, int endy) {
+		return aroundTile(endx, endy);
 
 	}
 
-	// is the villager around a tile (x and y in tile numbers)
-	public boolean aroundTile(int startx, int starty, int endx, int endy) {
-		return ((startx <= ((endx + 16))) && (startx >= ((endx - 16)))
-				&& ((starty >= ((endy - 16))) && (starty <= ((endy + 16)))));
+	// is the villager around a tile (x and y in pixels)
+	public boolean aroundTile(int endx, int endy) {
+		return ((this.x <= ((endx + 16))) && (this.x >= ((endx - 16)))
+				&& ((this.y >= ((endy - 16))) && (this.y <= ((endy + 16)))));
 
 	}
 
 	// pickup an item
 	public boolean pickUp(Item e) {
-		if (!e.isReservedVil(this)) {
-			return false;
-		}
-		movement = getShortest(e);
-		if (aroundSpot(x, y, e.getX(), e.getY())) {
+		if (onSpot(e.getX(), e.getY())) {
 			e.setReservedVil(this);
 			level.removeItem(e);
 			holding = e;
 			return true;
-		}
-		if (!(movement == null)) {
-			if (!movement.isArrived()) {
-				e.setReservedVil(this);
-				move();
-				return false;
-			} else {
-				level.removeItem(e);
-				holding = e;
-				return true;
-			}
-
 		}
 		return false;
 
@@ -172,8 +164,12 @@ public class Villager extends Mob {
 		if (holding != null) {
 			holding.setReservedVil(null);
 			level.addItem(holding);
+			holding = null;
 		}
-		holding = null;
+	}
+
+	public boolean onSpot(int x, int y) {
+		return (this.x >> 4 == x >> 4 && this.y >> 4 == y >> 4);
 	}
 
 	// add a job to the jobs list for the villager to do
@@ -183,7 +179,7 @@ public class Villager extends Mob {
 		}
 	}
 
-	private void addJob(Job e) {
+	public void addJob(Job e) {
 		if (e != null)
 			jobs.add(e);
 	}
@@ -200,10 +196,13 @@ public class Villager extends Mob {
 		return null;
 	}
 
+	public Path getPath(Entity e) {
+		return getPath(e.getX() >> 4, e.getY() >> 4);
+	}
+
 	public Path getShortest(int x, int y) {
-		return PathFinder.getShortest(
-				new Path[] { getPath(this.x >> 4, this.y >> 4, x - 1, y), getPath(this.x >> 4, this.y >> 4, x + 1, y),
-						getPath(this.x >> 4, this.y >> 4, x, y - 1), getPath(this.x >> 4, this.y >> 4, x, y + 1) });
+		return PathFinder
+				.getShortest(new Path[] { getPath(x - 1, y), getPath(x + 1, y), getPath(x, y - 1), getPath(x, y + 1) });
 	}
 
 	// updates the villager in the game logic
