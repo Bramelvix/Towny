@@ -13,7 +13,7 @@ public class UiIcons {
 		icons = new Icon[4];
 		icons[0] = new Icon(50, 700, "/res/icons/tools/wood-axe.png", 60, 60);
 		icons[1] = new Icon(150, 700, "/res/icons/tools/mining.png", 60, 60);
-		icons[2] = new Icon(250, 700, "/res/icons/tools/trowel.png", 60, 60);
+		icons[2] = new Icon(250, 700, "/res/icons/tools/saw.png", 60, 60);
 		icons[3] = new Icon(350, 700, "/res/icons/tools/sickle.png", 60, 60);
 
 	}
