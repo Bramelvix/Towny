@@ -64,6 +64,11 @@ public abstract class Mob extends Entity {
 		this.level = level;
 		finder = new PathFinder(level);
 	}
+	public Mob(Level level) {
+		super();
+		this.level = level;
+		finder = new PathFinder(level);
+	}
 
 	// update method needed for game logic
 	public abstract void update();

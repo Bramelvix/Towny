@@ -31,7 +31,13 @@ public class Villager extends Mob {
 
 	// basic constructors
 	public Villager(int x, int y, Level level) {
-		super(level, x, y);
+		super(level);
+		while (!level.isWalkAbleTile(x>>4, y>>4)) {
+			x+=16;
+			y+=16;
+		}
+		this.x = x;
+		this.y = y;
 		this.sprite = Sprite.getPerson();
 		wearing = new ArrayList<Item>();
 		jobs = new ArrayList<Job>();
@@ -66,7 +72,7 @@ public class Villager extends Mob {
 			idletimer = getIdleTimer();
 			return true;
 		} else {
-			idletimer = idletimer - 1;
+			idletimer--;
 			return false;
 		}
 	}

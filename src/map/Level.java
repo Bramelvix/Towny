@@ -68,7 +68,7 @@ public class Level {
 	// is the tile on X and Y walkable (items can still be there)
 	public boolean isWalkAbleTile(int x, int y) {
 		for (Entity e : entities) {
-			if (e.getX() >> 4 == x && e.getY() >> 4 == y)
+			if ((e.getX() >> 4 == x && e.getY() >> 4 == y)|| getTile(x, y).solid())
 				return false;
 		}
 		return true;
@@ -86,7 +86,7 @@ public class Level {
 
 	public Item getItemOn(int x, int y) {
 		for (Item e : items) {
-			if ((e.getX()>>4 == x>>4) && (e.getY()>>4 == y>>4)) {
+			if ((e.getX() >> 4 == x >> 4) && (e.getY() >> 4 == y >> 4)) {
 				return e;
 			}
 		}
@@ -104,23 +104,21 @@ public class Level {
 		}
 	}
 
-	// generates a shitty random level
+	// generates a (slighty less) shitty random level
 	private void generateLevel() {
-		generateBorder();
-		for (int y = 1; y < height - 1; y++) {
-			for (int x = 1; x < height - 1; x++) {
-				if (random.nextInt(2) == 1) {
-					tiles[x + y * width] = new Tile(Sprite.getGrass(), false, x, y);
-					randForest(x, y);
-				} else {
+		float[] noise = Generator.generateSimplexNoise(width, height, 11, random.nextInt(1000), random.nextBoolean());
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				if (noise[x + y * width] > 0.5) {
 					tiles[x + y * width] = new Tile(Sprite.getDirt(), false, x, y);
 					randOre(x, y);
-				}
-				if (x == 4 && y == 4) {
+				} else {
 					tiles[x + y * width] = new Tile(Sprite.getGrass(), false, x, y);
+					randForest(x, y);
 				}
 			}
 		}
+		generateBorder();
 
 	}
 
@@ -173,6 +171,8 @@ public class Level {
 
 	// 10% chance of there being a tree on each grass tile
 	private void randForest(int x, int y) {
+		if (x == 0 || x == width || y == 0 || y == height)
+			return;
 		int rand = random.nextInt(10);
 		if (rand == 1) {
 			entities.add(new Tree(x << 4, y << 4));
@@ -183,6 +183,8 @@ public class Level {
 
 	// 10% chance of there being ore on a dirt tile
 	private void randOre(int x, int y) {
+		if (x == 0 || x == width || y == 0 || y == height)
+			return;
 		int rand = random.nextInt(20);
 		if (rand == 1) {
 			entities.add(new Ore(x << 4, y << 4, OreType.GOLD));

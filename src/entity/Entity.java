@@ -25,6 +25,9 @@ public abstract class Entity {
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
+	public Entity() {
+		super();
+	}
 
 	// getters
 	public boolean isVisible() {
