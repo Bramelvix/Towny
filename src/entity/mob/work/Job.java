@@ -9,7 +9,7 @@ import map.Level;
 public class Job implements Workable {
 	protected boolean completed; // is the job done
 	protected Item material; // what materials are needed for the job (like logs
-							// for a wall)
+								// for a wall)
 	protected int xloc, yloc; // the x and y location of the job
 	private boolean hasMaterial; // does the worker have the materials needed
 	private boolean needsMaterial; // does the worker still need the materials
@@ -18,6 +18,7 @@ public class Job implements Workable {
 	private boolean buildJob; // is the job a buildjob
 	private Wall buildJobObj; // the buildable entity the worker needs to build
 	private Level level; // the level in which the job is located
+	private boolean started = false;
 
 	// constructors
 	private Job(int xloc, int yloc, Villager worker) {
@@ -25,12 +26,13 @@ public class Job implements Workable {
 		completed = false;
 		this.xloc = xloc;
 		this.yloc = yloc;
-		worker.movement = worker.getShortest(xloc >> 4, yloc >> 4);
 		needsMaterial = false;
 	}
+
 	protected Job(Villager worker) {
 		this.worker = worker;
 	}
+
 	public boolean isCompleted() {
 		return completed;
 	}
@@ -54,7 +56,6 @@ public class Job implements Workable {
 			material = mat;
 			buildJob = true;
 			if (material == null) {
-				worker.movement = null;
 				completed = true;
 			}
 		}
@@ -77,9 +78,16 @@ public class Job implements Workable {
 		}
 	}
 
+	private void start() {
+		worker.movement = worker.getShortest(xloc >> 4, yloc >> 4);
+		if (worker.movement == null)
+			completed = true;
+		started = true;
+	}
+
 	// execute the job
 	public void execute() {
-		if (!completed) {
+		if (!completed && started) {
 			checkItem();
 			if (needsMaterial && !hasMaterial) {
 				if (worker.pickUp(material)) {
@@ -92,39 +100,39 @@ public class Job implements Workable {
 				worker.move();
 				return;
 			} else {
-				if (worker.aroundSpot(xloc, yloc)) {
-					if (jobObj != null) {
-						if (jobObj.work(worker.level))
-							completed = true;
-						return;
-					} else {
-						if (buildJob && buildJobObj != null) {
-							if (!level.isClearTile(buildJobObj.getX() >> 4, buildJobObj.getY() >> 4)
-									&& !buildJobObj.initialised) {
-								// wait if the buildLocation is blocked by an
-								// item or entity
-								return;
-							}
-							if (!buildJobObj.initialised) {
-								if (!buildJobObj.initialise(material, worker.level))
-									completed = true;
-							}
-							if (buildJobObj.build()) {
-								completed = true;
-							}
-							if (material.quantity <= 0) {
-								worker.holding = null;
-							} else {
-								worker.drop();
-							}
+				if (jobObj != null) {
+					if (jobObj.work(worker.level))
+						completed = true;
+					return;
+				} else {
+					if (buildJob && buildJobObj != null) {
+						if (!level.isClearTile(buildJobObj.getX() >> 4, buildJobObj.getY() >> 4)
+								&& !buildJobObj.initialised) {
+							// wait if the buildLocation is blocked by an
+							// item or entity
 							return;
-
 						}
+						if (!buildJobObj.initialised) {
+							if (!buildJobObj.initialise(material, worker.level))
+								completed = true;
+						}
+						if (buildJobObj.build()) {
+							completed = true;
+						}
+						if (material.quantity <= 0) {
+							worker.holding = null;
+						} else {
+							worker.drop();
+						}
+						return;
 
 					}
+
 				}
 			}
 
+		} else {
+			start();
 		}
 	}
 

@@ -10,11 +10,12 @@ public class UiIcons {
 
 	// initialising the icons
 	public static void init() {
-		icons = new Icon[4];
+		icons = new Icon[5];
 		icons[0] = new Icon(50, 700, "/res/icons/tools/wood-axe.png", 60, 60);
 		icons[1] = new Icon(150, 700, "/res/icons/tools/mining.png", 60, 60);
-		icons[2] = new Icon(250, 700, "/res/icons/tools/saw.png", 60, 60);
-		icons[3] = new Icon(350, 700, "/res/icons/tools/sickle.png", 60, 60);
+		icons[2] = new Icon(250, 700, "/res/icons/tools/sickle.png", 60, 60);
+		icons[3] = new Icon(350, 700, "/res/icons/tools/saw.png", 60, 60);
+		icons[4] = new Icon(450, 700, "/res/icons/tools/swords.png", 60, 60);
 
 	}
 
@@ -28,7 +29,11 @@ public class UiIcons {
 
 	// getters
 	public static boolean hoverOnAnyIcon() {
-		return isMiningHover() || isTrowelHover() || isWoodHover();
+		for (Icon i : icons) {
+			if (i.hoverOn())
+				return true;
+		}
+		return false;
 	}
 
 	public static boolean isWoodHover() {
@@ -39,12 +44,16 @@ public class UiIcons {
 		return icons[1].hoverOn();
 	}
 
-	public static boolean isTrowelHover() {
+	public static boolean isSickleHover() {
 		return icons[2].hoverOn();
 	}
 
-	public static boolean isSickleHover() {
+	public static boolean isSawHover() {
 		return icons[3].hoverOn();
+	}
+
+	public static boolean isSwordsHover() {
+		return icons[4].hoverOn();
 	}
 
 	public static boolean isWoodSelected() {
@@ -55,12 +64,16 @@ public class UiIcons {
 		return icons[1].isSelected();
 	}
 
-	public static boolean isTrowelSelected() {
+	public static boolean isSickleSelected() {
 		return icons[2].isSelected();
 	}
 
-	public static boolean isSickleSelected() {
+	public static boolean isSawSelected() {
 		return icons[3].isSelected();
+	}
+
+	public static boolean isSwordsSelected() {
+		return icons[4].isSelected();
 	}
 
 	// update the icons
@@ -73,19 +86,22 @@ public class UiIcons {
 		setSelected(mouse);
 
 	}
-	//checks if all icons (other than the one provided in num) are unselected
-	private static boolean allOtherIconsNotSelected(int num) { 
-		for (int i = 0; i <icons.length; i++) {
-			if (i==num) continue;
-			if (icons[i].isSelected()) return false;
+
+	// checks if all icons (other than the one provided in num) are unselected
+	private static boolean allOtherIconsNotSelected(int num) {
+		for (int i = 0; i < icons.length; i++) {
+			if (i == num)
+				continue;
+			if (icons[i].isSelected())
+				return false;
 		}
 		return true;
 	}
 
 	// selecting an icon
 	public static void setSelected(Mouse mouse) {
-		for (int i = 0; i < 3; i++) {
-			if (mouse.getClicked() && icons[i].hoverOn()&&allOtherIconsNotSelected(i))
+		for (int i = 0; i < icons.length; i++) {
+			if (mouse.getClicked() && icons[i].hoverOn() && allOtherIconsNotSelected(i))
 				icons[i].setSelect(true);
 		}
 	}

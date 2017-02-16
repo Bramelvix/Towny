@@ -261,10 +261,13 @@ public class Villager extends Mob {
 
 	// resets the villager's path
 	public void resetMove() {
-		jobsLeeg();
 		counter = 0;
 		arrived = false;
 		movement = null;
+	}
+	public void resetAll() {
+		jobsLeeg();
+		resetMove();
 	}
 
 	// empties the jobs list

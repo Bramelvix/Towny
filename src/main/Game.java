@@ -203,9 +203,13 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	private void deselectAllVills() {
-		for (Villager i : vills) {
-			i.setSelected(false);
-		}
+		vills.forEach((Villager i) -> i.setSelected(false));
+		selectedvill = null;
+	}
+
+	private void deSelect(Villager vill) {
+		vill.setSelected(false);
+		selectedvill = null;
 	}
 
 	private void updateMouse() {
@@ -265,7 +269,7 @@ public class Game extends Canvas implements Runnable {
 			ui.deSelectIcons();
 			return;
 		}
-		if (UiIcons.isTrowelHover() && !ui.menuVisible() && mouse.getClicked()) {
+		if (UiIcons.isSawHover() && !ui.menuVisible() && mouse.getClicked()) {
 			deselectAllVills();
 			ui.showMenuOn(mouse, new String[] { MenuItem.BUILD + " Wall", MenuItem.CANCEL });
 			return;
@@ -313,15 +317,18 @@ public class Game extends Canvas implements Runnable {
 			if (ui.getMenu().clickedOnItem(MenuItem.CANCEL, mouse)) {
 				ui.getMenu().hide();
 				ui.deSelectIcons();
+				if (selectedvill != null) {
+					deSelect(selectedvill);
+				}
 				return;
 			}
 			if (ui.getMenu().clickedOnItem(MenuItem.MOVE, mouse)) {
-				selectedvill.resetMove();
+				selectedvill.resetAll();
 				selectedvill.movement = selectedvill.getPath(mouse.getTileX(), mouse.getTileY());
 				if (selectedvill.movement == null) {
 					selectedvill.movement = selectedvill.getShortest(level.getEntityOn(mouse.getX(), mouse.getY()));
 				}
-				selectedvill.setSelected(false);
+				deSelect(selectedvill);
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
@@ -329,7 +336,7 @@ public class Game extends Canvas implements Runnable {
 			if (ui.getMenu().clickedOnItem(MenuItem.CHOP, mouse)) {
 				selectedvill.resetMove();
 				selectedvill.addJob(level.selectTree(mouse.getX(), mouse.getY()));
-				selectedvill.setSelected(false);
+				deSelect(selectedvill);
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
@@ -337,7 +344,7 @@ public class Game extends Canvas implements Runnable {
 			if (ui.getMenu().clickedOnItem(MenuItem.MINE, mouse)) {
 				selectedvill.resetMove();
 				selectedvill.addJob(level.selectOre(mouse.getX(), mouse.getY()));
-				selectedvill.setSelected(false);
+				deSelect(selectedvill);
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
@@ -351,9 +358,10 @@ public class Game extends Canvas implements Runnable {
 			if (ui.getMenu().clickedOnItem(MenuItem.PICKUP, mouse) && !ui.outlineIsVisible()) {
 				selectedvill.resetMove();
 				if (level.getItemOn(ui.getMenuIngameX(), ui.getMenuIngameY()) != null)
-					selectedvill.addJob(new MoveItemJob(level.getItemOn(ui.getMenuIngameX(), ui.getMenuIngameY()), selectedvill));
+					selectedvill.addJob(
+							new MoveItemJob(level.getItemOn(ui.getMenuIngameX(), ui.getMenuIngameY()), selectedvill));
 				ui.deSelectIcons();
-				selectedvill.setSelected(false);
+				deSelect(selectedvill);
 				ui.getMenu().hide();
 				return;
 			}
@@ -361,7 +369,7 @@ public class Game extends Canvas implements Runnable {
 				selectedvill.resetMove();
 				selectedvill.addJob(new MoveItemJob(ui.getMenuIngameX(), ui.getMenuIngameY(), selectedvill));
 				ui.deSelectIcons();
-				selectedvill.setSelected(false);
+				deSelect(selectedvill);
 				ui.getMenu().hide();
 				return;
 			}
