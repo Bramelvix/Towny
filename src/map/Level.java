@@ -68,7 +68,7 @@ public class Level {
 	// is the tile on X and Y walkable (items can still be there)
 	public boolean isWalkAbleTile(int x, int y) {
 		for (Entity e : entities) {
-			if ((e.getX() >> 4 == x && e.getY() >> 4 == y)|| getTile(x, y).solid())
+			if ((e.getX() >> 4 == x && e.getY() >> 4 == y) || getTile(x, y).solid())
 				return false;
 		}
 		return true;
@@ -124,11 +124,24 @@ public class Level {
 
 	// if there is a tree on X and Y, return it
 	public Tree selectTree(int x, int y) {
+		return selectTree(x, y, true);
+
+	}
+
+	public Tree selectTree(int x, int y, boolean seperate) {
 		for (int s = 0; s < entities.size(); s++) {
 			Entity i = entities.get(s);
 			if (i instanceof Tree) {
-				if (i.getX() >> 4 == x >> 4 && i.getY() >> 4 == y >> 4)
-					return (Tree) i;
+				if (i.getX() >> 4 == x >> 4) {
+					if (i.getY() >> 4 == y >> 4) {
+						return (Tree) i;
+					}
+					if (seperate) {
+						if ((i.getY() - 1) >> 4 == y >> 4)
+							return (Tree) i;
+					}
+
+				}
 			}
 		}
 		return null;

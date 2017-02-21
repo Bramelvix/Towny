@@ -238,7 +238,7 @@ public class Game extends Canvas implements Runnable {
 				int height = ui.getSelectionHeight();
 				for (int xs = x; xs < (x + width); xs += 16) {
 					for (int ys = y; ys < (y + height); ys += 16) {
-						Tree tree = level.selectTree(xs, ys);
+						Tree tree = level.selectTree(xs, ys, false);
 						if (tree != null) {
 							Villager idle = getIdlestVil();
 							idle.resetMove();
