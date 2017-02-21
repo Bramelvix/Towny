@@ -5,7 +5,10 @@ import java.util.List;
 
 import entity.Entity;
 import entity.Resource;
+import entity.item.Clothing;
 import entity.item.Item;
+import entity.item.VillagerInventory;
+import entity.item.weapon.Weapon;
 import entity.mob.work.Job;
 import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
@@ -20,7 +23,7 @@ public class Villager extends Mob {
 	private int counter; // counter of steps along the path
 	private boolean arrived = false; // has the villager arrived at the path's
 										// destination
-	public List<Item> wearing; // clothing item list
+	public VillagerInventory inventory; // clothing item list
 	public boolean male; // is the villager male
 	public Item holding; // item the villager is holding in his hands
 	private Sprite hair; // hair sprite
@@ -32,14 +35,14 @@ public class Villager extends Mob {
 	// basic constructors
 	public Villager(int x, int y, Level level) {
 		super(level);
-		while (!level.isWalkAbleTile(x>>4, y>>4)) {
-			x+=16;
-			y+=16;
+		while (!level.isWalkAbleTile(x >> 4, y >> 4)) {
+			x += 16;
+			y += 16;
 		}
 		this.x = x;
 		this.y = y;
 		this.sprite = Sprite.getPerson();
-		wearing = new ArrayList<Item>();
+		inventory = new VillagerInventory(this);
 		jobs = new ArrayList<Job>();
 		male = random.nextBoolean();
 		initHair(true);
@@ -48,12 +51,12 @@ public class Villager extends Mob {
 
 	}
 
-	public Villager(int x, int y, Level level, int hairnr, List<Item> wearing, Item holding, boolean male) {
+	public Villager(int x, int y, Level level, int hairnr, VillagerInventory wearing, Item holding, boolean male) {
 		this(x, y, level);
 		this.hairnr = hairnr;
 		this.male = male;
 		initHair(false);
-		this.wearing = wearing;
+		this.inventory = wearing;
 		this.holding = holding;
 	}
 
@@ -174,6 +177,12 @@ public class Villager extends Mob {
 		}
 	}
 
+	public void dropItem(Item e) {
+		if (e != null) {
+			level.addItem(e);
+		}
+	}
+
 	public boolean onSpot(int x, int y) {
 		return (this.x >> 4 == x >> 4 && this.y >> 4 == y >> 4);
 	}
@@ -227,8 +236,12 @@ public class Villager extends Mob {
 	}
 
 	// add clothing to the villager
-	public void addClothing(Item item) {
-		wearing.add(item);
+	public void addClothing(Clothing item) {
+		inventory.addClothing(item);
+	}
+
+	public void addWeapon(Weapon item) {
+		inventory.addWeapon(item);
 	}
 
 	// method to move the villager
@@ -271,6 +284,7 @@ public class Villager extends Mob {
 		arrived = false;
 		movement = null;
 	}
+
 	public void resetAll() {
 		jobsLeeg();
 		resetMove();
@@ -314,14 +328,10 @@ public class Villager extends Mob {
 
 	// render onto the screen
 	public void render(Screen screen) {
+		inventory.update(x, y);
 		screen.renderSprite(x, y, this.sprite); // renders the body
-		if (wearing != null) {
-			for (int i = 0; i < wearing.size(); i++) {
-				if (wearing.get(i) != null) {
-					screen.renderSprite(x, y, wearing.get(i).sprite); // renders
-																		// clothing
-				}
-			}
+		if (inventory != null) {
+			inventory.render(screen);
 		}
 		screen.renderSprite(x, y, hair); // renders the hair
 		if (holding != null) {

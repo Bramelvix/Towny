@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 
 import entity.Tree;
 import entity.item.Clothing;
+import entity.item.ClothingType;
 import entity.mob.Mob;
 import entity.mob.Villager;
 import entity.mob.work.MoveItemJob;
@@ -90,13 +91,13 @@ public class Game extends Canvas implements Runnable {
 
 	private void spawnvills() {
 		Villager vil = new Villager(144, 144, level);
-		vil.addClothing(new Clothing("Brown Shirt", vil, Sprite.brownShirt1, "A brown tshirt"));
+		vil.addClothing(new Clothing("Brown Shirt", vil, Sprite.brownShirt1, "A brown tshirt", ClothingType.SHIRT));
 		addVillager(vil);
 		Villager vil2 = new Villager(144, 160, level);
-		vil2.addClothing(new Clothing("Green Shirt", vil, Sprite.greenShirt1, "A green tshirt"));
+		vil2.addClothing(new Clothing("Green Shirt", vil, Sprite.greenShirt1, "A green tshirt", ClothingType.SHIRT));
 		addVillager(vil2);
 		Villager vil3 = new Villager(160, 160, level);
-		vil3.addClothing(new Clothing("Green Shirt", vil3, Sprite.greenShirt2, "A green tshirt"));
+		vil3.addClothing(new Clothing("Green Shirt", vil3, Sprite.greenShirt2, "A green tshirt", ClothingType.SHIRT));
 		addVillager(vil3);
 	}
 
