@@ -103,8 +103,8 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 		trueY = trueYpixels / 3;
 		mouseX = trueX + game.xScroll;
 		mouseY = trueY + game.yScroll;
-		mouseTileX = mouseX >> 4;
-		mouseTileY = mouseY >> 4;
+		mouseTileX = mouseX / 16;
+		mouseTileY = mouseY /16;
 
 	}
 
@@ -116,8 +116,8 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 		trueY = trueYpixels / 3;
 		mouseX = trueX + game.xScroll;
 		mouseY = trueY + game.yScroll;
-		mouseTileX = mouseX >> 4;
-		mouseTileY = mouseY >> 4;
+		mouseTileX = mouseX /16;
+		mouseTileY = mouseY /16;
 
 	}
 

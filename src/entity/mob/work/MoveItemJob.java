@@ -11,12 +11,12 @@ public class MoveItemJob extends Job {
 		pickUpJob = true;
 		pickUpJob = true;
 		this.material = material;
-		if (hasMaterial(material))
+		if (worker.holding(material))
 			completed = true;
 		if (!material.isReservedVil(worker))
 			completed = true;
-		
-		worker.movement = worker.getPath(material);
+		xloc = material.getX();
+		yloc = material.getY();
 	}
 
 	private MoveItemJob(Villager worker) {
@@ -30,18 +30,20 @@ public class MoveItemJob extends Job {
 		pickUpJob = false;
 		this.xloc = xloc;
 		this.yloc = yloc;
-		worker.movement = worker.getPath(xloc >> 4, yloc >> 4);
 
 	}
 
-	public boolean hasMaterial(Item mat) {
-		return worker.holding(mat);
+	private void start() {
+		worker.movement = worker.getPath(xloc >> 4, yloc >> 4);
+		if (worker.movement == null)
+			completed = true;
+		started = true;
 	}
 
 	public void execute() {
-		if (!completed) {
+		if (!completed && started) {
 			if (pickUpJob) {
-				if (hasMaterial(material)) {
+				if (worker.holding(material)) {
 					completed = true;
 					return;
 				} else {
@@ -81,6 +83,9 @@ public class MoveItemJob extends Job {
 					}
 				}
 			}
+
+		} else {
+			start();
 		}
 	}
 

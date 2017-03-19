@@ -114,6 +114,9 @@ public class Villager extends Mob {
 
 	// gets the item nearest to the villager with a specific name
 	private Item getNearestItemOfType(String name) {
+		if (holding != null && holding.getName().equals(name)) {
+			return holding;
+		}
 		Item closest = null;
 		Path path = null;
 		for (int i = 0; i < level.getItemList().size(); i++) {
@@ -199,6 +202,12 @@ public class Villager extends Mob {
 			jobs.add(e);
 	}
 
+	public void addJob(Job e, int prio) {
+		if (e != null) {
+			jobs.add(prio, e);
+		}
+	}
+
 	// add a buildjob
 	public void addBuildJob(int x, int y) {
 		addJob(new Job(x, y, getNearestItemOfType("Logs"), this, level));
@@ -207,12 +216,12 @@ public class Villager extends Mob {
 	// pathfinder
 	public Path getShortest(Entity e) {
 		if (e != null)
-			return getShortest(e.getX() >> 4, e.getY() >> 4);
+			return getShortest(e.getX() / 16, e.getY() / 16);
 		return null;
 	}
 
 	public Path getPath(Entity e) {
-		return getPath(e.getX() >> 4, e.getY() >> 4);
+		return getPath(e.getX() / 16, e.getY() / 16);
 	}
 
 	public Path getShortest(int x, int y) {

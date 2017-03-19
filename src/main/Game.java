@@ -31,8 +31,8 @@ import sound.Sound;
 public class Game extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 1L;
-	private static int width = 500;
-	private static int height = width / 16 * 9;
+	private static final int width = 500;
+	private static final int height = width / 16 * 9;
 	private Thread thread;
 	private static final int SCALE = 3;
 	private Level level;
@@ -40,9 +40,9 @@ public class Game extends Canvas implements Runnable {
 	private boolean running = false;
 	private Mouse mouse;
 	private Keyboard keyboard;
-	public List<Villager> vills;
-	public List<Villager> sols;
-	public List<Mob> mobs;
+	private List<Villager> vills;
+	private List<Villager> sols;
+	private List<Mob> mobs;
 	private Ui ui;
 	private boolean paused = false;
 	private byte speed = 6;
@@ -121,7 +121,7 @@ public class Game extends Canvas implements Runnable {
 
 	public synchronized void start() {
 		running = true;
-		thread = new Thread(this, "Display");
+		thread = new Thread(this);
 		thread.start();
 	}
 
@@ -208,7 +208,7 @@ public class Game extends Canvas implements Runnable {
 		selectedvill = null;
 	}
 
-	private void deSelect(Villager vill) {
+	private void deselect(Villager vill) {
 		vill.setSelected(false);
 		selectedvill = null;
 	}
@@ -319,7 +319,7 @@ public class Game extends Canvas implements Runnable {
 				ui.getMenu().hide();
 				ui.deSelectIcons();
 				if (selectedvill != null) {
-					deSelect(selectedvill);
+					deselect(selectedvill);
 				}
 				return;
 			}
@@ -329,7 +329,7 @@ public class Game extends Canvas implements Runnable {
 				if (selectedvill.movement == null) {
 					selectedvill.movement = selectedvill.getShortest(level.getEntityOn(mouse.getX(), mouse.getY()));
 				}
-				deSelect(selectedvill);
+				deselect(selectedvill);
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
@@ -337,7 +337,7 @@ public class Game extends Canvas implements Runnable {
 			if (ui.getMenu().clickedOnItem(MenuItem.CHOP, mouse)) {
 				selectedvill.resetMove();
 				selectedvill.addJob(level.selectTree(mouse.getX(), mouse.getY()));
-				deSelect(selectedvill);
+				deselect(selectedvill);
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
@@ -345,7 +345,7 @@ public class Game extends Canvas implements Runnable {
 			if (ui.getMenu().clickedOnItem(MenuItem.MINE, mouse)) {
 				selectedvill.resetMove();
 				selectedvill.addJob(level.selectOre(mouse.getX(), mouse.getY()));
-				deSelect(selectedvill);
+				deselect(selectedvill);
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
@@ -362,7 +362,7 @@ public class Game extends Canvas implements Runnable {
 					selectedvill.addJob(
 							new MoveItemJob(level.getItemOn(ui.getMenuIngameX(), ui.getMenuIngameY()), selectedvill));
 				ui.deSelectIcons();
-				deSelect(selectedvill);
+				deselect(selectedvill);
 				ui.getMenu().hide();
 				return;
 			}
@@ -370,7 +370,7 @@ public class Game extends Canvas implements Runnable {
 				selectedvill.resetMove();
 				selectedvill.addJob(new MoveItemJob(ui.getMenuIngameX(), ui.getMenuIngameY(), selectedvill));
 				ui.deSelectIcons();
-				deSelect(selectedvill);
+				deselect(selectedvill);
 				ui.getMenu().hide();
 				return;
 			}
@@ -414,10 +414,7 @@ public class Game extends Canvas implements Runnable {
 		level.renderItems(screen);
 		renderMobs();
 		level.renderEntites(screen);
-
-		for (int i = 0; i < pixels.length; i++) {
-			pixels[i] = screen.pixels[i];
-		}
+		pixels = screen.pixels;
 		Graphics g = bs.getDrawGraphics();
 		g.fillRect(0, 0, getWidth(), getHeight());
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);

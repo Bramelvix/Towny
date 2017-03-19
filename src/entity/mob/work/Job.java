@@ -18,7 +18,8 @@ public class Job implements Workable {
 	private boolean buildJob; // is the job a buildjob
 	private Wall buildJobObj; // the buildable entity the worker needs to build
 	private Level level; // the level in which the job is located
-	private boolean started = false;
+	protected boolean started = false;
+	private boolean goingToPickUpItem = false;
 
 	// constructors
 	private Job(int xloc, int yloc, Villager worker) {
@@ -40,24 +41,12 @@ public class Job implements Workable {
 	public Job(int xloc, int yloc, Item mat, Villager worker, Level level) {
 		this(xloc, yloc, worker);
 		this.level = level;
-		if (worker.getShortest(xloc >> 4, yloc >> 4) == null) {
+		needsMaterial = true;
+		buildJobObj = new Wall((xloc - (xloc % 16)), (yloc - (yloc % 16)));
+		material = mat;
+		buildJob = true;
+		if (material == null) {
 			completed = true;
-		} else {
-			needsMaterial = true;
-			int xtussen = xloc >> 4; // this step is needed to turn pixels into
-										// tiles and then back into pixels, to
-										// round down numbers undevidable by 16.
-										// (example: pixel 260 x => divide by 16
-										// rounded down to get 16 => multiply up
-										// by 16 to get 256). Items are always
-										// placed exactly on tile borders.
-			int ytussen = yloc >> 4;
-			buildJobObj = new Wall(xtussen << 4, ytussen << 4);
-			material = mat;
-			buildJob = true;
-			if (material == null) {
-				completed = true;
-			}
 		}
 
 	}
@@ -74,7 +63,6 @@ public class Job implements Workable {
 			if (worker.holding.equals(material)) {
 				hasMaterial = true;
 			}
-
 		}
 	}
 
@@ -85,17 +73,25 @@ public class Job implements Workable {
 		started = true;
 	}
 
+	private void goPickupItem() {
+		if (!goingToPickUpItem ) {
+			worker.addJob(new MoveItemJob(material, worker),0);
+			goingToPickUpItem = true;
+		}
+	}
+
 	// execute the job
 	public void execute() {
-		if (!completed && started) {
-			checkItem();
-			if (needsMaterial && !hasMaterial) {
-				if (worker.pickUp(material)) {
-					worker.movement = worker.getShortest(xloc >> 4, yloc >> 4);
-					hasMaterial = true;
-				}
-				return;
+		checkItem();
+		if (needsMaterial && !hasMaterial) {
+			goPickupItem();
+			if (worker.pickUp(material)) {
+				worker.movement = worker.getShortest(xloc >> 4, yloc >> 4);
+				hasMaterial = true;
 			}
+			return;
+		}
+		if (!completed && started && (!needsMaterial || hasMaterial)) {
 			if (!worker.aroundSpot(xloc, yloc) && worker.movement != null) {
 				worker.move();
 				return;
