@@ -78,6 +78,7 @@ public class Screen {
 
 	// render trees
 	public void renderTree(int xp, int yp, Tree e) {
+		renderSprite(xp, yp, e.sprite);
 		xp -= xOffset;
 		yp -= yOffset;
 		for (int y = 0; y < Sprite.SIZE; y++) {

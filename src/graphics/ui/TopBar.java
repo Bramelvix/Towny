@@ -72,9 +72,8 @@ public class TopBar {
 	}
 
 	public byte getSpeed() {
-		if (speed == 0) {
+		if (speed == 0) 
 			return 6;
-		}
 		return speed;
 	}
 

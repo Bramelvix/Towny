@@ -29,9 +29,7 @@ public class Menu { // the menu is the little options menu that shows up when
 				}
 			}
 			g.fillRect(x, y, width, height);
-			for (MenuItem i : items) {
-				i.render(g);
-			}
+			items.forEach((MenuItem i) -> i.render(g));
 		}
 	}
 
@@ -74,9 +72,7 @@ public class Menu { // the menu is the little options menu that shows up when
 			hide();
 			return;
 		} else {
-			for (MenuItem i : items) {
-				i.update(mouse);
-			}
+			items.forEach((MenuItem i) -> i.update(mouse));
 			setVisible((((mouse.getTrueXPixels()) >= getX() - 10)
 					&& ((mouse.getTrueXPixels()) <= getX() + (getWidth() + 10))
 					&& ((mouse.getTrueYPixels()) >= getY() - 10)
@@ -104,9 +100,11 @@ public class Menu { // the menu is the little options menu that shows up when
 	public int getYLocForMenuItem() {
 		return y + (items.size() * 15);
 	}
+
 	public int getIngameX() {
 		return ingameX;
 	}
+
 	public int getIngameY() {
 		return ingameY;
 	}

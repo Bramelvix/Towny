@@ -1,7 +1,6 @@
 package graphics.ui.icon;
 
 import java.awt.Graphics;
-import java.security.AllPermission;
 
 import input.Mouse;
 

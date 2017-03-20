@@ -150,9 +150,8 @@ public class Weapon extends Item {
 		}
 		name.concat(type.toString().toLowerCase());
 		String tooltip = "a " + name.toLowerCase();
-		if (mat == WeaponMaterial.IRON) {
+		if (mat == WeaponMaterial.IRON)
 			tooltip = "an " + name.toLowerCase();
-		}
 		return new Weapon(name, x, y, Sprite.getWeaponSprite(type, mat), tooltip, type, mat);
 	}
 

@@ -171,13 +171,7 @@ public class Sprite {
 	// returns random skin color sprite
 	public static Sprite getPerson() {
 		byte n = (byte) rand.nextInt(3);
-		if (n == 0)
-			return Sprite.villager1;
-		if (n == 1)
-			return Sprite.villager2;
-		if (n == 2)
-			return Sprite.villager3;
-		return Sprite.voidSprite;
+		return n == 0 ? Sprite.villager1 : n == 1 ? Sprite.villager2 : Sprite.villager3;
 	}
 
 	// return random sand sprite

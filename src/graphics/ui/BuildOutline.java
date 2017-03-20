@@ -26,11 +26,8 @@ public class BuildOutline {
 	public void render(Graphics g) {
 		if (visible) {
 			if (buildSquareXE == 0 && buildSquareYE == 0) {
-				if (notBuildable(((buildSquareXS / 3) >> 4), (buildSquareYS / 3) >> 4)) {
-					g.setColor(notbuildable);
-				} else {
-					g.setColor(buildable);
-				}
+				g.setColor(
+						notBuildable(((buildSquareXS / 3) >> 4), (buildSquareYS / 3) >> 4) ? notbuildable : buildable);
 				g.fillRect(buildSquareXSTeken, buildSquareYSTeken, WIDTH, WIDTH);
 				return;
 			}
@@ -39,22 +36,15 @@ public class BuildOutline {
 															// EIND == SLEEP
 															// NAAR RECHTS
 					for (int i = 0; i < squarewidth; i++) {
-						if (notBuildable(((buildSquareXS / 3) >> 4) + i, ((buildSquareYS / 3) >> 4))) {
-							g.setColor(notbuildable);
-						} else {
-							g.setColor(buildable);
-						}
+						g.setColor(notBuildable(((buildSquareXS / 3) >> 4) + i, ((buildSquareYS / 3) >> 4))
+								? notbuildable : buildable);
 						g.fillRect(buildSquareXSTeken + (i * WIDTH), buildSquareYSTeken, WIDTH, WIDTH);
 					}
 					return;
 				} else { // START RECHTS VAN EIND == SLEEP NAAR LINKS
 					for (int i = 0; i < squarewidth; i++) {
-						if (notBuildable((((buildSquareXS - (WIDTH * (squarewidth - 1))) / 3) >> 4) + i,
-								((buildSquareYS / 3) >> 4))) {
-							g.setColor(notbuildable);
-						} else {
-							g.setColor(buildable);
-						}
+						g.setColor((notBuildable((((buildSquareXS - (WIDTH * (squarewidth - 1))) / 3) >> 4) + i,
+								((buildSquareYS / 3) >> 4))) ? notbuildable : buildable);
 						g.fillRect(buildSquareXSTeken - (WIDTH * (squarewidth - 1)) + (i * WIDTH), buildSquareYSTeken,
 								WIDTH, WIDTH);
 					}
@@ -64,23 +54,17 @@ public class BuildOutline {
 				if (buildSquareYSTeken < buildSquareYE) { // START BOVEN EIND ==
 															// SLEEP NAAR ONDER
 					for (int i = 0; i < squareheight; i++) {
-						if (notBuildable(((buildSquareXS / 3) >> 4), ((buildSquareYS / 3) >> 4) + i)) {
-							g.setColor(notbuildable);
-						} else {
-							g.setColor(buildable);
-						}
+						g.setColor((notBuildable(((buildSquareXS / 3) >> 4), ((buildSquareYS / 3) >> 4) + i))
+								? notbuildable : buildable);
 						g.fillRect(buildSquareXSTeken, buildSquareYSTeken + (WIDTH * i), WIDTH,
 								WIDTH * (squareheight - i));
 					}
 					return;
 				} else { // START ONDER EIND == SLEEP NAAR BOVEN
 					for (int i = 0; i < squareheight; i++) {
-						if (notBuildable(((buildSquareXS / 3) >> 4),
-								(((buildSquareYS - (WIDTH * (squareheight - 1))) / 3) >> 4) + i)) {
-							g.setColor(notbuildable);
-						} else {
-							g.setColor(buildable);
-						}
+						g.setColor((notBuildable(((buildSquareXS / 3) >> 4),
+								(((buildSquareYS - (WIDTH * (squareheight - 1))) / 3) >> 4) + i)) ? notbuildable
+										: buildable);
 						g.fillRect(buildSquareXSTeken, buildSquareYSTeken - (WIDTH * (squareheight - 1)) + (i * WIDTH),
 								WIDTH, WIDTH);
 					}
@@ -147,11 +131,7 @@ public class BuildOutline {
 	}
 
 	public int getLength() {
-		if (squarewidth > squareheight) {
-			return squarewidth;
-		} else {
-			return squareheight;
-		}
+		return (squarewidth > squareheight) ? squarewidth : squareheight;
 	}
 
 	public boolean isVisible() {
@@ -220,8 +200,7 @@ public class BuildOutline {
 
 	// hide the outline
 	public void remove() {
-		if (visible) {
+		if (visible)
 			visible = false;
-		}
 	}
 }

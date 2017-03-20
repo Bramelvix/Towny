@@ -16,8 +16,7 @@ public class SelectionSquare {
 	private boolean startedDragging;
 
 	public void update(Mouse mouse) {
-		if (mouse.getDrag())
-			startedDragging = true;
+		startedDragging = mouse.getDrag();
 		if (visible) {
 			if (startedDragging) {
 				widthteken = mouse.getTrueX() * 3 - xcoord;
@@ -60,33 +59,19 @@ public class SelectionSquare {
 	}
 
 	public int getX() {
-		if (width < 0) {
-			return x + width;
-
-		}
-		return x;
+		return (width < 0) ? x + width : x;
 	}
 
 	public int getY() {
-		if (height < 0) {
-			y += height;
-		}
-		return y;
+		return (height < 0) ? y += height : y;
 	}
 
 	public int getWidth() {
-		if (width < 0) {
-			width = -width;
-
-		}
-		return width;
+		return (width < 0) ? width = -width : width;
 	}
 
 	public int getHeight() {
-		if (height < 0) {
-			height = -height;
-		}
-		return height;
+		return (height < 0) ? height = -height : height;
 	}
 
 	public boolean isVisible() {

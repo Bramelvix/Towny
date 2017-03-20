@@ -11,9 +11,8 @@ public class MoveItemJob extends Job {
 		pickUpJob = true;
 		pickUpJob = true;
 		this.material = material;
+		material.setReservedVil(worker);
 		if (worker.holding(material))
-			completed = true;
-		if (!material.isReservedVil(worker))
 			completed = true;
 		xloc = material.getX();
 		yloc = material.getY();
@@ -35,8 +34,10 @@ public class MoveItemJob extends Job {
 
 	private void start() {
 		worker.movement = worker.getPath(xloc >> 4, yloc >> 4);
-		if (worker.movement == null)
+		if (worker.movement == null) {
 			completed = true;
+			material.setReservedVil(null);
+		}
 		started = true;
 	}
 

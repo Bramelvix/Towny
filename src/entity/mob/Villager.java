@@ -81,10 +81,7 @@ public class Villager extends Mob {
 	}
 
 	public boolean holding(Item item) {
-		if (holding != null) {
-			return holding.equals(item);
-		}
-		return false;
+		return holding != null ? holding.equals(item) : false;
 	}
 
 	// the villager moves to a random location nearby if he has nothing to do.
@@ -97,49 +94,37 @@ public class Villager extends Mob {
 
 	// initialise the hairsprite
 	private void initHair(boolean generate) {
-		if (generate) {
-			if (male) {
-				hairnr = random.nextInt(HairSprite.maleHair.length);
-			} else {
-				hairnr = random.nextInt(HairSprite.femaleHair.length);
-			}
-		}
-		if (male) {
-			hair = HairSprite.maleHair[hairnr];
-		} else {
-			hair = HairSprite.femaleHair[hairnr];
-		}
+		if (generate)
+			hairnr = male ? random.nextInt(HairSprite.maleHair.length) : random.nextInt(HairSprite.femaleHair.length);
+		hair = male ? HairSprite.maleHair[hairnr] : HairSprite.femaleHair[hairnr];
 
 	}
 
 	// gets the item nearest to the villager with a specific name
-	private Item getNearestItemOfType(String name) {
-		if (holding != null && holding.getName().equals(name)) {
+	public Item getNearestItemOfType(String name) {
+		if (holding != null && holding.getName().equals(name))
 			return holding;
-		}
 		Item closest = null;
 		Path path = null;
 		for (int i = 0; i < level.getItemList().size(); i++) {
-			if (level.getItem(i).getName().equals(name) && level.getItem(i).isReservedVil(this)) {
-				closest = level.getItem(i);
+			if (level.getItemList().get(i).getName().equals(name) && level.getItemList().get(i).isReservedVil(this)) {
+				closest = level.getItemList().get(i);
 				path = getPath(closest.getX() >> 4, closest.getY() >> 4);
-				if (closest.getX() >> 4 == x >> 4 && y >> 4 == closest.getY() >> 4) {
+				if (closest.getX() >> 4 == x >> 4 && y >> 4 == closest.getY() >> 4)
 					return closest;
-				}
 			}
 		}
-		if (closest == null && path == null) {
+		if (closest == null && path == null)
 			return null;
-		}
 		return closest;
 	}
 
 	// work method for the villager to execute his jobs
 	public void work() {
-		if (jobs.get(0) != null && !jobs.get(0).isCompleted()) {
-			jobs.get(0).execute();
-		} else {
-			if (jobs.get(0).isCompleted()) {
+		if (jobs.get(0) != null) {
+			if (!jobs.get(0).isCompleted()) {
+				jobs.get(0).execute();
+			} else {
 				jobs.remove(0);
 			}
 		}
@@ -181,9 +166,8 @@ public class Villager extends Mob {
 	}
 
 	public void dropItem(Item e) {
-		if (e != null) {
+		if (e != null)
 			level.addItem(e);
-		}
 	}
 
 	public boolean onSpot(int x, int y) {
@@ -192,9 +176,9 @@ public class Villager extends Mob {
 
 	// add a job to the jobs list for the villager to do
 	public void addJob(Resource e) {
-		if (e != null) {
+		if (e != null)
 			addJob(new Job(e, this));
-		}
+
 	}
 
 	public void addJob(Job e) {
@@ -203,9 +187,9 @@ public class Villager extends Mob {
 	}
 
 	public void addJob(Job e, int prio) {
-		if (e != null) {
+		if (e != null)
 			jobs.add(prio, e);
-		}
+
 	}
 
 	// add a buildjob
@@ -215,9 +199,7 @@ public class Villager extends Mob {
 
 	// pathfinder
 	public Path getShortest(Entity e) {
-		if (e != null)
-			return getShortest(e.getX() / 16, e.getY() / 16);
-		return null;
+		return e != null ? getShortest(e.getX() / 16, e.getY() / 16) : null;
 	}
 
 	public Path getPath(Entity e) {
@@ -295,38 +277,16 @@ public class Villager extends Mob {
 	}
 
 	public void resetAll() {
-		jobsLeeg();
-		resetMove();
-	}
-
-	// empties the jobs list
-	private void jobsLeeg() {
 		jobs.clear();
-
+		resetMove();
 	}
 
 	// DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()!! DO NOT
 	// USE!!!
 	private final void moveTo(int x, int y) {
 		int xmov, ymov;
-		if (this.x > x) {
-			xmov = -1;
-		} else {
-			if (this.x == x) {
-				xmov = 0;
-			} else {
-				xmov = 1;
-			}
-		}
-		if (this.y > y) {
-			ymov = -1;
-		} else {
-			if (this.y == y) {
-				ymov = 0;
-			} else {
-				ymov = 1;
-			}
-		}
+		xmov = (this.x > x) ? -1 : (this.x == x) ? 0 : 1;
+		ymov = (this.y > y) ? -1 : (this.y == y) ? 0 : 1;
 		move(xmov, ymov);
 		if (!(holding == null)) {
 			holding.setX(x);
@@ -339,14 +299,12 @@ public class Villager extends Mob {
 	public void render(Screen screen) {
 		inventory.update(x, y);
 		screen.renderSprite(x, y, this.sprite); // renders the body
-		if (inventory != null) {
+		if (inventory != null)
 			inventory.render(screen);
-		}
 		screen.renderSprite(x, y, hair); // renders the hair
-		if (holding != null) {
+		if (holding != null)
 			screen.renderSprite(x, y, holding.sprite); // renders the item the
 														// villager is holding
-		}
 		screen.renderSelection(x, y, this); // render the red square around
 											// selected villagers
 

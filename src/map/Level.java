@@ -37,10 +37,6 @@ public class Level {
 		return items;
 	}
 
-	public Item getItem(int index) {
-		return items.get(index);
-	}
-
 	// adding an item to the list
 	public void addItem(Item e) {
 		Item o = new Item(e);
@@ -49,8 +45,7 @@ public class Level {
 
 	// removing an item from the list
 	public void removeItem(Item e) {
-		if (items.contains(e))
-			items.remove(e);
+		items.remove(e);
 	}
 
 	// is the tile on X and Y clear (No items or entities or walls blocking it)
@@ -59,9 +54,8 @@ public class Level {
 			if (e.getX() >> 4 == x && e.getY() >> 4 == y)
 				return false;
 		}
-		if (!isWalkAbleTile(x, y)) {
+		if (!isWalkAbleTile(x, y))
 			return false;
-		}
 		return !getTile(x, y).solid();
 	}
 
@@ -77,18 +71,16 @@ public class Level {
 	// if there is a wall on x and y, return it
 	public Wall getWallOn(int x, int y) {
 		for (Entity e : entities) {
-			if ((e.getX() == x) && (e.getY() == y) && e instanceof Wall) {
+			if ((e.getX() == x) && (e.getY() == y) && e instanceof Wall)
 				return (Wall) e;
-			}
 		}
 		return null;
 	}
 
 	public Item getItemOn(int x, int y) {
 		for (Item e : items) {
-			if ((e.getX() >> 4 == x >> 4) && (e.getY() >> 4 == y >> 4)) {
+			if ((e.getX() >> 4 == x >> 4) && (e.getY() >> 4 == y >> 4))
 				return e;
-			}
 		}
 		return null;
 	}
@@ -133,9 +125,8 @@ public class Level {
 			Entity i = entities.get(s);
 			if (i instanceof Tree) {
 				if (i.getX() >> 4 == x >> 4) {
-					if (i.getY() >> 4 == y >> 4) {
+					if (i.getY() >> 4 == y >> 4)
 						return (Tree) i;
-					}
 					if (seperate) {
 						if ((i.getY() - 1) >> 4 == y >> 4)
 							return (Tree) i;
@@ -230,10 +221,7 @@ public class Level {
 
 	// return the tile on x and y
 	public Tile getTile(int x, int y) {
-		if (x < 0 || x >= width || y < 0 || y >= height) {
-			return Tile.voidTile;
-		}
-		return tiles[x + y * width];
+		return (x < 0 || x >= width || y < 0 || y >= height) ? Tile.voidTile : tiles[x + y * width];
 	}
 
 }

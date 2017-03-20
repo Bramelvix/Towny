@@ -68,7 +68,7 @@ public class Job implements Workable {
 
 	private void start() {
 		worker.movement = worker.getShortest(xloc >> 4, yloc >> 4);
-		if (worker.movement == null)
+		if (worker.movement == null) 
 			completed = true;
 		started = true;
 	}
@@ -88,7 +88,11 @@ public class Job implements Workable {
 			return;
 		}
 		if (!completed && started && (!needsMaterial || hasMaterial)) {
-			if (!worker.aroundSpot(xloc, yloc) && worker.movement != null) {
+			if (!worker.aroundSpot(xloc, yloc)) {
+				if (worker.movement == null) {
+					completed = true;
+					return;
+				}
 				worker.move();
 				return;
 			} else {
