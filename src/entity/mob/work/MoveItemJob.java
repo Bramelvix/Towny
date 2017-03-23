@@ -90,8 +90,4 @@ public class MoveItemJob extends Job {
 		}
 	}
 
-	public boolean isCompleted() {
-		return completed;
-	}
-
 }

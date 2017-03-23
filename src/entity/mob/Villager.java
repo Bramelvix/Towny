@@ -2,8 +2,6 @@ package entity.mob;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import entity.Entity;
 import entity.Resource;
 import entity.item.Clothing;
 import entity.item.Item;
@@ -11,7 +9,6 @@ import entity.item.VillagerInventory;
 import entity.item.weapon.Weapon;
 import entity.mob.work.Job;
 import entity.pathfinding.Path;
-import entity.pathfinding.PathFinder;
 import entity.pathfinding.Point;
 import graphics.HairSprite;
 import graphics.Screen;
@@ -30,7 +27,6 @@ public class Villager extends Mob {
 	private int hairnr; // hair number (needed for the hair sprite to be
 						// decided)
 	private List<Job> jobs; // jobs the villager needs to do
-	private int idletimer = getIdleTimer(); // timer for the villager to idle
 
 	// basic constructors
 	public Villager(int x, int y, Level level) {
@@ -58,11 +54,6 @@ public class Villager extends Mob {
 		initHair(false);
 		this.inventory = wearing;
 		this.holding = holding;
-	}
-
-	// getter
-	private int getIdleTimer() {
-		return random.nextInt(5) * 60;
 	}
 
 	public int getJobSize() {
@@ -131,19 +122,6 @@ public class Villager extends Mob {
 
 	}
 
-	// is the villager on or around a location (x and y in pixels)
-	public boolean aroundSpot(int endx, int endy) {
-		return aroundTile(endx, endy);
-
-	}
-
-	// is the villager around a tile (x and y in pixels)
-	public boolean aroundTile(int endx, int endy) {
-		return ((this.x <= ((endx + 16))) && (this.x >= ((endx - 16)))
-				&& ((this.y >= ((endy - 16))) && (this.y <= ((endy + 16)))));
-
-	}
-
 	// pickup an item
 	public boolean pickUp(Item e) {
 		if (onSpot(e.getX(), e.getY())) {
@@ -170,10 +148,6 @@ public class Villager extends Mob {
 			level.addItem(e);
 	}
 
-	public boolean onSpot(int x, int y) {
-		return (this.x >> 4 == x >> 4 && this.y >> 4 == y >> 4);
-	}
-
 	// add a job to the jobs list for the villager to do
 	public void addJob(Resource e) {
 		if (e != null)
@@ -195,20 +169,6 @@ public class Villager extends Mob {
 	// add a buildjob
 	public void addBuildJob(int x, int y) {
 		addJob(new Job(x, y, getNearestItemOfType("Logs"), this, level));
-	}
-
-	// pathfinder
-	public Path getShortest(Entity e) {
-		return e != null ? getShortest(e.getX() / 16, e.getY() / 16) : null;
-	}
-
-	public Path getPath(Entity e) {
-		return getPath(e.getX() / 16, e.getY() / 16);
-	}
-
-	public Path getShortest(int x, int y) {
-		return PathFinder
-				.getShortest(new Path[] { getPath(x - 1, y), getPath(x + 1, y), getPath(x, y - 1), getPath(x, y + 1) });
 	}
 
 	// updates the villager in the game logic
@@ -283,11 +243,8 @@ public class Villager extends Mob {
 
 	// DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()!! DO NOT
 	// USE!!!
-	private final void moveTo(int x, int y) {
-		int xmov, ymov;
-		xmov = (this.x > x) ? -1 : (this.x == x) ? 0 : 1;
-		ymov = (this.y > y) ? -1 : (this.y == y) ? 0 : 1;
-		move(xmov, ymov);
+	protected final void moveTo(int x, int y) {
+		super.moveTo(x, y);
 		if (!(holding == null)) {
 			holding.setX(x);
 			holding.setY(y);
@@ -307,6 +264,14 @@ public class Villager extends Mob {
 														// villager is holding
 		screen.renderSelection(x, y, this); // render the red square around
 											// selected villagers
+
+	}
+
+	@Override
+	public void die() {
+		if (holding != null)
+			level.addItem(holding);
+		inventory.dropAll();
 
 	}
 

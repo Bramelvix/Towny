@@ -8,7 +8,10 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+
 import javax.swing.JFrame;
 
 import entity.Tree;
@@ -16,6 +19,8 @@ import entity.item.Clothing;
 import entity.item.ClothingType;
 import entity.mob.Mob;
 import entity.mob.Villager;
+import entity.mob.Zombie;
+import entity.mob.work.FightJob;
 import entity.mob.work.MoveItemJob;
 import graphics.Screen;
 import graphics.Sprite;
@@ -53,6 +58,7 @@ public class Game extends Canvas implements Runnable {
 	private Screen screen;
 	private BufferedImage image;
 	private int[] pixels;
+	private Random rand;
 
 	public static void main(String[] args) {
 		new Game();
@@ -61,6 +67,7 @@ public class Game extends Canvas implements Runnable {
 
 	public Game() {
 		Dimension size = new Dimension(width * SCALE, height * SCALE);
+		rand = new Random();
 		setPreferredSize(size);
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
@@ -82,6 +89,7 @@ public class Game extends Canvas implements Runnable {
 		sols = new ArrayList<Villager>();
 		ui = new Ui(level);
 		spawnvills();
+		spawnZombies();
 
 		addKeyListener(keyboard);
 		addMouseListener(mouse);
@@ -99,6 +107,14 @@ public class Game extends Canvas implements Runnable {
 		Villager vil3 = new Villager(160, 160, level);
 		vil3.addClothing(new Clothing("Green Shirt", vil3, Sprite.greenShirt2, "A green tshirt", ClothingType.SHIRT));
 		addVillager(vil3);
+	}
+
+	private void spawnZombies() {
+		int teller = rand.nextInt(5) + 1;
+		for (int i = 0; i < teller; i++) {
+			Zombie zomb = new Zombie(level, rand.nextInt(256) + 16, rand.nextInt(256) + 16);
+			mobs.add(zomb);
+		}
 	}
 
 	private void addVillager(Villager vil) {
@@ -203,6 +219,14 @@ public class Game extends Canvas implements Runnable {
 		return null;
 	}
 
+	private Mob anyMobHoverOn(Mouse mouse) {
+		for (Mob i : mobs) {
+			if (i.hoverOn(mouse))
+				return i;
+		}
+		return null;
+	}
+
 	private void deselectAllVills() {
 		vills.forEach((Villager i) -> i.setSelected(false));
 		selectedvill = null;
@@ -259,6 +283,16 @@ public class Game extends Canvas implements Runnable {
 			idle.resetMove();
 			deselectAllVills();
 			idle.addJob(level.selectOre(mouse.getX(), mouse.getY()));
+			ui.deSelectIcons();
+			return;
+
+		}
+		if (((UiIcons.isSwordsSelected()) && !UiIcons.hoverOnAnyIcon() && mouse.getClicked())
+				&& (anyMobHoverOn(mouse) != null)) {
+			Villager idle = getIdlestVil();
+			idle.resetMove();
+			deselectAllVills();
+			idle.addJob(new FightJob(idle, anyMobHoverOn(mouse)));
 			ui.deSelectIcons();
 			return;
 
@@ -392,9 +426,33 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	private void updateMobs() {
-		mobs.forEach((Mob i) -> i.update());
-		vills.forEach((Villager i) -> i.update());
-		sols.forEach((Villager i) -> i.update());
+		Iterator<Mob> iMob = mobs.iterator();
+		while (iMob.hasNext()) {
+			Mob i = iMob.next();
+			i.update();
+			if (i.getHealth() == 0) {
+				i.die();
+				iMob.remove();
+			}
+		}
+		Iterator<Villager> iVill = vills.iterator();
+		while (iVill.hasNext()) {
+			Mob i = iVill.next();
+			i.update();
+			if (i.getHealth() == 0) {
+				i.die();
+				iVill.remove();
+			}
+		}
+		Iterator<Villager> iSoll = sols.iterator();
+		while (iSoll.hasNext()) {
+			Mob i = iSoll.next();
+			i.update();
+			if (i.getHealth() == 0) {
+				i.die();
+				iSoll.remove();
+			}
+		}
 	}
 
 	private void renderMobs() {

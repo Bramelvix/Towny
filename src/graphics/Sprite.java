@@ -55,6 +55,8 @@ public class Sprite {
 	public static Sprite villager1 = new Sprite(1, 0, SpriteSheet.entities);
 	public static Sprite villager2 = new Sprite(1, 1, SpriteSheet.entities);
 	public static Sprite villager3 = new Sprite(1, 2, SpriteSheet.entities);
+	public static Sprite zombie = new Sprite(0,3,SpriteSheet.entities);
+	public static Sprite zombiehit = new Sprite(1,3,SpriteSheet.entities);
 
 	// ORE
 	public static Sprite coalOre = new Sprite(0, 23, SpriteSheet.tiles);
@@ -141,6 +143,12 @@ public class Sprite {
 	public static Sprite woodheater = new Sprite(35, 0, SpriteSheet.entities);
 	public static Sprite bronzespear = new Sprite(44, 1, SpriteSheet.entities);
 
+	
+	//furnace
+	public static Sprite furnaceOff = new Sprite(12,0,SpriteSheet.tiles);
+	public static Sprite furnaceOn1 = new Sprite(13,0,SpriteSheet.tiles);
+	public static Sprite furnaceOn2 = new Sprite(14,0,SpriteSheet.tiles);
+	
 	protected Sprite(int x, int y, SpriteSheet sheet) {
 		this.x = x * SIZE + (x * sheet.margin);
 		this.y = y * SIZE + (y * sheet.margin);

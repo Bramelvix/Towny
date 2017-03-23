@@ -85,6 +85,16 @@ public class VillagerInventory {
 
 	}
 
+	public void dropAll() {
+		dropItem(hat);
+		dropItem(shirt);
+		dropItem(trousers);
+		dropItem(shoes);
+		dropItem(weaponHand);
+		dropItem(shieldHand);
+
+	}
+
 	public void update(int x, int y) {
 		if (hat != null) {
 			hat.setX(x);

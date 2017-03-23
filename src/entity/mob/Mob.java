@@ -11,6 +11,7 @@ import map.Level;
 //abstract mob class for villagers and monsters/animals to extend
 public abstract class Mob extends Entity {
 	public Sprite sprite;
+	protected int idletimer = getIdleTimer();// timer for the mob to idle
 	protected Direction dir;
 	protected boolean moving = false;
 	private static PathFinder finder;
@@ -22,14 +23,65 @@ public abstract class Mob extends Entity {
 	// between -1 and 1). example: for x -1
 	// is left and 1 is right.
 	public void move(int xa, int ya) { // extreem korte notatie
-		dir = (xa > 0) ? (ya > 0) ? Direction.RECHTS_OMLAAG : (ya < 0) ? Direction.RECHTS_OMHOOG : Direction.RECHTS
-				: (xa < 0) ? (ya > 0) ? Direction.LINKS_OMLAAG : (ya < 0) ? Direction.LINKS_OMHOOG : Direction.LINKS
-						: (ya > 0) ? Direction.OMLAAG : Direction.OMHOOG;
+		if (xa > 0) {
+			if (ya > 0) {
+				dir = Direction.RECHTS_OMLAAG;
+			} else {
+				dir = (ya < 0) ? Direction.RECHTS_OMHOOG : Direction.RECHTS;
+			}
+		} else {
+			if (xa < 0) {
+				if (ya > 0) {
+					dir = Direction.LINKS_OMLAAG;
+				} else {
+					dir = (ya < 0) ? Direction.LINKS_OMHOOG : Direction.LINKS;
+				}
+
+			} else {
+				dir = (ya > 0) ? Direction.OMLAAG : Direction.OMHOOG;
+			}
+		}
 		if (!collision()) {
 			x += xa;
 			y += ya;
 		}
 
+	}
+
+	// is the mob on or around a location (x and y in pixels)
+	public boolean aroundSpot(int endx, int endy) {
+		return aroundTile(endx, endy);
+
+	}
+
+	// is the mob around a tile (x and y in pixels)
+	public boolean aroundTile(int endx, int endy) {
+		return ((this.x <= ((endx + 16))) && (this.x >= ((endx - 16)))
+				&& ((this.y >= ((endy - 16))) && (this.y <= ((endy + 16)))));
+
+	}
+
+	public boolean onSpot(int x, int y) {
+		return (this.x >> 4 == x >> 4 && this.y >> 4 == y >> 4);
+	}
+
+	// pathfinder
+	public Path getShortest(Entity e) {
+		return e != null ? getShortest(e.getX() / 16, e.getY() / 16) : null;
+	}
+
+	public Path getPath(Entity e) {
+		return getPath(e.getX() / 16, e.getY() / 16);
+	}
+
+	public Path getShortest(int x, int y) {
+		return PathFinder
+				.getShortest(new Path[] { getPath(x - 1, y), getPath(x + 1, y), getPath(x, y - 1), getPath(x, y + 1) });
+	}
+
+	// getter
+	protected int getIdleTimer() {
+		return random.nextInt(5) * 60;
 	}
 
 	// constructor
@@ -45,6 +97,8 @@ public abstract class Mob extends Entity {
 		finder = new PathFinder(level);
 	}
 
+	public abstract void die();
+
 	// update method needed for game logic
 	public abstract void update();
 
@@ -56,6 +110,14 @@ public abstract class Mob extends Entity {
 
 	public int getHealth() {
 		return health;
+	}
+
+	public int getSpeed() {
+		return 1;
+	}
+
+	public int getDamage() {
+		return 20;
 	}
 
 	public void hit(int damage) {
@@ -75,6 +137,16 @@ public abstract class Mob extends Entity {
 			return false;
 
 		return level.getTile((x >> 4), (y >> 4)).solid() || level.getTile((x + 1 >> 4), (y + 1 >> 4)).solid();
+
+	}
+
+	// DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()!! DO NOT
+	// USE!!!
+	protected void moveTo(int x, int y) {
+		int xmov, ymov;
+		xmov = (this.x > x) ? -1 : (this.x == x) ? 0 : 1;
+		ymov = (this.y > y) ? -1 : (this.y == y) ? 0 : 1;
+		move(xmov, ymov);
 
 	}
 
