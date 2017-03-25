@@ -44,6 +44,7 @@ public class Villager extends Mob {
 		initHair(true);
 		this.x = x;
 		this.y = y;
+		setName("villager");
 
 	}
 

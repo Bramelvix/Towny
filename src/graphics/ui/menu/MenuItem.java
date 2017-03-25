@@ -20,6 +20,7 @@ public class MenuItem {
 	public static final String BUILD = "Build";
 	public static final String PICKUP = "Pick Up";
 	public static final String DROP = "Drop";
+	public static final String FIGHT = "Fight";
 
 	// constructor
 	public MenuItem(String type, Menu menu) {

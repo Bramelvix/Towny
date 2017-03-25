@@ -22,14 +22,17 @@ public class Ore extends Resource {
 	private void getSprite() {
 		switch (type) {
 		case IRON:
+			setName("iron ore");
 			sprite = Sprite.ironOre;
 			itemSprite = Sprite.ironChunk;
 			break;
 		case GOLD:
+			setName("gold ore");
 			sprite = Sprite.goldOre;
 			itemSprite = Sprite.goldChunk;
 			break;
 		case COAL:
+			setName("coal");
 			sprite = Sprite.coalOre;
 			break;
 		default:

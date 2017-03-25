@@ -16,6 +16,7 @@ public abstract class Entity {
 	public Sprite extraSprite; // extra sprite for large entities (like trees)
 	protected boolean visible; // is the entity visible or not
 	protected boolean selected = false;
+	private String displayName;
 
 	// setters
 	public void setVisible(boolean visible) {
@@ -25,6 +26,13 @@ public abstract class Entity {
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
+	public String getName() {
+		return displayName;
+	}
+	public void setName(String name) {
+		displayName = name;
+	}
+
 	public Entity() {
 		super();
 	}
@@ -54,8 +62,12 @@ public abstract class Entity {
 
 	// does the mouse hover over the entity
 	public boolean hoverOn(Mouse mouse) {
-		return ((mouse.getX()) >= x && ((mouse.getX()) <= x + Sprite.SIZE)
-				&& ((mouse.getY()) >= y && ((mouse.getY()) <= y + Sprite.SIZE)));
+		return hoverOn(mouse.getX(), mouse.getY());
+	}
+
+	// does the mouse hover over the entity
+	public boolean hoverOn(int x, int y) {
+		return (x >= this.x && x <= this.x + Sprite.SIZE && y >= this.y && y <= this.y + Sprite.SIZE);
 	}
 
 	// render method

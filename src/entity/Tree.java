@@ -4,7 +4,6 @@ import entity.item.Item;
 import graphics.Screen;
 import graphics.Sprite;
 import map.Level;
-import map.Tile;
 import sound.Sound;
 
 public class Tree extends Resource {
@@ -16,6 +15,7 @@ public class Tree extends Resource {
 		sprite = Sprite.treebottom;
 		extraSprite = Sprite.treetop;
 		setVisible(true);
+		setName("tree");
 	}
 
 	//render method to render onto the screen

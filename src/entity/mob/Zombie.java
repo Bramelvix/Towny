@@ -23,6 +23,7 @@ public class Zombie extends Mob {
 		this.x = x;
 		this.y = y;
 		this.sprite = Sprite.zombie;
+		setName("zombie");
 
 	}
 

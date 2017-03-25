@@ -211,17 +211,17 @@ public class Game extends Canvas implements Runnable {
 		return lowest;
 	}
 
-	private Villager anyVillHoverOn(Mouse mouse) {
+	private Villager anyVillHoverOn(int x, int y) {
 		for (Villager i : vills) {
-			if (i.hoverOn(mouse))
+			if (i.hoverOn(x, y))
 				return i;
 		}
 		return null;
 	}
 
-	private Mob anyMobHoverOn(Mouse mouse) {
+	private Mob anyMobHoverOn(int x, int y) {
 		for (Mob i : mobs) {
-			if (i.hoverOn(mouse))
+			if (i.hoverOn(x, y))
 				return i;
 		}
 		return null;
@@ -288,18 +288,18 @@ public class Game extends Canvas implements Runnable {
 
 		}
 		if (((UiIcons.isSwordsSelected()) && !UiIcons.hoverOnAnyIcon() && mouse.getClicked())
-				&& (anyMobHoverOn(mouse) != null)) {
+				&& (anyMobHoverOn(mouse.getX(), mouse.getY()) != null)) {
 			Villager idle = getIdlestVil();
 			idle.resetMove();
 			deselectAllVills();
-			idle.addJob(new FightJob(idle, anyMobHoverOn(mouse)));
+			idle.addJob(new FightJob(idle, anyMobHoverOn(mouse.getX(), mouse.getY())));
 			ui.deSelectIcons();
 			return;
 
 		}
-		if (mouse.getClicked() && anyVillHoverOn(mouse) != null && !ui.outlineIsVisible()) {
+		if (mouse.getClicked() && anyVillHoverOn(mouse.getX(), mouse.getY()) != null && !ui.outlineIsVisible()) {
 			deselectAllVills();
-			selectedvill = anyVillHoverOn(mouse);
+			selectedvill = anyVillHoverOn(mouse.getX(), mouse.getY());
 			selectedvill.setSelected(true);
 			ui.deSelectIcons();
 			return;
@@ -317,11 +317,14 @@ public class Game extends Canvas implements Runnable {
 					options.add(MenuItem.DROP + selectedvill.holding.getName());
 				}
 				if (level.selectTree(mouse.getX(), mouse.getY()) != null) {
-					options.add(MenuItem.CHOP);
+					options.add(MenuItem.CHOP + " " + level.selectTree(mouse.getX(), mouse.getY()).getName());
 				} else {
 					if (level.selectOre(mouse.getX(), mouse.getY()) != null) {
-						options.add(MenuItem.MINE);
+						options.add(MenuItem.MINE + " " + level.selectOre(mouse.getX(), mouse.getY()).getName());
 					} else {
+						if (anyMobHoverOn(mouse.getX(), mouse.getY()) != null) {
+							options.add(MenuItem.FIGHT + " " + anyMobHoverOn(mouse.getX(), mouse.getY()).getName());
+						}
 						if (level.getItemOn(mouse.getX(), mouse.getY()) != null) {
 							options.add(MenuItem.PICKUP + " " + level.getItemOn(mouse.getX(), mouse.getY()).getName());
 						}
@@ -370,7 +373,16 @@ public class Game extends Canvas implements Runnable {
 			}
 			if (ui.getMenu().clickedOnItem(MenuItem.CHOP, mouse)) {
 				selectedvill.resetMove();
-				selectedvill.addJob(level.selectTree(mouse.getX(), mouse.getY()));
+				selectedvill.addJob(level.selectTree(ui.getMenuIngameX(), ui.getMenuIngameY()));
+				deselect(selectedvill);
+				ui.deSelectIcons();
+				ui.getMenu().hide();
+				return;
+			}
+			if (ui.getMenu().clickedOnItem(MenuItem.FIGHT, mouse)) {
+				selectedvill.resetMove();
+				selectedvill
+						.addJob(new FightJob(selectedvill, anyMobHoverOn(ui.getMenuIngameX(), ui.getMenuIngameY())));
 				deselect(selectedvill);
 				ui.deSelectIcons();
 				ui.getMenu().hide();
@@ -378,7 +390,7 @@ public class Game extends Canvas implements Runnable {
 			}
 			if (ui.getMenu().clickedOnItem(MenuItem.MINE, mouse)) {
 				selectedvill.resetMove();
-				selectedvill.addJob(level.selectOre(mouse.getX(), mouse.getY()));
+				selectedvill.addJob(level.selectOre(ui.getMenuIngameX(), ui.getMenuIngameY()));
 				deselect(selectedvill);
 				ui.deSelectIcons();
 				ui.getMenu().hide();
