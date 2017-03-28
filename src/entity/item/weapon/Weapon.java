@@ -1,6 +1,9 @@
 package entity.item.weapon;
 
+import java.util.Random;
+
 import entity.item.Item;
+import entity.mob.Mob;
 import entity.mob.Villager;
 import graphics.Sprite;
 
@@ -22,7 +25,7 @@ public class Weapon extends Item {
 	}
 
 	public float getDamage(Villager user) {
-		return mat_strong * cut;
+		return mat_strong * cut*10;
 	}
 
 	private void calcDam(WeaponType type) {
@@ -106,6 +109,12 @@ public class Weapon extends Item {
 			break;
 		}
 	}
+	public static Weapon getRandomWeapon(int x, int y, Random r) {
+		return getWeapon(WeaponType.getWeaponRandType(r), WeaponMaterial.getWeaponRandMat(r), x, y);
+	}
+	public static Weapon getRandomWeapon(Mob a, Random r) {
+		return getRandomWeapon(a.getX(),a.getY(),r);
+	}
 
 	private float calcMatStrong(WeaponMaterial mat) {
 		float strong = 0;
@@ -129,7 +138,7 @@ public class Weapon extends Item {
 		return strong;
 	}
 
-	public Weapon getWeapon(WeaponType type, WeaponMaterial mat, int x, int y) {
+	public static Weapon getWeapon(WeaponType type, WeaponMaterial mat, int x, int y) {
 		String name = "";
 		switch (mat) {
 		case WOOD:

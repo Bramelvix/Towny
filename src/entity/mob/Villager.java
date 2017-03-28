@@ -47,6 +47,13 @@ public class Villager extends Mob {
 		setName("villager");
 
 	}
+	@Override
+	public float getDamage() {
+		return inventory.getWeaponDamage();
+	}
+	public int getMeleeDamage() {
+		return 10;
+	}
 
 	public Villager(int x, int y, Level level, int hairnr, VillagerInventory wearing, Item holding, boolean male) {
 		this(x, y, level);

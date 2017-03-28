@@ -117,11 +117,9 @@ public abstract class Mob extends Entity {
 		return 1;
 	}
 
-	public int getDamage() {
-		return 20;
-	}
-
-	public void hit(int damage) {
+	public abstract float getDamage();
+	
+	public void hit(float damage) {
 		health -= (damage - armour);
 	}
 

@@ -1,6 +1,7 @@
 package entity.mob;
 
 import entity.item.Item;
+import entity.item.weapon.Weapon;
 import entity.pathfinding.Path;
 import entity.pathfinding.Point;
 import graphics.Screen;
@@ -24,6 +25,7 @@ public class Zombie extends Mob {
 		this.y = y;
 		this.sprite = Sprite.zombie;
 		setName("zombie");
+		this.holding = Weapon.getRandomWeapon(this, random);
 
 	}
 
@@ -105,6 +107,15 @@ public class Zombie extends Mob {
 
 	}
 
+	protected final void moveTo(int x, int y) {
+		super.moveTo(x, y);
+		if (!(holding == null)) {
+			holding.setX(x);
+			holding.setY(y);
+		}
+
+	}
+
 	// resets the zombie's path
 	public void resetMove() {
 		counter = 0;
@@ -128,6 +139,11 @@ public class Zombie extends Mob {
 		if (holding != null)
 			level.addItem(holding);
 
+	}
+
+	@Override
+	public float getDamage() {
+		return 0;
 	}
 
 }

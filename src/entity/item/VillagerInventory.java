@@ -32,6 +32,10 @@ public class VillagerInventory {
 			shieldHand.render(screen);
 	}
 
+	public float getWeaponDamage() {
+		return (weaponHand != null ? weaponHand.getDamage(wearer) : wearer.getMeleeDamage());
+	}
+
 	public void addClothing(Clothing item) {
 		switch (item.getType()) {
 		case HAT:
