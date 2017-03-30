@@ -47,10 +47,12 @@ public class Villager extends Mob {
 		setName("villager");
 
 	}
+
 	@Override
 	public float getDamage() {
 		return inventory.getWeaponDamage();
 	}
+
 	public int getMeleeDamage() {
 		return 10;
 	}
@@ -135,6 +137,15 @@ public class Villager extends Mob {
 		if (onSpot(e.getX(), e.getY())) {
 			e.setReservedVil(this);
 			level.removeItem(e);
+			if (e instanceof Weapon) {
+				inventory.addWeapon((Weapon) e);
+				return true;
+			} else {
+				if (e instanceof Clothing) {
+					inventory.addClothing((Clothing) e);
+					return true;
+				}
+			}
 			holding = e;
 			return true;
 		}

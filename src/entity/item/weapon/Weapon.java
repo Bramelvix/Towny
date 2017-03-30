@@ -17,15 +17,22 @@ public class Weapon extends Item {
 	private WeaponType type;
 	private WeaponMaterial mat;
 
-	private Weapon(String name, int x, int y, Sprite sprite, String tooltip, WeaponType type, WeaponMaterial mat) {
+	public Weapon(String name, int x, int y, Sprite sprite, String tooltip, WeaponType type, WeaponMaterial mat) {
 		super(name, x, y, sprite, tooltip, true, 1);
+		this.mat = mat;
+		this.type = type;
 		mat_strong = calcMatStrong(mat);
 		calcDam(type);
 
 	}
 
+	public Weapon(Weapon e) {
+		this(e.getName(), e.getX(), e.getY(), e.sprite, e.getToolTip(), e.type, e.mat);
+
+	}
+
 	public float getDamage(Villager user) {
-		return mat_strong * cut*10;
+		return mat_strong * cut * 10;
 	}
 
 	private void calcDam(WeaponType type) {
@@ -109,11 +116,13 @@ public class Weapon extends Item {
 			break;
 		}
 	}
+
 	public static Weapon getRandomWeapon(int x, int y, Random r) {
 		return getWeapon(WeaponType.getWeaponRandType(r), WeaponMaterial.getWeaponRandMat(r), x, y);
 	}
+
 	public static Weapon getRandomWeapon(Mob a, Random r) {
-		return getRandomWeapon(a.getX(),a.getY(),r);
+		return getRandomWeapon(a.getX(), a.getY(), r);
 	}
 
 	private float calcMatStrong(WeaponMaterial mat) {

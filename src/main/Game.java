@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import entity.Tree;
 import entity.item.Clothing;
 import entity.item.ClothingType;
+import entity.item.weapon.Weapon;
 import entity.mob.Mob;
 import entity.mob.Villager;
 import entity.mob.Zombie;
@@ -314,19 +315,32 @@ public class Game extends Canvas implements Runnable {
 			if (selectedvill != null) {
 				List<String> options = new ArrayList<String>();
 				if (selectedvill.holding != null) {
-					options.add(MenuItem.DROP + selectedvill.holding.getName());
+					options.add(MenuItem.getMenuItemText(MenuItem.DROP, selectedvill.holding));
 				}
 				if (level.selectTree(mouse.getX(), mouse.getY()) != null) {
-					options.add(MenuItem.CHOP + " " + level.selectTree(mouse.getX(), mouse.getY()).getName());
+					options.add(MenuItem.getMenuItemText(MenuItem.CHOP, level.selectTree(mouse.getX(), mouse.getY())));
 				} else {
 					if (level.selectOre(mouse.getX(), mouse.getY()) != null) {
-						options.add(MenuItem.MINE + " " + level.selectOre(mouse.getX(), mouse.getY()).getName());
+						options.add(
+								MenuItem.getMenuItemText(MenuItem.MINE, level.selectOre(mouse.getX(), mouse.getY())));
 					} else {
 						if (anyMobHoverOn(mouse.getX(), mouse.getY()) != null) {
-							options.add(MenuItem.FIGHT + " " + anyMobHoverOn(mouse.getX(), mouse.getY()).getName());
+							options.add(MenuItem.getMenuItemText(MenuItem.FIGHT,
+									anyMobHoverOn(mouse.getX(), mouse.getY())));
 						}
 						if (level.getItemOn(mouse.getX(), mouse.getY()) != null) {
-							options.add(MenuItem.PICKUP + " " + level.getItemOn(mouse.getX(), mouse.getY()).getName());
+							if (level.getItemOn(mouse.getX(), mouse.getY()) instanceof Weapon) {
+								options.add(MenuItem.getMenuItemText(MenuItem.EQUIP,
+										level.getItemOn(mouse.getX(), mouse.getY())));
+							} else {
+								if (level.getItemOn(mouse.getX(), mouse.getY()) instanceof Clothing) {
+									options.add(MenuItem.getMenuItemText(MenuItem.WEAR,
+											level.getItemOn(mouse.getX(), mouse.getY())));
+								} else {
+									options.add(MenuItem.getMenuItemText(MenuItem.PICKUP,
+											level.getItemOn(mouse.getX(), mouse.getY())));
+								}
+							}
 						}
 					}
 				}
@@ -402,7 +416,8 @@ public class Game extends Canvas implements Runnable {
 				ui.getMenu().hide();
 				return;
 			}
-			if (ui.getMenu().clickedOnItem(MenuItem.PICKUP, mouse) && !ui.outlineIsVisible()) {
+			if ((ui.getMenu().clickedOnItem(MenuItem.PICKUP, mouse) || ui.getMenu().clickedOnItem(MenuItem.EQUIP, mouse)
+					|| ui.getMenu().clickedOnItem(MenuItem.WEAR, mouse)) && !ui.outlineIsVisible()) {
 				selectedvill.resetMove();
 				if (level.getItemOn(ui.getMenuIngameX(), ui.getMenuIngameY()) != null)
 					selectedvill.addJob(

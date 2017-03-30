@@ -9,13 +9,17 @@ public class Clothing extends Item {
 	private ClothingType type;
 
 	// basic constructor
-	public Clothing(String name, int x, int y, Sprite sprite, String tooltip, boolean visible) {
-		super(name, x, y, sprite, tooltip, visible, 1);
+	public Clothing(String name, int x, int y, Sprite sprite, String tooltip, ClothingType type) {
+		super(name, x, y, sprite, tooltip, true, 1);
 	}
 
 	public Clothing(String name, Villager vil, Sprite sprite, String tooltip, ClothingType type) {
-		this(name, vil.getX(), vil.getY(), sprite, tooltip, true);
+		this(name, vil.getX(), vil.getY(), sprite, tooltip, type);
 		this.type = type;
+	}
+
+	public Clothing(Clothing e) {
+		this(e.getName(), e.getX(), e.getY(), e.sprite, e.getToolTip(), e.type);
 	}
 
 	public ClothingType getType() {

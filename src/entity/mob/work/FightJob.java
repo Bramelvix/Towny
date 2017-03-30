@@ -16,7 +16,6 @@ public class FightJob extends Job {
 		worker.movement = worker.getPath(xloc >> 4, yloc >> 4);
 		if (worker.movement == null) {
 			completed = true;
-			material.setReservedVil(null);
 		}
 		started = true;
 	}
@@ -24,14 +23,19 @@ public class FightJob extends Job {
 	private void fight() {
 		if (timer == 0) {
 			target.hit(worker.getDamage());
-			timer = 100 / worker.getSpeed();
+			timer = 70 / worker.getSpeed();
 		}
 		timer--;
 	}
 
 	public void execute() {
-		xloc = target.getX();
-		yloc = target.getY();
+		if (target == null) {
+			completed = true;
+			return;
+		} else {
+			xloc = target.getX();
+			yloc = target.getY();
+		}
 		if (!completed && started) {
 			if (worker.aroundSpot(xloc, yloc)) {
 				fight();

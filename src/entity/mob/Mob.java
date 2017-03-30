@@ -84,7 +84,6 @@ public abstract class Mob extends Entity {
 		return random.nextInt(5) * 60;
 	}
 
-
 	// constructor
 	public Mob(Level level, int x, int y) {
 		super(x, y);
@@ -118,7 +117,7 @@ public abstract class Mob extends Entity {
 	}
 
 	public abstract float getDamage();
-	
+
 	public void hit(float damage) {
 		health -= (damage - armour);
 	}

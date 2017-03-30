@@ -9,7 +9,9 @@ import entity.Ore;
 import entity.OreType;
 import entity.Tree;
 import entity.Wall;
+import entity.item.Clothing;
 import entity.item.Item;
+import entity.item.weapon.Weapon;
 import graphics.Screen;
 import graphics.Sprite;
 
@@ -40,6 +42,15 @@ public class Level {
 	// adding an item to the list
 	public void addItem(Item e) {
 		Item o = new Item(e);
+		items.add(o);
+	}
+
+	public void addItem(Weapon e) {
+		Weapon o = new Weapon(e);
+		items.add(o);
+	}
+	public void addItem(Clothing e) {
+		Clothing o = new Clothing(e);
 		items.add(o);
 	}
 

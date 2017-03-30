@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
+import entity.Entity;
 import input.Mouse;
 
 public class MenuItem {
@@ -21,6 +22,8 @@ public class MenuItem {
 	public static final String PICKUP = "Pick Up";
 	public static final String DROP = "Drop";
 	public static final String FIGHT = "Fight";
+	public static final String EQUIP = "Equip";
+	public static final String WEAR = "Wear";
 
 	// constructor
 	public MenuItem(String type, Menu menu) {
@@ -29,6 +32,10 @@ public class MenuItem {
 		width = menu.getWidth();
 		y = menu.getYLocForMenuItem();
 
+	}
+
+	public static String getMenuItemText(String menuItem, Entity entity) {
+		return menuItem + " " + entity.getName();
 	}
 
 	// rendering the menuitem's text

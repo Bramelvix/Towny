@@ -61,7 +61,8 @@ public class Zombie extends Mob {
 
 	}
 
-	public void hit(int damage) {
+	@Override
+	public void hit(float damage) {
 		super.hit(damage);
 		sprite = Sprite.zombiehit;
 		animationtimer = 30;
@@ -136,8 +137,9 @@ public class Zombie extends Mob {
 
 	@Override
 	public void die() {
-		if (holding != null)
-			level.addItem(holding);
+		if (holding != null) {
+			level.addItem((Weapon) holding);
+		}
 
 	}
 
