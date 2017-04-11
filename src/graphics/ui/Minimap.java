@@ -14,8 +14,8 @@ public class Minimap {
 
 	private int width, height; // width and height of the minimap
 	private int x, y; // x and y of the top left corner
-	public int[] pixels; // pixels array
-	private Level map; // map being shown
+	private int[] pixels; // pixels array
+	private static Level map; // map being shown
 	private Image img; // image being rendered
 	private static final Color COL = new Color(91, 94, 99, 110); // colour of
 																	// the small
@@ -34,7 +34,7 @@ public class Minimap {
 		width = 200;
 		height = 200;
 		pixels = new int[(width) * (height)];
-		this.map = map;
+		Minimap.map = map;
 		init();
 
 	}
@@ -43,12 +43,7 @@ public class Minimap {
 	private void init() {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
-					pixels[x + y * width] = 0;
-				} else {
 					pixels[y + x * width] = map.tiles[y / 2 + x / 2 * map.width].sprite.pixels[0];
-
-				}
 
 			}
 		}
@@ -60,8 +55,8 @@ public class Minimap {
 	public void render(Graphics g) {
 		g.drawImage(img, x, y, null);
 		g.setColor(COL);
-		float xloc = (x + (xoff / 3) / 3);
-		float yloc = (y + (yoff / 3) / 3);
+		float xloc = (x + (xoff *0.125f));
+		float yloc = (y + (yoff *0.125f));
 		g.fillRect((int) xloc + 1, (int) yloc + 1, (int) (31.25 * 2), (int) (17.578125 * 2));
 
 	}

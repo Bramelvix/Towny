@@ -118,7 +118,7 @@ public class Weapon extends Item {
 	}
 
 	public static Weapon getRandomWeapon(int x, int y, Random r) {
-		return getWeapon(WeaponType.getWeaponRandType(r), WeaponMaterial.getWeaponRandMat(r), x, y);
+		return getWeapon(WeaponType.getWeaponRandType(r), WeaponMaterial.getWeaponRandMat(r), x, y,r);
 	}
 
 	public static Weapon getRandomWeapon(Mob a, Random r) {
@@ -147,7 +147,7 @@ public class Weapon extends Item {
 		return strong;
 	}
 
-	public static Weapon getWeapon(WeaponType type, WeaponMaterial mat, int x, int y) {
+	public static Weapon getWeapon(WeaponType type, WeaponMaterial mat, int x, int y, Random r) {
 		String name = "";
 		switch (mat) {
 		case WOOD:
@@ -166,6 +166,8 @@ public class Weapon extends Item {
 			name.concat("Crystal ");
 			break;
 		}
+		if (type == WeaponType.BOW && mat == WeaponMaterial.BRONZE)
+			return getRandomWeapon(x, y, r);
 		name.concat(type.toString().toLowerCase());
 		String tooltip = "a " + name.toLowerCase();
 		if (mat == WeaponMaterial.IRON)

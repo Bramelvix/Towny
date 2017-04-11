@@ -110,8 +110,8 @@ public class Level {
 	// generates a (slighty less) shitty random level
 	private void generateLevel() {
 		float[] noise = Generator.generateSimplexNoise(width, height, 11, random.nextInt(1000), random.nextBoolean());
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
+		for (int y = 0; y < height-1; y++) {
+			for (int x = 0; x < width-1; x++) {
 				if (noise[x + y * width] > 0.5) {
 					tiles[x + y * width] = new Tile(Sprite.getDirt(), false, x, y);
 					randOre(x, y);
