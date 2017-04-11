@@ -146,6 +146,8 @@ public class Villager extends Mob {
 					return true;
 				}
 			}
+			if (holding != null)
+				dropItem(holding);
 			holding = e;
 			return true;
 		}
@@ -163,6 +165,16 @@ public class Villager extends Mob {
 	}
 
 	public void dropItem(Item e) {
+		if (e != null)
+			level.addItem(e);
+	}
+
+	public void dropItem(Weapon e) {
+		if (e != null)
+			level.addItem(e);
+	}
+
+	public void dropItem(Clothing e) {
 		if (e != null)
 			level.addItem(e);
 	}
@@ -275,9 +287,9 @@ public class Villager extends Mob {
 	public void render(Screen screen) {
 		inventory.update(x, y);
 		screen.renderSprite(x, y, this.sprite); // renders the body
+		screen.renderSprite(x, y, hair); // renders the hair
 		if (inventory != null)
 			inventory.render(screen);
-		screen.renderSprite(x, y, hair); // renders the hair
 		if (holding != null)
 			screen.renderSprite(x, y, holding.sprite); // renders the item the
 														// villager is holding

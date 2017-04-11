@@ -9,7 +9,6 @@ public class MoveItemJob extends Job {
 	public MoveItemJob(Item material, Villager worker) {
 		this(worker);
 		pickUpJob = true;
-		pickUpJob = true;
 		this.material = material;
 		material.setReservedVil(worker);
 		if (worker.holding(material))
@@ -49,7 +48,9 @@ public class MoveItemJob extends Job {
 					return;
 				} else {
 					if (worker.onSpot(material.getX(), material.getY())) {
-						worker.pickUp(material);
+						if (worker.pickUp(material))
+							completed = true;
+						return;
 					} else {
 						if (worker.movement == null) {
 							if (worker.getPath(material) != null) {
