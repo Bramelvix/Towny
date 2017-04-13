@@ -7,7 +7,7 @@ import map.Level;
 import sound.Sound;
 
 public class Tree extends Resource {
-	private float chopped = 100;
+	private byte chopped = 100;
 
 	//basic constructor
 	public Tree(int x, int y) {

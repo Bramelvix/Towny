@@ -2,6 +2,8 @@ package entity.mob;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import entity.Entity;
 import entity.Resource;
 import entity.item.Clothing;
 import entity.item.Item;
@@ -40,7 +42,7 @@ public class Villager extends Mob {
 		this.sprite = Sprite.getPerson();
 		inventory = new VillagerInventory(this);
 		jobs = new ArrayList<Job>();
-		male = random.nextBoolean();
+		male = Entity.getRand().nextBoolean();
 		initHair(true);
 		this.x = x;
 		this.y = y;
@@ -88,7 +90,7 @@ public class Villager extends Mob {
 	// the villager moves to a random location nearby if he has nothing to do.
 	public void idle() {
 		while (movement == null) {
-			movement = getPath((x >> 4) + random.nextInt(4) - 2, (y >> 4) + random.nextInt(4) - 2);
+			movement = getPath((x >> 4) + Entity.getRand().nextInt(4) - 2, (y >> 4) + Entity.getRand().nextInt(4) - 2);
 		}
 
 	}
@@ -96,7 +98,7 @@ public class Villager extends Mob {
 	// initialise the hairsprite
 	private void initHair(boolean generate) {
 		if (generate)
-			hairnr = male ? random.nextInt(HairSprite.maleHair.length) : random.nextInt(HairSprite.femaleHair.length);
+			hairnr = male ? Entity.getRand().nextInt(HairSprite.maleHair.length) : Entity.getRand().nextInt(HairSprite.femaleHair.length);
 		hair = male ? HairSprite.maleHair[hairnr] : HairSprite.femaleHair[hairnr];
 
 	}

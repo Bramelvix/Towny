@@ -1,12 +1,12 @@
 package entity.item.weapon;
 
-import java.util.Random;
+import entity.Entity;
 
 public enum WeaponMaterial {
 	WOOD,GOLD,IRON,BRONZE,CRYSTAL;
 	
-	public static WeaponMaterial getWeaponRandMat(Random r) {
-		return WeaponMaterial.values()[r.nextInt(WeaponMaterial.values().length)];
+	public static WeaponMaterial getWeaponRandMat() {
+		return WeaponMaterial.values()[Entity.getRand().nextInt(WeaponMaterial.values().length)];
 	}
 
 }

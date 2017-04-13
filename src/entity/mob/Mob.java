@@ -48,11 +48,6 @@ public abstract class Mob extends Entity {
 
 	}
 
-	// is the mob on or around a location (x and y in pixels)
-	public boolean aroundSpot(int endx, int endy) {
-		return aroundTile(endx, endy);
-
-	}
 
 	// is the mob around a tile (x and y in pixels)
 	public boolean aroundTile(int endx, int endy) {
@@ -81,7 +76,7 @@ public abstract class Mob extends Entity {
 
 	// getter
 	protected int getIdleTimer() {
-		return random.nextInt(5) * 60;
+		return Entity.getRand().nextInt(5) * 60;
 	}
 
 	// constructor

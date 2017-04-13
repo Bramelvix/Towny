@@ -6,7 +6,7 @@ import map.Level;
 import sound.Sound;
 
 public class Ore extends Resource {
-	private float mined = 100; //mined percentage (100 = unfinished / 0 = finished)
+	private byte mined = 100; //mined percentage (100 = unfinished / 0 = finished)
 	private Sprite itemSprite; // sprite for the item the ore drops when mined
 	private OreType type; // type of ore (iron, coal, gold,...)
 
@@ -14,12 +14,12 @@ public class Ore extends Resource {
 	public Ore(int x, int y, OreType type) {
 		super(x, y);
 		this.type = type;
+		decideSprite();
 		setVisible(true);
-		getSprite();
 	}
 
 	//decide the sprite for the ore
-	private void getSprite() {
+	private void decideSprite() {
 		switch (type) {
 		case IRON:
 			setName("iron ore");

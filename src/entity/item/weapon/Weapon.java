@@ -2,6 +2,7 @@ package entity.item.weapon;
 
 import java.util.Random;
 
+import entity.Entity;
 import entity.item.Item;
 import entity.mob.Mob;
 import entity.mob.Villager;
@@ -117,12 +118,12 @@ public class Weapon extends Item {
 		}
 	}
 
-	public static Weapon getRandomWeapon(int x, int y, Random r) {
-		return getWeapon(WeaponType.getWeaponRandType(r), WeaponMaterial.getWeaponRandMat(r), x, y,r);
+	public static Weapon getRandomWeapon(int x, int y) {
+		return getWeapon(WeaponType.getWeaponRandType(), WeaponMaterial.getWeaponRandMat(), x, y);
 	}
 
-	public static Weapon getRandomWeapon(Mob a, Random r) {
-		return getRandomWeapon(a.getX(), a.getY(), r);
+	public static Weapon getRandomWeapon(Mob a) {
+		return getRandomWeapon(a.getX(), a.getY());
 	}
 
 	private float calcMatStrong(WeaponMaterial mat) {
@@ -147,7 +148,7 @@ public class Weapon extends Item {
 		return strong;
 	}
 
-	public static Weapon getWeapon(WeaponType type, WeaponMaterial mat, int x, int y, Random r) {
+	public static Weapon getWeapon(WeaponType type, WeaponMaterial mat, int x, int y) {
 		String name = "";
 		switch (mat) {
 		case WOOD:
@@ -167,7 +168,7 @@ public class Weapon extends Item {
 			break;
 		}
 		if (type == WeaponType.BOW && mat == WeaponMaterial.BRONZE)
-			return getRandomWeapon(x, y, r);
+			return getRandomWeapon(x, y);
 		name.concat(type.toString().toLowerCase());
 		String tooltip = "a " + name.toLowerCase();
 		if (mat == WeaponMaterial.IRON)

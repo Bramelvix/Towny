@@ -10,25 +10,31 @@ import map.Level;
 public abstract class Entity {
 	protected int x, y; // x and y of the entity
 	public Level level; // level in which the entity is placed
-	protected final Random random = new Random(); // random needed for various
-													// chance calculations
+	private final static Random random = new Random(); // random needed for
+															// various chance
+															// calculations
 	public Sprite sprite; // the entity's sprite
 	public Sprite extraSprite; // extra sprite for large entities (like trees)
-	protected boolean visible; // is the entity visible or not
-	protected boolean selected = false;
+	private boolean visible; // is the entity visible or not
+	private boolean selected = false;
 	private String displayName;
 
 	// setters
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
+	public static final Random getRand() {
+		return random;
+	}
 
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
+
 	public String getName() {
 		return displayName;
 	}
+
 	public void setName(String name) {
 		displayName = name;
 	}

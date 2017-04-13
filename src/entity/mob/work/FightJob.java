@@ -37,7 +37,7 @@ public class FightJob extends Job {
 			yloc = target.getY();
 		}
 		if (!completed && started) {
-			if (worker.aroundSpot(xloc, yloc)) {
+			if (worker.aroundTile(xloc, yloc)) {
 				fight();
 				if (target.getHealth() == 0) {
 					completed = true;

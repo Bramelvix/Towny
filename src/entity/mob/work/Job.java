@@ -88,7 +88,7 @@ public class Job implements Workable {
 			return;
 		}
 		if (!completed && started && (!needsMaterial || hasMaterial)) {
-			if (!worker.aroundSpot(xloc, yloc)) {
+			if (!worker.aroundTile(xloc, yloc)) {
 				if (worker.movement == null) {
 					completed = true;
 					return;

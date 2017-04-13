@@ -7,7 +7,8 @@ import map.Tile;
 import sound.Sound;
 
 public class Wall extends Entity implements Buildable {
-	public int condition = 0; // condition of the wall (0=not built , 100= done)
+	private byte condition = 0; // condition of the wall (0=not built , 100=
+								// done)
 	public boolean initialised = false; // is the wall initialised
 	private boolean topHasWall; // is there a wall above this wall
 	private boolean bottomHasWall; // is there a wall below this wall
@@ -18,7 +19,6 @@ public class Wall extends Entity implements Buildable {
 	public Wall(int x, int y) {
 		super(x, y);
 		setVisible(false);
-		condition = 0;
 	}
 
 	// checks the 4 sides of this wall to see if there are walls next to it. The
@@ -64,25 +64,23 @@ public class Wall extends Entity implements Buildable {
 		checkSides(true);
 	}
 
-	//called by villagers when they start building the wall.
+	// called by villagers when they start building the wall.
 	public boolean initialise(Item material, Level level) {
 		this.level = level;
-		if (material == null) {
+		if (material == null)
 			return false;
-		}
-		if (material.quantity > 0) {
+		if (material.quantity > 0)
 			material.quantity--;
-		}
 		level.entities.add(this);
-		if (material.getName().equals("Logs")) {
+		if (material.getName().equals("Logs"))
 			checkSides();
-		}
 		initialised = true;
 		return true;
 
 	}
 
-	//decide the sprite for the wall, depending on the other 4 sides next to the wall
+	// decide the sprite for the wall, depending on the other 4 sides next to
+	// the wall
 	private void decideSprite() {
 		sprite = null;
 		sprite = Sprite.woodenWallVerticalTop;
@@ -141,7 +139,7 @@ public class Wall extends Entity implements Buildable {
 
 	}
 
-	//build method called by villagers when building
+	// build method called by villagers when building
 	public boolean build() {
 		if (initialised) {
 			if (condition < 100) {

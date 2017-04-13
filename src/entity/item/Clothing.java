@@ -5,7 +5,7 @@ import graphics.Sprite;
 
 //villager clothing class
 public class Clothing extends Item {
-	public float defence; // defence rating for armour
+	private float defence; // defence rating for armour
 	private ClothingType type;
 
 	// basic constructor
@@ -24,6 +24,9 @@ public class Clothing extends Item {
 
 	public ClothingType getType() {
 		return type;
+	}
+	public float getDefence() {
+		return defence;
 	}
 
 }

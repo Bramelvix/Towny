@@ -1,5 +1,6 @@
 package entity.mob;
 
+import entity.Entity;
 import entity.item.Item;
 import entity.item.weapon.Weapon;
 import entity.pathfinding.Path;
@@ -25,7 +26,7 @@ public class Zombie extends Mob {
 		this.y = y;
 		this.sprite = Sprite.zombie;
 		setName("zombie");
-		this.holding = Weapon.getRandomWeapon(this, random);
+		this.holding = Weapon.getRandomWeapon(this);
 
 	}
 
@@ -41,7 +42,7 @@ public class Zombie extends Mob {
 
 	public void idle() {
 		while (movement == null) {
-			movement = getPath((x >> 4) + random.nextInt(4) - 2, (y >> 4) + random.nextInt(4) - 2);
+			movement = getPath((x >> 4) + Entity.getRand().nextInt(4) - 2, (y >> 4) + Entity.getRand().nextInt(4) - 2);
 		}
 
 	}
