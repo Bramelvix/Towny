@@ -2,7 +2,7 @@ package graphics.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
-
+import entity.BuildAbleObjects;
 import input.Mouse;
 import map.Level;
 
@@ -21,11 +21,13 @@ public class BuildOutline {
 	private int squareheight; // height of the outline in squares
 	private boolean visible; // is the outline visible
 	private Level level; // the map is needed to decide if a square is empty
+	private boolean lockedSize = false;
+	private BuildAbleObjects build;
 
 	// rendering the outline
 	public void render(Graphics g) {
 		if (visible) {
-			if (buildSquareXE == 0 && buildSquareYE == 0) {
+			if (lockedSize || buildSquareXE == 0 && buildSquareYE == 0) {
 				g.setColor(
 						notBuildable(((buildSquareXS / 3) >> 4), (buildSquareYS / 3) >> 4) ? notbuildable : buildable);
 				g.fillRect(buildSquareXSTeken, buildSquareYSTeken, WIDTH, WIDTH);
@@ -153,7 +155,7 @@ public class BuildOutline {
 	// update the outline
 	public void update(Mouse mouse, int xOff, int yOff, boolean force) {
 		if (visible || force) {
-			if (mouse.getDrag()) {
+			if (mouse.getDrag() && !lockedSize) {
 				buildSquareXE = (mouse.getTileX() << 4) * 3;
 				buildSquareYE = (mouse.getTileY() << 4) * 3;
 				squarewidth = Math.abs(((buildSquareXE >> 4) / 3) - ((buildSquareXS >> 4) / 3)) + 1;
@@ -181,13 +183,17 @@ public class BuildOutline {
 		update(mouse, xOff, yOff, false);
 	}
 
+	public BuildAbleObjects getBuildJobItem() {
+		return build;
+	}
+
 	// constructor
 	public BuildOutline(Level level) {
 		this.level = level;
 	}
 
 	// show the outline
-	public void show(Mouse mouse, int xoff, int yoff) {
+	public void show(Mouse mouse, int xoff, int yoff, boolean lockedSize, BuildAbleObjects build) {
 		if (!visible) {
 			update(mouse, xoff, yoff, true);
 			visible = true;
@@ -195,6 +201,8 @@ public class BuildOutline {
 			buildSquareYS = (mouse.getTileY() << 4) * 3;
 			squarewidth = 1;
 			squareheight = 1;
+			this.build = build;
+			this.lockedSize = lockedSize;
 		}
 	}
 

@@ -30,7 +30,7 @@ public class Tree extends Resource {
 			chopped--;
 			return false;
 		} else {
-			level.entities.remove(this);
+			level.hardEntities.remove(this);
 			level.addItem(new Item("Logs", this.x, this.y, Sprite.logs, "Wooden logs", true, 5));
 			level.getTile(x>>4, y>>4).setSolid(false);
 			return true;

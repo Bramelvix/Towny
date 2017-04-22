@@ -14,7 +14,9 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
+import entity.BuildAbleObjects;
 import entity.Tree;
+import entity.Wall;
 import entity.item.Clothing;
 import entity.item.ClothingType;
 import entity.item.weapon.Weapon;
@@ -307,7 +309,8 @@ public class Game extends Canvas implements Runnable {
 		}
 		if (UiIcons.isSawHover() && !ui.menuVisible() && mouse.getClicked()) {
 			deselectAllVills();
-			ui.showMenuOn(mouse, new String[] { MenuItem.BUILD + " Wall", MenuItem.CANCEL });
+			ui.showMenuOn(mouse,
+					new String[] { MenuItem.BUILD + " wooden wall", MenuItem.BUILD + " furnace", MenuItem.CANCEL });
 			return;
 		}
 
@@ -358,7 +361,7 @@ public class Game extends Canvas implements Runnable {
 				if (!level.getTile(blok[0] >> 4, blok[1] >> 4).solid()) {
 					Villager idle = getIdlestVil();
 					idle.resetMove();
-					idle.addBuildJob(blok[0], blok[1]);
+					idle.addBuildJob(blok[0], blok[1],ui.getBuildAbleObjectOutline());
 				}
 			}
 			ui.removeBuildSquare();
@@ -410,8 +413,14 @@ public class Game extends Canvas implements Runnable {
 				ui.getMenu().hide();
 				return;
 			}
-			if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " Wall", mouse) && !ui.outlineIsVisible()) {
-				ui.showBuildSquare(mouse, xScroll, yScroll);
+			if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " wooden wall", mouse) && !ui.outlineIsVisible()) {
+				ui.showBuildSquare(mouse, xScroll, yScroll, false, BuildAbleObjects.WOODEN_WALL);
+				ui.deSelectIcons();
+				ui.getMenu().hide();
+				return;
+			}
+			if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " furnace", mouse) && !ui.outlineIsVisible()) {
+				ui.showBuildSquare(mouse, xScroll, yScroll, true, BuildAbleObjects.FURNACE);
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
@@ -496,9 +505,9 @@ public class Game extends Canvas implements Runnable {
 		}
 		screen.clear();
 		level.render(xScroll, yScroll, screen);
-		level.renderItems(screen);
+		level.renderSoftEntities(screen);
 		renderMobs();
-		level.renderEntites(screen);
+		level.renderHardEntites(screen);
 		pixels = screen.pixels;
 		Graphics g = bs.getDrawGraphics();
 		g.fillRect(0, 0, getWidth(), getHeight());

@@ -1,9 +1,12 @@
 package entity.mob.work;
 
+import entity.BuildAbleObject;
+import entity.BuildAbleObjects;
 import entity.Resource;
 import entity.Wall;
 import entity.item.Item;
 import entity.mob.Villager;
+import entity.workstations.Furnace;
 import map.Level;
 
 public class Job implements Workable {
@@ -16,7 +19,7 @@ public class Job implements Workable {
 	protected Villager worker; // the villager doing the job
 	private Resource jobObj; // the resource the worker needs to gather
 	private boolean buildJob; // is the job a buildjob
-	private Wall buildJobObj; // the buildable entity the worker needs to build
+	private BuildAbleObject buildJobObj; // the buildable entity the worker needs to build
 	private Level level; // the level in which the job is located
 	protected boolean started = false;
 	private boolean goingToPickUpItem = false;
@@ -38,11 +41,17 @@ public class Job implements Workable {
 		return completed;
 	}
 
-	public Job(int xloc, int yloc, Item mat, Villager worker, Level level) {
+	public Job(int xloc, int yloc, Item mat, BuildAbleObjects object, Villager worker, Level level) {
 		this(xloc, yloc, worker);
 		this.level = level;
 		needsMaterial = true;
-		buildJobObj = new Wall((xloc - (xloc % 16)), (yloc - (yloc % 16)));
+		switch (object) {
+		case WOODEN_WALL:
+			buildJobObj = new Wall((xloc - (xloc % 16)), (yloc - (yloc % 16)));
+			break;
+		case FURNACE:
+			buildJobObj = new Furnace((xloc - (xloc % 16)), (yloc - (yloc % 16)));
+		}
 		material = mat;
 		buildJob = true;
 		if (material == null) {
@@ -68,7 +77,7 @@ public class Job implements Workable {
 
 	private void start() {
 		worker.movement = worker.getShortest(xloc >> 4, yloc >> 4);
-		if (worker.movement == null) 
+		if (worker.movement == null)
 			completed = true;
 		started = true;
 	}

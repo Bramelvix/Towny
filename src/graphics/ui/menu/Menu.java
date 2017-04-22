@@ -23,11 +23,6 @@ public class Menu { // the menu is the little options menu that shows up when
 	public void render(Graphics g) {
 		if (visible) {
 			g.setColor(colour);
-			for (MenuItem i : items) {
-				if (i.getText().length() > 10) {
-					width = 100;
-				}
-			}
 			g.fillRect(x, y, width, height);
 			items.forEach((MenuItem i) -> i.render(g));
 		}
@@ -132,6 +127,9 @@ public class Menu { // the menu is the little options menu that shows up when
 			MenuItem o = new MenuItem(i, this);
 			if (!(items.contains(o))) {
 				items.add(o);
+				if (i.length() > width / 10) {
+					width += ((i.length() * 10) - width);
+				}
 				height = height + 15;
 			}
 		}

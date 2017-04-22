@@ -6,10 +6,7 @@ import map.Level;
 import map.Tile;
 import sound.Sound;
 
-public class Wall extends Entity implements Buildable {
-	private byte condition = 0; // condition of the wall (0=not built , 100=
-								// done)
-	public boolean initialised = false; // is the wall initialised
+public class Wall extends BuildAbleObject {
 	private boolean topHasWall; // is there a wall above this wall
 	private boolean bottomHasWall; // is there a wall below this wall
 	private boolean leftHasWall; // is there a wall to the left of this wall
@@ -18,7 +15,6 @@ public class Wall extends Entity implements Buildable {
 	// basic constructor
 	public Wall(int x, int y) {
 		super(x, y);
-		setVisible(false);
 	}
 
 	// checks the 4 sides of this wall to see if there are walls next to it. The
@@ -66,16 +62,9 @@ public class Wall extends Entity implements Buildable {
 
 	// called by villagers when they start building the wall.
 	public boolean initialise(Item material, Level level) {
-		this.level = level;
-		if (material == null)
-			return false;
-		if (material.quantity > 0)
-			material.quantity--;
-		level.entities.add(this);
 		if (material.getName().equals("Logs"))
 			checkSides();
-		initialised = true;
-		return true;
+		return super.initialise(material, level);
 
 	}
 
@@ -139,22 +128,5 @@ public class Wall extends Entity implements Buildable {
 
 	}
 
-	// build method called by villagers when building
-	public boolean build() {
-		if (initialised) {
-			if (condition < 100) {
-				if (condition == 1)
-					Sound.speelGeluid(Sound.drill);
-				condition++;
-				return false;
-			} else {
-				this.setVisible(true);
-				level.getTile(x >> 4, y >> 4).setSolid(true);
-				return true;
-			}
-
-		}
-		return false;
-	}
 
 }

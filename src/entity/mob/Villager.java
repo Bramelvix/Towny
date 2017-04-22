@@ -3,6 +3,7 @@ package entity.mob;
 import java.util.ArrayList;
 import java.util.List;
 
+import entity.BuildAbleObjects;
 import entity.Entity;
 import entity.Resource;
 import entity.item.Clothing;
@@ -98,7 +99,8 @@ public class Villager extends Mob {
 	// initialise the hairsprite
 	private void initHair(boolean generate) {
 		if (generate)
-			hairnr = male ? Entity.getRand().nextInt(HairSprite.maleHair.length) : Entity.getRand().nextInt(HairSprite.femaleHair.length);
+			hairnr = male ? Entity.getRand().nextInt(HairSprite.maleHair.length)
+					: Entity.getRand().nextInt(HairSprite.femaleHair.length);
 		hair = male ? HairSprite.maleHair[hairnr] : HairSprite.femaleHair[hairnr];
 
 	}
@@ -200,8 +202,15 @@ public class Villager extends Mob {
 	}
 
 	// add a buildjob
-	public void addBuildJob(int x, int y) {
-		addJob(new Job(x, y, getNearestItemOfType("Logs"), this, level));
+	public void addBuildJob(int x, int y, BuildAbleObjects object) {
+		switch (object) {
+		case WOODEN_WALL:
+			addJob(new Job(x, y, getNearestItemOfType("Logs"), object,this, level));
+			break;
+		case FURNACE:
+			addJob(new Job(x, y, getNearestItemOfType("stones"), object,this, level));
+			break;
+		}
 	}
 
 	// updates the villager in the game logic

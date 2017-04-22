@@ -71,6 +71,8 @@ public class Sprite {
 	public static Sprite goldBar = new Sprite(43, 10, SpriteSheet.tiles);
 	public static Sprite ironChunk = new Sprite(44, 10, SpriteSheet.tiles);
 	public static Sprite goldChunk = new Sprite(45, 10, SpriteSheet.tiles);
+	public static Sprite stoneChunk = new Sprite(46, 10, SpriteSheet.tiles);
+	public static Sprite coalChunk = new Sprite(47, 10, SpriteSheet.tiles);
 
 	// CLOTHES
 	public static Sprite blacktrousers = new Sprite(4, 0, SpriteSheet.entities);

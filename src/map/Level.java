@@ -2,8 +2,6 @@ package map;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
 import entity.Entity;
 import entity.Ore;
 import entity.OreType;
@@ -18,23 +16,21 @@ import graphics.Sprite;
 public class Level {
 	public Tile[] tiles; // array of tiles on the map
 	public int width, height; // map with and height
-	private final Random random; // random used for generating
-	public List<Entity> entities; // list of entities on the map
-	private List<Item> items; // list of items on the map
+	public List<Entity> hardEntities; // list of entities on the map
+	public List<Entity> walkableEntities;
+	public List<Item> items;
 
 	// basic constructor
 	public Level(int height, int width) {
 		this.width = width;
 		this.height = height;
 		tiles = new Tile[width * height];
-		random = new Random();
-		entities = new ArrayList<Entity>();
+		hardEntities = new ArrayList<Entity>();
+		walkableEntities = new ArrayList<Entity>();
 		items = new ArrayList<Item>();
 		generateLevel();
 
 	}
-
-	// getters
 	public List<Item> getItemList() {
 		return items;
 	}
@@ -49,6 +45,7 @@ public class Level {
 		Weapon o = new Weapon(e);
 		items.add(o);
 	}
+
 	public void addItem(Clothing e) {
 		Clothing o = new Clothing(e);
 		items.add(o);
@@ -61,7 +58,7 @@ public class Level {
 
 	// is the tile on X and Y clear (No items or entities or walls blocking it)
 	public boolean isClearTile(int x, int y) {
-		for (Item e : items) {
+		for (Entity e : walkableEntities) {
 			if (e.getX() >> 4 == x && e.getY() >> 4 == y)
 				return false;
 		}
@@ -72,7 +69,7 @@ public class Level {
 
 	// is the tile on X and Y walkable (items can still be there)
 	public boolean isWalkAbleTile(int x, int y) {
-		for (Entity e : entities) {
+		for (Entity e : hardEntities) {
 			if ((e.getX() >> 4 == x && e.getY() >> 4 == y) || getTile(x, y).solid())
 				return false;
 		}
@@ -81,7 +78,7 @@ public class Level {
 
 	// if there is a wall on x and y, return it
 	public Wall getWallOn(int x, int y) {
-		for (Entity e : entities) {
+		for (Entity e : hardEntities) {
 			if ((e.getX() == x) && (e.getY() == y) && e instanceof Wall)
 				return (Wall) e;
 		}
@@ -109,9 +106,10 @@ public class Level {
 
 	// generates a (slighty less) shitty random level
 	private void generateLevel() {
-		float[] noise = Generator.generateSimplexNoise(width, height, 11, random.nextInt(1000), random.nextBoolean());
-		for (int y = 0; y < height-1; y++) {
-			for (int x = 0; x < width-1; x++) {
+		float[] noise = Generator.generateSimplexNoise(width, height, 11, Entity.getRand().nextInt(1000),
+				Entity.getRand().nextBoolean());
+		for (int y = 0; y < height - 1; y++) {
+			for (int x = 0; x < width - 1; x++) {
 				if (noise[x + y * width] > 0.5) {
 					tiles[x + y * width] = new Tile(Sprite.getDirt(), false, x, y);
 					randOre(x, y);
@@ -132,8 +130,8 @@ public class Level {
 	}
 
 	public Tree selectTree(int x, int y, boolean seperate) {
-		for (int s = 0; s < entities.size(); s++) {
-			Entity i = entities.get(s);
+		for (int s = 0; s < hardEntities.size(); s++) {
+			Entity i = hardEntities.get(s);
 			if (i instanceof Tree) {
 				if (i.getX() >> 4 == x >> 4) {
 					if (i.getY() >> 4 == y >> 4)
@@ -152,8 +150,8 @@ public class Level {
 
 	// if there is ore on X and Y, return it
 	public Ore selectOre(int x, int y) {
-		for (int s = 0; s < entities.size(); s++) {
-			Entity i = entities.get(s);
+		for (int s = 0; s < walkableEntities.size(); s++) {
+			Entity i = walkableEntities.get(s);
 			if (i instanceof Ore) {
 				if (i.getX() >> 4 == x >> 4 && i.getY() >> 4 == y >> 4)
 					return (Ore) i;
@@ -164,19 +162,30 @@ public class Level {
 	}
 
 	// render the entities
-	public void renderEntites(Screen screen) {
-		entities.forEach((Entity i) -> i.render(screen));
+	public void renderHardEntites(Screen screen) {
+		hardEntities.forEach((Entity i) -> i.render(screen));
 	}
 
 	// render the items
-	public void renderItems(Screen screen) {
-		items.forEach((Item i) -> i.render(screen));
+	public void renderSoftEntities(Screen screen) {
+		walkableEntities.forEach((Entity i) -> i.render(screen));
+		items.forEach((Entity i) -> i.render(screen));
 	}
 
 	// if there is an entity on X and Y, return it
 	public Entity getEntityOn(int x, int y) {
-		for (int s = 0; s < entities.size(); s++) {
-			Entity i = entities.get(s);
+		for (int s = 0; s < items.size(); s++) {
+			Entity i = items.get(s);
+			if (i.getX() >> 4 == x >> 4 && i.getY() >> 4 == y >> 4)
+				return i;
+		}
+		for (int s = 0; s < walkableEntities.size(); s++) {
+			Entity i = walkableEntities.get(s);
+			if (i.getX() >> 4 == x >> 4 && i.getY() >> 4 == y >> 4)
+				return i;
+		}
+		for (int s = 0; s < hardEntities.size(); s++) {
+			Entity i = hardEntities.get(s);
 			if (i.getX() >> 4 == x >> 4 && i.getY() >> 4 == y >> 4)
 				return i;
 		}
@@ -188,9 +197,9 @@ public class Level {
 	private void randForest(int x, int y) {
 		if (x == 0 || x == width || y == 0 || y == height)
 			return;
-		int rand = random.nextInt(10);
+		int rand = Entity.getRand().nextInt(10);
 		if (rand == 1) {
-			entities.add(new Tree(x << 4, y << 4));
+			hardEntities.add(new Tree(x << 4, y << 4));
 			getTile(x, y).setSolid(true);
 		}
 
@@ -200,18 +209,23 @@ public class Level {
 	private void randOre(int x, int y) {
 		if (x == 0 || x == width || y == 0 || y == height)
 			return;
-		int rand = random.nextInt(20);
-		if (rand == 1) {
-			entities.add(new Ore(x << 4, y << 4, OreType.GOLD));
-			getTile(x, y).setSolid(true);
+		int rand = Entity.getRand().nextInt(30);
+		if (rand == 4 || rand == 5 || rand == 6 || rand == 7) {
+			walkableEntities.add(new Ore(x << 4, y << 4, OreType.STONE));
 		} else {
-			if (rand == 2) {
-				entities.add(new Ore(x << 4, y << 4, OreType.IRON));
-				getTile(x, y).setSolid(true);
+			if (rand == 1) {
+				walkableEntities.add(new Ore(x << 4, y << 4, OreType.GOLD));
+			} else {
+				if (rand == 2) {
+					walkableEntities.add(new Ore(x << 4, y << 4, OreType.IRON));
 
+				} else {
+					if (rand == 3) {
+						walkableEntities.add(new Ore(x << 4, y << 4, OreType.COAL));
+					}
+				}
 			}
 		}
-
 	}
 
 	// render the tiles

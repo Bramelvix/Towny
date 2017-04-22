@@ -1,6 +1,8 @@
 package graphics.ui;
 
 import java.awt.Graphics;
+
+import entity.BuildAbleObjects;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.Menu;
 import input.Mouse;
@@ -74,6 +76,7 @@ public class Ui {
 			menu.show(mouse);
 		}
 	}
+
 	public void showMenuOn(Mouse mouse, String item) {
 		if (!outline.isVisible()) {
 			showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels());
@@ -81,9 +84,14 @@ public class Ui {
 			menu.show(mouse);
 		}
 	}
+	public BuildAbleObjects getBuildAbleObjectOutline() {
+		return outline.getBuildJobItem();
+	}
+
 	public int getMenuIngameY() {
 		return menu.getIngameY();
 	}
+
 	public int getMenuIngameX() {
 		return menu.getIngameX();
 	}
@@ -128,8 +136,8 @@ public class Ui {
 		return selection.getHeight();
 	}
 
-	public void showBuildSquare(Mouse mouse, int xoff, int yoff) {
-		outline.show(mouse, xoff, yoff);
+	public void showBuildSquare(Mouse mouse, int xoff, int yoff, boolean lockedSize, BuildAbleObjects build) {
+		outline.show(mouse, xoff, yoff, lockedSize, build);
 	}
 
 	public void removeBuildSquare() {
