@@ -4,7 +4,6 @@ import entity.item.Item;
 import graphics.Sprite;
 import map.Level;
 import map.Tile;
-import sound.Sound;
 
 public class Wall extends BuildAbleObject {
 	private boolean topHasWall; // is there a wall above this wall

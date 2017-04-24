@@ -24,6 +24,7 @@ public class MenuItem {
 	public static final String FIGHT = "Fight";
 	public static final String EQUIP = "Equip";
 	public static final String WEAR = "Wear";
+	public static final String CRAFT = "Craft";
 
 	// constructor
 	public MenuItem(String type, Menu menu) {

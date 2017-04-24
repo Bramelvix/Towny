@@ -31,6 +31,7 @@ public class Level {
 		generateLevel();
 
 	}
+
 	public List<Item> getItemList() {
 		return items;
 	}
@@ -77,6 +78,14 @@ public class Level {
 	}
 
 	// if there is a wall on x and y, return it
+	public Entity getHardEntityOn(int x, int y) {
+		for (Entity e : hardEntities) {
+			if ((e.getX() >> 4 == x >> 4) && (e.getY() >> 4 == y >> 4))
+				return e;
+		}
+		return null;
+	}
+
 	public Wall getWallOn(int x, int y) {
 		for (Entity e : hardEntities) {
 			if ((e.getX() == x) && (e.getY() == y) && e instanceof Wall)

@@ -16,7 +16,6 @@ import javax.swing.JFrame;
 
 import entity.BuildAbleObjects;
 import entity.Tree;
-import entity.Wall;
 import entity.item.Clothing;
 import entity.item.ClothingType;
 import entity.item.weapon.Weapon;
@@ -25,6 +24,7 @@ import entity.mob.Villager;
 import entity.mob.Zombie;
 import entity.mob.work.FightJob;
 import entity.mob.work.MoveItemJob;
+import entity.workstations.Furnace;
 import graphics.Screen;
 import graphics.Sprite;
 import graphics.ui.Ui;
@@ -352,7 +352,13 @@ public class Game extends Canvas implements Runnable {
 				ui.showMenuOn(mouse, options.toArray(new String[0]));
 
 			} else {
-				ui.showMenuOn(mouse, MenuItem.CANCEL);
+				if (level.getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Furnace) {
+					ui.showMenuOn(mouse, new String[] { MenuItem.CRAFT + " iron bar", MenuItem.CRAFT + " gold bar",
+							MenuItem.CANCEL });
+				} else {
+					ui.showMenuOn(mouse, MenuItem.CANCEL);
+				}
+
 			}
 		}
 		if (ui.outlineIsVisible() && !ui.menuVisible() && mouse.getReleased() && !UiIcons.hoverOnAnyIcon()) {
@@ -361,7 +367,7 @@ public class Game extends Canvas implements Runnable {
 				if (!level.getTile(blok[0] >> 4, blok[1] >> 4).solid()) {
 					Villager idle = getIdlestVil();
 					idle.resetMove();
-					idle.addBuildJob(blok[0], blok[1],ui.getBuildAbleObjectOutline());
+					idle.addBuildJob(blok[0], blok[1], ui.getBuildAbleObjectOutline());
 				}
 			}
 			ui.removeBuildSquare();
