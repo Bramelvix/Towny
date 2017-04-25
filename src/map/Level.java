@@ -10,6 +10,7 @@ import entity.Wall;
 import entity.item.Clothing;
 import entity.item.Item;
 import entity.item.weapon.Weapon;
+import entity.workstations.Furnace;
 import graphics.Screen;
 import graphics.Sprite;
 
@@ -90,6 +91,14 @@ public class Level {
 		for (Entity e : hardEntities) {
 			if ((e.getX() == x) && (e.getY() == y) && e instanceof Wall)
 				return (Wall) e;
+		}
+		return null;
+	}
+
+	public Furnace getNearestFurnace() {
+		for (Entity e : hardEntities) {
+			if (e instanceof Furnace)
+				return (Furnace) e;
 		}
 		return null;
 	}

@@ -24,6 +24,12 @@ public class Item extends Entity {
 	public Item(String name, int x, int y, Sprite sprite, boolean visible, int quantity) {
 		this(name, x, y, sprite, "", visible, quantity);
 	}
+	public Item(String name, Sprite sprite, boolean visible, int quantity) {
+		super.setName(name);
+		this.sprite = sprite;
+		super.setVisible(visible);
+		this.quantity = quantity;
+	}
 
 	public Item(Item o) {
 		this(o.getName(), o.x, o.y, o.sprite, o.getToolTip(), o.isVisible(), o.quantity);

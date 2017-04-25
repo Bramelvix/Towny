@@ -1,10 +1,9 @@
 package entity.workstations;
 
-import entity.BuildAbleObject;
 import graphics.Screen;
 import graphics.Sprite;
 
-public class Furnace extends BuildAbleObject {
+public class Furnace extends Workstation {
 	public Furnace(int x, int y) {
 		super(x, y);
 	}

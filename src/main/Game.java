@@ -18,10 +18,12 @@ import entity.BuildAbleObjects;
 import entity.Tree;
 import entity.item.Clothing;
 import entity.item.ClothingType;
+import entity.item.Item;
 import entity.item.weapon.Weapon;
 import entity.mob.Mob;
 import entity.mob.Villager;
 import entity.mob.Zombie;
+import entity.mob.work.CraftJob;
 import entity.mob.work.FightJob;
 import entity.mob.work.MoveItemJob;
 import entity.workstations.Furnace;
@@ -447,6 +449,26 @@ public class Game extends Canvas implements Runnable {
 				selectedvill.addJob(new MoveItemJob(ui.getMenuIngameX(), ui.getMenuIngameY(), selectedvill));
 				ui.deSelectIcons();
 				deselect(selectedvill);
+				ui.getMenu().hide();
+				return;
+			}
+			if (ui.getMenu().clickedOnItem(MenuItem.CRAFT + " iron bar", mouse)) {
+				Villager idle = getIdlestVil();
+				idle.resetMove();
+				idle.addJob(new CraftJob(idle,
+						new Item[] { idle.getNearestItemOfType("iron ore"), idle.getNearestItemOfType("coal ore") },
+						new Item("iron bar", Sprite.ironBar, false, 1),level.getNearestFurnace()));
+				ui.deSelectIcons();
+				ui.getMenu().hide();
+				return;
+			}
+			if (ui.getMenu().clickedOnItem(MenuItem.CRAFT + " gold bar", mouse)) {
+				Villager idle = getIdlestVil();
+				idle.resetMove();
+				idle.addJob(new CraftJob(idle,
+						new Item[] { idle.getNearestItemOfType("gold ore"), idle.getNearestItemOfType("coal ore") },
+						new Item("gold bar", Sprite.goldBar, false, 1),level.getNearestFurnace()));
+				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
 			}
