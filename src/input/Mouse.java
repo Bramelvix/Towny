@@ -8,27 +8,31 @@ import javax.swing.event.MouseInputListener;
 import main.Game;
 
 public class Mouse extends MouseAdapter implements MouseInputListener {
-	//used to register the mouse on the screen
+	// used to register the mouse on the screen
 	private Game game;
-	private int mouseX = -1; // x and y coord on the screen, in ingame pixels (/3), WITH OFFSET
+	private int mouseX = -1; // x and y coord on the screen, in ingame pixels
+								// (/3), WITH OFFSET
 	private int mouseY = -1;
 	private int mouseB = -1; // the mouse button pressed
-	private int mouseTileX = -1; // the x and y of the tiles in the game that the mouse is on
+	private int mouseTileX = -1; // the x and y of the tiles in the game that
+									// the mouse is on
 	private int mouseTileY = -1;
-	private int trueX = -1; // x and y coord on the screen, in ingame pixels (/3), WITHOUT OFFSET
+	private int trueX = -1; // x and y coord on the screen, in ingame pixels
+							// (/3), WITHOUT OFFSET
 	private int trueY = -1;
-	private int trueXpixels = -1; // x and y coord on the screen, in acutal pixels, WITHOUT OFFSET
+	private int trueXpixels = -1; // x and y coord on the screen, in acutal
+									// pixels, WITHOUT OFFSET
 	private int trueYpixels = -1;
 	private boolean clicked; // has the mouse been clicked
 	private boolean drag; // has the mouse been dragged
 	private boolean released; // has the mouse been released
 
-	//constructor
+	// constructor
 	public Mouse(Game game) {
 		this.game = game;
 	}
 
-	//getters
+	// getters
 	public int getX() {
 		return mouseX;
 	}
@@ -51,7 +55,8 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		clicked = true;
+		if (arg0.getButton() == 1)
+			clicked = true;
 
 	}
 
@@ -77,19 +82,23 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 		released = true;
 
 	}
+
 	public boolean getClicked() {
 		return clicked;
 	}
+
 	public boolean getReleased() {
 		return released;
 	}
+
 	public void reset() {
 		clicked = false;
 		released = false;
-		if (mouseB!=1)
-		drag = false;
-		
+		if (mouseB != 1)
+			drag = false;
+
 	}
+
 	public boolean getDrag() {
 		return drag;
 	}
@@ -104,7 +113,7 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 		mouseX = trueX + game.xScroll;
 		mouseY = trueY + game.yScroll;
 		mouseTileX = mouseX / 16;
-		mouseTileY = mouseY /16;
+		mouseTileY = mouseY / 16;
 
 	}
 
@@ -116,8 +125,8 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 		trueY = trueYpixels / 3;
 		mouseX = trueX + game.xScroll;
 		mouseY = trueY + game.yScroll;
-		mouseTileX = mouseX /16;
-		mouseTileY = mouseY /16;
+		mouseTileX = mouseX / 16;
+		mouseTileY = mouseY / 16;
 
 	}
 

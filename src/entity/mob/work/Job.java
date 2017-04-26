@@ -19,7 +19,8 @@ public class Job implements Workable {
 	protected Villager worker; // the villager doing the job
 	private Resource jobObj; // the resource the worker needs to gather
 	private boolean buildJob; // is the job a buildjob
-	private BuildAbleObject buildJobObj; // the buildable entity the worker needs to build
+	private BuildAbleObject buildJobObj; // the buildable entity the worker
+											// needs to build
 	private Level level; // the level in which the job is located
 	protected boolean started = false;
 	private boolean goingToPickUpItem = false;
@@ -95,49 +96,50 @@ public class Job implements Workable {
 		if (needsMaterial && !hasMaterial) {
 			goPickupItem();
 			return;
-		}
-		if (!completed && started && (!needsMaterial || hasMaterial)) {
-			if (!worker.aroundTile(xloc, yloc)) {
-				if (worker.movement == null) {
-					completed = true;
-					return;
-				}
-				worker.move();
-				return;
-			} else {
-				if (jobObj != null) {
-					if (jobObj.work(worker.level))
+		} else {
+			if (!completed && started) {
+				if (!worker.aroundTile(xloc, yloc)) {
+					if (worker.movement == null) {
 						completed = true;
+						return;
+					}
+					worker.move();
 					return;
 				} else {
-					if (buildJob && buildJobObj != null) {
-						if (!level.isClearTile(buildJobObj.getX() >> 4, buildJobObj.getY() >> 4)
-								&& !buildJobObj.initialised) {
-							// wait if the buildLocation is blocked by an
-							// item or entity
-							return;
-						}
-						if (!buildJobObj.initialised) {
-							if (!buildJobObj.initialise(material, worker.level))
-								completed = true;
-						}
-						if (buildJobObj.build()) {
+					if (jobObj != null) {
+						if (jobObj.work(worker.level))
 							completed = true;
-						}
-						if (material.quantity <= 0) {
-							worker.holding = null;
-						} else {
-							worker.drop();
-						}
 						return;
+					} else {
+						if (buildJob && buildJobObj != null) {
+							if (!level.isClearTile(buildJobObj.getX() >> 4, buildJobObj.getY() >> 4)
+									&& !buildJobObj.initialised) {
+								// wait if the buildLocation is blocked by an
+								// item or entity
+								return;
+							}
+							if (!buildJobObj.initialised) {
+								if (!buildJobObj.initialise(material, worker.level))
+									completed = true;
+							}
+							if (buildJobObj.build()) {
+								completed = true;
+							}
+							if (material.quantity <= 0) {
+								worker.holding = null;
+							} else {
+								worker.drop();
+							}
+							return;
+
+						}
 
 					}
-
 				}
-			}
 
-		} else {
-			start();
+			} else {
+				start();
+			}
 		}
 	}
 
