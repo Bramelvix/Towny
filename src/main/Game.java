@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
 import javax.swing.JFrame;
-
 import entity.BuildAbleObjects;
 import entity.Tree;
 import entity.item.Clothing;
@@ -38,9 +36,8 @@ import map.Level;
 import map.Tile;
 import sound.Sound;
 
-public class Game extends Canvas implements Runnable {
+public class Game implements Runnable {
 
-	private static final long serialVersionUID = 1L;
 	private static final int width = 500;
 	private static final int height = width / 16 * 9;
 	private Thread thread;
@@ -64,6 +61,7 @@ public class Game extends Canvas implements Runnable {
 	private BufferedImage image;
 	private int[] pixels;
 	private Random rand;
+	private Canvas canvas;
 
 	public static void main(String[] args) {
 		new Game();
@@ -71,16 +69,17 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	public Game() {
+		canvas = new Canvas();
 		Dimension size = new Dimension(width * SCALE, height * SCALE);
 		rand = new Random();
-		setPreferredSize(size);
+		canvas.setPreferredSize(size);
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 		screen = new Screen(width, height, pixels);
 		frame = new JFrame();
 		frame.setResizable(false);
 		frame.setTitle("Towny");
-		frame.add(this);
+		frame.add(canvas);
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
@@ -96,9 +95,9 @@ public class Game extends Canvas implements Runnable {
 		spawnvills();
 		spawnZombies();
 
-		addKeyListener(keyboard);
-		addMouseListener(mouse);
-		addMouseMotionListener(mouse);
+		canvas.addKeyListener(keyboard);
+		canvas.addMouseListener(mouse);
+		canvas.addMouseMotionListener(mouse);
 		start();
 	}
 
@@ -526,9 +525,9 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	private void render() {
-		BufferStrategy bs = getBufferStrategy();
+		BufferStrategy bs = canvas.getBufferStrategy();
 		if (bs == null) {
-			createBufferStrategy(3);
+			canvas.createBufferStrategy(3);
 			return;
 		}
 		screen.clear();
@@ -538,8 +537,8 @@ public class Game extends Canvas implements Runnable {
 		level.renderHardEntites(screen);
 		pixels = screen.pixels;
 		Graphics g = bs.getDrawGraphics();
-		g.fillRect(0, 0, getWidth(), getHeight());
-		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+		g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+		g.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
 		ui.setOffset(xScroll, yScroll);
 		ui.render(g);
 		g.dispose();
