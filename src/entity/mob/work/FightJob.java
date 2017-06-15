@@ -13,8 +13,8 @@ public class FightJob extends Job {
 	}
 
 	private void start() {
-		worker.movement = worker.getPath(xloc >> 4, yloc >> 4);
-		if (worker.movement == null) {
+		worker.setMovement(worker.getPath(xloc >> 4, yloc >> 4));
+		if (worker.isMovementNull()) {
 			completed = true;
 		}
 		started = true;
@@ -44,9 +44,9 @@ public class FightJob extends Job {
 				}
 				return;
 			} else {
-				if (worker.movement == null) {
+				if (worker.isMovementNull()) {
 					if (worker.getPath(xloc >> 4, yloc >> 4) != null) {
-						worker.movement = worker.getPath(xloc >> 4, yloc >> 4);
+						worker.setMovement(worker.getPath(xloc >> 4, yloc >> 4));
 						return;
 					} else {
 						worker.drop();

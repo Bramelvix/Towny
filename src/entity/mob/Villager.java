@@ -19,7 +19,7 @@ import graphics.Sprite;
 import map.Level;
 
 public class Villager extends Mob {
-	public Path movement; // path for the villager to follow
+	private Path movement; // path for the villager to follow
 	private int counter; // counter of steps along the path
 	private boolean arrived = false; // has the villager arrived at the path's
 										// destination
@@ -205,10 +205,10 @@ public class Villager extends Mob {
 	public void addBuildJob(int x, int y, BuildAbleObjects object) {
 		switch (object) {
 		case WOODEN_WALL:
-			addJob(new Job(x, y, getNearestItemOfType("Logs"), object,this, level));
+			addJob(new Job(x, y, getNearestItemOfType("Logs"), object, this, level));
 			break;
 		case FURNACE:
-			addJob(new Job(x, y, getNearestItemOfType("stones"), object,this, level));
+			addJob(new Job(x, y, getNearestItemOfType("stones"), object, this, level));
 			break;
 		}
 	}
@@ -255,32 +255,36 @@ public class Villager extends Mob {
 		} else {
 			if (!arrived) {
 				Point step = movement.getStep(counter);
-				if (step == null || !level.isWalkAbleTile(step.x, step.y)) {
-					int destx = movement.getXdest();
-					int desty = movement.getYdest();
-					movement = getShortest(destx, desty);
-					return;
-				}
-				moveTo(step.x << 4, step.y << 4);
-				if (x == step.x << 4 && y == step.y << 4) {
-					arrived = true;
-				}
+				if (step != null) {
+					if (step == null || !level.isWalkAbleTile(step.x, step.y)) {
+						int destx = movement.getXdest();
+						int desty = movement.getYdest();
+						movement = getShortest(destx, desty);
+						return;
+					}
+					moveTo(step.x << 4, step.y << 4);
+					if (x == step.x << 4 && y == step.y << 4) {
+						arrived = true;
+					}
 
+				}
 			}
 		}
 
 	}
-
-	// resets the villager's path
-	public void resetMove() {
+	//set the path of a villager
+	public void setMovement(Path path) {
+		movement = path;
 		counter = 0;
 		arrived = false;
-		movement = null;
+	}
+	public boolean isMovementNull() {
+		return movement==null;
 	}
 
 	public void resetAll() {
 		jobs.clear();
-		resetMove();
+		setMovement(null);
 	}
 
 	// DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()!! DO NOT

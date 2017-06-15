@@ -69,7 +69,7 @@ public class Job implements Workable {
 
 	// checks if the worker has or still needs the item
 	private void checkItem() {
-		if (!hasMaterial && worker.holding != null && needsMaterial) {
+		if (needsMaterial && !hasMaterial && worker.holding != null) {
 			if (worker.holding.equals(material)) {
 				hasMaterial = true;
 			}
@@ -77,9 +77,8 @@ public class Job implements Workable {
 	}
 
 	private void start() {
-		worker.movement = worker.getShortest(xloc >> 4, yloc >> 4);
-		if (worker.movement == null)
-			completed = true;
+		worker.setMovement(worker.getShortest(xloc >> 4, yloc >> 4));
+		completed = (worker.isMovementNull());
 		started = true;
 	}
 
@@ -99,11 +98,11 @@ public class Job implements Workable {
 		} else {
 			if (!completed && started) {
 				if (!worker.aroundTile(xloc, yloc)) {
-					if (worker.movement == null) {
+					if (worker.isMovementNull()) {
 						completed = true;
-						return;
+					} else {
+						worker.move();
 					}
-					worker.move();
 					return;
 				} else {
 					if (jobObj != null) {

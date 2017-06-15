@@ -269,7 +269,7 @@ public class Game implements Runnable {
 						Tree tree = level.selectTree(xs, ys, false);
 						if (tree != null) {
 							Villager idle = getIdlestVil();
-							idle.resetMove();
+							idle.setMovement(null);
 							idle.addJob(tree);
 						}
 					}
@@ -284,7 +284,7 @@ public class Game implements Runnable {
 		if (((UiIcons.isMiningSelected()) && !UiIcons.hoverOnAnyIcon() && mouse.getClicked())
 				&& (level.selectOre(mouse.getX(), mouse.getY()) != null)) {
 			Villager idle = getIdlestVil();
-			idle.resetMove();
+			idle.setMovement(null);
 			deselectAllVills();
 			idle.addJob(level.selectOre(mouse.getX(), mouse.getY()));
 			ui.deSelectIcons();
@@ -294,7 +294,7 @@ public class Game implements Runnable {
 		if (((UiIcons.isSwordsSelected()) && !UiIcons.hoverOnAnyIcon() && mouse.getClicked())
 				&& (anyMobHoverOn(mouse.getX(), mouse.getY()) != null)) {
 			Villager idle = getIdlestVil();
-			idle.resetMove();
+			idle.setMovement(null);
 			deselectAllVills();
 			idle.addJob(new FightJob(idle, anyMobHoverOn(mouse.getX(), mouse.getY())));
 			ui.deSelectIcons();
@@ -367,7 +367,7 @@ public class Game implements Runnable {
 			for (int[] blok : coords) {
 				if (!level.getTile(blok[0] >> 4, blok[1] >> 4).solid()) {
 					Villager idle = getIdlestVil();
-					idle.resetMove();
+					idle.setMovement(null);
 					idle.addBuildJob(blok[0], blok[1], ui.getBuildAbleObjectOutline());
 				}
 			}
@@ -386,9 +386,9 @@ public class Game implements Runnable {
 			}
 			if (ui.getMenu().clickedOnItem(MenuItem.MOVE, mouse)) {
 				selectedvill.resetAll();
-				selectedvill.movement = selectedvill.getPath(mouse.getTileX(), mouse.getTileY());
-				if (selectedvill.movement == null) {
-					selectedvill.movement = selectedvill.getShortest(level.getEntityOn(mouse.getX(), mouse.getY()));
+				selectedvill.setMovement(selectedvill.getPath(mouse.getTileX(), mouse.getTileY()));
+				if (selectedvill.isMovementNull()) {
+					selectedvill.setMovement(selectedvill.getShortest(level.getEntityOn(mouse.getX(), mouse.getY())));
 				}
 				deselect(selectedvill);
 				ui.deSelectIcons();
@@ -396,7 +396,7 @@ public class Game implements Runnable {
 				return;
 			}
 			if (ui.getMenu().clickedOnItem(MenuItem.CHOP, mouse)) {
-				selectedvill.resetMove();
+				selectedvill.setMovement(null);
 				selectedvill.addJob(level.selectTree(ui.getMenuIngameX(), ui.getMenuIngameY()));
 				deselect(selectedvill);
 				ui.deSelectIcons();
@@ -404,7 +404,7 @@ public class Game implements Runnable {
 				return;
 			}
 			if (ui.getMenu().clickedOnItem(MenuItem.FIGHT, mouse)) {
-				selectedvill.resetMove();
+				selectedvill.setMovement(null);
 				selectedvill
 						.addJob(new FightJob(selectedvill, anyMobHoverOn(ui.getMenuIngameX(), ui.getMenuIngameY())));
 				deselect(selectedvill);
@@ -413,7 +413,7 @@ public class Game implements Runnable {
 				return;
 			}
 			if (ui.getMenu().clickedOnItem(MenuItem.MINE, mouse)) {
-				selectedvill.resetMove();
+				selectedvill.setMovement(null);
 				selectedvill.addJob(level.selectOre(ui.getMenuIngameX(), ui.getMenuIngameY()));
 				deselect(selectedvill);
 				ui.deSelectIcons();
@@ -434,7 +434,7 @@ public class Game implements Runnable {
 			}
 			if ((ui.getMenu().clickedOnItem(MenuItem.PICKUP, mouse) || ui.getMenu().clickedOnItem(MenuItem.EQUIP, mouse)
 					|| ui.getMenu().clickedOnItem(MenuItem.WEAR, mouse)) && !ui.outlineIsVisible()) {
-				selectedvill.resetMove();
+				selectedvill.setMovement(null);
 				if (level.getItemOn(ui.getMenuIngameX(), ui.getMenuIngameY()) != null)
 					selectedvill.addJob(
 							new MoveItemJob(level.getItemOn(ui.getMenuIngameX(), ui.getMenuIngameY()), selectedvill));
@@ -444,7 +444,7 @@ public class Game implements Runnable {
 				return;
 			}
 			if (ui.getMenu().clickedOnItem(MenuItem.DROP, mouse) && !ui.outlineIsVisible()) {
-				selectedvill.resetMove();
+				selectedvill.setMovement(null);
 				selectedvill.addJob(new MoveItemJob(ui.getMenuIngameX(), ui.getMenuIngameY(), selectedvill));
 				ui.deSelectIcons();
 				deselect(selectedvill);
@@ -453,7 +453,7 @@ public class Game implements Runnable {
 			}
 			if (ui.getMenu().clickedOnItem(MenuItem.CRAFT + " iron bar", mouse)) {
 				Villager idle = getIdlestVil();
-				idle.resetMove();
+				idle.setMovement(null);
 				idle.addJob(new CraftJob(idle,
 						new Item[] { idle.getNearestItemOfType("iron ore"), idle.getNearestItemOfType("coal ore") },
 						new Item("iron bar", Sprite.ironBar, false, 1),level.getNearestFurnace()));
@@ -463,7 +463,7 @@ public class Game implements Runnable {
 			}
 			if (ui.getMenu().clickedOnItem(MenuItem.CRAFT + " gold bar", mouse)) {
 				Villager idle = getIdlestVil();
-				idle.resetMove();
+				idle.setMovement(null);
 				idle.addJob(new CraftJob(idle,
 						new Item[] { idle.getNearestItemOfType("gold ore"), idle.getNearestItemOfType("coal ore") },
 						new Item("gold bar", Sprite.goldBar, false, 1),level.getNearestFurnace()));

@@ -14,6 +14,9 @@ public class Path {
 	public int getXdest() {
 		return xdest;
 	}
+	public int getStepsSize() {
+		return steps.size();
+	}
 
 	public int getYdest() {
 		return ydest;
