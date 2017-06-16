@@ -23,8 +23,6 @@ public class MoveItemJob extends Job {
 
 	public MoveItemJob(int xloc, int yloc, Villager worker) {
 		this(worker);
-		if (worker.holding == null)
-			completed = true;
 		pickUpJob = false;
 		this.xloc = xloc;
 		this.yloc = yloc;
@@ -32,10 +30,15 @@ public class MoveItemJob extends Job {
 	}
 
 	private void start() {
+		if (!pickUpJob) {
+			if (worker.holding == null)
+				completed = true;
+		}
 		worker.setMovement(worker.getPath(xloc >> 4, yloc >> 4));
 		if (worker.isMovementNull()) {
 			completed = true;
-			material.setReservedVil(null);
+			if (pickUpJob)
+				material.setReservedVil(null);
 		}
 		started = true;
 	}

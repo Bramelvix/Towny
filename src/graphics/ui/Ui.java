@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import entity.BuildAbleObjects;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.Menu;
+import graphics.ui.menu.MenuItem;
 import input.Mouse;
 import map.Level;
 
@@ -69,7 +70,7 @@ public class Ui {
 		UiIcons.deSelect();
 	}
 
-	public void showMenuOn(Mouse mouse, String[] items) {
+	public void showMenuOn(Mouse mouse, MenuItem[] items) {
 		if (!outline.isVisible()) {
 			showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels());
 			menu.addItems(items);
@@ -77,7 +78,7 @@ public class Ui {
 		}
 	}
 
-	public void showMenuOn(Mouse mouse, String item) {
+	public void showMenuOn(Mouse mouse, MenuItem item) {
 		if (!outline.isVisible()) {
 			showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels());
 			menu.addItem(item);

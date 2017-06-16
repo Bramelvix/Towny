@@ -6,10 +6,12 @@ import map.Level;
 import map.Tile;
 
 public class Wall extends BuildAbleObject {
-	private boolean topHasWall; // is there a wall above this wall
-	private boolean bottomHasWall; // is there a wall below this wall
-	private boolean leftHasWall; // is there a wall to the left of this wall
-	private boolean rightHasWall; // is there a wall to the right of this wall
+	private boolean topHasWall = false; // is there a wall above this wall
+	private boolean bottomHasWall = false; // is there a wall below this wall
+	private boolean leftHasWall = false; // is there a wall to the left of this
+											// wall
+	private boolean rightHasWall = false; // is there a wall to the right of
+											// this wall
 
 	// basic constructor
 	public Wall(int x, int y) {
@@ -26,10 +28,6 @@ public class Wall extends BuildAbleObject {
 		Wall right = level.getWallOn((x + Tile.SIZE), y);
 		Wall up = level.getWallOn(x, (y - Tile.SIZE));
 		Wall down = level.getWallOn(x, (y + Tile.SIZE));
-		leftHasWall = false;
-		rightHasWall = false;
-		topHasWall = false;
-		bottomHasWall = false;
 		if (left != null) {
 			leftHasWall = true;
 			if (eerstekeer)
@@ -127,6 +125,5 @@ public class Wall extends BuildAbleObject {
 		}
 
 	}
-
 
 }

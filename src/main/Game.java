@@ -310,54 +310,53 @@ public class Game implements Runnable {
 		}
 		if (UiIcons.isSawHover() && !ui.menuVisible() && mouse.getClicked()) {
 			deselectAllVills();
-			ui.showMenuOn(mouse,
-					new String[] { MenuItem.BUILD + " wooden wall", MenuItem.BUILD + " furnace", MenuItem.CANCEL });
+			ui.showMenuOn(mouse, new MenuItem[] { new MenuItem(MenuItem.BUILD + " wooden wall"),
+					new MenuItem(MenuItem.BUILD + " furnace"), new MenuItem(MenuItem.CANCEL) });
 			return;
 		}
 
 		if (mouse.getButton() == 3) {
 			if (selectedvill != null) {
-				List<String> options = new ArrayList<String>();
+				List<MenuItem> options = new ArrayList<MenuItem>();
 				if (selectedvill.holding != null) {
-					options.add(MenuItem.getMenuItemText(MenuItem.DROP, selectedvill.holding));
+					options.add(new MenuItem(MenuItem.getMenuItemText(MenuItem.DROP, selectedvill.holding)));
 				}
 				if (level.selectTree(mouse.getX(), mouse.getY()) != null) {
-					options.add(MenuItem.getMenuItemText(MenuItem.CHOP, level.selectTree(mouse.getX(), mouse.getY())));
+					options.add(new MenuItem(
+							MenuItem.getMenuItemText(MenuItem.CHOP, level.selectTree(mouse.getX(), mouse.getY()))));
 				} else {
 					if (level.selectOre(mouse.getX(), mouse.getY()) != null) {
-						options.add(
-								MenuItem.getMenuItemText(MenuItem.MINE, level.selectOre(mouse.getX(), mouse.getY())));
+						options.add(new MenuItem(
+								MenuItem.getMenuItemText(MenuItem.MINE, level.selectOre(mouse.getX(), mouse.getY()))));
 					} else {
 						if (anyMobHoverOn(mouse.getX(), mouse.getY()) != null) {
-							options.add(MenuItem.getMenuItemText(MenuItem.FIGHT,
-									anyMobHoverOn(mouse.getX(), mouse.getY())));
+							options.add(new MenuItem(MenuItem.getMenuItemText(MenuItem.FIGHT,
+									anyMobHoverOn(mouse.getX(), mouse.getY()))));
 						}
-						if (level.getItemOn(mouse.getX(), mouse.getY()) != null) {
-							if (level.getItemOn(mouse.getX(), mouse.getY()) instanceof Weapon) {
-								options.add(MenuItem.getMenuItemText(MenuItem.EQUIP,
-										level.getItemOn(mouse.getX(), mouse.getY())));
-							} else {
-								if (level.getItemOn(mouse.getX(), mouse.getY()) instanceof Clothing) {
-									options.add(MenuItem.getMenuItemText(MenuItem.WEAR,
-											level.getItemOn(mouse.getX(), mouse.getY())));
+						if (!level.getItemsOn(mouse.getX(), mouse.getY()).isEmpty()) {
+							for (Item e : level.getItemsOn(mouse.getX(), mouse.getY()))
+								if (e instanceof Weapon) {
+									options.add(new MenuItem(MenuItem.getMenuItemText(MenuItem.EQUIP, e), e));
 								} else {
-									options.add(MenuItem.getMenuItemText(MenuItem.PICKUP,
-											level.getItemOn(mouse.getX(), mouse.getY())));
+									if (e instanceof Clothing) {
+										options.add(new MenuItem(MenuItem.getMenuItemText(MenuItem.WEAR, e), e));
+									} else {
+										options.add(new MenuItem(MenuItem.getMenuItemText(MenuItem.PICKUP, e), e));
+									}
 								}
-							}
 						}
 					}
 				}
-				options.add(MenuItem.MOVE);
-				options.add(MenuItem.CANCEL);
-				ui.showMenuOn(mouse, options.toArray(new String[0]));
+				options.add(new MenuItem(MenuItem.MOVE));
+				options.add(new MenuItem(MenuItem.CANCEL));
+				ui.showMenuOn(mouse, options.toArray(new MenuItem[0]));
 
 			} else {
 				if (level.getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Furnace) {
-					ui.showMenuOn(mouse, new String[] { MenuItem.CRAFT + " iron bar", MenuItem.CRAFT + " gold bar",
-							MenuItem.CANCEL });
+					ui.showMenuOn(mouse, new MenuItem[] { new MenuItem(MenuItem.CRAFT + " iron bar"),
+							new MenuItem(MenuItem.CRAFT + " gold bar"), new MenuItem(MenuItem.CANCEL) });
 				} else {
-					ui.showMenuOn(mouse, MenuItem.CANCEL);
+					ui.showMenuOn(mouse, new MenuItem(MenuItem.CANCEL));
 				}
 
 			}
@@ -435,9 +434,10 @@ public class Game implements Runnable {
 			if ((ui.getMenu().clickedOnItem(MenuItem.PICKUP, mouse) || ui.getMenu().clickedOnItem(MenuItem.EQUIP, mouse)
 					|| ui.getMenu().clickedOnItem(MenuItem.WEAR, mouse)) && !ui.outlineIsVisible()) {
 				selectedvill.setMovement(null);
-				if (level.getItemOn(ui.getMenuIngameX(), ui.getMenuIngameY()) != null)
-					selectedvill.addJob(
-							new MoveItemJob(level.getItemOn(ui.getMenuIngameX(), ui.getMenuIngameY()), selectedvill));
+				Item e = (Item) ui.getMenu().clickedItem().getEntity();
+				System.out.println(e.getName());
+				if (!level.getItemsOn(ui.getMenuIngameX(), ui.getMenuIngameY()).isEmpty())
+					selectedvill.addJob(new MoveItemJob(e, selectedvill));
 				ui.deSelectIcons();
 				deselect(selectedvill);
 				ui.getMenu().hide();
@@ -456,7 +456,7 @@ public class Game implements Runnable {
 				idle.setMovement(null);
 				idle.addJob(new CraftJob(idle,
 						new Item[] { idle.getNearestItemOfType("iron ore"), idle.getNearestItemOfType("coal ore") },
-						new Item("iron bar", Sprite.ironBar, false, 1),level.getNearestFurnace()));
+						new Item("iron bar", Sprite.ironBar, false, 1), level.getNearestFurnace()));
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
@@ -466,7 +466,7 @@ public class Game implements Runnable {
 				idle.setMovement(null);
 				idle.addJob(new CraftJob(idle,
 						new Item[] { idle.getNearestItemOfType("gold ore"), idle.getNearestItemOfType("coal ore") },
-						new Item("gold bar", Sprite.goldBar, false, 1),level.getNearestFurnace()));
+						new Item("gold bar", Sprite.goldBar, false, 1), level.getNearestFurnace()));
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;

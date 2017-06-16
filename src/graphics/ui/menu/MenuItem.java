@@ -25,14 +25,27 @@ public class MenuItem {
 	public static final String EQUIP = "Equip";
 	public static final String WEAR = "Wear";
 	public static final String CRAFT = "Craft";
+	private Entity entity;
 
 	// constructor
-	public MenuItem(String type, Menu menu) {
-		this.text = type;
+	public MenuItem(String text) {
+		this.text = text;
+
+	}
+
+	public MenuItem(String text, Entity e) {
+		this(text);
+		this.entity = e;
+
+	}
+	public void init(Menu menu) {
 		x = menu.getX();
 		width = menu.getWidth();
 		y = menu.getYLocForMenuItem();
+	}
 
+	public Entity getEntity() {
+		return entity;
 	}
 
 	public static String getMenuItemText(String menuItem, Entity entity) {

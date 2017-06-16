@@ -55,8 +55,8 @@ public class Menu { // the menu is the little options menu that shows up when
 	}
 
 	// adding items to the menu
-	public void addItems(String[] items) {
-		for (String i : items) {
+	public void addItems(MenuItem[] items) {
+		for (MenuItem i : items) {
 			addItem(i);
 		}
 	}
@@ -114,21 +114,28 @@ public class Menu { // the menu is the little options menu that shows up when
 
 	public boolean clickedOnItem(String type, Mouse mouse) {
 		for (MenuItem i : items) {
-			if (i.equals(type)) {
+			if (i.getText().contains((type))) {
 				return i.clicked(mouse);
 			}
 		}
 		return false;
 	}
 
+	public MenuItem clickedItem() {
+		for (MenuItem i : items) {
+			return i;
+		}
+		return null;
+	}
+
 	// adding an item to the menu
-	public void addItem(String i) {
-		if (i != null) {
-			MenuItem o = new MenuItem(i, this);
+	public void addItem(MenuItem o) {
+		if (o != null) {
 			if (!(items.contains(o))) {
+				o.init(this);
 				items.add(o);
-				if (i.length() > width / 10) {
-					width += ((i.length() * 10) - width);
+				if (o.getText().length() > width / 10) {
+					width += ((o.getText().length() * 10) - width);
 				}
 				height = height + 15;
 			}

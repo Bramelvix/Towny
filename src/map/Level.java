@@ -103,9 +103,18 @@ public class Level {
 		return null;
 	}
 
-	public Item getItemOn(int x, int y) {
-		for (Item e : items) {
+	public List<Item> getItemsOn(int x, int y) {
+		List<Item> items = new ArrayList<Item>();
+		for (Item e : this.items) {
 			if ((e.getX() >> 4 == x >> 4) && (e.getY() >> 4 == y >> 4))
+				items.add(e);
+		}
+		return items;
+	}
+
+	public Item getItemWithNameOn(int x, int y, String name) {
+		for (Item e : getItemsOn(x, y)) {
+			if (e.getName().equals(name))
 				return e;
 		}
 		return null;

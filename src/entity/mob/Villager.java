@@ -205,10 +205,10 @@ public class Villager extends Mob {
 	public void addBuildJob(int x, int y, BuildAbleObjects object) {
 		switch (object) {
 		case WOODEN_WALL:
-			addJob(new Job(x, y, getNearestItemOfType("Logs"), object, this, level));
+			addJob(new Job(x, y, getNearestItemOfType("Logs"), object, this));
 			break;
 		case FURNACE:
-			addJob(new Job(x, y, getNearestItemOfType("stones"), object, this, level));
+			addJob(new Job(x, y, getNearestItemOfType("stones"), object, this));
 			break;
 		}
 	}

@@ -21,7 +21,6 @@ public class Job implements Workable {
 	private boolean buildJob; // is the job a buildjob
 	private BuildAbleObject buildJobObj; // the buildable entity the worker
 											// needs to build
-	private Level level; // the level in which the job is located
 	protected boolean started = false;
 	private boolean goingToPickUpItem = false;
 
@@ -42,9 +41,8 @@ public class Job implements Workable {
 		return completed;
 	}
 
-	public Job(int xloc, int yloc, Item mat, BuildAbleObjects object, Villager worker, Level level) {
+	public Job(int xloc, int yloc, Item mat, BuildAbleObjects object, Villager worker) {
 		this(xloc, yloc, worker);
-		this.level = level;
 		needsMaterial = true;
 		switch (object) {
 		case WOODEN_WALL:
@@ -111,7 +109,7 @@ public class Job implements Workable {
 						return;
 					} else {
 						if (buildJob && buildJobObj != null) {
-							if (!level.isClearTile(buildJobObj.getX() >> 4, buildJobObj.getY() >> 4)
+							if (!worker.level.isClearTile(buildJobObj.getX() >> 4, buildJobObj.getY() >> 4)
 									&& !buildJobObj.initialised) {
 								// wait if the buildLocation is blocked by an
 								// item or entity
