@@ -22,10 +22,10 @@ public class Wall extends BuildAbleObject {
 	// retrigger checking the sides of this wall, which would create an infinite
 	// loop of walls checking eachother again and again
 	public void checkSides(boolean eerstekeer) {
-		Wall left = (level.getWallOn((x - Tile.SIZE), y));
-		Wall right = (level.getWallOn((x + Tile.SIZE), y));
-		Wall up = (level.getWallOn(x, (y - Tile.SIZE)));
-		Wall down = (level.getWallOn(x, (y + Tile.SIZE)));
+		Wall left = level.getWallOn((x - Tile.SIZE), y);
+		Wall right = level.getWallOn((x + Tile.SIZE), y);
+		Wall up = level.getWallOn(x, (y - Tile.SIZE));
+		Wall down = level.getWallOn(x, (y + Tile.SIZE));
 		leftHasWall = false;
 		rightHasWall = false;
 		topHasWall = false;
@@ -61,9 +61,10 @@ public class Wall extends BuildAbleObject {
 
 	// called by villagers when they start building the wall.
 	public boolean initialise(Item material, Level level) {
-		if (material.getName().equals("Logs"))
+		boolean initGelukt = super.initialise(material, level);
+		if (initGelukt && material.getName().equals("Logs"))
 			checkSides();
-		return super.initialise(material, level);
+		return initGelukt;
 
 	}
 

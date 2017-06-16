@@ -118,12 +118,10 @@ public class Job implements Workable {
 								return;
 							}
 							if (!buildJobObj.initialised) {
-								if (!buildJobObj.initialise(material, worker.level))
-									completed = true;
+								completed = !buildJobObj.initialise(material, worker.level);
 							}
-							if (buildJobObj.build()) {
-								completed = true;
-							}
+							completed = buildJobObj.build();
+							
 							if (material.quantity <= 0) {
 								worker.holding = null;
 							} else {

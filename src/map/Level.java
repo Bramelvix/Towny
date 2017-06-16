@@ -89,7 +89,7 @@ public class Level {
 
 	public Wall getWallOn(int x, int y) {
 		for (Entity e : hardEntities) {
-			if ((e.getX() == x) && (e.getY() == y) && e instanceof Wall)
+			if (e instanceof Wall && (e.getX() == x) && (e.getY() == y))
 				return (Wall) e;
 		}
 		return null;
