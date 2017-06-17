@@ -74,7 +74,7 @@ public class Job implements Workable {
 		}
 	}
 
-	private void start() {
+	protected void start() {
 		worker.setMovement(worker.getShortest(xloc >> 4, yloc >> 4));
 		completed = (worker.isMovementNull());
 		started = true;

@@ -29,7 +29,8 @@ public class MoveItemJob extends Job {
 
 	}
 
-	private void start() {
+	@Override
+	protected void start() {
 		started = true;
 		if (!pickUpJob) {
 			if (worker.holding == null || (!worker.level.isClearTile(xloc / 16, yloc / 16)

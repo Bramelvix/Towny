@@ -12,7 +12,9 @@ public class FightJob extends Job {
 		this.target = target;
 	}
 
-	private void start() {
+
+	@Override
+	protected void start() {
 		worker.setMovement(worker.getPath(xloc >> 4, yloc >> 4));
 		if (worker.isMovementNull()) {
 			completed = true;
@@ -28,6 +30,7 @@ public class FightJob extends Job {
 		timer--;
 	}
 
+	@Override
 	public void execute() {
 		if (target == null) {
 			completed = true;

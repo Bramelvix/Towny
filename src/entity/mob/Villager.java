@@ -169,19 +169,9 @@ public class Villager extends Mob {
 		}
 	}
 
-	public void dropItem(Item e) {
-		if (e != null)
-			level.addItem(e);
-	}
-
-	public void dropItem(Weapon e) {
-		if (e != null)
-			level.addItem(e);
-	}
-
-	public void dropItem(Clothing e) {
-		if (e != null)
-			level.addItem(e);
+	public <T extends Item> void dropItem(T item) {
+		if (item != null)
+			level.addItem(item);
 	}
 
 	// add a job to the jobs list for the villager to do

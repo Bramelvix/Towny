@@ -11,8 +11,8 @@ public abstract class Entity {
 	protected int x, y; // x and y of the entity
 	public Level level; // level in which the entity is placed
 	private final static Random random = new Random(); // random needed for
-															// various chance
-															// calculations
+														// various chance
+														// calculations
 	public Sprite sprite; // the entity's sprite
 	public Sprite extraSprite; // extra sprite for large entities (like trees)
 	private boolean visible; // is the entity visible or not
@@ -23,6 +23,7 @@ public abstract class Entity {
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
+
 	public static final Random getRand() {
 		return random;
 	}
@@ -37,6 +38,19 @@ public abstract class Entity {
 
 	public void setName(String name) {
 		displayName = name;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public void setLocation(int x, int y) {
+		setX(x);
+		setY(y);
 	}
 
 	public Entity() {
@@ -62,8 +76,8 @@ public abstract class Entity {
 
 	// basic constructor
 	public Entity(int x, int y) {
-		this.x = x;
-		this.y = y;
+		setX(x);
+		setY(y);
 	}
 
 	// does the mouse hover over the entity
