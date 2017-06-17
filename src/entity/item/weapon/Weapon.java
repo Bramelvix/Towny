@@ -152,24 +152,24 @@ public class Weapon extends Item {
 		String name = "";
 		switch (mat) {
 		case WOOD:
-			name.concat("Wooden ");
+			name = name.concat("Wooden ");
 			break;
 		case GOLD:
-			name.concat("Golden ");
+			name = name.concat("Golden ");
 			break;
 		case IRON:
-			name.concat("Iron ");
+			name = name.concat("Iron ");
 			break;
 		case BRONZE:
-			name.concat("Bronze ");
+			name = name.concat("Bronze ");
 			break;
 		case CRYSTAL:
-			name.concat("Crystal ");
+			name = name.concat("Crystal ");
 			break;
 		}
 		if (type == WeaponType.BOW && mat == WeaponMaterial.BRONZE)
 			return getRandomWeapon(x, y);
-		name.concat(type.toString().toLowerCase());
+		name = name.concat(type.toString().toLowerCase());
 		String tooltip = "a " + name.toLowerCase();
 		if (mat == WeaponMaterial.IRON)
 			tooltip = "an " + name.toLowerCase();

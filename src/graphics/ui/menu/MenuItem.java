@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 
 import entity.Entity;
+import entity.item.Item;
 import input.Mouse;
 
 public class MenuItem {
@@ -19,7 +20,7 @@ public class MenuItem {
 	public static final String CHOP = "Chop";
 	public static final String MINE = "Mine";
 	public static final String BUILD = "Build";
-	public static final String PICKUP = "Pick Up";
+	public static final String PICKUP = "Pick up";
 	public static final String DROP = "Drop";
 	public static final String FIGHT = "Fight";
 	public static final String EQUIP = "Equip";
@@ -38,6 +39,7 @@ public class MenuItem {
 		this.entity = e;
 
 	}
+
 	public void init(Menu menu) {
 		x = menu.getX();
 		width = menu.getWidth();
@@ -49,6 +51,8 @@ public class MenuItem {
 	}
 
 	public static String getMenuItemText(String menuItem, Entity entity) {
+		if (entity instanceof Item)
+			return menuItem + " " + entity.getName() + " (" + ((Item) entity).quantity + ")";
 		return menuItem + " " + entity.getName();
 	}
 

@@ -10,6 +10,7 @@ import entity.Wall;
 import entity.item.Clothing;
 import entity.item.Item;
 import entity.item.weapon.Weapon;
+import entity.pathfinding.Point;
 import entity.workstations.Furnace;
 import graphics.Screen;
 import graphics.Sprite;
@@ -33,24 +34,40 @@ public class Level {
 
 	}
 
-	public List<Item> getItemList() {
-		return items;
+	public Item getItemOnIndexInList(int i) {
+		return items.get(i);
+	}
+
+	public int getItemlistSize() {
+		return items.size();
 	}
 
 	// adding an item to the list
 	public void addItem(Item e) {
 		Item o = new Item(e);
-		items.add(o);
+		if (itemAlreadyThere(e.getX(), e.getY(), e)) {
+			getItemOn(e.getX(), e.getY()).quantity += e.quantity;
+		} else {
+			items.add(o);
+		}
 	}
 
 	public void addItem(Weapon e) {
 		Weapon o = new Weapon(e);
-		items.add(o);
+		if (itemAlreadyThere(e.getX(), e.getY(), e)) {
+			getItemOn(e.getX(), e.getY()).quantity += e.quantity;
+		} else {
+			items.add(o);
+		}
 	}
 
 	public void addItem(Clothing e) {
 		Clothing o = new Clothing(e);
-		items.add(o);
+		if (itemAlreadyThere(e.getX(), e.getY(), e)) {
+			getItemOn(e.getX(), e.getY()).quantity += e.quantity;
+		} else {
+			items.add(o);
+		}
 	}
 
 	// removing an item from the list
@@ -60,13 +77,11 @@ public class Level {
 
 	// is the tile on X and Y clear (No items or entities or walls blocking it)
 	public boolean isClearTile(int x, int y) {
-		for (Entity e : walkableEntities) {
+		for (Entity e : items) {
 			if (e.getX() >> 4 == x && e.getY() >> 4 == y)
 				return false;
 		}
-		if (!isWalkAbleTile(x, y))
-			return false;
-		return !getTile(x, y).solid();
+		return isWalkAbleTile(x, y);
 	}
 
 	// is the tile on X and Y walkable (items can still be there)
@@ -81,10 +96,39 @@ public class Level {
 	// if there is a wall on x and y, return it
 	public Entity getHardEntityOn(int x, int y) {
 		for (Entity e : hardEntities) {
-			if ((e.getX() >> 4 == x >> 4) && (e.getY() >> 4 == y >> 4))
+			if ((e.getX() / 16 == x / 16) && (e.getY() / 16 == y / 16))
 				return e;
 		}
 		return null;
+	}
+
+	// TODO beter maken, dit is shitty
+	public Point getNearestEmptySpot(int x, int y) {
+		int gedeeldex = x / 16;
+		int gedeeldey = y / 16;
+		if (isClearTile(gedeeldex, gedeeldey)) {
+			return new Point(gedeeldex, gedeeldey);
+		} else {
+			for (int i = 1; (i < gedeeldex && i < gedeeldey); i++) {
+				if (isClearTile(gedeeldex - i, gedeeldey - i))
+					return new Point(gedeeldex - i, gedeeldey - i);
+				if (isClearTile(gedeeldex, gedeeldey - i))
+					return new Point(gedeeldex, gedeeldey - i);
+				if (isClearTile(gedeeldex + i, gedeeldey - i))
+					return new Point(gedeeldex + i, gedeeldey - i);
+				if (isClearTile(gedeeldex + i, gedeeldey))
+					return new Point(gedeeldex + i, gedeeldey);
+				if (isClearTile(gedeeldex + i, gedeeldey + i))
+					return new Point(gedeeldex + i, gedeeldey + i);
+				if (isClearTile(gedeeldex, gedeeldey + i))
+					return new Point(gedeeldex, gedeeldey + i);
+				if (isClearTile(gedeeldex - i, gedeeldey + i))
+					return new Point(gedeeldex - i, gedeeldey + i);
+				if (isClearTile(gedeeldex - i, gedeeldey))
+					return new Point(gedeeldex - i, gedeeldey);
+			}
+			return null;
+		}
 	}
 
 	public Wall getWallOn(int x, int y) {
@@ -95,6 +139,10 @@ public class Level {
 		return null;
 	}
 
+	public boolean itemAlreadyThere(int x, int y, Item i) {
+		return (getItemWithNameOn(x, y, i.getName()) != null);
+	}
+
 	public Furnace getNearestFurnace() {
 		for (Entity e : hardEntities) {
 			if (e instanceof Furnace)
@@ -103,20 +151,17 @@ public class Level {
 		return null;
 	}
 
-	public List<Item> getItemsOn(int x, int y) {
-		List<Item> items = new ArrayList<Item>();
+	public Item getItemOn(int x, int y) {
 		for (Item e : this.items) {
-			if ((e.getX() >> 4 == x >> 4) && (e.getY() >> 4 == y >> 4))
-				items.add(e);
+			if (((e.getX() / 16) == (x / 16)) && ((e.getY() / 16) == (y / 16)))
+				return e;
 		}
-		return items;
+		return null;
 	}
 
 	public Item getItemWithNameOn(int x, int y, String name) {
-		for (Item e : getItemsOn(x, y)) {
-			if (e.getName().equals(name))
-				return e;
-		}
+		if (getItemOn(x, y) != null && getItemOn(x, y).getName().equals(name))
+			return getItemOn(x, y);
 		return null;
 	}
 
@@ -160,11 +205,11 @@ public class Level {
 		for (int s = 0; s < hardEntities.size(); s++) {
 			Entity i = hardEntities.get(s);
 			if (i instanceof Tree) {
-				if (i.getX() >> 4 == x >> 4) {
-					if (i.getY() >> 4 == y >> 4)
+				if (i.getX() / 16 == x / 16) {
+					if (i.getY() / 16 == y / 16)
 						return (Tree) i;
 					if (seperate) {
-						if ((i.getY() - 1) >> 4 == y >> 4)
+						if ((i.getY() - 1) / 16 == y / 16)
 							return (Tree) i;
 					}
 
@@ -180,7 +225,7 @@ public class Level {
 		for (int s = 0; s < walkableEntities.size(); s++) {
 			Entity i = walkableEntities.get(s);
 			if (i instanceof Ore) {
-				if (i.getX() >> 4 == x >> 4 && i.getY() >> 4 == y >> 4)
+				if (i.getX() / 16 == x >> 4 && i.getY() / 16 == y / 16)
 					return (Ore) i;
 			}
 		}
@@ -203,17 +248,17 @@ public class Level {
 	public Entity getEntityOn(int x, int y) {
 		for (int s = 0; s < items.size(); s++) {
 			Entity i = items.get(s);
-			if (i.getX() >> 4 == x >> 4 && i.getY() >> 4 == y >> 4)
+			if (i.getX() / 16 == x / 16 && i.getY() / 16 == y / 16)
 				return i;
 		}
 		for (int s = 0; s < walkableEntities.size(); s++) {
 			Entity i = walkableEntities.get(s);
-			if (i.getX() >> 4 == x >> 4 && i.getY() >> 4 == y >> 4)
+			if (i.getX() / 16 == x / 16 && i.getY() / 16 == y / 16)
 				return i;
 		}
 		for (int s = 0; s < hardEntities.size(); s++) {
 			Entity i = hardEntities.get(s);
-			if (i.getX() >> 4 == x >> 4 && i.getY() >> 4 == y >> 4)
+			if (i.getX() / 16 == x / 16 && i.getY() / 16 == y / 16)
 				return i;
 		}
 		return null;
@@ -226,7 +271,7 @@ public class Level {
 			return;
 		int rand = Entity.getRand().nextInt(10);
 		if (rand == 1) {
-			hardEntities.add(new Tree(x << 4, y << 4));
+			hardEntities.add(new Tree(x * 16, y * 16));
 			getTile(x, y).setSolid(true);
 		}
 
@@ -237,18 +282,18 @@ public class Level {
 		if (x == 0 || x == width || y == 0 || y == height)
 			return;
 		int rand = Entity.getRand().nextInt(30);
-		if (rand == 4 || rand == 5 || rand == 6 || rand == 7) {
-			walkableEntities.add(new Ore(x << 4, y << 4, OreType.STONE));
+		if (rand >= 4 && rand <= 7) {
+			walkableEntities.add(new Ore(x * 16, y * 16, OreType.STONE));
 		} else {
 			if (rand == 1) {
-				walkableEntities.add(new Ore(x << 4, y << 4, OreType.GOLD));
+				walkableEntities.add(new Ore(x * 16, y * 16, OreType.GOLD));
 			} else {
 				if (rand == 2) {
-					walkableEntities.add(new Ore(x << 4, y << 4, OreType.IRON));
+					walkableEntities.add(new Ore(x * 16, y * 16, OreType.IRON));
 
 				} else {
 					if (rand == 3) {
-						walkableEntities.add(new Ore(x << 4, y << 4, OreType.COAL));
+						walkableEntities.add(new Ore(x * 16, y * 16, OreType.COAL));
 					}
 				}
 			}
@@ -258,10 +303,10 @@ public class Level {
 	// render the tiles
 	public void render(int xScroll, int yScroll, Screen screen) {
 		screen.setOffset(xScroll, yScroll);
-		int x0 = xScroll >> 4;
-		int x1 = (xScroll + screen.width + Sprite.SIZE) >> 4;
-		int y0 = yScroll >> 4;
-		int y1 = (yScroll + screen.height + Sprite.SIZE) >> 4;
+		int x0 = xScroll / 16;
+		int x1 = (xScroll + screen.width + Sprite.SIZE) / 16;
+		int y0 = yScroll / 16;
+		int y1 = (yScroll + screen.height + Sprite.SIZE) / 16;
 
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {

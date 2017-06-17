@@ -111,9 +111,10 @@ public class Villager extends Mob {
 			return holding;
 		Item closest = null;
 		Path path = null;
-		for (int i = 0; i < level.getItemList().size(); i++) {
-			if (level.getItemList().get(i).getName().equals(name) && level.getItemList().get(i).isReservedVil(this)) {
-				closest = level.getItemList().get(i);
+		for (int i = 0; i < level.getItemlistSize(); i++) {
+			Item item = level.getItemOnIndexInList(i);
+			if (item.getName().equals(name) && item.isReservedVil(this)) {
+				closest = item;
 				path = getPath(closest.getX() >> 4, closest.getY() >> 4);
 				if (closest.getX() >> 4 == x >> 4 && y >> 4 == closest.getY() >> 4)
 					return closest;
@@ -272,14 +273,16 @@ public class Villager extends Mob {
 		}
 
 	}
-	//set the path of a villager
+
+	// set the path of a villager
 	public void setMovement(Path path) {
 		movement = path;
 		counter = 0;
 		arrived = false;
 	}
+
 	public boolean isMovementNull() {
-		return movement==null;
+		return movement == null;
 	}
 
 	public void resetAll() {

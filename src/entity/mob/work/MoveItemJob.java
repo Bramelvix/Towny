@@ -30,17 +30,20 @@ public class MoveItemJob extends Job {
 	}
 
 	private void start() {
+		started = true;
 		if (!pickUpJob) {
-			if (worker.holding == null)
+			if (worker.holding == null || (!worker.level.isClearTile(xloc / 16, yloc / 16)
+					&& !worker.level.itemAlreadyThere(xloc, yloc, worker.holding)))
 				completed = true;
+			return;
 		}
-		worker.setMovement(worker.getPath(xloc >> 4, yloc >> 4));
+		worker.setMovement(worker.getPath(xloc / 16, yloc / 16));
 		if (worker.isMovementNull()) {
 			completed = true;
 			if (pickUpJob)
 				material.setReservedVil(null);
+
 		}
-		started = true;
 	}
 
 	public void execute() {
@@ -75,8 +78,8 @@ public class MoveItemJob extends Job {
 					return;
 				} else {
 					if (worker.isMovementNull()) {
-						if (worker.getPath(xloc >> 4, yloc >> 4) != null) {
-							worker.setMovement(worker.getPath(xloc >> 4, yloc >> 4));
+						if (worker.getPath(xloc / 16, yloc / 16) != null) {
+							worker.setMovement(worker.getPath(xloc / 16, yloc / 16));
 							return;
 						} else {
 							worker.drop();

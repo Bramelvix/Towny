@@ -1,14 +1,14 @@
 package entity;
 
-import map.Level;
+import entity.mob.Villager;
 
 //superclass of gatherable resources such as trees and ore
-public abstract class Resource extends Entity implements Gatherable {
+public abstract class Resource extends Entity {
 
 	public Resource(int x, int y) {
 		super(x, y);
 	}
 
-	public abstract boolean work(Level level);
+	public abstract boolean work(Villager worker);
 
 }

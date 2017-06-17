@@ -104,12 +104,12 @@ public class Job implements Workable {
 					return;
 				} else {
 					if (jobObj != null) {
-						if (jobObj.work(worker.level))
+						if (jobObj.work(worker))
 							completed = true;
 						return;
 					} else {
 						if (buildJob && buildJobObj != null) {
-							if (!worker.level.isClearTile(buildJobObj.getX() >> 4, buildJobObj.getY() >> 4)
+							if (!worker.level.isWalkAbleTile(buildJobObj.getX() >> 4, buildJobObj.getY() >> 4)
 									&& !buildJobObj.initialised) {
 								// wait if the buildLocation is blocked by an
 								// item or entity
@@ -119,7 +119,7 @@ public class Job implements Workable {
 								completed = !buildJobObj.initialise(material, worker.level);
 							}
 							completed = buildJobObj.build();
-							
+
 							if (material.quantity <= 0) {
 								worker.holding = null;
 							} else {

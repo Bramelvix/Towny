@@ -1,6 +1,10 @@
 package entity;
 
 import entity.item.Item;
+import entity.mob.Villager;
+import entity.mob.work.Job;
+import entity.mob.work.MoveItemJob;
+import entity.pathfinding.Point;
 import graphics.Sprite;
 import map.Level;
 import sound.Sound;
@@ -48,19 +52,26 @@ public class Ore extends Resource {
 	}
 
 	// work method executed by the villager when mining
-	public boolean work(Level level) {
+	public boolean work(Villager worker) {
+		if (!worker.level.isClearTile(this.x / 16, this.y / 16) && worker.level.getItemOn(this.x, this.y) != null
+				&& worker.level.getNearestEmptySpot(this.x, this.y) != null) {
+			worker.addJob(new MoveItemJob(worker.level.getItemOn(this.x, this.y), worker));
+			Point punt = worker.level.getNearestEmptySpot(this.x, this.y);
+			worker.addJob(new MoveItemJob(punt.x * 16, punt.y * 16, worker));
+			worker.addJob(new Job(this, worker));
+			return true;
+		}
 		if (mined > 0) {
 			if (mined % 20 == 0)
 				Sound.speelGeluid(Sound.stoneMining);
 			mined--;
 			return false;
 		} else {
-			level.walkableEntities.remove(this);
-			level.getTile(x >> 4, y >> 4).setSolid(false);
+			worker.level.walkableEntities.remove(this);
 			if (type == OreType.STONE) {
-				level.addItem(new Item(type.name().toLowerCase() + "s", this.x, this.y, itemSprite, true, 3));
+				worker.level.addItem(new Item(type.name().toLowerCase() + "s", this.x, this.y, itemSprite, true, 3));
 			} else {
-				level.addItem(new Item(type.name().toLowerCase() + " ore", this.x, this.y, itemSprite, true, 3));
+				worker.level.addItem(new Item(type.name().toLowerCase() + " ore", this.x, this.y, itemSprite, true, 3));
 			}
 			return true;
 		}
