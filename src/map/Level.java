@@ -77,29 +77,21 @@ public class Level {
 
 	// is the tile on X and Y clear (No items or entities or walls blocking it)
 	public boolean isClearTile(int x, int y) {
-		for (Entity e : items) {
-			if (e.getX() >> 4 == x && e.getY() >> 4 == y)
-				return false;
-		}
-		return isWalkAbleTile(x, y);
+		return items.stream().filter(t -> (t.getX() / 16) == x && (t.getY() / 16) == y).findFirst().orElse(null) == null
+				? isWalkAbleTile(x, y)
+				: false;
+
 	}
 
 	// is the tile on X and Y walkable (items can still be there)
 	public boolean isWalkAbleTile(int x, int y) {
-		for (Entity e : hardEntities) {
-			if ((e.getX() >> 4 == x && e.getY() >> 4 == y) || getTile(x, y).solid())
-				return false;
-		}
-		return true;
+		return hardEntities.stream().filter(t -> (t.getX() / 16) == x && (t.getY() / 16) == y).findFirst()
+				.orElse(null) == null;
 	}
 
 	// if there is a wall on x and y, return it
 	public Entity getHardEntityOn(int x, int y) {
-		for (Entity e : hardEntities) {
-			if ((e.getX() / 16 == x / 16) && (e.getY() / 16 == y / 16))
-				return e;
-		}
-		return null;
+		return hardEntities.stream().filter(t -> (t.getX() / 16) == x && (t.getY() / 16) == y).findFirst().orElse(null);
 	}
 
 	// TODO beter maken, dit is shitty
@@ -160,9 +152,11 @@ public class Level {
 	}
 
 	public Item getItemWithNameOn(int x, int y, String name) {
-		if (getItemOn(x, y) != null && getItemOn(x, y).getName().equals(name))
+		if (getItemOn(x, y) != null && getItemOn(x, y).getName().equals(name)) {
 			return getItemOn(x, y);
-		return null;
+		} else {
+			return null;
+		}
 	}
 
 	// generate the green border around the map
