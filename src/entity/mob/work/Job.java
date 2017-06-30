@@ -7,7 +7,6 @@ import entity.Wall;
 import entity.item.Item;
 import entity.mob.Villager;
 import entity.workstations.Furnace;
-import map.Level;
 
 public class Job implements Workable {
 	protected boolean completed; // is the job done

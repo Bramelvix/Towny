@@ -41,15 +41,15 @@ public class Item extends Entity {
 		return tooltip;
 	}
 
-	public boolean isReservedVil(Villager vil) {
+	public boolean isReserved(Villager vil) {
 		return reservedVil == null || reservedVil.equals(vil);
 	}
 
-	public void setReservedVil(Villager vil) {
+	public void setReserved(Villager vil) {
 		reservedVil = vil;
 	}
 
-	public void resetReservedVil() {
+	public void removeReserved() {
 		reservedVil = null;
 	}
 }

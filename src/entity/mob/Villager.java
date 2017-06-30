@@ -105,22 +105,22 @@ public class Villager extends Mob {
 
 	}
 
-	// gets the item nearest to the villager with a specific name
+	// gets the item nearest to the villager with a specific name (and unreserved)
 	public Item getNearestItemOfType(String name) {
 		if (holding != null && holding.getName().equals(name))
 			return holding;
 		Item closest = null;
 		Path path = null;
-		for (int i = 0; i < level.getItemlistSize(); i++) {
-			Item item = level.getItemOnIndexInList(i);
-			if (item.getName().equals(name) && item.isReservedVil(this)) {
-				closest = item;
-				path = getPath(closest.getX() >> 4, closest.getY() >> 4);
-				if (closest.getX() >> 4 == x >> 4 && y >> 4 == closest.getY() >> 4)
-					return closest;
+		for (Item item : level.getItemList()) {
+			if (item.getName().equals(name) && item.isReserved(this)) {
+				if (closest == null || path == null || (getPath(item.getX() >> 4, item.getY() >> 4) != null
+						&& path.getStepsSize() > getPath(item.getX() >> 4, item.getY() >> 4).getStepsSize())) {
+					closest = item;
+					path = getPath(closest.getX() >> 4, closest.getY() >> 4);
+				}
 			}
 		}
-		if (closest == null && path == null)
+		if (closest == null || path == null)
 			return null;
 		return closest;
 	}
@@ -140,7 +140,7 @@ public class Villager extends Mob {
 	// pickup an item
 	public boolean pickUp(Item e) {
 		if (onSpot(e.getX(), e.getY())) {
-			e.setReservedVil(this);
+			e.setReserved(this);
 			level.removeItem(e);
 			if (e instanceof Weapon) {
 				inventory.addWeapon((Weapon) e);
@@ -163,7 +163,7 @@ public class Villager extends Mob {
 	// drop the item the villager is holding
 	public void drop() {
 		if (holding != null) {
-			holding.setReservedVil(null);
+			holding.removeReserved();
 			level.addItem(holding);
 			holding = null;
 		}

@@ -10,11 +10,13 @@ public class MoveItemJob extends Job {
 		this(worker);
 		pickUpJob = true;
 		this.material = material;
-		material.setReservedVil(worker);
-		if (worker.holding(material))
+		if (this.worker.holding(this.material) || !this.material.isReserved(this.worker)) {
 			completed = true;
-		xloc = material.getX();
-		yloc = material.getY();
+		} else {
+			this.material.setReserved(this.worker);
+			xloc = material.getX();
+			yloc = material.getY();
+		}
 	}
 
 	private MoveItemJob(Villager worker) {
@@ -42,7 +44,7 @@ public class MoveItemJob extends Job {
 		if (worker.isMovementNull()) {
 			completed = true;
 			if (pickUpJob)
-				material.setReservedVil(null);
+				material.removeReserved();
 
 		}
 	}

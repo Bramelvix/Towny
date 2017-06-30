@@ -66,7 +66,7 @@ public class VillagerInventory {
 
 	public void removeWeapon(Weapon item) {
 		wearer.dropItem(item.isShield() ? shieldHand : weaponHand);
-		(item.isShield() ? shieldHand : weaponHand).setReservedVil(null);
+		(item.isShield() ? shieldHand : weaponHand).removeReserved();
 		if (item.isShield()) {
 			shieldHand = null;
 		} else {
@@ -89,22 +89,22 @@ public class VillagerInventory {
 		switch (type) {
 		case HAT:
 			wearer.dropItem(hat);
-			hat.setReservedVil(null);
+			hat.removeReserved();
 			hat = null;
 			break;
 		case SHIRT:
 			wearer.dropItem(shirt);
-			shirt.setReservedVil(null);
+			shirt.removeReserved();
 			shirt = null;
 			break;
 		case TROUSERS:
 			wearer.dropItem(trousers);
-			trousers.setReservedVil(null);
+			trousers.removeReserved();
 			trousers = null;
 			break;
 		case SHOES:
 			wearer.dropItem(shoes);
-			shoes.setReservedVil(null);
+			shoes.removeReserved();
 			shoes = null;
 			break;
 		}
@@ -120,22 +120,22 @@ public class VillagerInventory {
 
 	public void dropAll() {
 		wearer.dropItem(hat);
-		hat.setReservedVil(null);
+		hat.removeReserved();
 		hat = null;
 		wearer.dropItem(shirt);
-		shirt.setReservedVil(null);
+		shirt.removeReserved();
 		shirt = null;
 		wearer.dropItem(trousers);
-		trousers.setReservedVil(null);
+		trousers.removeReserved();
 		trousers = null;
 		wearer.dropItem(shoes);
-		shoes.setReservedVil(null);
+		shoes.removeReserved();
 		shoes = null;
 		wearer.dropItem(weaponHand);
-		weaponHand.setReservedVil(null);
+		weaponHand.removeReserved();
 		weaponHand = null;
 		wearer.dropItem(shieldHand);
-		shieldHand.setReservedVil(null);
+		shieldHand.removeReserved();
 		shieldHand = null;
 
 	}

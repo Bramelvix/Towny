@@ -34,12 +34,8 @@ public class Level {
 
 	}
 
-	public Item getItemOnIndexInList(int i) {
-		return items.get(i);
-	}
-
-	public int getItemlistSize() {
-		return items.size();
+	public List<Item> getItemList() {
+		return items;
 	}
 
 	// adding an item to the list
