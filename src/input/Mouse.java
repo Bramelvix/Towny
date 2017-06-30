@@ -23,7 +23,8 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 	private int trueXpixels = -1; // x and y coord on the screen, in acutal
 									// pixels, WITHOUT OFFSET
 	private int trueYpixels = -1;
-	private boolean clicked; // has the mouse been clicked
+	private boolean clickedLinks; // has the left mousebutton been clicked
+	private boolean clickedRechts; // has the right mousebutton been clicked
 	private boolean drag; // has the mouse been dragged
 	private boolean released; // has the mouse been released
 
@@ -56,7 +57,9 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		if (arg0.getButton() == 1)
-			clicked = true;
+			clickedLinks = true;
+		if (arg0.getButton() == 3)
+			clickedRechts = true;
 
 	}
 
@@ -83,8 +86,11 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 
 	}
 
-	public boolean getClicked() {
-		return clicked;
+	public boolean getClickedLeft() {
+		return clickedLinks;
+	}
+	public boolean getClickedRight() {
+		return clickedRechts;
 	}
 
 	public boolean getReleased() {
@@ -92,7 +98,8 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 	}
 
 	public void reset() {
-		clicked = false;
+		clickedLinks = false;
+		clickedRechts = false;
 		released = false;
 		if (mouseB != 1)
 			drag = false;

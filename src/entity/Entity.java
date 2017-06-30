@@ -76,8 +76,7 @@ public abstract class Entity {
 
 	// basic constructor
 	public Entity(int x, int y) {
-		setX(x);
-		setY(y);
+		setLocation(x, y);
 	}
 
 	// does the mouse hover over the entity

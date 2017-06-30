@@ -71,7 +71,7 @@ public class MenuItem {
 
 	// getter
 	public boolean clicked(Mouse mouse) {
-		return hover && mouse.getButton() == 1;
+		return hover && mouse.getClickedLeft();
 	}
 
 	// the menuitem is equal to other menuitems with the same text

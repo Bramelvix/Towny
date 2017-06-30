@@ -117,21 +117,21 @@ public class TopBar {
 		return (mouse.getTrueXPixels() >= x + (width / 3) + 35
 				&& mouse.getTrueXPixels() <= x + (width / 3) + 35 + pauseimg.getWidth(null)
 				&& mouse.getTrueYPixels() >= (y + 30) && mouse.getTrueYPixels() <= (y + 30) + pauseimg.getHeight(null)
-				&& mouse.getClicked());
+				&& mouse.getClickedLeft());
 	}
 
 	private boolean clickedOnFast(Mouse mouse) {
 		return (mouse.getTrueXPixels() >= x + (width >> 1) + 20
 				&& mouse.getTrueXPixels() <= x + (width >> 1) + 20 + fastimg.getWidth(null)
 				&& mouse.getTrueYPixels() >= (y + 35) && mouse.getTrueYPixels() <= (y + 35) + fastimg.getHeight(null)
-				&& mouse.getClicked());
+				&& mouse.getClickedLeft());
 	}
 
 	private boolean clickedOnSlow(Mouse mouse) {
 		return (mouse.getTrueXPixels() >= x + (width >> 2) + 10
 				&& mouse.getTrueXPixels() <= x + (width >> 2) + 10 + slowimg.getWidth(null)
 				&& mouse.getTrueYPixels() >= (y + 35) && mouse.getTrueYPixels() <= (y + 35) + slowimg.getHeight(null)
-				&& mouse.getClicked());
+				&& mouse.getClickedLeft());
 	}
 
 	// toggle pausing

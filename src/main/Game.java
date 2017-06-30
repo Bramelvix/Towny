@@ -270,7 +270,6 @@ public class Game implements Runnable {
 						Tree tree = level.selectTree(xs, ys, false);
 						if (tree != null) {
 							Villager idle = getIdlestVil();
-							idle.setMovement(null);
 							idle.addJob(tree);
 						}
 					}
@@ -281,7 +280,7 @@ public class Game implements Runnable {
 
 			}
 			return;
-		} else if (((UiIcons.isMiningSelected()) && !UiIcons.hoverOnAnyIcon() && mouse.getClicked())
+		} else if (((UiIcons.isMiningSelected()) && !UiIcons.hoverOnAnyIcon() && mouse.getClickedLeft())
 				&& (level.selectOre(mouse.getX(), mouse.getY()) != null)) {
 			Villager idle = getIdlestVil();
 			idle.setMovement(null);
@@ -290,7 +289,7 @@ public class Game implements Runnable {
 			ui.deSelectIcons();
 			return;
 
-		} else if (((UiIcons.isSwordsSelected()) && !UiIcons.hoverOnAnyIcon() && mouse.getClicked())
+		} else if (((UiIcons.isSwordsSelected()) && !UiIcons.hoverOnAnyIcon() && mouse.getClickedLeft())
 				&& (anyMobHoverOn(mouse.getX(), mouse.getY()) != null)) {
 			Villager idle = getIdlestVil();
 			idle.setMovement(null);
@@ -299,20 +298,21 @@ public class Game implements Runnable {
 			ui.deSelectIcons();
 			return;
 
-		} else if (mouse.getClicked() && anyVillHoverOn(mouse.getX(), mouse.getY()) != null && !ui.outlineIsVisible()) {
+		} else if (mouse.getClickedLeft() && anyVillHoverOn(mouse.getX(), mouse.getY()) != null
+				&& !ui.outlineIsVisible()) {
 			deselectAllVills();
 			selectedvill = anyVillHoverOn(mouse.getX(), mouse.getY());
 			selectedvill.setSelected(true);
 			ui.deSelectIcons();
 			return;
-		} else if (UiIcons.isSawHover() && !ui.menuVisible() && mouse.getClicked()) {
+		} else if (UiIcons.isSawHover() && !ui.menuVisible() && mouse.getClickedLeft()) {
 			deselectAllVills();
 			ui.showMenuOn(mouse, new MenuItem[] { new MenuItem(MenuItem.BUILD + " wooden wall"),
 					new MenuItem(MenuItem.BUILD + " furnace"), new MenuItem(MenuItem.CANCEL) });
 			return;
 		}
 
-		else if (mouse.getButton() == 3) {
+		else if (mouse.getClickedRight()) {
 			if (selectedvill != null) {
 				List<MenuItem> options = new ArrayList<MenuItem>();
 				if (selectedvill.holding != null)
