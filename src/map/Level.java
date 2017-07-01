@@ -87,7 +87,7 @@ public class Level {
 
 	// if there is a wall on x and y, return it
 	public Entity getHardEntityOn(int x, int y) {
-		return hardEntities.stream().filter(t -> (t.getX() / 16) == x && (t.getY() / 16) == y).findFirst().orElse(null);
+		return hardEntities.stream().filter(t -> (t.getX() / 16) == (x/16) && (t.getY() / 16) == (y/16)).findFirst().orElse(null);
 	}
 
 	// TODO beter maken, dit is shitty

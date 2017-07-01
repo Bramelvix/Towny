@@ -341,6 +341,7 @@ public class Game implements Runnable {
 				options.add(new MenuItem(MenuItem.CANCEL));
 				ui.showMenuOn(mouse, options.toArray(new MenuItem[0]));
 			} else {
+				System.out.println(level.getHardEntityOn(mouse.getX(), mouse.getY()));
 				if (level.getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Furnace) {
 					ui.showMenuOn(mouse, new MenuItem[] { new MenuItem(MenuItem.CRAFT + " iron bar"),
 							new MenuItem(MenuItem.CRAFT + " gold bar"), new MenuItem(MenuItem.CANCEL) });
