@@ -42,7 +42,7 @@ public class Zombie extends Mob {
 
 	public void idle() {
 		while (movement == null) {
-			movement = getPath((x >> 4) + Entity.getRand().nextInt(4) - 2, (y >> 4) + Entity.getRand().nextInt(4) - 2);
+			movement = getPath((x >> 4) +Entity.RANDOM.nextInt(4) - 2, (y >> 4) + Entity.RANDOM.nextInt(4) - 2);
 		}
 
 	}

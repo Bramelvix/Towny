@@ -1,7 +1,5 @@
 package entity.mob.work;
 
-
-
 import entity.item.Item;
 import entity.mob.Villager;
 import entity.workstations.Workstation;
@@ -10,6 +8,8 @@ public class CraftJob extends Job {
 	private Item[] resources;
 	private Item product;
 	private Workstation station;
+	private byte craftTimer = 100;
+	private boolean itemsUpdated = false;
 
 	public CraftJob(Villager worker, Item[] resources, Item product) {
 		super(worker);
@@ -88,24 +88,40 @@ public class CraftJob extends Job {
 				}
 				return;
 			} else {
-				for (Item i : resources) {
-					i.quantity--;
-					if (i.quantity < 0) {
-						worker.level.removeItem(i);
+				if (!itemsUpdated) {
+					station.setRunning(true);
+					for (Item i : resources) {
+						i.quantity--;
+						if (i.quantity < 0) {
+							worker.level.removeItem(i);
+						}
 					}
+					itemsUpdated = true;
 				}
-				worker.holding = product;
-				completed = true;
+				if (craft()) {
+					worker.holding = product;
+					completed = true;
+				}
+
 			}
 		} else {
 			start();
 		}
 	}
 
+	private boolean craft() {
+		craftTimer--;
+		if (craftTimer == 0) {
+			station.setRunning(false);
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	protected void start() {
 		worker.setMovement(worker.getShortest(station.getX() >> 4, station.getY() >> 4));
-		completed = (worker.isMovementNull());
+		completed = worker.isMovementNull();
 		started = true;
 	}
 

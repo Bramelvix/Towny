@@ -4,7 +4,6 @@ import entity.item.Item;
 import entity.mob.Villager;
 import graphics.Screen;
 import graphics.Sprite;
-import map.Level;
 import sound.Sound;
 
 public class Tree extends Resource {

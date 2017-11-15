@@ -168,8 +168,8 @@ public class Level {
 
 	// generates a (slighty less) shitty random level
 	private void generateLevel() {
-		float[] noise = Generator.generateSimplexNoise(width, height, 11, Entity.getRand().nextInt(1000),
-				Entity.getRand().nextBoolean());
+		float[] noise = Generator.generateSimplexNoise(width, height, 11, Entity.RANDOM.nextInt(1000),
+				Entity.RANDOM.nextBoolean());
 		for (int y = 0; y < height - 1; y++) {
 			for (int x = 0; x < width - 1; x++) {
 				if (noise[x + y * width] > 0.5) {
@@ -259,7 +259,7 @@ public class Level {
 	private void randForest(int x, int y) {
 		if (x == 0 || x == width || y == 0 || y == height)
 			return;
-		int rand = Entity.getRand().nextInt(10);
+		int rand = Entity.RANDOM.nextInt(10);
 		if (rand == 1) {
 			hardEntities.add(new Tree(x * 16, y * 16));
 			getTile(x, y).setSolid(true);
@@ -271,7 +271,7 @@ public class Level {
 	private void randOre(int x, int y) {
 		if (x == 0 || x == width || y == 0 || y == height)
 			return;
-		int rand = Entity.getRand().nextInt(30);
+		int rand = Entity.RANDOM.nextInt(30);
 		if (rand >= 4 && rand <= 7) {
 			walkableEntities.add(new Ore(x * 16, y * 16, OreType.STONE));
 		} else {

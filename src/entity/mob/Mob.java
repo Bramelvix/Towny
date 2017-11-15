@@ -76,7 +76,7 @@ public abstract class Mob extends Entity {
 
 	// getter
 	protected int getIdleTimer() {
-		return Entity.getRand().nextInt(5) * 60;
+		return Entity.RANDOM.nextInt(5) * 60;
 	}
 
 	// constructor

@@ -3,7 +3,7 @@ package entity.mob;
 import java.util.ArrayList;
 import java.util.List;
 
-import entity.BuildAbleObjects;
+import entity.BuildAbleObject;
 import entity.Entity;
 import entity.Resource;
 import entity.item.Clothing;
@@ -43,7 +43,7 @@ public class Villager extends Mob {
 		this.sprite = Sprite.getPerson();
 		inventory = new VillagerInventory(this);
 		jobs = new ArrayList<Job>();
-		male = Entity.getRand().nextBoolean();
+		male = Entity.RANDOM.nextBoolean();
 		initHair(true);
 		this.x = x;
 		this.y = y;
@@ -91,7 +91,7 @@ public class Villager extends Mob {
 	// the villager moves to a random location nearby if he has nothing to do.
 	public void idle() {
 		while (movement == null) {
-			movement = getPath((x >> 4) + Entity.getRand().nextInt(4) - 2, (y >> 4) + Entity.getRand().nextInt(4) - 2);
+			movement = getPath((x >> 4) + Entity.RANDOM.nextInt(4) - 2, (y >> 4) + Entity.RANDOM.nextInt(4) - 2);
 		}
 
 	}
@@ -99,13 +99,14 @@ public class Villager extends Mob {
 	// initialise the hairsprite
 	private void initHair(boolean generate) {
 		if (generate)
-			hairnr = male ? Entity.getRand().nextInt(HairSprite.maleHair.length)
-					: Entity.getRand().nextInt(HairSprite.femaleHair.length);
+			hairnr = male ? Entity.RANDOM.nextInt(HairSprite.maleHair.length)
+					: Entity.RANDOM.nextInt(HairSprite.femaleHair.length);
 		hair = male ? HairSprite.maleHair[hairnr] : HairSprite.femaleHair[hairnr];
 
 	}
 
-	// gets the item nearest to the villager with a specific name (and unreserved)
+	// gets the item nearest to the villager with a specific name (and
+	// unreserved)
 	public Item getNearestItemOfType(String name) {
 		if (holding != null && holding.getName().equals(name))
 			return holding;
@@ -193,15 +194,9 @@ public class Villager extends Mob {
 	}
 
 	// add a buildjob
-	public void addBuildJob(int x, int y, BuildAbleObjects object) {
-		switch (object) {
-		case WOODEN_WALL:
-			addJob(new Job(x, y, getNearestItemOfType("Logs"), object, this));
-			break;
-		case FURNACE:
-			addJob(new Job(x, y, getNearestItemOfType("stones"), object, this));
-			break;
-		}
+	public void addBuildJob(int x, int y, BuildAbleObject object) {
+		addJob(new Job(x, y, getNearestItemOfType(object.getResourceName()), object, this));
+
 	}
 
 	// updates the villager in the game logic

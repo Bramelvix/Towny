@@ -14,8 +14,9 @@ public class Wall extends BuildAbleObject {
 											// this wall
 
 	// basic constructor
-	public Wall(int x, int y) {
-		super(x, y);
+	public Wall() {
+		super();
+		resourceName = "Logs";
 	}
 
 	// checks the 4 sides of this wall to see if there are walls next to it. The
@@ -58,8 +59,8 @@ public class Wall extends BuildAbleObject {
 	}
 
 	// called by villagers when they start building the wall.
-	public boolean initialise(Item material, Level level) {
-		boolean initGelukt = super.initialise(material, level);
+	public boolean initialise(int x, int y, Item material, Level level) {
+		boolean initGelukt = super.initialise(x, y, material, level);
 		if (initGelukt && material.getName().equals("Logs"))
 			checkSides();
 		return initGelukt;

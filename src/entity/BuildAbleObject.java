@@ -9,18 +9,19 @@ public abstract class BuildAbleObject extends Entity {
 	protected byte condition = 0; // condition of the building (0=not built ,
 									// 100=
 	// done)
+	protected String resourceName;
 
-	public BuildAbleObject(int x, int y) {
-		super(x, y);
+	public BuildAbleObject() {
 		setVisible(false);
 	}
 
-	public boolean initialise(Item material, Level level) {
-		this.level = level;
+	public boolean initialise(int x, int y, Item material, Level level) {
 		if (material == null)
 			return false;
 		if (material.quantity > 0)
 			material.quantity--;
+		this.level = level;
+		setLocation(x * 16, y * 16);
 		level.hardEntities.add(this);
 		initialised = true;
 		return true;
@@ -43,6 +44,10 @@ public abstract class BuildAbleObject extends Entity {
 
 		}
 		return false;
+	}
+
+	public String getResourceName() {
+		return resourceName;
 	}
 
 }

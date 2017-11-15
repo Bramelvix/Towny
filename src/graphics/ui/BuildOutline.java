@@ -2,7 +2,7 @@ package graphics.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import entity.BuildAbleObjects;
+import entity.BuildAbleObject;
 import input.Mouse;
 import map.Level;
 
@@ -22,7 +22,7 @@ public class BuildOutline {
 	private boolean visible; // is the outline visible
 	private Level level; // the map is needed to decide if a square is empty
 	private boolean lockedSize = false;
-	private BuildAbleObjects build;
+	private BuildAbleObject build;
 
 	// rendering the outline
 	public void render(Graphics g) {
@@ -183,7 +183,7 @@ public class BuildOutline {
 		update(mouse, xOff, yOff, false);
 	}
 
-	public BuildAbleObjects getBuildJobItem() {
+	public BuildAbleObject getBuildJobItem() {
 		return build;
 	}
 
@@ -193,7 +193,7 @@ public class BuildOutline {
 	}
 
 	// show the outline
-	public void show(Mouse mouse, int xoff, int yoff, boolean lockedSize, BuildAbleObjects build) {
+	public void show(Mouse mouse, int xoff, int yoff, boolean lockedSize, BuildAbleObject build) {
 		if (!visible) {
 			update(mouse, xoff, yoff, true);
 			visible = true;

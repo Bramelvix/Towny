@@ -12,9 +12,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import javax.swing.JFrame;
-import entity.BuildAbleObjects;
+
+import entity.Entity;
 import entity.Ore;
 import entity.Tree;
+import entity.Wall;
 import entity.item.Clothing;
 import entity.item.ClothingType;
 import entity.item.Item;
@@ -47,7 +49,6 @@ public class Game implements Runnable {
 	private JFrame frame;
 	private boolean running = false;
 	private Mouse mouse;
-	private Keyboard keyboard;
 	private List<Villager> vills;
 	private List<Villager> sols;
 	private List<Mob> mobs;
@@ -61,7 +62,6 @@ public class Game implements Runnable {
 	private Screen screen;
 	private BufferedImage image;
 	private int[] pixels;
-	private Random rand;
 	private Canvas canvas;
 
 	public static void main(String[] args) {
@@ -72,7 +72,6 @@ public class Game implements Runnable {
 	public Game() {
 		canvas = new Canvas();
 		Dimension size = new Dimension(width * SCALE, height * SCALE);
-		rand = new Random();
 		canvas.setPreferredSize(size);
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
@@ -86,7 +85,6 @@ public class Game implements Runnable {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		Sound.initSound();
-		keyboard = new Keyboard();
 		mouse = new Mouse(this);
 		level = new Level(100, 100);
 		mobs = new ArrayList<Mob>();
@@ -96,7 +94,8 @@ public class Game implements Runnable {
 		spawnvills();
 		spawnZombies();
 
-		canvas.addKeyListener(keyboard);
+
+		canvas.addKeyListener(new Keyboard());
 		canvas.addMouseListener(mouse);
 		canvas.addMouseMotionListener(mouse);
 		start();
@@ -115,9 +114,9 @@ public class Game implements Runnable {
 	}
 
 	private void spawnZombies() {
-		int teller = rand.nextInt(5) + 1;
+		int teller = Entity.RANDOM.nextInt(5) + 1;
 		for (int i = 0; i < teller; i++) {
-			Zombie zomb = new Zombie(level, rand.nextInt(256) + 16, rand.nextInt(256) + 16);
+			Zombie zomb = new Zombie(level, Entity.RANDOM.nextInt(256) + 16, Entity.RANDOM.nextInt(256) + 16);
 			mobs.add(zomb);
 		}
 	}
@@ -354,7 +353,7 @@ public class Game implements Runnable {
 		if (ui.outlineIsVisible() && !ui.menuVisible() && mouse.getReleased() && !UiIcons.hoverOnAnyIcon()) {
 			int[][] coords = ui.getOutlineCoords();
 			for (int[] blok : coords) {
-				if (!level.getTile(blok[0] >> 4, blok[1] >> 4).solid()) {
+				if (!level.getTile(blok[0] / 16, blok[1] / 16).solid()) {
 					Villager idle = getIdlestVil();
 					idle.setMovement(null);
 					idle.addBuildJob(blok[0], blok[1], ui.getBuildAbleObjectOutline());
@@ -406,12 +405,12 @@ public class Game implements Runnable {
 				return;
 			} else if (ui.getMenu().clickedOnAnyItem(MenuItem.BUILD + " wooden wall", mouse)
 					&& !ui.outlineIsVisible()) {
-				ui.showBuildSquare(mouse, xScroll, yScroll, false, BuildAbleObjects.WOODEN_WALL);
+				ui.showBuildSquare(mouse, xScroll, yScroll, false, new Wall());
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
 			} else if (ui.getMenu().clickedOnAnyItem(MenuItem.BUILD + " furnace", mouse) && !ui.outlineIsVisible()) {
-				ui.showBuildSquare(mouse, xScroll, yScroll, true, BuildAbleObjects.FURNACE);
+				ui.showBuildSquare(mouse, xScroll, yScroll, true, new Furnace());
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;

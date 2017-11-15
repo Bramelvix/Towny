@@ -10,7 +10,7 @@ import map.Level;
 public abstract class Entity {
 	protected int x, y; // x and y of the entity
 	public Level level; // level in which the entity is placed
-	private final static Random random = new Random(); // random needed for
+	public static final Random RANDOM = new Random(); // random needed for
 														// various chance
 														// calculations
 	public Sprite sprite; // the entity's sprite
@@ -22,10 +22,6 @@ public abstract class Entity {
 	// setters
 	public void setVisible(boolean visible) {
 		this.visible = visible;
-	}
-
-	public static final Random getRand() {
-		return random;
 	}
 
 	public void setSelected(boolean selected) {

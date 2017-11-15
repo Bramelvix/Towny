@@ -6,7 +6,7 @@ public enum WeaponMaterial {
 	WOOD,GOLD,IRON,BRONZE,CRYSTAL;
 	
 	public static WeaponMaterial getWeaponRandMat() {
-		return WeaponMaterial.values()[Entity.getRand().nextInt(WeaponMaterial.values().length)];
+		return WeaponMaterial.values()[Entity.RANDOM.nextInt(WeaponMaterial.values().length)];
 	}
 
 }

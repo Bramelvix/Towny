@@ -4,20 +4,25 @@ import graphics.Screen;
 import graphics.Sprite;
 
 public class Furnace extends Workstation {
-	public Furnace(int x, int y) {
-		super(x, y);
+	public Furnace() {
+		super();
+		resourceName = "stones";
 	}
 
-	private static final Sprite furnaceOn1 = Sprite.furnaceOn1;
-	private static final Sprite furnaceOn2 = Sprite.furnaceOn2;
-	private boolean running = false;
-	private byte animationcounter = 60;
 
 
 	public void render(Screen s) {
-		if (!running) {
+		if (!isRunning()) {
 			s.renderSprite(x, y, Sprite.furnaceOff);
-		}
+		} else {
+			if (animationcounter>29) {
+				s.renderSprite(x, y, Sprite.furnaceOn1);
+				anmiationCounterTick();
+			} else {
+				s.renderSprite(x, y, Sprite.furnaceOn2);
+				anmiationCounterTick();
+			}
+		} 
 	}
 
 }

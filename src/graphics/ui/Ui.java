@@ -2,7 +2,7 @@ package graphics.ui;
 
 import java.awt.Graphics;
 
-import entity.BuildAbleObjects;
+import entity.BuildAbleObject;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.Menu;
 import graphics.ui.menu.MenuItem;
@@ -85,7 +85,7 @@ public class Ui {
 			menu.show(mouse);
 		}
 	}
-	public BuildAbleObjects getBuildAbleObjectOutline() {
+	public BuildAbleObject getBuildAbleObjectOutline() {
 		return outline.getBuildJobItem();
 	}
 
@@ -137,7 +137,7 @@ public class Ui {
 		return selection.getHeight();
 	}
 
-	public void showBuildSquare(Mouse mouse, int xoff, int yoff, boolean lockedSize, BuildAbleObjects build) {
+	public void showBuildSquare(Mouse mouse, int xoff, int yoff, boolean lockedSize, BuildAbleObject build) {
 		outline.show(mouse, xoff, yoff, lockedSize, build);
 	}
 
