@@ -54,7 +54,7 @@ public class Job implements Workable {
 
 	}
 
-	// checks if the worker has or still needs the item
+	// checks if the worker still needs the item
 	private void checkItem() {
 		if (needsMaterial && worker.holding != null) {
 			if (worker.holding.equals(material)) {
@@ -110,7 +110,7 @@ public class Job implements Workable {
 							}
 							completed = buildJobObj.build();
 
-							if (material.quantity <= 0) {
+							if (material.getQuantity() <= 0) {
 								worker.holding = null;
 							} else {
 								worker.drop();

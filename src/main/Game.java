@@ -94,7 +94,6 @@ public class Game implements Runnable {
 		spawnvills();
 		spawnZombies();
 
-
 		canvas.addKeyListener(new Keyboard());
 		canvas.addMouseListener(mouse);
 		canvas.addMouseMotionListener(mouse);
@@ -340,7 +339,6 @@ public class Game implements Runnable {
 				options.add(new MenuItem(MenuItem.CANCEL));
 				ui.showMenuOn(mouse, options.toArray(new MenuItem[0]));
 			} else {
-				System.out.println(level.getHardEntityOn(mouse.getX(), mouse.getY()));
 				if (level.getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Furnace) {
 					ui.showMenuOn(mouse, new MenuItem[] { new MenuItem(MenuItem.CRAFT + " iron bar"),
 							new MenuItem(MenuItem.CRAFT + " gold bar"), new MenuItem(MenuItem.CANCEL) });
@@ -435,6 +433,7 @@ public class Game implements Runnable {
 			} else if (ui.getMenu().clickedOnAnyItem(MenuItem.CRAFT + " iron bar", mouse)) {
 				Villager idle = getIdlestVil();
 				idle.setMovement(null);
+				System.out.println(idle.getNearestItemOfType("iron ore"));
 				idle.addJob(new CraftJob(idle,
 						new Item[] { idle.getNearestItemOfType("iron ore"), idle.getNearestItemOfType("coal ore") },
 						new Item("iron bar", Sprite.ironBar, false, 1), level.getNearestFurnace()));

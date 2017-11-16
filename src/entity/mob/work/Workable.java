@@ -4,4 +4,5 @@ public interface Workable {
 	public void execute();
 	public boolean isCompleted();
 
+
 }

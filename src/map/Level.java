@@ -42,7 +42,7 @@ public class Level {
 	public void addItem(Item e) {
 		Item o = new Item(e);
 		if (itemAlreadyThere(e.getX(), e.getY(), e)) {
-			getItemOn(e.getX(), e.getY()).quantity += e.quantity;
+			getItemOn(e.getX(), e.getY()).addToQuantity(e.getQuantity());
 		} else {
 			items.add(o);
 		}
@@ -51,7 +51,7 @@ public class Level {
 	public void addItem(Weapon e) {
 		Weapon o = new Weapon(e);
 		if (itemAlreadyThere(e.getX(), e.getY(), e)) {
-			getItemOn(e.getX(), e.getY()).quantity += e.quantity;
+			getItemOn(e.getX(), e.getY()).addToQuantity(e.getQuantity());
 		} else {
 			items.add(o);
 		}
@@ -60,7 +60,7 @@ public class Level {
 	public void addItem(Clothing e) {
 		Clothing o = new Clothing(e);
 		if (itemAlreadyThere(e.getX(), e.getY(), e)) {
-			getItemOn(e.getX(), e.getY()).quantity += e.quantity;
+			getItemOn(e.getX(), e.getY()).addToQuantity(e.getQuantity());
 		} else {
 			items.add(o);
 		}
@@ -74,8 +74,7 @@ public class Level {
 	// is the tile on X and Y clear (No items or entities or walls blocking it)
 	public boolean isClearTile(int x, int y) {
 		return items.stream().filter(t -> (t.getX() / 16) == x && (t.getY() / 16) == y).findFirst().orElse(null) == null
-				? isWalkAbleTile(x, y)
-				: false;
+				? isWalkAbleTile(x, y) : false;
 
 	}
 
@@ -87,7 +86,8 @@ public class Level {
 
 	// if there is a wall on x and y, return it
 	public Entity getHardEntityOn(int x, int y) {
-		return hardEntities.stream().filter(t -> (t.getX() / 16) == (x/16) && (t.getY() / 16) == (y/16)).findFirst().orElse(null);
+		return hardEntities.stream().filter(t -> (t.getX() / 16) == (x / 16) && (t.getY() / 16) == (y / 16)).findFirst()
+				.orElse(null);
 	}
 
 	// TODO beter maken, dit is shitty

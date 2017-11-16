@@ -19,12 +19,11 @@ public class CraftJob extends Job {
 
 	public CraftJob(Villager worker, Item[] resources, Item product, Workstation station) {
 		super(worker);
-		this.resources = resources;
 		this.product = product;
 		this.station = station;
 		boolean[] legeplaatsen = new boolean[8];
-		for (int i = 0; i < resources.length; i++) {
-			Item item = resources[i];
+		this.resources = resources;
+		for (Item item : this.resources) {
 			int stationDropPuntx = -10;
 			int stationDropPunty = -10;
 			if (worker.level.isWalkAbleTile((station.getX() / 16) - 1, station.getY() / 16) && !legeplaatsen[0]) {
@@ -91,8 +90,10 @@ public class CraftJob extends Job {
 				if (!itemsUpdated) {
 					station.setRunning(true);
 					for (Item i : resources) {
-						i.quantity--;
-						if (i.quantity < 0) {
+						System.out.println(i.getName() + ": " + i.getQuantity() + "// " + i);
+						i.lowerQuantity();
+						System.out.println(i.getName() + ": " + i.getQuantity());
+						if (i.getQuantity() <= 0) {
 							worker.level.removeItem(i);
 						}
 					}

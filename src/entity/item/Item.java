@@ -8,7 +8,7 @@ public class Item extends Entity {
 	private String tooltip; // the item's tooltip
 	private Villager reservedVil; // the villager that plans to pick the item
 									// up, or is already holding it
-	public int quantity; // the amount of the item (5 logs in a stack for
+	protected int quantity; // the amount of the item (5 logs in a stack for
 							// instance)
 
 	// basic constructors
@@ -51,5 +51,17 @@ public class Item extends Entity {
 
 	public void removeReserved() {
 		reservedVil = null;
+	}
+
+	public void lowerQuantity() {
+		quantity--;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void addToQuantity(int x) {
+		quantity += x;
 	}
 }
