@@ -8,32 +8,28 @@ public class Item extends Entity {
 	private String tooltip; // the item's tooltip
 	private Villager reservedVil; // the villager that plans to pick the item
 									// up, or is already holding it
-	protected int quantity; // the amount of the item (5 logs in a stack for
-							// instance)
 
 	// basic constructors
-	public Item(String name, int x, int y, Sprite sprite, String tooltip, boolean visible, int quantity) {
+	public Item(String name, int x, int y, Sprite sprite, String tooltip, boolean visible) {
 		super(x, y);
 		this.sprite = sprite;
 		setVisible(visible);
 		super.setName(name);
-		this.quantity = quantity;
 		this.tooltip = tooltip;
 	}
 
-	public Item(String name, int x, int y, Sprite sprite, boolean visible, int quantity) {
-		this(name, x, y, sprite, "", visible, quantity);
+	public Item(String name, int x, int y, Sprite sprite, boolean visible) {
+		this(name, x, y, sprite, "", visible);
 	}
 
-	public Item(String name, Sprite sprite, boolean visible, int quantity) {
+	public Item(String name, Sprite sprite, boolean visible) {
 		super.setName(name);
 		this.sprite = sprite;
 		super.setVisible(visible);
-		this.quantity = quantity;
 	}
 
 	public Item(Item o) {
-		this(o.getName(), o.x, o.y, o.sprite, o.getToolTip(), o.isVisible(), o.quantity);
+		this(o.getName(), o.x, o.y, o.sprite, o.getToolTip(), o.isVisible());
 	}
 
 	// getters and setters
@@ -51,17 +47,5 @@ public class Item extends Entity {
 
 	public void removeReserved() {
 		reservedVil = null;
-	}
-
-	public void lowerQuantity() {
-		quantity--;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void addToQuantity(int x) {
-		quantity += x;
 	}
 }

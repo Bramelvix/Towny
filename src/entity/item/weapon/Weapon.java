@@ -1,8 +1,6 @@
 package entity.item.weapon;
 
-import java.util.Random;
 
-import entity.Entity;
 import entity.item.Item;
 import entity.mob.Mob;
 import entity.mob.Villager;
@@ -19,7 +17,7 @@ public class Weapon extends Item {
 	private WeaponMaterial mat;
 
 	public Weapon(String name, int x, int y, Sprite sprite, String tooltip, WeaponType type, WeaponMaterial mat) {
-		super(name, x, y, sprite, tooltip, true, 1);
+		super(name, x, y, sprite, tooltip, true);
 		this.mat = mat;
 		this.type = type;
 		mat_strong = calcMatStrong(mat);

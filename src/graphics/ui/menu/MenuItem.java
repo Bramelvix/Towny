@@ -52,7 +52,7 @@ public class MenuItem {
 
 	public static String getMenuItemText(String menuItem, Entity entity) {
 		if (entity instanceof Item)
-			return menuItem + " " + entity.getName() + " (" + ((Item) entity).getQuantity() + ")";
+			return menuItem + " " + entity.getName();
 		return menuItem + " " + entity.getName();
 	}
 

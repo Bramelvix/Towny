@@ -362,14 +362,14 @@ public class Game implements Runnable {
 			ui.deSelectIcons();
 		}
 		if (ui.menuVisible()) {
-			if (ui.getMenu().clickedOnAnyItem(MenuItem.CANCEL, mouse)) {
+			if (ui.getMenu().clickedOnItem(MenuItem.CANCEL, mouse)) {
 				ui.getMenu().hide();
 				ui.deSelectIcons();
 				if (selectedvill != null) {
 					deselect(selectedvill);
 				}
 				return;
-			} else if (ui.getMenu().clickedOnAnyItem(MenuItem.MOVE, mouse)) {
+			} else if (ui.getMenu().clickedOnItem(MenuItem.MOVE, mouse)) {
 				selectedvill.resetAll();
 				selectedvill.setMovement(selectedvill.getPath(mouse.getTileX(), mouse.getTileY()));
 				if (selectedvill.isMovementNull()) {
@@ -379,14 +379,14 @@ public class Game implements Runnable {
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
-			} else if (ui.getMenu().clickedOnAnyItem(MenuItem.CHOP, mouse)) {
+			} else if (ui.getMenu().clickedOnItem(MenuItem.CHOP, mouse)) {
 				selectedvill.setMovement(null);
 				selectedvill.addJob(level.selectTree(ui.getMenuIngameX(), ui.getMenuIngameY()));
 				deselect(selectedvill);
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
-			} else if (ui.getMenu().clickedOnAnyItem(MenuItem.FIGHT, mouse)) {
+			} else if (ui.getMenu().clickedOnItem(MenuItem.FIGHT, mouse)) {
 				selectedvill.setMovement(null);
 				selectedvill
 						.addJob(new FightJob(selectedvill, anyMobHoverOn(ui.getMenuIngameX(), ui.getMenuIngameY())));
@@ -394,27 +394,27 @@ public class Game implements Runnable {
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
-			} else if (ui.getMenu().clickedOnAnyItem(MenuItem.MINE, mouse)) {
+			} else if (ui.getMenu().clickedOnItem(MenuItem.MINE, mouse)) {
 				selectedvill.setMovement(null);
 				selectedvill.addJob(level.selectOre(ui.getMenuIngameX(), ui.getMenuIngameY()));
 				deselect(selectedvill);
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
-			} else if (ui.getMenu().clickedOnAnyItem(MenuItem.BUILD + " wooden wall", mouse)
+			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " wooden wall", mouse)
 					&& !ui.outlineIsVisible()) {
 				ui.showBuildSquare(mouse, xScroll, yScroll, false, new Wall());
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
-			} else if (ui.getMenu().clickedOnAnyItem(MenuItem.BUILD + " furnace", mouse) && !ui.outlineIsVisible()) {
+			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " furnace", mouse) && !ui.outlineIsVisible()) {
 				ui.showBuildSquare(mouse, xScroll, yScroll, true, new Furnace());
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
-			} else if ((ui.getMenu().clickedOnAnyItem(MenuItem.PICKUP, mouse)
-					|| ui.getMenu().clickedOnAnyItem(MenuItem.EQUIP, mouse)
-					|| ui.getMenu().clickedOnAnyItem(MenuItem.WEAR, mouse)) && !ui.outlineIsVisible()) {
+			} else if ((ui.getMenu().clickedOnItem(MenuItem.PICKUP, mouse)
+					|| ui.getMenu().clickedOnItem(MenuItem.EQUIP, mouse)
+					|| ui.getMenu().clickedOnItem(MenuItem.WEAR, mouse)) && !ui.outlineIsVisible()) {
 				selectedvill.setMovement(null);
 				Item e = (Item) ui.getMenu().clickedItem().getEntity();
 				if (level.getItemOn(ui.getMenuIngameX(), ui.getMenuIngameY()) != null)
@@ -423,29 +423,28 @@ public class Game implements Runnable {
 				deselect(selectedvill);
 				ui.getMenu().hide();
 				return;
-			} else if (ui.getMenu().clickedOnAnyItem(MenuItem.DROP, mouse) && !ui.outlineIsVisible()) {
+			} else if (ui.getMenu().clickedOnItem(MenuItem.DROP, mouse) && !ui.outlineIsVisible()) {
 				selectedvill.setMovement(null);
 				selectedvill.addJob(new MoveItemJob(ui.getMenuIngameX(), ui.getMenuIngameY(), selectedvill));
 				ui.deSelectIcons();
 				deselect(selectedvill);
 				ui.getMenu().hide();
 				return;
-			} else if (ui.getMenu().clickedOnAnyItem(MenuItem.CRAFT + " iron bar", mouse)) {
+			} else if (ui.getMenu().clickedOnItem(MenuItem.CRAFT + " iron bar", mouse)) {
 				Villager idle = getIdlestVil();
 				idle.setMovement(null);
-				System.out.println(idle.getNearestItemOfType("iron ore"));
 				idle.addJob(new CraftJob(idle,
 						new Item[] { idle.getNearestItemOfType("iron ore"), idle.getNearestItemOfType("coal ore") },
-						new Item("iron bar", Sprite.ironBar, false, 1), level.getNearestFurnace()));
+						new Item("iron bar", Sprite.ironBar, false), level.getNearestFurnace()));
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
-			} else if (ui.getMenu().clickedOnAnyItem(MenuItem.CRAFT + " gold bar", mouse)) {
+			} else if (ui.getMenu().clickedOnItem(MenuItem.CRAFT + " gold bar", mouse)) {
 				Villager idle = getIdlestVil();
 				idle.setMovement(null);
 				idle.addJob(new CraftJob(idle,
 						new Item[] { idle.getNearestItemOfType("gold ore"), idle.getNearestItemOfType("coal ore") },
-						new Item("gold bar", Sprite.goldBar, false, 1), level.getNearestFurnace()));
+						new Item("gold bar", Sprite.goldBar, false), level.getNearestFurnace()));
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;

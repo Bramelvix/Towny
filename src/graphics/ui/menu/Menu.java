@@ -112,7 +112,7 @@ public class Menu { // the menu is the little options menu that shows up when
 		return y;
 	}
 
-	public boolean clickedOnAnyItem(String type, Mouse mouse) {
+	public boolean clickedOnItem(String type, Mouse mouse) {
 		for (MenuItem i : items) {
 			if (i.getText().contains((type)) && i.clicked(mouse)) {
 				return true;

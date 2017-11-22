@@ -18,8 +18,6 @@ public abstract class BuildAbleObject extends Entity {
 	public boolean initialise(int x, int y, Item material, Level level) {
 		if (material == null)
 			return false;
-		if (material.getQuantity() > 0)
-			material.lowerQuantity();;
 		this.level = level;
 		setLocation(x * 16, y * 16);
 		level.hardEntities.add(this);

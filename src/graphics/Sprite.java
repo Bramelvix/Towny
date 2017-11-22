@@ -61,18 +61,21 @@ public class Sprite {
 	// ORE
 	public static Sprite coalOre = new Sprite(0, 23, SpriteSheet.tiles);
 	public static Sprite ironOre = new Sprite(0, 24, SpriteSheet.tiles);
-	public static Sprite copperOre = new Sprite(0, 25, SpriteSheet.tiles);
+	public static Sprite copperOre = new Sprite(0, 26, SpriteSheet.tiles);
 	public static Sprite goldOre = new Sprite(1, 25, SpriteSheet.tiles);
-	public static Sprite copperBar = new Sprite(41, 10, SpriteSheet.tiles);
+	public static Sprite crystalOre = new Sprite(0, 25, SpriteSheet.tiles);
 
 	// ITEMS
 	public static Sprite logs = new Sprite(53, 22, SpriteSheet.tiles);
 	public static Sprite ironBar = new Sprite(42, 10, SpriteSheet.tiles);
 	public static Sprite goldBar = new Sprite(43, 10, SpriteSheet.tiles);
+	public static Sprite copperBar = new Sprite(41, 10, SpriteSheet.tiles);
 	public static Sprite ironChunk = new Sprite(44, 10, SpriteSheet.tiles);
 	public static Sprite goldChunk = new Sprite(45, 10, SpriteSheet.tiles);
 	public static Sprite stoneChunk = new Sprite(46, 10, SpriteSheet.tiles);
 	public static Sprite coalChunk = new Sprite(47, 10, SpriteSheet.tiles);
+	public static Sprite copperChunk = new Sprite(48, 10, SpriteSheet.tiles);
+	public static Sprite crystalChunk = new Sprite(41, 23, SpriteSheet.tiles);
 
 	// CLOTHES
 	public static Sprite blacktrousers = new Sprite(4, 0, SpriteSheet.entities);

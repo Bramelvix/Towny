@@ -109,12 +109,7 @@ public class Job implements Workable {
 								completed = !buildJobObj.initialise(xloc / 16, yloc / 16, material, worker.level);
 							}
 							completed = buildJobObj.build();
-
-							if (material.getQuantity() <= 0) {
-								worker.holding = null;
-							} else {
-								worker.drop();
-							}
+							worker.holding = null;
 							return;
 
 						}

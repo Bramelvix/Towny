@@ -7,9 +7,7 @@ import entity.Ore;
 import entity.OreType;
 import entity.Tree;
 import entity.Wall;
-import entity.item.Clothing;
 import entity.item.Item;
-import entity.item.weapon.Weapon;
 import entity.pathfinding.Point;
 import entity.workstations.Furnace;
 import graphics.Screen;
@@ -39,31 +37,8 @@ public class Level {
 	}
 
 	// adding an item to the list
-	public void addItem(Item e) {
-		Item o = new Item(e);
-		if (itemAlreadyThere(e.getX(), e.getY(), e)) {
-			getItemOn(e.getX(), e.getY()).addToQuantity(e.getQuantity());
-		} else {
-			items.add(o);
-		}
-	}
-
-	public void addItem(Weapon e) {
-		Weapon o = new Weapon(e);
-		if (itemAlreadyThere(e.getX(), e.getY(), e)) {
-			getItemOn(e.getX(), e.getY()).addToQuantity(e.getQuantity());
-		} else {
-			items.add(o);
-		}
-	}
-
-	public void addItem(Clothing e) {
-		Clothing o = new Clothing(e);
-		if (itemAlreadyThere(e.getX(), e.getY(), e)) {
-			getItemOn(e.getX(), e.getY()).addToQuantity(e.getQuantity());
-		} else {
-			items.add(o);
-		}
+	public <T extends Item> void addItem(T e) {
+		items.add(e);
 	}
 
 	// removing an item from the list
@@ -271,21 +246,27 @@ public class Level {
 	private void randOre(int x, int y) {
 		if (x == 0 || x == width || y == 0 || y == height)
 			return;
-		int rand = Entity.RANDOM.nextInt(30);
-		if (rand >= 4 && rand <= 7) {
-			walkableEntities.add(new Ore(x * 16, y * 16, OreType.STONE));
-		} else {
-			if (rand == 1) {
+		int rand = Entity.RANDOM.nextInt(32);
+		if (rand <= 12) {
+			switch (rand) {
+			case 0:
 				walkableEntities.add(new Ore(x * 16, y * 16, OreType.GOLD));
-			} else {
-				if (rand == 2) {
-					walkableEntities.add(new Ore(x * 16, y * 16, OreType.IRON));
-
-				} else {
-					if (rand == 3) {
-						walkableEntities.add(new Ore(x * 16, y * 16, OreType.COAL));
-					}
-				}
+				break;
+			case 1:
+				walkableEntities.add(new Ore(x * 16, y * 16, OreType.IRON));
+				break;
+			case 2:
+				walkableEntities.add(new Ore(x * 16, y * 16, OreType.COAL));
+				break;
+			case 3:
+				walkableEntities.add(new Ore(x * 16, y * 16, OreType.COPPER));
+				break;
+			case 4:
+				walkableEntities.add(new Ore(x * 16, y * 16, OreType.CRYSTAL));
+				break;
+			default:
+				walkableEntities.add(new Ore(x * 16, y * 16, OreType.STONE));
+				break;
 			}
 		}
 	}

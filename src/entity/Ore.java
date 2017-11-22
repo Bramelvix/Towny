@@ -6,7 +6,6 @@ import entity.mob.work.Job;
 import entity.mob.work.MoveItemJob;
 import entity.pathfinding.Point;
 import graphics.Sprite;
-import map.Level;
 import sound.Sound;
 
 public class Ore extends Resource {
@@ -46,6 +45,16 @@ public class Ore extends Resource {
 			sprite = Sprite.getStone();
 			itemSprite = Sprite.stoneChunk;
 			break;
+		case CRYSTAL:
+			setName("crystal");
+			sprite = Sprite.crystalOre;
+			itemSprite = Sprite.crystalChunk;
+			break;
+		case COPPER:
+			setName("copper ore");
+			sprite = Sprite.copperOre;
+			itemSprite = Sprite.copperChunk;
+			break;
 		default:
 			sprite = null;
 		}
@@ -69,9 +78,9 @@ public class Ore extends Resource {
 		} else {
 			worker.level.walkableEntities.remove(this);
 			if (type == OreType.STONE) {
-				worker.level.addItem(new Item(type.name().toLowerCase() + "s", this.x, this.y, itemSprite, true, 3));
+				worker.level.addItem(new Item(type.name().toLowerCase() + "s", this.x, this.y, itemSprite, true));
 			} else {
-				worker.level.addItem(new Item(type.name().toLowerCase() + " ore", this.x, this.y, itemSprite, true, 3));
+				worker.level.addItem(new Item(type.name().toLowerCase() + " ore", this.x, this.y, itemSprite, true));
 			}
 			return true;
 		}

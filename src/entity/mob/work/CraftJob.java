@@ -90,12 +90,7 @@ public class CraftJob extends Job {
 				if (!itemsUpdated) {
 					station.setRunning(true);
 					for (Item i : resources) {
-						System.out.println(i.getName() + ": " + i.getQuantity() + "// " + i);
-						i.lowerQuantity();
-						System.out.println(i.getName() + ": " + i.getQuantity());
-						if (i.getQuantity() <= 0) {
-							worker.level.removeItem(i);
-						}
+						worker.level.removeItem(i);
 					}
 					itemsUpdated = true;
 				}

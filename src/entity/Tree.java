@@ -32,7 +32,7 @@ public class Tree extends Resource {
 			return false;
 		} else {
 			worker.level.hardEntities.remove(this);
-			worker.level.addItem(new Item("Logs", this.x, this.y, Sprite.logs, "Wooden logs", true, 5));
+			worker.level.addItem(new Item("Logs", this.x, this.y, Sprite.logs, "Wooden logs", true));
 			worker.level.getTile(x >> 4, y >> 4).setSolid(false);
 			return true;
 		}

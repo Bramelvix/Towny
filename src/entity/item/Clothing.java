@@ -10,7 +10,7 @@ public class Clothing extends Item {
 
 	// basic constructor
 	public Clothing(String name, int x, int y, Sprite sprite, String tooltip, ClothingType type) {
-		super(name, x, y, sprite, tooltip, true, 1);
+		super(name, x, y, sprite, tooltip, true);
 	}
 
 	public Clothing(String name, Villager vil, Sprite sprite, String tooltip, ClothingType type) {
