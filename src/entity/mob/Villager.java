@@ -12,20 +12,14 @@ import entity.item.VillagerInventory;
 import entity.item.weapon.Weapon;
 import entity.mob.work.Job;
 import entity.pathfinding.Path;
-import entity.pathfinding.Point;
 import graphics.HairSprite;
 import graphics.Screen;
 import graphics.Sprite;
 import map.Level;
 
-public class Villager extends Mob {
-	private Path movement; // path for the villager to follow
-	private int counter; // counter of steps along the path
-	private boolean arrived = false; // has the villager arrived at the path's
-										// destination
+public class Villager extends Humanoid {
 	public VillagerInventory inventory; // clothing item list
 	public boolean male; // is the villager male
-	public Item holding; // item the villager is holding in his hands
 	private Sprite hair; // hair sprite
 	private int hairnr; // hair number (needed for the hair sprite to be
 						// decided)
@@ -33,20 +27,12 @@ public class Villager extends Mob {
 
 	// basic constructors
 	public Villager(int x, int y, Level level) {
-		super(level);
-		while (!level.isWalkAbleTile(x >> 4, y >> 4)) {
-			x += 16;
-			y += 16;
-		}
-		this.x = x;
-		this.y = y;
+		this(level, x, y);
 		this.sprite = Sprite.getPerson();
 		inventory = new VillagerInventory(this);
 		jobs = new ArrayList<Job>();
 		male = Entity.RANDOM.nextBoolean();
 		initHair(true);
-		this.x = x;
-		this.y = y;
 		setName("villager");
 
 	}
@@ -58,6 +44,10 @@ public class Villager extends Mob {
 
 	public int getMeleeDamage() {
 		return 10;
+	}
+
+	private Villager(Level level, int x, int y) {
+		super(level, x, y);
 	}
 
 	public Villager(int x, int y, Level level, int hairnr, VillagerInventory wearing, Item holding, boolean male) {
@@ -73,34 +63,12 @@ public class Villager extends Mob {
 		return jobs.size();
 	}
 
-	// logic for the villager to idle
-	private boolean idleTime() {
-		if (idletimer <= 0) {
-			idletimer = getIdleTimer();
-			return true;
-		} else {
-			idletimer--;
-			return false;
-		}
-	}
-
-	public boolean holding(Item item) {
-		return holding != null ? holding.equals(item) : false;
-	}
-
-	// the villager moves to a random location nearby if he has nothing to do.
-	public void idle() {
-		while (movement == null) {
-			movement = getPath((x >> 4) + Entity.RANDOM.nextInt(4) - 2, (y >> 4) + Entity.RANDOM.nextInt(4) - 2);
-		}
-
-	}
-
 	// initialise the hairsprite
 	private void initHair(boolean generate) {
-		if (generate)
+		if (generate) {
 			hairnr = male ? Entity.RANDOM.nextInt(HairSprite.maleHair.length)
 					: Entity.RANDOM.nextInt(HairSprite.femaleHair.length);
+		}
 		hair = male ? HairSprite.maleHair[hairnr] : HairSprite.femaleHair[hairnr];
 
 	}
@@ -121,8 +89,9 @@ public class Villager extends Mob {
 				}
 			}
 		}
-		if (closest == null || path == null)
+		if (closest == null || path == null) {
 			return null;
+		}
 		return closest;
 	}
 
@@ -139,7 +108,7 @@ public class Villager extends Mob {
 	}
 
 	// pickup an item
-	public boolean pickUp(Item e) {
+	public <T extends Item> boolean pickUp(T e) {
 		if (onSpot(e.getX(), e.getY())) {
 			e.setReserved(this);
 			level.removeItem(e);
@@ -152,8 +121,7 @@ public class Villager extends Mob {
 					return true;
 				}
 			}
-			if (holding != null)
-				dropItem(holding);
+			dropItem(holding);
 			holding = e;
 			return true;
 		}
@@ -171,25 +139,29 @@ public class Villager extends Mob {
 	}
 
 	public <T extends Item> void dropItem(T item) {
-		if (item != null)
+		if (item != null) {
 			level.addItem(item);
+		}
 	}
 
 	// add a job to the jobs list for the villager to do
 	public void addJob(Resource e) {
-		if (e != null)
+		if (e != null) {
 			addJob(new Job(e, this));
+		}
 
 	}
 
 	public void addJob(Job e) {
-		if (e != null)
+		if (e != null) {
 			jobs.add(e);
+		}
 	}
 
 	public void addJob(Job e, int prio) {
-		if (e != null)
+		if (e != null) {
 			jobs.add(prio, e);
+		}
 
 	}
 
@@ -209,8 +181,8 @@ public class Villager extends Mob {
 				idle();
 			}
 			move();
-
 		}
+		inventory.update(x, y);
 
 	}
 
@@ -223,79 +195,21 @@ public class Villager extends Mob {
 		inventory.addWeapon(item);
 	}
 
-	// method to move the villager
-	public void move() {
-		if (movement == null) {
-			counter = 0;
-			return;
-		}
-		if (arrived) {
-			counter++;
-			arrived = false;
-		}
-		if (movement.getLength() == counter) {
-			counter = 0;
-			movement = null;
-			arrived = false;
-			return;
-		} else {
-			if (!arrived) {
-				Point step = movement.getStep(counter);
-				if (step != null) {
-					if (step == null || !level.isWalkAbleTile(step.x, step.y)) {
-						int destx = movement.getXdest();
-						int desty = movement.getYdest();
-						movement = getShortest(destx, desty);
-						return;
-					}
-					moveTo(step.x << 4, step.y << 4);
-					if (x == step.x << 4 && y == step.y << 4) {
-						arrived = true;
-					}
-
-				}
-			}
-		}
-
-	}
-
-	// set the path of a villager
-	public void setMovement(Path path) {
-		movement = path;
-		counter = 0;
-		arrived = false;
-	}
-
-	public boolean isMovementNull() {
-		return movement == null;
-	}
-
 	public void resetAll() {
 		jobs.clear();
 		setMovement(null);
 	}
 
-	// DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()!! DO NOT
-	// USE!!!
-	protected final void moveTo(int x, int y) {
-		super.moveTo(x, y);
-		if (!(holding == null)) {
-			holding.setX(x);
-			holding.setY(y);
-		}
-
-	}
-
 	// render onto the screen
+	@Override
 	public void render(Screen screen) {
-		inventory.update(x, y);
-		screen.renderSprite(x, y, this.sprite); // renders the body
+		super.render(screen);
 		screen.renderSprite(x, y, hair); // renders the hair
-		if (inventory != null)
-			inventory.render(screen);
-		if (holding != null)
+		inventory.render(screen);
+		if (holding != null) {
 			screen.renderSprite(x, y, holding.sprite); // renders the item the
 														// villager is holding
+		}
 		screen.renderSelection(x, y, this); // render the red square around
 											// selected villagers
 
@@ -303,8 +217,7 @@ public class Villager extends Mob {
 
 	@Override
 	public void die() {
-		if (holding != null)
-			level.addItem(holding);
+		super.die();
 		inventory.dropAll();
 
 	}

@@ -10,13 +10,12 @@ import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import javax.swing.JFrame;
-
 import entity.Entity;
 import entity.Ore;
 import entity.Tree;
 import entity.Wall;
+import entity.WallType;
 import entity.item.Clothing;
 import entity.item.ClothingType;
 import entity.item.Item;
@@ -222,6 +221,14 @@ public class Game implements Runnable {
 		return null;
 	}
 
+	private Villager anyVillHoverOn(Mouse mouse) {
+		return anyVillHoverOn(mouse.getX(), mouse.getY());
+	}
+
+	private Mob anyMobHoverOn(Mouse mouse) {
+		return anyMobHoverOn(mouse.getX(), mouse.getY());
+	}
+
 	private Mob anyMobHoverOn(int x, int y) {
 		for (Mob i : mobs) {
 			if (i.hoverOn(x, y))
@@ -288,18 +295,17 @@ public class Game implements Runnable {
 			return;
 
 		} else if (((UiIcons.isSwordsSelected()) && !UiIcons.hoverOnAnyIcon() && mouse.getClickedLeft())
-				&& (anyMobHoverOn(mouse.getX(), mouse.getY()) != null)) {
+				&& (anyMobHoverOn(mouse) != null)) {
 			Villager idle = getIdlestVil();
 			idle.setMovement(null);
 			deselectAllVills();
-			idle.addJob(new FightJob(idle, anyMobHoverOn(mouse.getX(), mouse.getY())));
+			idle.addJob(new FightJob(idle, anyMobHoverOn(mouse)));
 			ui.deSelectIcons();
 			return;
 
-		} else if (mouse.getClickedLeft() && anyVillHoverOn(mouse.getX(), mouse.getY()) != null
-				&& !ui.outlineIsVisible()) {
+		} else if (mouse.getClickedLeft() && anyVillHoverOn(mouse) != null && !ui.outlineIsVisible()) {
 			deselectAllVills();
-			selectedvill = anyVillHoverOn(mouse.getX(), mouse.getY());
+			selectedvill = anyVillHoverOn(mouse);
 			selectedvill.setSelected(true);
 			ui.deSelectIcons();
 			return;
@@ -321,7 +327,7 @@ public class Game implements Runnable {
 				Ore ore = level.selectOre(mouse.getX(), mouse.getY());
 				if (ore != null)
 					options.add(new MenuItem(MenuItem.getMenuItemText(MenuItem.MINE, ore), ore));
-				Mob mob = anyMobHoverOn(mouse.getX(), mouse.getY());
+				Mob mob = anyMobHoverOn(mouse);
 				if (mob != null)
 					options.add(new MenuItem(MenuItem.getMenuItemText(MenuItem.FIGHT, mob), mob));
 				Item item = level.getItemOn(mouse.getX(), mouse.getY());
@@ -401,9 +407,8 @@ public class Game implements Runnable {
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
-			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " wooden wall", mouse)
-					&& !ui.outlineIsVisible()) {
-				ui.showBuildSquare(mouse, xScroll, yScroll, false, new Wall());
+			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " wooden wall", mouse) && !ui.outlineIsVisible()) {
+				ui.showBuildSquare(mouse, xScroll, yScroll, false, new Wall(WallType.WOOD));
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;

@@ -123,8 +123,9 @@ public class CraftJob extends Job {
 
 	public static boolean doesNotContainTrue(boolean[] array) {
 		for (boolean b : array) {
-			if (b)
+			if (b) {
 				return false;
+			}
 		}
 		return true;
 	}

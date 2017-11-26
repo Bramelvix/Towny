@@ -16,8 +16,9 @@ public abstract class BuildAbleObject extends Entity {
 	}
 
 	public boolean initialise(int x, int y, Item material, Level level) {
-		if (material == null)
+		if (material == null) {
 			return false;
+		}
 		this.level = level;
 		setLocation(x * 16, y * 16);
 		level.hardEntities.add(this);
@@ -30,13 +31,14 @@ public abstract class BuildAbleObject extends Entity {
 	public boolean build() {
 		if (initialised) {
 			if (condition < 100) {
-				if (condition == 1)
+				if (condition == 1) {
 					Sound.speelGeluid(Sound.drill);
+				}
 				condition++;
 				return false;
 			} else {
 				this.setVisible(true);
-				level.getTile(x >> 4, y >> 4).setSolid(true);
+				level.getTile(x * 16, y * 16).setSolid(true);
 				return true;
 			}
 

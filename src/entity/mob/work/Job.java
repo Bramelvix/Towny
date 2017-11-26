@@ -95,8 +95,9 @@ public class Job implements Workable {
 					return;
 				} else {
 					if (jobObj != null) {
-						if (jobObj.work(worker))
+						if (jobObj.work(worker)) {
 							completed = true;
+						}
 						return;
 					} else {
 						if (buildJob && buildJobObj != null) {

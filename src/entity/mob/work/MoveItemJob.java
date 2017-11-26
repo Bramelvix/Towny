@@ -36,15 +36,17 @@ public class MoveItemJob extends Job {
 		started = true;
 		if (!pickUpJob) {
 			if (worker.holding == null || (!worker.level.isClearTile(xloc / 16, yloc / 16)
-					&& !worker.level.itemAlreadyThere(xloc, yloc, worker.holding)))
+					&& !worker.level.itemAlreadyThere(xloc, yloc, worker.holding))) {
 				completed = true;
+			}
 			return;
 		}
 		worker.setMovement(worker.getPath(xloc / 16, yloc / 16));
 		if (worker.isMovementNull()) {
 			completed = true;
-			if (pickUpJob)
+			if (pickUpJob) {
 				material.removeReserved();
+			}
 
 		}
 	}
@@ -57,8 +59,9 @@ public class MoveItemJob extends Job {
 					return;
 				} else {
 					if (worker.onSpot(material.getX(), material.getY())) {
-						if (worker.pickUp(material))
+						if (worker.pickUp(material)) {
 							completed = true;
+						}
 						return;
 					} else {
 						if (worker.isMovementNull()) {

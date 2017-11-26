@@ -36,17 +36,9 @@ public abstract class Entity {
 		displayName = name;
 	}
 
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
 	public void setLocation(int x, int y) {
-		setX(x);
-		setY(y);
+		this.x = x;
+		this.y = y;
 	}
 
 	public Entity() {

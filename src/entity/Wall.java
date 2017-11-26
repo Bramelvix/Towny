@@ -12,11 +12,13 @@ public class Wall extends BuildAbleObject {
 											// wall
 	private boolean rightHasWall = false; // is there a wall to the right of
 											// this wall
+	private Sprite[] sprites;
 
 	// basic constructor
-	public Wall() {
+	public Wall(WallType type) {
 		super();
 		resourceName = "Logs";
+		sprites = Sprite.WOODWALLSPRITES;
 	}
 
 	// checks the 4 sides of this wall to see if there are walls next to it. The
@@ -70,60 +72,60 @@ public class Wall extends BuildAbleObject {
 	// decide the sprite for the wall, depending on the other 4 sides next to
 	// the wall
 	private void decideSprite() {
-		sprite = null;
-		sprite = Sprite.woodenWallVerticalTop;
+		sprite = sprites[0];
 		if (topHasWall) {
 			if (bottomHasWall) {
-				sprite = Sprite.woodenWallVerticalBoth;
+				sprite = sprites[1];
 				if (leftHasWall) {
-					sprite = Sprite.woodenWallTLeft;
+					sprite = sprites[2];
 					if (rightHasWall) {
-						sprite = Sprite.woodenWall4sides;
+						sprite = sprites[3];
 					}
 				} else {
 					if (rightHasWall) {
-						sprite = Sprite.woodenWallTRight;
+						sprite = sprites[4];
 					}
 				}
 			} else {
 				if (leftHasWall) {
-					sprite = Sprite.woodenWallCornerTopLeft;
+					sprite = sprites[5];
 					if (rightHasWall) {
-						sprite = Sprite.woodenWallTTop;
+						sprite = sprites[6];
 					}
 				} else {
 					if (rightHasWall) {
-						sprite = Sprite.woodenWallCornerTopRight;
+						sprite = sprites[7];
 					}
 				}
 			}
 		} else {
 			if (bottomHasWall) {
-				sprite = Sprite.woodenWallVerticalBottom;
+				sprite = sprites[8];
 				if (leftHasWall) {
-					sprite = Sprite.woodenWallCornerBottomLeft;
+					sprite = sprites[9];
 					if (rightHasWall) {
-						sprite = Sprite.woodenWallTBottom;
+						sprite = sprites[10];
 					}
 
 				} else {
 					if (rightHasWall) {
-						sprite = Sprite.woodenWallCornerBottomRight;
+						sprite = sprites[11];
 					}
 				}
 			} else {
 				if (leftHasWall) {
-					sprite = Sprite.woodenWallHorizontalLeft;
+					sprite = sprites[12];
 					if (rightHasWall) {
-						sprite = Sprite.woodenWallHorizontalBoth;
+						sprite = sprites[13];
 					}
 				} else {
 					if (rightHasWall) {
-						sprite = Sprite.woodenWallHorizontalRight;
+						sprite = sprites[14];
 					}
 				}
 			}
 		}
+		sprites = null;
 
 	}
 

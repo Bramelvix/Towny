@@ -1,6 +1,5 @@
 package entity.item.weapon;
 
-
 import entity.item.Item;
 import entity.mob.Mob;
 import entity.mob.Villager;
@@ -13,6 +12,7 @@ public class Weapon extends Item {
 	private float def;
 	private float mat_strong;
 	private float speed;
+	private int range;
 	private WeaponType type;
 	private WeaponMaterial mat;
 
@@ -37,83 +37,48 @@ public class Weapon extends Item {
 	private void calcDam(WeaponType type) {
 		switch (type) {
 		case AXE:
-			crush = 0.25f;
-			pierce = 0f;
-			cut = 3f;
-			def = 0f;
-			speed = 3f;
+			setStats(0.25f, 0f, 3f, 0f, 3f, 3);
 			break;
 		case BOW:
-			crush = 0f;
-			pierce = 3f;
-			cut = 0f;
-			def = 0f;
-			speed = 2f;
+			setStats(0f, 3f, 0f, 0f, 2f, 10);
 			break;
 		case BUCKLER:
-			crush = 0.75f;
-			pierce = 0f;
-			cut = 0f;
-			def = 4f;
-			speed = -0.75f;
+			setStats(0.75f, 0f, 0f, 4f, -0.75f, 1);
 			break;
 		case DAGGER:
-			crush = 0f;
-			pierce = 2f;
-			cut = 1f;
-			def = 0f;
-			speed = 5f;
+			setStats(0f, 2f, 1f, 0f, 5f, 1);
 			break;
 		case HALBERT:
-			crush = 0.5f;
-			pierce = 1f;
-			cut = 5f;
-			def = 0.5f;
-			speed = 1f;
+			setStats(0.5f, 1f, 5f, 0.5f, 1f, 5);
 			break;
 		case HEATER:
-			crush = 1f;
-			pierce = 0f;
-			cut = 0f;
-			def = 5f;
-			speed = -1.5f;
+			setStats(1f, 0f, 0f, 5f, -1.5f, 1);
 			break;
 		case PICK:
-			crush = 2f;
-			pierce = 2.5f;
-			cut = 0f;
-			def = 0f;
-			speed = 2f;
+			setStats(2f, 2.5f, 0f, 0f, 2f, 3);
 			break;
 		case SCIMITAR:
-			crush = 0f;
-			pierce = 1f;
-			cut = 5f;
-			def = 0.5f;
-			speed = 4f;
+			setStats(0f, 1f, 5f, 0.5f, 4f, 3);
 			break;
 		case SPEAR:
-			crush = 0.25f;
-			pierce = 5f;
-			cut = 0.25f;
-			def = 2f;
-			speed = 2.5f;
+			setStats(0.25f, 5f, 0.25f, 2f, 2.5f, 5);
 			break;
 		case SWORD:
-			crush = 0.5f;
-			pierce = 4f;
-			cut = 4f;
-			def = 2.5f;
-			speed = 3f;
+			setStats(0.5f, 4f, 4f, 2.5f, 3f, 4);
 			break;
 		case WARHAMMER:
-			crush = 5f;
-			pierce = 1f;
-			cut = 2f;
-			def = 0f;
-			speed = 1.5f;
+			setStats(5f, 1f, 2f, 0f, 1.5f, 3);
 			break;
 		}
+	}
+
+	private void setStats(float crush, float pierce, float cut, float def, float speed, int range) {
+		this.crush = crush;
+		this.pierce = pierce;
+		this.cut = cut;
+		this.def = def;
+		this.speed = speed;
+		this.range = range;
 	}
 
 	public static Weapon getRandomWeapon(int x, int y) {

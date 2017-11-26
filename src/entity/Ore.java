@@ -26,38 +26,29 @@ public class Ore extends Resource {
 	private void decideSprite() {
 		switch (type) {
 		case IRON:
-			setName("iron ore");
-			sprite = Sprite.ironOre;
-			itemSprite = Sprite.ironChunk;
+			setOre("iron ore",Sprite.ironOre, Sprite.ironChunk);
 			break;
 		case GOLD:
-			setName("gold ore");
-			sprite = Sprite.goldOre;
-			itemSprite = Sprite.goldChunk;
+			setOre("gold ore",Sprite.goldOre, Sprite.goldChunk);
 			break;
 		case COAL:
-			setName("coal ore");
-			sprite = Sprite.coalOre;
-			itemSprite = Sprite.coalChunk;
+			setOre("coal ore",Sprite.coalOre, Sprite.coalChunk);
 			break;
 		case STONE:
-			setName("stone");
-			sprite = Sprite.getStone();
-			itemSprite = Sprite.stoneChunk;
+			setOre("stone",Sprite.getStone(), Sprite.stoneChunk);
 			break;
 		case CRYSTAL:
-			setName("crystal");
-			sprite = Sprite.crystalOre;
-			itemSprite = Sprite.crystalChunk;
+			setOre("crystal",Sprite.crystalOre, Sprite.crystalChunk);
 			break;
 		case COPPER:
-			setName("copper ore");
-			sprite = Sprite.copperOre;
-			itemSprite = Sprite.copperChunk;
+			setOre("copper ore",Sprite.copperOre, Sprite.copperChunk);
 			break;
-		default:
-			sprite = null;
 		}
+	}
+	private void setOre(String name, Sprite oreSprite, Sprite itemSprite) {
+		setName(name);
+		this.sprite = oreSprite;
+		this.itemSprite = itemSprite;
 	}
 
 	// work method executed by the villager when mining

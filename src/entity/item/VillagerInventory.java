@@ -5,155 +5,136 @@ import entity.mob.Villager;
 import graphics.Screen;
 
 public class VillagerInventory {
-	private Clothing hat;
-	private Clothing shirt;
-	private Clothing trousers;
-	private Clothing shoes;
-	private Weapon weaponHand;
-	private Weapon shieldHand;
+	private Clothing[] clothes;
+	private Weapon[] weapons;
 	private Villager wearer;
 
 	public VillagerInventory(Villager wearer) {
 		this.wearer = wearer;
+		clothes = new Clothing[4]; // 0 = hat, 1 = shirt, 2 = trousers, 3 =
+									// shoes
+		weapons = new Weapon[2]; // 0 = weaponhand, 1 = shieldhand
 	}
 
 	public void render(Screen screen) {
-		if (hat != null)
-			hat.render(screen);
-		if (shirt != null)
-			shirt.render(screen);
-		if (trousers != null)
-			trousers.render(screen);
-		if (shoes != null)
-			shoes.render(screen);
-		if (weaponHand != null)
-			weaponHand.render(screen);
-		if (shieldHand != null)
-			shieldHand.render(screen);
+		for (Clothing i : clothes) {
+			if (i != null) {
+				i.render(screen);
+			}
+		}
+		for (Weapon i : weapons) {
+			if (i != null) {
+				i.render(screen);
+			}
+		}
 	}
 
 	public float getWeaponDamage() {
-		return (weaponHand != null ? weaponHand.getDamage(wearer) : wearer.getMeleeDamage());
+		return (weapons[0] != null ? weapons[0].getDamage(wearer) : wearer.getMeleeDamage());
 	}
 
 	public void addClothing(Clothing item) {
-		if (alreadyWearing(item))
+		if (alreadyWearing(item)) {
 			removeClothing(item.getType());
+		}
 		switch (item.getType()) {
 		case HAT:
-			hat = item;
+			clothes[0] = item;
 			break;
 		case SHIRT:
-			shirt = item;
+			clothes[1] = item;
 			break;
 		case TROUSERS:
-			trousers = item;
+			clothes[2] = item;
 			break;
 		case SHOES:
-			shoes = item;
+			clothes[3] = item;
 		}
 	}
 
 	public void addWeapon(Weapon item) {
-		if (alreadyHolding(item))
+		if (alreadyHolding(item)) {
 			removeWeapon(item);
-		if (item.isShield()) {
-			shieldHand = item;
-		} else {
-			weaponHand = item;
 		}
+		weapons[item.isShield() ? 1 : 0] = item;
 	}
 
 	public void removeWeapon(Weapon item) {
-		wearer.dropItem(item.isShield() ? shieldHand : weaponHand);
-		(item.isShield() ? shieldHand : weaponHand).removeReserved();
-		if (item.isShield()) {
-			shieldHand = null;
-		} else {
-			weaponHand = null;
-		}
+		int num = item.isShield() ? 1 : 0;
+		wearer.dropItem(weapons[num]);
+		weapons[num].removeReserved();
+		weapons[num] = null;
 	}
 
 	private boolean alreadyHolding(Weapon item) {
-		return ((item.isShield() && shieldHand != null) || (!(item.isShield()) && weaponHand != null));
+		return ((item.isShield() && weapons[1] != null) || (!(item.isShield()) && weapons[0] != null));
 	}
 
 	private boolean alreadyWearing(Clothing item) {
-		return ((item.getType() == ClothingType.HAT && hat != null)
-				|| (item.getType() == ClothingType.SHIRT && shirt != null)
-				|| (item.getType() == ClothingType.TROUSERS && trousers != null)
-				|| (item.getType() == ClothingType.SHOES && shoes != null));
+		return ((item.getType() == ClothingType.HAT && clothes[0] != null)
+				|| (item.getType() == ClothingType.SHIRT && clothes[1] != null)
+				|| (item.getType() == ClothingType.TROUSERS && clothes[2] != null)
+				|| (item.getType() == ClothingType.SHOES && clothes[3] != null));
 	}
 
 	public void removeClothing(ClothingType type) {
 		switch (type) {
 		case HAT:
-			wearer.dropItem(hat);
-			hat.removeReserved();
-			hat = null;
+			wearer.dropItem(clothes[0]);
+			clothes[0].removeReserved();
+			clothes[0] = null;
 			break;
 		case SHIRT:
-			wearer.dropItem(shirt);
-			shirt.removeReserved();
-			shirt = null;
+			wearer.dropItem(clothes[1]);
+			clothes[1].removeReserved();
+			clothes[1] = null;
 			break;
 		case TROUSERS:
-			wearer.dropItem(trousers);
-			trousers.removeReserved();
-			trousers = null;
+			wearer.dropItem(clothes[2]);
+			clothes[2].removeReserved();
+			clothes[2] = null;
 			break;
 		case SHOES:
-			wearer.dropItem(shoes);
-			shoes.removeReserved();
-			shoes = null;
+			wearer.dropItem(clothes[3]);
+			clothes[3].removeReserved();
+			clothes[3] = null;
 			break;
 		}
 	}
 
 	public boolean isHoldingShield() {
-		return shieldHand != null;
+		return weapons[1] != null;
 	}
 
 	public boolean isHoldingWeapon() {
-		return weaponHand != null;
+		return weapons[0] != null;
 	}
 
 	public void dropAll() {
-		wearer.dropItem(hat);
-		hat.removeReserved();
-		hat = null;
-		wearer.dropItem(shirt);
-		shirt.removeReserved();
-		shirt = null;
-		wearer.dropItem(trousers);
-		trousers.removeReserved();
-		trousers = null;
-		wearer.dropItem(shoes);
-		shoes.removeReserved();
-		shoes = null;
-		wearer.dropItem(weaponHand);
-		weaponHand.removeReserved();
-		weaponHand = null;
-		wearer.dropItem(shieldHand);
-		shieldHand.removeReserved();
-		shieldHand = null;
+		for (Clothing i : clothes) {
+			wearer.dropItem(i);
+			i.removeReserved();
+			i = null;
+		}
+		for (Weapon i : weapons) {
+			wearer.dropItem(i);
+			i.removeReserved();
+			i = null;
+		}
 
 	}
 
 	public void update(int x, int y) {
-		if (hat != null)
-			hat.setLocation(x, y);
-		if (shirt != null)
-			shirt.setLocation(x, y);
-		if (trousers != null)
-			trousers.setLocation(x, y);
-		if (shoes != null)
-			shoes.setLocation(x, y);
-		if (weaponHand != null)
-			weaponHand.setLocation(x, y);
-		if (shieldHand != null)
-			shieldHand.setLocation(x, y);
-
+		for (Clothing i : clothes) {
+			if (i != null) {
+				i.setLocation(x, y);
+			}
+		}
+		for (Weapon i : weapons) {
+			if (i != null) {
+				i.setLocation(x, y);
+			}
+		}
 	}
 
 }

@@ -4,6 +4,7 @@ import entity.Entity;
 import entity.pathfinding.Direction;
 import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
+import entity.pathfinding.Point;
 import graphics.Screen;
 import graphics.Sprite;
 import map.Level;
@@ -17,6 +18,10 @@ public abstract class Mob extends Entity {
 	private static PathFinder finder;
 	private int health = 100;
 	private int armour = 0;
+	public Path movement; // path for the Mob to follow
+	private int counter; // counter of steps along the path
+	private boolean arrived = false; // has the mob arrived at the path's
+										// destination
 
 	// move a mob with a combination of x
 	// direction and y direction (both
@@ -48,6 +53,75 @@ public abstract class Mob extends Entity {
 
 	}
 
+	public void idle() {
+		while (movement == null) {
+			movement = getPath((x / 16) + Entity.RANDOM.nextInt(4) - 2, (y / 16) + Entity.RANDOM.nextInt(4) - 2);
+		}
+
+	}
+
+	protected boolean idleTime() {
+		if (idletimer <= 0) {
+			idletimer = getIdleTimer();
+			return true;
+		} else {
+			idletimer--;
+			return false;
+		}
+	}
+
+	public boolean isMovementNull() {
+		return movement == null;
+	}
+
+	public void setMovement(Path path) {
+		movement = path;
+		counter = 0;
+		arrived = false;
+	}
+
+	// resets the mob's path
+	public void resetMove() {
+		counter = 0;
+		arrived = false;
+		movement = null;
+	}
+
+	// method to move the villager
+	public void move() {
+		if (movement == null) {
+			counter = 0;
+			return;
+		}
+		if (arrived) {
+			counter++;
+			arrived = false;
+		}
+		if (movement.getLength() == counter) {
+			counter = 0;
+			movement = null;
+			arrived = false;
+			return;
+		} else {
+			if (!arrived) {
+				Point step = movement.getStep(counter);
+				if (step != null) {
+					if (step == null || !level.isWalkAbleTile(step.x, step.y)) {
+						int destx = movement.getXdest();
+						int desty = movement.getYdest();
+						movement = getShortest(destx, desty);
+						return;
+					}
+					moveTo(step.x * 16, step.y * 16);
+					if (x == step.x * 16 && y == step.y * 16) {
+						arrived = true;
+					}
+
+				}
+			}
+		}
+
+	}
 
 	// is the mob around a tile (x and y in pixels)
 	public boolean aroundTile(int endx, int endy) {
@@ -57,7 +131,7 @@ public abstract class Mob extends Entity {
 	}
 
 	public boolean onSpot(int x, int y) {
-		return (this.x >> 4 == x >> 4 && this.y >> 4 == y >> 4);
+		return (this.x / 16 == x / 16 && this.y / 16 == y / 16);
 	}
 
 	// pathfinder
@@ -99,7 +173,7 @@ public abstract class Mob extends Entity {
 
 	// pathfinder method
 	public Path getPath(int tx, int ty) {
-		return finder.findPath(x >> 4, y >> 4, tx, ty);
+		return finder.findPath(x / 16, y / 16, tx, ty);
 
 	}
 
@@ -120,16 +194,16 @@ public abstract class Mob extends Entity {
 	// calculates collision
 	private boolean collision() {
 		if (((dir != Direction.OMLAAG && dir != Direction.LINKS_OMLAAG && dir != Direction.RECHTS_OMLAAG)
-				&& !level.getTile((x >> 4), (y + 1 >> 4)).solid())
+				&& !level.getTile((x / 16), ((y + 1) / 16)).solid())
 				|| ((dir != Direction.OMHOOG && dir != Direction.LINKS_OMHOOG && dir != Direction.RECHTS_OMHOOG)
-						&& !level.getTile((x >> 4), (y - 1 >> 4)).solid())
+						&& !level.getTile((x / 16), ((y - 1) / 16)).solid())
 				|| ((dir != Direction.LINKS && dir != Direction.LINKS_OMHOOG && dir != Direction.LINKS_OMLAAG)
-						&& !level.getTile((x - 1 >> 4), (y >> 4)).solid())
+						&& !level.getTile(((x - 1) / 16), (y / 16)).solid())
 				|| ((dir != Direction.RECHTS && dir != Direction.RECHTS_OMHOOG && dir != Direction.RECHTS_OMLAAG)
-						&& !level.getTile((x + 1 >> 4), (y >> 4)).solid()))
+						&& !level.getTile(((x + 1) / 16), (y / 16)).solid()))
 			return false;
 
-		return level.getTile((x >> 4), (y >> 4)).solid() || level.getTile((x + 1 >> 4), (y + 1 >> 4)).solid();
+		return level.getTile((x / 16), (y / 16)).solid() || level.getTile(((x + 1) / 16), ((y + 1) / 16)).solid();
 
 	}
 

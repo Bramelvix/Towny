@@ -11,11 +11,11 @@ public class Clothing extends Item {
 	// basic constructor
 	public Clothing(String name, int x, int y, Sprite sprite, String tooltip, ClothingType type) {
 		super(name, x, y, sprite, tooltip, true);
+		this.type = type;
 	}
 
 	public Clothing(String name, Villager vil, Sprite sprite, String tooltip, ClothingType type) {
 		this(name, vil.getX(), vil.getY(), sprite, tooltip, type);
-		this.type = type;
 	}
 
 	public Clothing(Clothing e) {
