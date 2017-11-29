@@ -25,6 +25,11 @@ public class Weapon extends Item {
 
 	}
 
+	public Weapon(String name, Sprite sprite, String tooltip, WeaponType type, WeaponMaterial mat) {
+		super(name, sprite, true);
+
+	}
+
 	public Weapon(Weapon e) {
 		this(e.getName(), e.getX(), e.getY(), e.sprite, e.getToolTip(), e.type, e.mat);
 
@@ -82,7 +87,13 @@ public class Weapon extends Item {
 	}
 
 	public static Weapon getRandomWeapon(int x, int y) {
-		return getWeapon(WeaponType.getWeaponRandType(), WeaponMaterial.getWeaponRandMat(), x, y);
+		Weapon weapon = getRandomWeapon();
+		weapon.setLocation(x, y);
+		return weapon;
+	}
+
+	public static Weapon getRandomWeapon() {
+		return getWeapon(WeaponType.getWeaponRandType(), WeaponMaterial.getWeaponRandMat());
 	}
 
 	public static Weapon getRandomWeapon(Mob a) {
@@ -111,7 +122,7 @@ public class Weapon extends Item {
 		return strong;
 	}
 
-	public static Weapon getWeapon(WeaponType type, WeaponMaterial mat, int x, int y) {
+	public static Weapon getWeapon(WeaponType type, WeaponMaterial mat) {
 		String name = "";
 		switch (mat) {
 		case WOOD:
@@ -131,12 +142,12 @@ public class Weapon extends Item {
 			break;
 		}
 		if (type == WeaponType.BOW && mat == WeaponMaterial.BRONZE)
-			return getRandomWeapon(x, y);
+			return getRandomWeapon();
 		name = name.concat(type.toString().toLowerCase());
 		String tooltip = "a " + name.toLowerCase();
 		if (mat == WeaponMaterial.IRON)
 			tooltip = "an " + name.toLowerCase();
-		return new Weapon(name, x, y, Sprite.getWeaponSprite(type, mat), tooltip, type, mat);
+		return new Weapon(name, Sprite.getWeaponSprite(type, mat), tooltip, type, mat);
 	}
 
 	public boolean isShield() {

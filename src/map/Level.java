@@ -9,6 +9,7 @@ import entity.Tree;
 import entity.Wall;
 import entity.item.Item;
 import entity.pathfinding.Point;
+import entity.workstations.Anvil;
 import entity.workstations.Furnace;
 import graphics.Screen;
 import graphics.Sprite;
@@ -110,6 +111,13 @@ public class Level {
 		for (Entity e : hardEntities) {
 			if (e instanceof Furnace)
 				return (Furnace) e;
+		}
+		return null;
+	}
+	public Anvil getNearestAnvil() {
+		for (Entity e : hardEntities) {
+			if (e instanceof Anvil)
+				return (Anvil) e;
 		}
 		return null;
 	}

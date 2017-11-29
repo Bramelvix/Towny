@@ -17,8 +17,20 @@ public class Wall extends BuildAbleObject {
 	// basic constructor
 	public Wall(WallType type) {
 		super();
-		resourceName = "Logs";
-		sprites = Sprite.WOODWALLSPRITES;
+		decideSprites(type);
+	}
+
+	private void decideSprites(WallType type) {
+		switch (type) {
+		case WOOD:
+			sprites = Sprite.WOODWALLSPRITES;
+			resourceName = "Logs";
+			break;
+		case STONE:
+			sprites = Sprite.STONEWALLSPRITES;
+			resourceName = "stones";
+			break;
+		}
 	}
 
 	// checks the 4 sides of this wall to see if there are walls next to it. The
@@ -26,7 +38,7 @@ public class Wall extends BuildAbleObject {
 	// this method has a boolean that stops the walls next to this wall to
 	// retrigger checking the sides of this wall, which would create an infinite
 	// loop of walls checking eachother again and again
-	public void checkSides(boolean eerstekeer) {
+	private void checkSides(boolean eerstekeer) {
 		Wall left = level.getWallOn((x - Tile.SIZE), y);
 		Wall right = level.getWallOn((x + Tile.SIZE), y);
 		Wall up = level.getWallOn(x, (y - Tile.SIZE));
@@ -56,14 +68,14 @@ public class Wall extends BuildAbleObject {
 	}
 
 	// Checksides method for the walls around this wall
-	public void checkSides() {
+	private void checkSides() {
 		checkSides(true);
 	}
 
 	// called by villagers when they start building the wall.
 	public boolean initialise(int x, int y, Item material, Level level) {
 		boolean initGelukt = super.initialise(x, y, material, level);
-		if (initGelukt && material.getName().equals("Logs"))
+		if (initGelukt && material.getName().equals(resourceName))
 			checkSides();
 		return initGelukt;
 
@@ -125,7 +137,6 @@ public class Wall extends BuildAbleObject {
 				}
 			}
 		}
-		sprites = null;
 
 	}
 

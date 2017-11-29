@@ -24,6 +24,10 @@ public class CraftJob extends Job {
 		boolean[] legeplaatsen = new boolean[8];
 		this.resources = resources;
 		for (Item item : this.resources) {
+			if (item == null) {
+				completed = true;
+				return;
+			}
 			int stationDropPuntx = -10;
 			int stationDropPunty = -10;
 			if (worker.level.isWalkAbleTile((station.getX() / 16) - 1, station.getY() / 16) && !legeplaatsen[0]) {

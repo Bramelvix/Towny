@@ -1,6 +1,6 @@
 package entity;
 
 public enum WallType {
-	WOOD
+	WOOD, STONE
 
 }

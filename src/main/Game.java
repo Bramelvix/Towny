@@ -20,12 +20,15 @@ import entity.item.Clothing;
 import entity.item.ClothingType;
 import entity.item.Item;
 import entity.item.weapon.Weapon;
+import entity.item.weapon.WeaponMaterial;
+import entity.item.weapon.WeaponType;
 import entity.mob.Mob;
 import entity.mob.Villager;
 import entity.mob.Zombie;
 import entity.mob.work.CraftJob;
 import entity.mob.work.FightJob;
 import entity.mob.work.MoveItemJob;
+import entity.workstations.Anvil;
 import entity.workstations.Furnace;
 import graphics.Screen;
 import graphics.Sprite;
@@ -311,12 +314,12 @@ public class Game implements Runnable {
 			return;
 		} else if (UiIcons.isSawHover() && !ui.menuVisible() && mouse.getClickedLeft()) {
 			deselectAllVills();
-			ui.showMenuOn(mouse, new MenuItem[] { new MenuItem(MenuItem.BUILD + " wooden wall"),
-					new MenuItem(MenuItem.BUILD + " furnace"), new MenuItem(MenuItem.CANCEL) });
+			ui.showMenuOn(mouse,
+					new MenuItem[] { new MenuItem(MenuItem.BUILD + " wooden wall"),
+							new MenuItem(MenuItem.BUILD + " stone wall"), new MenuItem(MenuItem.BUILD + " furnace"),
+							new MenuItem(MenuItem.BUILD + " anvil"), new MenuItem(MenuItem.CANCEL) });
 			return;
-		}
-
-		else if (mouse.getClickedRight()) {
+		} else if (mouse.getClickedRight()) {
 			if (selectedvill != null) {
 				List<MenuItem> options = new ArrayList<MenuItem>();
 				if (selectedvill.holding != null)
@@ -348,6 +351,9 @@ public class Game implements Runnable {
 				if (level.getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Furnace) {
 					ui.showMenuOn(mouse, new MenuItem[] { new MenuItem(MenuItem.CRAFT + " iron bar"),
 							new MenuItem(MenuItem.CRAFT + " gold bar"), new MenuItem(MenuItem.CANCEL) });
+				} else if (level.getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Anvil) {
+					ui.showMenuOn(mouse, new MenuItem[] { new MenuItem(MenuItem.CRAFT + " iron sword"),
+							new MenuItem(MenuItem.CANCEL) });
 				} else {
 					ui.showMenuOn(mouse, new MenuItem(MenuItem.CANCEL));
 				}
@@ -417,6 +423,16 @@ public class Game implements Runnable {
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
+			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " anvil", mouse) && !ui.outlineIsVisible()) {
+				ui.showBuildSquare(mouse, xScroll, yScroll, true, new Anvil());
+				ui.deSelectIcons();
+				ui.getMenu().hide();
+				return;
+			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " stone wall", mouse) && !ui.outlineIsVisible()) {
+				ui.showBuildSquare(mouse, xScroll, yScroll, true, new Wall(WallType.STONE));
+				ui.deSelectIcons();
+				ui.getMenu().hide();
+				return;
 			} else if ((ui.getMenu().clickedOnItem(MenuItem.PICKUP, mouse)
 					|| ui.getMenu().clickedOnItem(MenuItem.EQUIP, mouse)
 					|| ui.getMenu().clickedOnItem(MenuItem.WEAR, mouse)) && !ui.outlineIsVisible()) {
@@ -450,6 +466,14 @@ public class Game implements Runnable {
 				idle.addJob(new CraftJob(idle,
 						new Item[] { idle.getNearestItemOfType("gold ore"), idle.getNearestItemOfType("coal ore") },
 						new Item("gold bar", Sprite.goldBar, false), level.getNearestFurnace()));
+				ui.deSelectIcons();
+				ui.getMenu().hide();
+				return;
+			} else if (ui.getMenu().clickedOnItem(MenuItem.CRAFT + " iron sword", mouse)) {
+				Villager idle = getIdlestVil();
+				idle.setMovement(null);
+				idle.addJob(new CraftJob(idle, new Item[] { idle.getNearestItemOfType("iron bar") },
+						Weapon.getWeapon(WeaponType.SWORD, WeaponMaterial.IRON), level.getNearestAnvil()));
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;

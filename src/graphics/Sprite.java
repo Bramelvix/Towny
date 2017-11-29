@@ -34,7 +34,28 @@ public class Sprite {
 	public static final Sprite treetop = new Sprite(13, 10, SpriteSheet.tiles);
 
 	// WALLS
-	private static final Sprite beigeWallVertical = new Sprite(15, 13, SpriteSheet.tiles);
+	private static final Sprite stoneWallHorizontalRight = new Sprite(27, 12, SpriteSheet.tiles);
+	private static final Sprite stoneWallHorizontalBoth = new Sprite(28, 12, SpriteSheet.tiles);
+	private static final Sprite stoneWallHorizontalLeft = new Sprite(29, 12, SpriteSheet.tiles);
+	private static final Sprite stoneWallVerticalBottom = new Sprite(27, 13, SpriteSheet.tiles);
+	private static final Sprite stoneWall4sides = new Sprite(28, 13, SpriteSheet.tiles);
+	private static final Sprite stoneWallVerticalBoth = new Sprite(29, 13, SpriteSheet.tiles);
+	private static final Sprite stoneWallCornerTopRight = new Sprite(30, 13, SpriteSheet.tiles);
+	private static final Sprite stoneWallCornerTopLeft = new Sprite(31, 13, SpriteSheet.tiles);
+	private static final Sprite stoneWallVerticalTop = new Sprite(27, 14, SpriteSheet.tiles);
+	private static final Sprite stoneWallCornerBottomRight = new Sprite(30, 12, SpriteSheet.tiles);
+	private static final Sprite stoneWallCornerBottomLeft = new Sprite(31, 12, SpriteSheet.tiles);
+	private static final Sprite stoneWallTRight = new Sprite(32, 12, SpriteSheet.tiles);
+	private static final Sprite stoneWallTTop = new Sprite(32, 12, SpriteSheet.tiles);
+	private static final Sprite stoneWallTLeft = new Sprite(31, 13, SpriteSheet.tiles);
+	private static final Sprite stoneWallTBottom = new Sprite(32, 13, SpriteSheet.tiles);
+
+	public static final Sprite[] STONEWALLSPRITES = { Sprite.stoneWallVerticalTop, Sprite.stoneWallVerticalBoth,
+			Sprite.stoneWallTLeft, Sprite.stoneWall4sides, Sprite.stoneWallTRight, Sprite.stoneWallCornerTopLeft,
+			Sprite.stoneWallTTop, Sprite.stoneWallCornerTopRight, Sprite.stoneWallVerticalBottom,
+			Sprite.stoneWallCornerBottomLeft, Sprite.stoneWallTBottom, Sprite.stoneWallCornerBottomRight,
+			Sprite.stoneWallHorizontalLeft, Sprite.stoneWallHorizontalBoth, Sprite.stoneWallHorizontalRight };
+
 	private static final Sprite woodenWallHorizontalRight = new Sprite(34, 12, SpriteSheet.tiles);
 	private static final Sprite woodenWallHorizontalBoth = new Sprite(35, 12, SpriteSheet.tiles);
 	private static final Sprite woodenWallHorizontalLeft = new Sprite(36, 12, SpriteSheet.tiles);
@@ -157,6 +178,9 @@ public class Sprite {
 	public static final Sprite furnaceOff = new Sprite(12, 0, SpriteSheet.tiles);
 	public static final Sprite furnaceOn1 = new Sprite(13, 0, SpriteSheet.tiles);
 	public static final Sprite furnaceOn2 = new Sprite(14, 0, SpriteSheet.tiles);
+
+	// anvil
+	public static final Sprite anvil = new Sprite(15, 0, SpriteSheet.tiles);
 
 	protected Sprite(int x, int y, SpriteSheet sheet) {
 		this.x = x * SIZE + (x * sheet.margin);
