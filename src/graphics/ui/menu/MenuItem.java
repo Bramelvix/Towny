@@ -6,6 +6,7 @@ import java.awt.Graphics;
 
 import entity.Entity;
 import entity.item.Item;
+import entity.mob.work.Recipe;
 import input.Mouse;
 
 public class MenuItem {
@@ -26,6 +27,9 @@ public class MenuItem {
 	public static final String EQUIP = "Equip";
 	public static final String WEAR = "Wear";
 	public static final String CRAFT = "Craft";
+	public static final String SMELT = "Smelt";
+	public static final String SMITH = "Smith";
+	private Recipe recipe;
 	private Entity entity;
 
 	// constructor
@@ -38,6 +42,11 @@ public class MenuItem {
 		this(text);
 		this.entity = e;
 
+	}
+
+	public MenuItem(Recipe recipe) {
+		this.text = CRAFT + " " + recipe.getRecipeName();
+		this.recipe = recipe;
 	}
 
 	public void init(Menu menu) {
@@ -81,6 +90,10 @@ public class MenuItem {
 
 	public String getText() {
 		return text;
+	}
+
+	public Recipe getRecipe() {
+		return recipe;
 	}
 
 }

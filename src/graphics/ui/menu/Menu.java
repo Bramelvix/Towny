@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import entity.mob.work.Recipe;
 import input.Mouse;
 
 public class Menu { // the menu is the little options menu that shows up when
@@ -113,12 +114,24 @@ public class Menu { // the menu is the little options menu that shows up when
 	}
 
 	public boolean clickedOnItem(String type, Mouse mouse) {
+		return clickedItem(type, mouse) != null;
+	}
+
+	private MenuItem clickedItem(String type, Mouse mouse) {
 		for (MenuItem i : items) {
 			if (i.getText().contains((type)) && i.clicked(mouse)) {
-				return true;
+				return i;
 			}
 		}
-		return false;
+		return null;
+	}
+
+	public Recipe recipeFromCraftOption(Mouse mouse) {
+		MenuItem clickedItem = clickedItem(MenuItem.CRAFT, mouse);
+		if (clickedItem != null) {
+			return clickedItem.getRecipe();
+		}
+		return null;
 	}
 
 	public MenuItem clickedItem() {

@@ -28,6 +28,7 @@ import entity.mob.Zombie;
 import entity.mob.work.CraftJob;
 import entity.mob.work.FightJob;
 import entity.mob.work.MoveItemJob;
+import entity.mob.work.Recipe;
 import entity.workstations.Anvil;
 import entity.workstations.Furnace;
 import graphics.Screen;
@@ -349,11 +350,11 @@ public class Game implements Runnable {
 				ui.showMenuOn(mouse, options.toArray(new MenuItem[0]));
 			} else {
 				if (level.getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Furnace) {
-					ui.showMenuOn(mouse, new MenuItem[] { new MenuItem(MenuItem.CRAFT + " iron bar"),
-							new MenuItem(MenuItem.CRAFT + " gold bar"), new MenuItem(MenuItem.CANCEL) });
+					ui.showMenuOn(mouse,
+							new MenuItem[] { new MenuItem(MenuItem.SMELT), new MenuItem(MenuItem.CANCEL) });
 				} else if (level.getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Anvil) {
-					ui.showMenuOn(mouse, new MenuItem[] { new MenuItem(MenuItem.CRAFT + " iron sword"),
-							new MenuItem(MenuItem.CANCEL) });
+					ui.showMenuOn(mouse,
+							new MenuItem[] { new MenuItem(MenuItem.SMITH), new MenuItem(MenuItem.CANCEL) });
 				} else {
 					ui.showMenuOn(mouse, new MenuItem(MenuItem.CANCEL));
 				}
@@ -451,33 +452,41 @@ public class Game implements Runnable {
 				deselect(selectedvill);
 				ui.getMenu().hide();
 				return;
-			} else if (ui.getMenu().clickedOnItem(MenuItem.CRAFT + " iron bar", mouse)) {
-				Villager idle = getIdlestVil();
-				idle.setMovement(null);
-				idle.addJob(new CraftJob(idle,
-						new Item[] { idle.getNearestItemOfType("iron ore"), idle.getNearestItemOfType("coal ore") },
-						new Item("iron bar", Sprite.ironBar, false), level.getNearestFurnace()));
-				ui.deSelectIcons();
-				ui.getMenu().hide();
+			} else if (ui.getMenu().clickedOnItem(MenuItem.SMELT, mouse)) {
+				MenuItem[] craftingOptions = new MenuItem[Recipe.FURNACE_RECIPES.length + 1];
+				for (int i = 0; i < Recipe.FURNACE_RECIPES.length; i++) {
+					craftingOptions[i] = new MenuItem(Recipe.FURNACE_RECIPES[i]);
+				}
+				craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
+				ui.showMenuOn(mouse, craftingOptions);
 				return;
-			} else if (ui.getMenu().clickedOnItem(MenuItem.CRAFT + " gold bar", mouse)) {
-				Villager idle = getIdlestVil();
-				idle.setMovement(null);
-				idle.addJob(new CraftJob(idle,
-						new Item[] { idle.getNearestItemOfType("gold ore"), idle.getNearestItemOfType("coal ore") },
-						new Item("gold bar", Sprite.goldBar, false), level.getNearestFurnace()));
-				ui.deSelectIcons();
-				ui.getMenu().hide();
+
+			} else if (ui.getMenu().clickedOnItem(MenuItem.SMITH, mouse)) {
+				MenuItem[] craftingOptions = new MenuItem[Recipe.IRON_ANVIL_RECIPES.length + 1];
+				for (int i = 0; i < Recipe.IRON_ANVIL_RECIPES.length; i++) {
+					craftingOptions[i] = new MenuItem(Recipe.IRON_ANVIL_RECIPES[i]);
+				}
+				craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
+				ui.showMenuOn(mouse, craftingOptions);
 				return;
-			} else if (ui.getMenu().clickedOnItem(MenuItem.CRAFT + " iron sword", mouse)) {
+
+			} else if (ui.getMenu().clickedOnItem(MenuItem.CRAFT, mouse)) {
 				Villager idle = getIdlestVil();
-				idle.setMovement(null);
-				idle.addJob(new CraftJob(idle, new Item[] { idle.getNearestItemOfType("iron bar") },
-						Weapon.getWeapon(WeaponType.SWORD, WeaponMaterial.IRON), level.getNearestAnvil()));
-				ui.deSelectIcons();
-				ui.getMenu().hide();
+				Recipe recipe = ui.getMenu().recipeFromCraftOption(mouse);
+				if (recipe != null) {
+					idle.setMovement(null);
+					Item[] res = new Item[recipe.resources.length];
+					for (int i = 0; i < res.length; i++) {
+						res[i] = idle.getNearestItemOfType(recipe.resources[i]);
+					}
+					idle.addJob(new CraftJob(idle, res, recipe.getProduct(),
+							level.getNearestWorkstation(recipe.getWorkstationClass())));
+					ui.deSelectIcons();
+					ui.getMenu().hide();
+				}
 				return;
 			}
+
 		}
 		return;
 

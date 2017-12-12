@@ -9,8 +9,7 @@ import entity.Tree;
 import entity.Wall;
 import entity.item.Item;
 import entity.pathfinding.Point;
-import entity.workstations.Anvil;
-import entity.workstations.Furnace;
+import entity.workstations.Workstation;
 import graphics.Screen;
 import graphics.Sprite;
 
@@ -107,17 +106,11 @@ public class Level {
 		return (getItemWithNameOn(x, y, i.getName()) != null);
 	}
 
-	public Furnace getNearestFurnace() {
+	public <T extends Workstation> T getNearestWorkstation(Class<T> workstation) {
 		for (Entity e : hardEntities) {
-			if (e instanceof Furnace)
-				return (Furnace) e;
-		}
-		return null;
-	}
-	public Anvil getNearestAnvil() {
-		for (Entity e : hardEntities) {
-			if (e instanceof Anvil)
-				return (Anvil) e;
+			if (workstation.isInstance(e)) {
+				return workstation.cast(e);
+			}
 		}
 		return null;
 	}
