@@ -22,7 +22,7 @@ public class Recipe {
 			Anvil.class, "iron bar");
 	public static final Recipe[] IRON_ANVIL_RECIPES = { IRON_SWORD };
 
-	public String[] resources;
+	private String[] resources;
 	private Item product;
 	private Class<? extends Workstation> workstation;
 
@@ -37,7 +37,7 @@ public class Recipe {
 	}
 
 	public Item getProduct() {
-		return product;
+		return new Item(product);
 	}
 
 	public String getRecipeName() {

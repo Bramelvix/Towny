@@ -475,9 +475,9 @@ public class Game implements Runnable {
 				Recipe recipe = ui.getMenu().recipeFromCraftOption(mouse);
 				if (recipe != null) {
 					idle.setMovement(null);
-					Item[] res = new Item[recipe.resources.length];
+					Item[] res = new Item[recipe.getResources().length];
 					for (int i = 0; i < res.length; i++) {
-						res[i] = idle.getNearestItemOfType(recipe.resources[i]);
+						res[i] = idle.getNearestItemOfType(recipe.getResources()[i]);
 					}
 					idle.addJob(new CraftJob(idle, res, recipe.getProduct(),
 							level.getNearestWorkstation(recipe.getWorkstationClass())));
