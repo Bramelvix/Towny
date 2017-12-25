@@ -70,18 +70,10 @@ public class Ui {
 		UiIcons.deSelect();
 	}
 
-	public void showMenuOn(Mouse mouse, MenuItem[] items) {
+	public void showMenuOn(Mouse mouse, MenuItem... items) {
 		if (!outline.isVisible()) {
 			showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels());
 			menu.addItems(items);
-			menu.show(mouse);
-		}
-	}
-
-	public void showMenuOn(Mouse mouse, MenuItem item) {
-		if (!outline.isVisible()) {
-			showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels());
-			menu.addItem(item);
 			menu.show(mouse);
 		}
 	}

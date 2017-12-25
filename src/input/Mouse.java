@@ -38,12 +38,12 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 		return mouseX;
 	}
 
-	public int getY() {
-		return mouseY;
+	public int getMouseB() {
+		return mouseB;
 	}
 
-	public int getButton() {
-		return mouseB;
+	public int getY() {
+		return mouseY;
 	}
 
 	public int getTileY() {
@@ -56,10 +56,12 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		if (arg0.getButton() == 1)
+		if (arg0.getButton() == 1) {
 			clickedLinks = true;
-		if (arg0.getButton() == 3)
+		}
+		if (arg0.getButton() == 3) {
 			clickedRechts = true;
+		}
 
 	}
 
@@ -89,6 +91,7 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 	public boolean getClickedLeft() {
 		return clickedLinks;
 	}
+
 	public boolean getClickedRight() {
 		return clickedRechts;
 	}

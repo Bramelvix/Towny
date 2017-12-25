@@ -49,14 +49,15 @@ public class Level {
 	// is the tile on X and Y clear (No items or entities or walls blocking it)
 	public boolean isClearTile(int x, int y) {
 		return items.stream().filter(t -> (t.getX() / 16) == x && (t.getY() / 16) == y).findFirst().orElse(null) == null
-				? isWalkAbleTile(x, y) : false;
+				? isWalkAbleTile(x, y)
+				: false;
 
 	}
 
 	// is the tile on X and Y walkable (items can still be there)
 	public boolean isWalkAbleTile(int x, int y) {
 		return hardEntities.stream().filter(t -> (t.getX() / 16) == x && (t.getY() / 16) == y).findFirst()
-				.orElse(null) == null;
+				.orElse(null) == null && !getTile(x, y).solid();
 	}
 
 	// if there is a wall on x and y, return it
@@ -73,22 +74,30 @@ public class Level {
 			return new Point(gedeeldex, gedeeldey);
 		} else {
 			for (int i = 1; (i < gedeeldex && i < gedeeldey); i++) {
-				if (isClearTile(gedeeldex - i, gedeeldey - i))
+				if (isClearTile(gedeeldex - i, gedeeldey - i)) {
 					return new Point(gedeeldex - i, gedeeldey - i);
-				if (isClearTile(gedeeldex, gedeeldey - i))
+				}
+				if (isClearTile(gedeeldex, gedeeldey - i)) {
 					return new Point(gedeeldex, gedeeldey - i);
-				if (isClearTile(gedeeldex + i, gedeeldey - i))
+				}
+				if (isClearTile(gedeeldex + i, gedeeldey - i)) {
 					return new Point(gedeeldex + i, gedeeldey - i);
-				if (isClearTile(gedeeldex + i, gedeeldey))
+				}
+				if (isClearTile(gedeeldex + i, gedeeldey)) {
 					return new Point(gedeeldex + i, gedeeldey);
-				if (isClearTile(gedeeldex + i, gedeeldey + i))
+				}
+				if (isClearTile(gedeeldex + i, gedeeldey + i)) {
 					return new Point(gedeeldex + i, gedeeldey + i);
-				if (isClearTile(gedeeldex, gedeeldey + i))
+				}
+				if (isClearTile(gedeeldex, gedeeldey + i)) {
 					return new Point(gedeeldex, gedeeldey + i);
-				if (isClearTile(gedeeldex - i, gedeeldey + i))
+				}
+				if (isClearTile(gedeeldex - i, gedeeldey + i)) {
 					return new Point(gedeeldex - i, gedeeldey + i);
-				if (isClearTile(gedeeldex - i, gedeeldey))
+				}
+				if (isClearTile(gedeeldex - i, gedeeldey)) {
 					return new Point(gedeeldex - i, gedeeldey);
+				}
 			}
 			return null;
 		}
@@ -115,7 +124,7 @@ public class Level {
 		return null;
 	}
 
-	public Item getItemOn(int x, int y) {
+	public <T extends Item> Item getItemOn(int x, int y) {
 		for (Item e : this.items) {
 			if (((e.getX() / 16) == (x / 16)) && ((e.getY() / 16) == (y / 16)))
 				return e;
@@ -123,7 +132,7 @@ public class Level {
 		return null;
 	}
 
-	public Item getItemWithNameOn(int x, int y, String name) {
+	public <T extends Item> Item getItemWithNameOn(int x, int y, String name) {
 		if (getItemOn(x, y) != null && getItemOn(x, y).getName().equals(name)) {
 			return getItemOn(x, y);
 		} else {

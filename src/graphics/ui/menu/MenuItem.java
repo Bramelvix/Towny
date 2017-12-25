@@ -3,9 +3,7 @@ package graphics.ui.menu;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-
 import entity.Entity;
-import entity.item.Item;
 import entity.mob.work.Recipe;
 import input.Mouse;
 
@@ -60,8 +58,6 @@ public class MenuItem {
 	}
 
 	public static String getMenuItemText(String menuItem, Entity entity) {
-		if (entity instanceof Item)
-			return menuItem + " " + entity.getName();
 		return menuItem + " " + entity.getName();
 	}
 
@@ -82,12 +78,6 @@ public class MenuItem {
 	public boolean clicked(Mouse mouse) {
 		return hover && mouse.getClickedLeft();
 	}
-
-	// the menuitem is equal to other menuitems with the same text
-	public boolean equals(String i) {
-		return text.contains(i);
-	}
-
 	public String getText() {
 		return text;
 	}

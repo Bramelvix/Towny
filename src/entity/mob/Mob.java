@@ -27,7 +27,7 @@ public abstract class Mob extends Entity {
 	// direction and y direction (both
 	// between -1 and 1). example: for x -1
 	// is left and 1 is right.
-	public void move(int xa, int ya) { // extreem korte notatie
+	public void move(int xa, int ya) { // redelijk korte notatie
 		if (xa > 0) {
 			if (ya > 0) {
 				dir = Direction.RECHTS_OMLAAG;
@@ -218,6 +218,7 @@ public abstract class Mob extends Entity {
 	}
 
 	// method to render onto the screen
-	public abstract void render(Screen screen);
-
+	public void render(Screen screen) {
+		screen.renderSprite(x, y, this.sprite); // renders the body
+	}
 }

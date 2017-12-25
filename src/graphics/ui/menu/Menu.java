@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
+import entity.Entity;
 import entity.mob.work.Recipe;
 import input.Mouse;
 
@@ -15,6 +16,7 @@ public class Menu { // the menu is the little options menu that shows up when
 	private int width = 70; // width and height hardcoded
 	private int height = 20;
 	public List<MenuItem> items; // list of items on the menu
+	private List<Entity> menuItemEntities;
 	private boolean visible; // is the item visible
 	private Color colour = new Color(91, 94, 99, 210); // the grey-blue colour
 														// of the background of
@@ -56,7 +58,7 @@ public class Menu { // the menu is the little options menu that shows up when
 	}
 
 	// adding items to the menu
-	public void addItems(MenuItem[] items) {
+	public void addItems(MenuItem... items) {
 		for (MenuItem i : items) {
 			addItem(i);
 		}
@@ -81,6 +83,7 @@ public class Menu { // the menu is the little options menu that shows up when
 		x = 0;
 		y = 0;
 		items = new ArrayList<MenuItem>();
+		menuItemEntities = new ArrayList<Entity>();
 		setVisible(false);
 	}
 
@@ -134,9 +137,13 @@ public class Menu { // the menu is the little options menu that shows up when
 		return null;
 	}
 
-	public MenuItem clickedItem() {
-		for (MenuItem i : items) {
-			return i;
+	@SuppressWarnings("unchecked") // shouldnt ever be a problem
+	public <T extends Entity> T getEntity(String... checkText) {
+		for (MenuItem item : items) {
+			for (String text : checkText)
+				if (item.getText().contains(text)) {
+					return (T) item.getEntity();
+				}
 		}
 		return null;
 	}
@@ -151,6 +158,9 @@ public class Menu { // the menu is the little options menu that shows up when
 					width += ((o.getText().length() * 10) - width);
 				}
 				height = height + 15;
+				if (o.getEntity() != null) {
+					menuItemEntities.add(o.getEntity());
+				}
 			}
 		}
 	}

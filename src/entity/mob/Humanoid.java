@@ -1,7 +1,6 @@
 package entity.mob;
 
 import entity.item.Item;
-import graphics.Screen;
 import map.Level;
 
 public abstract class Humanoid extends Mob {
@@ -40,18 +39,6 @@ public abstract class Humanoid extends Mob {
 		}
 
 	}
-	@Override
-	public void render(Screen screen) {
-		screen.renderSprite(x, y, this.sprite); // renders the body
-		
-
-	}
-
-	@Override
-	public abstract void update();
-
-	@Override
-	public abstract float getDamage();
 
 
 }
