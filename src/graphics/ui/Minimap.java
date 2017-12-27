@@ -43,7 +43,7 @@ public class Minimap {
 	private void init() {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-					pixels[y + x * width] = map.tiles[y / 2 + x / 2 * map.width].sprite.pixels[0];
+				pixels[y + x * width] = map.getTile(y / 2, x / 2).sprite.pixels[0];
 
 			}
 		}
@@ -55,8 +55,8 @@ public class Minimap {
 	public void render(Graphics g) {
 		g.drawImage(img, x, y, null);
 		g.setColor(COL);
-		float xloc = (x + (xoff *0.125f));
-		float yloc = (y + (yoff *0.125f));
+		float xloc = (x + (xoff * 0.125f));
+		float yloc = (y + (yoff * 0.125f));
 		g.fillRect((int) xloc + 1, (int) yloc + 1, (int) (31.25 * 2), (int) (17.578125 * 2));
 
 	}

@@ -47,7 +47,7 @@ public class PathFinder implements AStarHeuristic {
 				|| ty > level.height) {
 			return null;
 		}
-		if (level.tiles[tx + ty * level.width].solid()) {
+		if (!level.isWalkAbleTile(tx, ty)){
 			return null;
 
 		}
@@ -113,9 +113,10 @@ public class PathFinder implements AStarHeuristic {
 	}
 
 	private boolean isValidLocation(int xp, int yp) {
-		if (xp <= 0 || xp >= level.width || yp <= 0 || yp >= level.height)
+		if (xp <= 0 || xp >= level.width || yp <= 0 || yp >= level.height) {
 			return false;
-		return !(level.tiles[xp + yp * level.width].solid());
+		}
+		return level.isWalkAbleTile(xp, yp);
 	}
 
 	public float getCost(int x, int y, int tx, int ty) {

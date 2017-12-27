@@ -79,6 +79,6 @@ public abstract class Entity {
 
 	// render method
 	public void render(Screen screen) {
-		screen.renderEntity(x, y, this);
+		screen.renderSprite(x, y, sprite);
 	}
 }

@@ -21,7 +21,7 @@ public abstract class BuildAbleObject extends Entity {
 		}
 		this.level = level;
 		setLocation(x * 16, y * 16);
-		level.hardEntities.add(this);
+		level.addHardEntity(this);
 		initialised = true;
 		return true;
 

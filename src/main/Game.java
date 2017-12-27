@@ -62,7 +62,6 @@ public class Game implements Runnable {
 	public int yScroll = 0;
 	private Screen screen;
 	private BufferedImage image;
-	private int[] pixels;
 	private Canvas canvas;
 
 	public static void main(String[] args) {
@@ -75,7 +74,7 @@ public class Game implements Runnable {
 		Dimension size = new Dimension(width * SCALE, height * SCALE);
 		canvas.setPreferredSize(size);
 		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-		pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
+		int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 		screen = new Screen(width, height, pixels);
 		frame = new JFrame();
 		frame.setResizable(false);
@@ -324,7 +323,7 @@ public class Game implements Runnable {
 					options.add(new MenuItem(MenuItem.getMenuItemText(MenuItem.DROP, selectedvill.holding)));
 				Tree boom = level.selectTree(mouse.getX(), mouse.getY());
 				if (boom != null) {
-					options.add(new MenuItem(MenuItem.getMenuItemText(MenuItem.CHOP, boom)));
+					options.add(new MenuItem(MenuItem.getMenuItemText(MenuItem.CHOP, boom), boom));
 				}
 				Ore ore = level.selectOre(mouse.getX(), mouse.getY());
 				if (ore != null) {
@@ -383,9 +382,6 @@ public class Game implements Runnable {
 			} else if (ui.getMenu().clickedOnItem(MenuItem.MOVE, mouse)) {
 				selectedvill.resetAll();
 				selectedvill.setMovement(selectedvill.getPath(mouse.getTileX(), mouse.getTileY()));
-				if (selectedvill.isMovementNull()) {
-					selectedvill.setMovement(selectedvill.getShortest(level.getEntityOn(mouse.getX(), mouse.getY())));
-				}
 				deselect(selectedvill);
 				ui.deSelectIcons();
 				ui.getMenu().hide();
@@ -490,14 +486,18 @@ public class Game implements Runnable {
 	}
 
 	private void moveCamera() {
-		if (Keyboard.getKeyPressed(KeyEvent.VK_UP) && yScroll > 0)
+		if (Keyboard.getKeyPressed(KeyEvent.VK_UP) && yScroll > 0) {
 			yScroll -= 2;
-		if (Keyboard.getKeyPressed(KeyEvent.VK_DOWN) && yScroll < (level.height * Tile.SIZE) - 1 - height)
+		}
+		if (Keyboard.getKeyPressed(KeyEvent.VK_DOWN) && yScroll < (level.height * Tile.SIZE) - 1 - height) {
 			yScroll += 2;
-		if (Keyboard.getKeyPressed(KeyEvent.VK_LEFT) && xScroll > 0)
+		}
+		if (Keyboard.getKeyPressed(KeyEvent.VK_LEFT) && xScroll > 0) {
 			xScroll -= 2;
-		if (Keyboard.getKeyPressed(KeyEvent.VK_RIGHT) && xScroll < (level.width * Tile.SIZE) - width - 1)
+		}
+		if (Keyboard.getKeyPressed(KeyEvent.VK_RIGHT) && xScroll < (level.width * Tile.SIZE) - width - 1) {
 			xScroll += 2;
+		}
 
 	}
 
@@ -548,7 +548,6 @@ public class Game implements Runnable {
 		level.renderSoftEntities(screen);
 		renderMobs();
 		level.renderHardEntites(screen);
-		pixels = screen.pixels;
 		Graphics g = bs.getDrawGraphics();
 		g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		g.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight(), null);

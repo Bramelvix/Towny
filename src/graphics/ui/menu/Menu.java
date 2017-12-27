@@ -140,10 +140,11 @@ public class Menu { // the menu is the little options menu that shows up when
 	@SuppressWarnings("unchecked") // shouldnt ever be a problem
 	public <T extends Entity> T getEntity(String... checkText) {
 		for (MenuItem item : items) {
-			for (String text : checkText)
+			for (String text : checkText) {
 				if (item.getText().contains(text)) {
 					return (T) item.getEntity();
 				}
+			}
 		}
 		return null;
 	}

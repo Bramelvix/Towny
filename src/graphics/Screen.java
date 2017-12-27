@@ -25,22 +25,6 @@ public class Screen {
 		}
 	}
 
-	// render a tile on the screen
-	public void renderTile(int xp, int yp, Tile tile) {
-		xp -= xOffset;
-		yp -= yOffset;
-		for (int y = 0; y < Sprite.SIZE; y++) {
-			int ya = y + yp;
-			for (int x = 0; x < Sprite.SIZE; x++) {
-				int xa = x + xp;
-				if (xa < 0|| xa >= width || ya < 0 || ya >= height) continue;
-				int col = tile.sprite.pixels[x + y * Sprite.SIZE];
-				if (col != 0xffff00ff)
-					pixels[xa + ya * width] = col;
-			}
-		}
-	}
-
 	// render the red square around selected entities
 	public void renderSelection(int xp, int yp, Entity e) {
 		xp -= xOffset;
@@ -49,7 +33,9 @@ public class Screen {
 			int ya = y + yp;
 			for (int x = 0; x < Sprite.SIZE; x++) {
 				int xa = x + xp;
-				if (xa < 0|| xa >= width || ya < 0 || ya >= height) continue;
+				if (xa < 0 || xa >= width || ya < 0 || ya >= height) {
+					continue;
+				}
 				if (e.isSelected() && (x == 0 || x == Sprite.SIZE - 1 || y == 0 || y == Sprite.SIZE - 1)) {
 					pixels[xa + ya * width] = 0xf44242;
 
@@ -59,42 +45,10 @@ public class Screen {
 		}
 	}
 
-	// render entities
-	public void renderEntity(int xp, int yp, Entity e) {
-		xp -= xOffset;
-		yp -= yOffset;
-		for (int y = 0; y < Sprite.SIZE; y++) {
-			int ya = y + yp;
-			for (int x = 0; x < Sprite.SIZE; x++) {
-				int xa = x + xp;
-				if (xa < 0|| xa >= width || ya < 0 || ya >= height) continue;
-				int col = e.sprite.pixels[x + y * Sprite.SIZE];
-				if (col != 0xffff00ff)
-					pixels[xa + ya * width] = col;
-			}
-		}
-
-	}
-
 	// render trees
 	public void renderTree(int xp, int yp, Tree e) {
 		renderSprite(xp, yp, e.sprite);
-		xp -= xOffset;
-		yp -= yOffset;
-		for (int y = 0; y < Sprite.SIZE; y++) {
-			int ya = y + yp;
-			for (int x = 0; x < Sprite.SIZE; x++) {
-				int xa = x + xp;
-				if (xa < 0|| xa >= width || ya < 0 || ya >= height) continue;
-				int col = e.sprite.pixels[x + y * Sprite.SIZE];
-				if (e.isSelected() && (x == 0 || x == Sprite.SIZE - 1 || y == Sprite.SIZE - 1)) {
-					col = 0xf44242;
-				}
-				if (col != 0xffff00ff)
-					pixels[xa + ya * width] = col;
-			}
-		}
-		renderSprite(xp, yp - Tile.SIZE, e.extraSprite, e.isSelected(), false);
+		renderSprite(xp, yp - Tile.SIZE, e.extraSprite, e.isSelected(), true);
 
 	}
 
@@ -113,13 +67,15 @@ public class Screen {
 			int ya = y + yp;
 			for (int x = 0; x < Sprite.SIZE; x++) {
 				int xa = x + xp;
-				if (xa < 0|| xa >= width || ya < 0 || ya >= height) continue;
+				if (xa < 0 || xa >= width || ya < 0 || ya >= height)
+					continue;
 				int col = e.pixels[x + y * Sprite.SIZE];
 				if (selected && (x == 0 || x == Sprite.SIZE - 1 || y == 0)) {
 					col = 0xf44242;
 				}
-				if (col != 0xffff00ff)
+				if (col != 0xffff00ff) {
 					pixels[xa + ya * width] = col;
+				}
 			}
 		}
 

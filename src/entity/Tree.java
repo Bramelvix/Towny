@@ -26,14 +26,14 @@ public class Tree extends Resource {
 	// work method (same as in the Ore class)
 	public boolean work(Villager worker) {
 		if (chopped > 0) {
-			if (chopped % 20 == 0)
+			if (chopped % 20 == 0) {
 				Sound.speelGeluid(Sound.woodChopping);
+			}
 			chopped--;
 			return false;
 		} else {
-			worker.level.hardEntities.remove(this);
+			worker.level.removeHardEntity(this);
 			worker.level.addItem(new Item("Logs", this.x, this.y, Sprite.logs, "Wooden logs", true));
-			worker.level.getTile(x >> 4, y >> 4).setSolid(false);
 			return true;
 		}
 

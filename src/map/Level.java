@@ -14,9 +14,9 @@ import graphics.Screen;
 import graphics.Sprite;
 
 public class Level {
-	public Tile[] tiles; // array of tiles on the map
+	private Tile[] tiles; // array of tiles on the map
 	public int width, height; // map with and height
-	public List<Entity> hardEntities; // list of entities on the map
+	private List<Entity> hardEntities; // list of entities on the map
 	public List<Entity> walkableEntities;
 	public List<Item> items;
 
@@ -38,12 +38,16 @@ public class Level {
 
 	// adding an item to the list
 	public <T extends Item> void addItem(T e) {
-		items.add(e);
+		if (e != null) {
+			items.add(e);
+		}
 	}
 
 	// removing an item from the list
-	public void removeItem(Item e) {
-		items.remove(e);
+	public <T extends Item> void removeItem(T e) {
+		if (e != null) {
+			items.remove(e);
+		}
 	}
 
 	// is the tile on X and Y clear (No items or entities or walls blocking it)
@@ -56,8 +60,7 @@ public class Level {
 
 	// is the tile on X and Y walkable (items can still be there)
 	public boolean isWalkAbleTile(int x, int y) {
-		return hardEntities.stream().filter(t -> (t.getX() / 16) == x && (t.getY() / 16) == y).findFirst()
-				.orElse(null) == null && !getTile(x, y).solid();
+		return !tiles[x + y * width].solid();
 	}
 
 	// if there is a wall on x and y, return it
@@ -181,11 +184,13 @@ public class Level {
 			Entity i = hardEntities.get(s);
 			if (i instanceof Tree) {
 				if (i.getX() / 16 == x / 16) {
-					if (i.getY() / 16 == y / 16)
+					if (i.getY() / 16 == y / 16) {
 						return (Tree) i;
+					}
 					if (seperate) {
-						if ((i.getY() - 1) / 16 == y / 16)
+						if ((i.getY() - 1) / 16 == y / 16) {
 							return (Tree) i;
+						}
 					}
 
 				}
@@ -200,53 +205,34 @@ public class Level {
 		for (int s = 0; s < walkableEntities.size(); s++) {
 			Entity i = walkableEntities.get(s);
 			if (i instanceof Ore) {
-				if (i.getX() / 16 == x >> 4 && i.getY() / 16 == y / 16)
+				if (i.getX() / 16 == x >> 4 && i.getY() / 16 == y / 16) {
 					return (Ore) i;
+				}
 			}
 		}
 		return null;
 
 	}
 
-	// render the entities
+	// render the hard (not walkable) entities
 	public void renderHardEntites(Screen screen) {
 		hardEntities.forEach((Entity i) -> i.render(screen));
 	}
 
-	// render the items
+	// render the soft (walkable) entities
 	public void renderSoftEntities(Screen screen) {
 		walkableEntities.forEach((Entity i) -> i.render(screen));
 		items.forEach((Entity i) -> i.render(screen));
 	}
 
-	// if there is an entity on X and Y, return it
-	public Entity getEntityOn(int x, int y) {
-		for (int s = 0; s < items.size(); s++) {
-			Entity i = items.get(s);
-			if (i.getX() / 16 == x / 16 && i.getY() / 16 == y / 16)
-				return i;
-		}
-		for (int s = 0; s < walkableEntities.size(); s++) {
-			Entity i = walkableEntities.get(s);
-			if (i.getX() / 16 == x / 16 && i.getY() / 16 == y / 16)
-				return i;
-		}
-		for (int s = 0; s < hardEntities.size(); s++) {
-			Entity i = hardEntities.get(s);
-			if (i.getX() / 16 == x / 16 && i.getY() / 16 == y / 16)
-				return i;
-		}
-		return null;
-
-	}
-
 	// 10% chance of there being a tree on each grass tile
 	private void randForest(int x, int y) {
-		if (x == 0 || x == width || y == 0 || y == height)
+		if (x == 0 || x == width || y == 0 || y == height) {
 			return;
+		}
 		int rand = Entity.RANDOM.nextInt(10);
 		if (rand == 1) {
-			hardEntities.add(new Tree(x * 16, y * 16));
+			addHardEntity(new Tree(x * 16, y * 16));
 			getTile(x, y).setSolid(true);
 		}
 
@@ -254,8 +240,9 @@ public class Level {
 
 	// 10% chance of there being ore on a dirt tile
 	private void randOre(int x, int y) {
-		if (x == 0 || x == width || y == 0 || y == height)
+		if (x == 0 || x == width || y == 0 || y == height) {
 			return;
+		}
 		int rand = Entity.RANDOM.nextInt(32);
 		if (rand <= 12) {
 			switch (rand) {
@@ -300,6 +287,19 @@ public class Level {
 	// return the tile on x and y
 	public Tile getTile(int x, int y) {
 		return (x < 0 || x >= width || y < 0 || y >= height) ? Tile.voidTile : tiles[x + y * width];
+	}
+
+	public void addHardEntity(Entity entity) {
+		if (entity != null) {
+			hardEntities.add(entity);
+			tiles[entity.getX() / 16 + entity.getY() / 16 * width].setSolid(true);
+		}
+	}
+
+	public void removeHardEntity(Entity entity) {
+		hardEntities.remove(entity);
+		tiles[entity.getX() / 16 + entity.getY() / 16 * width].setSolid(false);
+
 	}
 
 }
