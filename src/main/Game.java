@@ -101,15 +101,16 @@ public class Game implements Runnable {
 	}
 
 	private void spawnvills() {
-		Villager vil = new Villager(144, 144, level);
-		vil.addClothing(new Clothing("Brown Shirt", vil, Sprite.brownShirt1, "A brown tshirt", ClothingType.SHIRT));
-		addVillager(vil);
+		Villager vil1 = new Villager(144, 144, level);
+		vil1.addClothing(new Clothing("Brown Shirt", vil1, Sprite.brownShirt1, "A brown tshirt", ClothingType.SHIRT));
+		addVillager(vil1);
 		Villager vil2 = new Villager(144, 160, level);
-		vil2.addClothing(new Clothing("Green Shirt", vil, Sprite.greenShirt1, "A green tshirt", ClothingType.SHIRT));
+		vil2.addClothing(new Clothing("Green Shirt", vil2, Sprite.greenShirt1, "A green tshirt", ClothingType.SHIRT));
 		addVillager(vil2);
 		Villager vil3 = new Villager(160, 160, level);
 		vil3.addClothing(new Clothing("Green Shirt", vil3, Sprite.greenShirt2, "A green tshirt", ClothingType.SHIRT));
 		addVillager(vil3);
+		
 	}
 
 	private void spawnZombies() {

@@ -16,7 +16,6 @@ public abstract class Humanoid extends Mob {
 
 	public Item holding; // item the mob is holding in his hands
 
-
 	public <T extends Item> boolean holding(T item) {
 		return holding != null ? holding.equals(item) : false;
 	}
@@ -39,6 +38,5 @@ public abstract class Humanoid extends Mob {
 		}
 
 	}
-
 
 }

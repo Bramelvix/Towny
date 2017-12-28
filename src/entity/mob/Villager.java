@@ -80,12 +80,14 @@ public class Villager extends Humanoid {
 			return holding;
 		Item closest = null;
 		Path path = null;
-		for (Item item : level.getItemList()) {
-			if (item.getName().equals(name) && item.isReserved(this)) {
-				if (closest == null || path == null || (getPath(item.getX() >> 4, item.getY() >> 4) != null
-						&& path.getStepsSize() > getPath(item.getX() >> 4, item.getY() >> 4).getStepsSize())) {
-					closest = item;
-					path = getPath(closest.getX() >> 4, closest.getY() >> 4);
+		for (Item[] row : level.getItems()) {
+			for (Item item : row) {
+				if (item != null && item.getName().equals(name) && item.isReserved(this)) {
+					if (closest == null || path == null || (getPath(item.getX() >> 4, item.getY() >> 4) != null
+							&& path.getStepsSize() > getPath(item.getX() >> 4, item.getY() >> 4).getStepsSize())) {
+						closest = item;
+						path = getPath(closest.getX() >> 4, closest.getY() >> 4);
+					}
 				}
 			}
 		}

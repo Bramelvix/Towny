@@ -5,7 +5,7 @@ import entity.mob.Villager;
 import graphics.Sprite;
 
 public class Item extends Entity {
-	private String tooltip; // the item's tooltip
+	protected String tooltip; // the item's tooltip
 	private Villager reservedVil; // the villager that plans to pick the item
 									// up, or is already holding it
 
@@ -28,8 +28,8 @@ public class Item extends Entity {
 		super.setVisible(visible);
 	}
 
-	public Item(Item o) {
-		this(o.getName(), o.x, o.y, o.sprite, o.getToolTip(), o.isVisible());
+	public Item copy() {
+		return new Item(this.getName(), this.x, this.y, this.sprite, this.getToolTip(), this.isVisible());
 	}
 
 	// getters and setters
@@ -48,4 +48,5 @@ public class Item extends Entity {
 	public void removeReserved() {
 		reservedVil = null;
 	}
+
 }

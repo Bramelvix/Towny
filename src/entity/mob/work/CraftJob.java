@@ -11,13 +11,13 @@ public class CraftJob extends Job {
 	private byte craftTimer = 100;
 	private boolean itemsUpdated = false;
 
-	public CraftJob(Villager worker, Item[] resources, Item product) {
+	public <T extends Item> CraftJob(Villager worker, Item[] resources, T product) {
 		super(worker);
 		this.resources = resources;
 		this.product = product;
 	}
 
-	public CraftJob(Villager worker, Item[] resources, Item product, Workstation station) {
+	public <T extends Item> CraftJob(Villager worker, Item[] resources, T product, Workstation station) {
 		super(worker);
 		this.product = product;
 		this.station = station;

@@ -25,16 +25,6 @@ public class Weapon extends Item {
 
 	}
 
-	public Weapon(String name, Sprite sprite, String tooltip, WeaponType type, WeaponMaterial mat) {
-		super(name, sprite, true);
-
-	}
-
-	public Weapon(Weapon e) {
-		this(e.getName(), e.getX(), e.getY(), e.sprite, e.getToolTip(), e.type, e.mat);
-
-	}
-
 	public float getDamage(Villager user) {
 		return mat_strong * cut * 10;
 	}
@@ -147,11 +137,15 @@ public class Weapon extends Item {
 		String tooltip = "a " + name.toLowerCase();
 		if (mat == WeaponMaterial.IRON)
 			tooltip = "an " + name.toLowerCase();
-		return new Weapon(name, Sprite.getWeaponSprite(type, mat), tooltip, type, mat);
+		return new Weapon(name, 0, 0, Sprite.getWeaponSprite(type, mat), tooltip, type, mat);
 	}
 
 	public boolean isShield() {
 		return type == WeaponType.BUCKLER || type == WeaponType.HEATER;
+	}
+
+	public Weapon copy() {
+		return new Weapon(this.getName(), this.x, this.y, this.sprite, this.tooltip, this.type, this.mat);
 	}
 
 }

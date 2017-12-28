@@ -26,7 +26,7 @@ public class Recipe {
 	private Item product;
 	private Class<? extends Workstation> workstation;
 
-	private Recipe(Item product, Class<? extends Workstation> workstation, String... resources) {
+	private <T extends Item> Recipe(T product, Class<? extends Workstation> workstation, String... resources) {
 		this.product = product;
 		this.workstation = workstation;
 		this.resources = resources;
@@ -36,8 +36,8 @@ public class Recipe {
 		return resources;
 	}
 
-	public Item getProduct() {
-		return new Item(product);
+	public <T extends Item> Item getProduct() {
+		return product.copy();
 	}
 
 	public String getRecipeName() {

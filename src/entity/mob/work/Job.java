@@ -66,7 +66,6 @@ public class Job implements Workable {
 	}
 
 	protected void start() {
-		System.out.println("starting");
 		worker.setMovement(worker.getShortest(xloc / 16, yloc / 16));
 		completed = worker.isMovementNull();
 		started = true;
