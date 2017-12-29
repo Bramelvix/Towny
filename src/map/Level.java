@@ -18,7 +18,6 @@ public class Level {
 	public int width, height; // map with and height
 	private List<Entity> hardEntities; // list of entities on the map
 	public List<Entity> walkableEntities;
-	public Item[][] items;
 
 	// basic constructor
 	public Level(int height, int width) {
@@ -27,32 +26,39 @@ public class Level {
 		tiles = new Tile[width][height];
 		hardEntities = new ArrayList<Entity>();
 		walkableEntities = new ArrayList<Entity>();
-		items = new Item[width][height];
 		generateLevel();
 
 	}
 
-	public Item[][] getItems() {
+	public ArrayList<Item> getItems() {
+		ArrayList<Item> items = new ArrayList<Item>();
+		for (Tile[] row : tiles) {
+			for (Tile tile : row) {
+				if (tile.getItem() != null) {
+					items.add(tile.getItem());
+				}
+			}
+		}
 		return items;
 	}
 
 	// adding an item to the list
 	public <T extends Item> void addItem(T e) {
 		if (e != null) {
-			items[e.getX() / 16][e.getY() / 16] = e;
+			tiles[e.getX() / 16][e.getY() / 16].setItem(e);
 		}
 	}
 
 	// removing an item from the list
 	public <T extends Item> void removeItem(T e) {
 		if (e != null) {
-			items[e.getX() / 16][e.getY() / 16] = null;
+			tiles[e.getX() / 16][e.getY() / 16].setItem(null);
 		}
 	}
 
 	// is the tile on X and Y clear (No items or entities or walls blocking it)
 	public boolean isClearTile(int x, int y) {
-		return items[x][y] == null ? isWalkAbleTile(x, y) : false;
+		return tiles[x][y].getItem() == null ? isWalkAbleTile(x, y) : false;
 
 	}
 
@@ -109,6 +115,10 @@ public class Level {
 			if (e instanceof Wall && (e.getX() == x) && (e.getY() == y))
 				return (Wall) e;
 		}
+		for (Entity e : walkableEntities) {
+			if (e instanceof Wall && (e.getX() == x) && (e.getY() == y))
+				return (Wall) e;
+		}
 		return null;
 	}
 
@@ -125,11 +135,11 @@ public class Level {
 		return null;
 	}
 
-	public <T extends Item> Item getItemOn(int x, int y) {
-		return  items[x / 16][y / 16];
+	public Item getItemOn(int x, int y) {
+		return tiles[x / 16][y / 16].getItem();
 	}
 
-	public <T extends Item> Item getItemWithNameOn(int x, int y, String name) {
+	public Item getItemWithNameOn(int x, int y, String name) {
 		if (getItemOn(x, y) != null && getItemOn(x, y).getName().equals(name)) {
 			return getItemOn(x, y);
 		} else {
@@ -272,8 +282,8 @@ public class Level {
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
 				getTile(x, y).render(x, y, screen);
-				if (getItemOn(x*16, y*16) != null) {
-					getItemOn(x*16, y*16).render(screen);
+				if (getItemOn(x * 16, y * 16) != null) {
+					getItemOn(x * 16, y * 16).render(screen);
 				}
 			}
 		}

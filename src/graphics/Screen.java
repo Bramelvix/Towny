@@ -8,7 +8,7 @@ import map.Tile;
 public class Screen {
 	public int width; // screen width
 	public int height; // screen height
-	public int[] pixels; // array of pixels (is 1d but is actually 2d)
+	public int[] pixels; // array of pixels
 	public int xOffset, yOffset; // the offset of the screen
 
 	// constructor
@@ -36,7 +36,7 @@ public class Screen {
 				if (xa < 0 || xa >= width || ya < 0 || ya >= height) {
 					continue;
 				}
-				if (e.isSelected() && (x == 0 || x == Sprite.SIZE - 1 || y == 0 || y == Sprite.SIZE - 1)) {
+				if (x == 0 || x == Sprite.SIZE - 1 || y == 0 || y == Sprite.SIZE - 1) {
 					pixels[xa + ya * width] = 0xf44242;
 
 				}
@@ -47,7 +47,7 @@ public class Screen {
 
 	// render trees
 	public void renderTree(int xp, int yp, Tree e) {
-		renderSprite(xp, yp, e.sprite);
+		renderSprite(xp, yp, e.sprite, e.isSelected(), true);
 		renderSprite(xp, yp - Tile.SIZE, e.extraSprite, e.isSelected(), true);
 
 	}

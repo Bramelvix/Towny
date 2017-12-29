@@ -1,5 +1,7 @@
 package map;
 
+import entity.Entity;
+import entity.item.Item;
 import graphics.Screen;
 import graphics.Sprite;
 
@@ -9,6 +11,7 @@ public class Tile {
 	private boolean solid; // is the tile solid
 	private boolean visible; // is the tile visible
 	public static final int SIZE = 16; // fixed size
+	private Item item;
 
 	// two static tiles voidtile = black, darkgrass is dark green
 	public static Tile darkGrass = new Tile(Sprite.darkGrass, true, 0, 0);
@@ -48,6 +51,14 @@ public class Tile {
 
 	public boolean solid() {
 		return solid;
+	}
+
+	public Item getItem() {
+		return item;
+	}
+
+	public <T extends Item> void setItem(T item) {
+		this.item = item;
 	}
 
 }

@@ -110,7 +110,7 @@ public class Game implements Runnable {
 		Villager vil3 = new Villager(160, 160, level);
 		vil3.addClothing(new Clothing("Green Shirt", vil3, Sprite.greenShirt2, "A green tshirt", ClothingType.SHIRT));
 		addVillager(vil3);
-		
+
 	}
 
 	private void spawnZombies() {
@@ -123,8 +123,7 @@ public class Game implements Runnable {
 
 	private void addVillager(Villager vil) {
 		if (!vills.contains(vil)) {
-			if (sols.contains(vil))
-				sols.remove(vil);
+			sols.remove(vil);
 			vills.add(vil);
 			ui.updateCounts(sols.size(), vills.size());
 		}
@@ -132,8 +131,7 @@ public class Game implements Runnable {
 
 	private void addSoldier(Villager vil) {
 		if (!sols.contains(vil)) {
-			if (vills.contains(vil))
-				vills.remove(vil);
+			vills.remove(vil);
 			sols.add(vil);
 			ui.updateCounts(sols.size(), vills.size());
 		}
@@ -314,7 +312,8 @@ public class Game implements Runnable {
 		} else if (UiIcons.isSawHover() && !ui.menuVisible() && mouse.getClickedLeft()) {
 			deselectAllVills();
 			ui.showMenuOn(mouse, new MenuItem(MenuItem.BUILD + " wooden wall"),
-					new MenuItem(MenuItem.BUILD + " stone wall"), new MenuItem(MenuItem.BUILD + " furnace"),
+					new MenuItem(MenuItem.BUILD + " stone wall"), new MenuItem(MenuItem.BUILD + " wooden door"),
+					new MenuItem(MenuItem.BUILD + " stone door"), new MenuItem(MenuItem.BUILD + " furnace"),
 					new MenuItem(MenuItem.BUILD + " anvil"), new MenuItem(MenuItem.CANCEL));
 			return;
 		} else if (mouse.getClickedRight()) {
@@ -425,6 +424,16 @@ public class Game implements Runnable {
 				return;
 			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " stone wall", mouse) && !ui.outlineIsVisible()) {
 				ui.showBuildSquare(mouse, xScroll, yScroll, true, new Wall(WallType.STONE));
+				ui.deSelectIcons();
+				ui.getMenu().hide();
+				return;
+			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " stone door", mouse) && !ui.outlineIsVisible()) {
+				ui.showBuildSquare(mouse, xScroll, yScroll, true, new Wall(WallType.STONE, true));
+				ui.deSelectIcons();
+				ui.getMenu().hide();
+				return;
+			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " wooden door", mouse) && !ui.outlineIsVisible()) {
+				ui.showBuildSquare(mouse, xScroll, yScroll, true, new Wall(WallType.STONE, true));
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;

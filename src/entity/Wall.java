@@ -13,24 +13,38 @@ public class Wall extends BuildAbleObject {
 	private boolean rightHasWall = false; // is there a wall to the right of
 											// this wall
 	private Sprite[] sprites;
+	private boolean door;
 
 	// basic constructor
 	public Wall(WallType type) {
-		super();
-		decideSprites(type);
+		this(type, false);
 	}
 
-	private void decideSprites(WallType type) {
+	private void decideSprites(WallType type, boolean door) {
 		switch (type) {
 		case WOOD:
-			sprites = Sprite.WOODWALLSPRITES;
+			if (door) {
+				sprites = Sprite.WOODDOORSPRITES;
+			} else {
+				sprites = Sprite.WOODWALLSPRITES;
+			}
 			resourceName = "Logs";
 			break;
 		case STONE:
-			sprites = Sprite.STONEWALLSPRITES;
+			if (door) {
+				sprites = Sprite.STONEDOORSPRITES;
+			} else {
+				sprites = Sprite.STONEWALLSPRITES;
+			}
 			resourceName = "stones";
 			break;
 		}
+	}
+
+	public Wall(WallType type, boolean door) {
+		super();
+		this.door = door;
+		decideSprites(type, door);
 	}
 
 	// checks the 4 sides of this wall to see if there are walls next to it. The
@@ -75,8 +89,12 @@ public class Wall extends BuildAbleObject {
 	// called by villagers when they start building the wall.
 	public boolean initialise(int x, int y, Item material, Level level) {
 		boolean initGelukt = super.initialise(x, y, material, level);
-		if (initGelukt && material.getName().equals(resourceName))
+		if (initGelukt && material.getName().equals(resourceName)) {
 			checkSides();
+		}
+		if (door) {
+			setOpened(true);
+		}
 		return initGelukt;
 
 	}

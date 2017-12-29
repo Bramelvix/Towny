@@ -5,6 +5,7 @@ import map.Level;
 import sound.Sound;
 
 public abstract class BuildAbleObject extends Entity {
+	private boolean open;
 	public boolean initialised = false; // has the building been initialised
 	protected byte condition = 0; // condition of the building (0=not built ,
 									// 100=
@@ -15,13 +16,33 @@ public abstract class BuildAbleObject extends Entity {
 		setVisible(false);
 	}
 
+	public void setOpened(boolean open) {
+		this.open = open;
+		if (open) {
+			level.removeHardEntity(this);
+			level.walkableEntities.add(this);
+		} else {
+			level.addHardEntity(this);
+			level.walkableEntities.remove(this);
+		}
+	}
+
+	public boolean isOpen() {
+		return open;
+	}
+
 	public boolean initialise(int x, int y, Item material, Level level) {
 		if (material == null) {
 			return false;
 		}
 		this.level = level;
 		setLocation(x * 16, y * 16);
-		level.addHardEntity(this);
+		if (isOpen()) {
+			level.walkableEntities.add(this);
+		} else {
+			level.addHardEntity(this);
+		}
+
 		initialised = true;
 		return true;
 

@@ -80,16 +80,15 @@ public class Villager extends Humanoid {
 			return holding;
 		Item closest = null;
 		Path path = null;
-		for (Item[] row : level.getItems()) {
-			for (Item item : row) {
-				if (item != null && item.getName().equals(name) && item.isReserved(this)) {
-					if (closest == null || path == null || (getPath(item.getX() >> 4, item.getY() >> 4) != null
-							&& path.getStepsSize() > getPath(item.getX() >> 4, item.getY() >> 4).getStepsSize())) {
-						closest = item;
-						path = getPath(closest.getX() >> 4, closest.getY() >> 4);
-					}
+		for (Item item : level.getItems()) {
+			if (item != null && item.getName().equals(name) && item.isReserved(this)) {
+				if (closest == null || path == null || (getPath(item.getX() >> 4, item.getY() >> 4) != null
+						&& path.getStepsSize() > getPath(item.getX() >> 4, item.getY() >> 4).getStepsSize())) {
+					closest = item;
+					path = getPath(closest.getX() >> 4, closest.getY() >> 4);
 				}
 			}
+
 		}
 		if (closest == null || path == null) {
 			return null;
@@ -212,8 +211,10 @@ public class Villager extends Humanoid {
 			screen.renderSprite(x, y, holding.sprite); // renders the item the
 														// villager is holding
 		}
-		screen.renderSelection(x, y, this); // render the red square around
-											// selected villagers
+		if (this.isSelected()) {
+			screen.renderSelection(x, y, this); // render the red square around
+												// selected villagers
+		}
 
 	}
 

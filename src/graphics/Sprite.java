@@ -71,11 +71,31 @@ public class Sprite {
 	private static final Sprite woodenWallTTop = new Sprite(40, 12, SpriteSheet.tiles);
 	private static final Sprite woodenWallTLeft = new Sprite(39, 13, SpriteSheet.tiles);
 	private static final Sprite woodenWallTBottom = new Sprite(40, 13, SpriteSheet.tiles);
+
 	public static final Sprite[] WOODWALLSPRITES = { Sprite.woodenWallVerticalTop, Sprite.woodenWallVerticalBoth,
 			Sprite.woodenWallTLeft, Sprite.woodenWall4sides, Sprite.woodenWallTRight, Sprite.woodenWallCornerTopLeft,
 			Sprite.woodenWallTTop, Sprite.woodenWallCornerTopRight, Sprite.woodenWallVerticalBottom,
 			Sprite.woodenWallCornerBottomLeft, Sprite.woodenWallTBottom, Sprite.woodenWallCornerBottomRight,
 			Sprite.woodenWallHorizontalLeft, Sprite.woodenWallHorizontalBoth, Sprite.woodenWallHorizontalRight };
+
+	private static final Sprite woodenDoorHorizontal = new Sprite(32, 1, SpriteSheet.tiles);
+	private static final Sprite woodenDoorVertical = new Sprite(37, 1, SpriteSheet.tiles);
+
+	public static final Sprite[] WOODDOORSPRITES = { Sprite.woodenDoorVertical, Sprite.woodenDoorVertical,
+			Sprite.woodenDoorVertical, Sprite.woodenDoorHorizontal, Sprite.woodenDoorVertical,
+			Sprite.woodenDoorHorizontal, Sprite.woodenDoorHorizontal, Sprite.woodenDoorHorizontal,
+			Sprite.woodenDoorVertical, Sprite.woodenDoorHorizontal, Sprite.woodenDoorHorizontal,
+			Sprite.woodenDoorHorizontal, Sprite.woodenDoorHorizontal, Sprite.woodenDoorHorizontal,
+			Sprite.woodenDoorHorizontal };
+
+	private static final Sprite stoneDoorHorizontal = new Sprite(32, 2, SpriteSheet.tiles);
+	private static final Sprite stoneDoorVertical = new Sprite(32, 4, SpriteSheet.tiles);
+
+	public static final Sprite[] STONEDOORSPRITES = { Sprite.stoneDoorVertical, Sprite.stoneDoorVertical,
+			Sprite.stoneDoorVertical, Sprite.stoneDoorHorizontal, Sprite.stoneDoorVertical, Sprite.stoneDoorHorizontal,
+			Sprite.stoneDoorHorizontal, Sprite.stoneDoorHorizontal, Sprite.stoneDoorVertical,
+			Sprite.stoneDoorHorizontal, Sprite.stoneDoorHorizontal, Sprite.stoneDoorHorizontal,
+			Sprite.stoneDoorHorizontal, Sprite.stoneDoorHorizontal, Sprite.stoneDoorHorizontal };
 
 	// MOBS
 	public static final Sprite villager1 = new Sprite(1, 0, SpriteSheet.entities);
