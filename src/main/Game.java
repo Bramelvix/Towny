@@ -433,7 +433,7 @@ public class Game implements Runnable {
 				ui.getMenu().hide();
 				return;
 			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " wooden door", mouse) && !ui.outlineIsVisible()) {
-				ui.showBuildSquare(mouse, xScroll, yScroll, true, new Wall(WallType.STONE, true));
+				ui.showBuildSquare(mouse, xScroll, yScroll, true, new Wall(WallType.WOOD, true));
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
@@ -555,9 +555,8 @@ public class Game implements Runnable {
 		}
 		screen.clear();
 		level.render(xScroll, yScroll, screen);
-		level.renderSoftEntities(screen);
 		renderMobs();
-		level.renderHardEntites(screen);
+		level.renderHardEntities(xScroll, yScroll, screen);
 		Graphics g = bs.getDrawGraphics();
 		g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		g.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight(), null);

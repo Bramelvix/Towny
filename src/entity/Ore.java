@@ -67,7 +67,7 @@ public class Ore extends Resource {
 			mined--;
 			return false;
 		} else {
-			worker.level.walkableEntities.remove(this);
+			worker.level.removeEntity(this);
 			if (type == OreType.STONE) {
 				worker.level.addItem(new Item(type.name().toLowerCase() + "s", this.x, this.y, itemSprite, true));
 			} else {

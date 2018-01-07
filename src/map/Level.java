@@ -1,7 +1,6 @@
 package map;
 
 import java.util.ArrayList;
-import java.util.List;
 import entity.Entity;
 import entity.Ore;
 import entity.OreType;
@@ -16,16 +15,12 @@ import graphics.Sprite;
 public class Level {
 	private Tile[][] tiles; // array of tiles on the map
 	public int width, height; // map with and height
-	private List<Entity> hardEntities; // list of entities on the map
-	public List<Entity> walkableEntities;
 
 	// basic constructor
 	public Level(int height, int width) {
 		this.width = width;
 		this.height = height;
 		tiles = new Tile[width][height];
-		hardEntities = new ArrayList<Entity>();
-		walkableEntities = new ArrayList<Entity>();
 		generateLevel();
 
 	}
@@ -69,8 +64,7 @@ public class Level {
 
 	// if there is a wall on x and y, return it
 	public Entity getHardEntityOn(int x, int y) {
-		return hardEntities.stream().filter(t -> (t.getX() / 16) == (x / 16) && (t.getY() / 16) == (y / 16)).findFirst()
-				.orElse(null);
+		return tiles[x][y].solid() ? tiles[x][y].getEntity() : null;
 	}
 
 	// TODO beter maken, dit is shitty
@@ -111,15 +105,8 @@ public class Level {
 	}
 
 	public Wall getWallOn(int x, int y) {
-		for (Entity e : hardEntities) {
-			if (e instanceof Wall && (e.getX() == x) && (e.getY() == y))
-				return (Wall) e;
-		}
-		for (Entity e : walkableEntities) {
-			if (e instanceof Wall && (e.getX() == x) && (e.getY() == y))
-				return (Wall) e;
-		}
-		return null;
+		Entity entity = tiles[x/16][y/16].getEntity();
+		return entity instanceof Wall ? (Wall) entity : null;
 	}
 
 	public boolean itemAlreadyThere(int x, int y, Item i) {
@@ -127,9 +114,11 @@ public class Level {
 	}
 
 	public <T extends Workstation> T getNearestWorkstation(Class<T> workstation) {
-		for (Entity e : hardEntities) {
-			if (workstation.isInstance(e)) {
-				return workstation.cast(e);
+		for (Tile[] row : tiles) {
+			for (Tile e : row) {
+				if (workstation.isInstance(e.getEntity())) {
+					return workstation.cast(e.getEntity());
+				}
 			}
 		}
 		return null;
@@ -184,19 +173,20 @@ public class Level {
 	}
 
 	public Tree selectTree(int x, int y, boolean seperate) {
-		for (int s = 0; s < hardEntities.size(); s++) {
-			Entity i = hardEntities.get(s);
-			if (i instanceof Tree) {
-				if (i.getX() / 16 == x / 16) {
-					if (i.getY() / 16 == y / 16) {
-						return (Tree) i;
-					}
-					if (seperate) {
-						if ((i.getY() - 1) / 16 == y / 16) {
-							return (Tree) i;
+		for (Tile[] row : tiles) {
+			for (Tile e : row) {
+				if (e.getEntity() instanceof Tree) {
+					if (e.getEntity().getX() / 16 == x / 16) {
+						if (e.getEntity().getY() / 16 == y / 16) {
+							return (Tree) e.getEntity();
 						}
-					}
+						if (seperate) {
+							if ((e.getEntity().getY() - 1) / 16 == y / 16) {
+								return (Tree) e.getEntity();
+							}
+						}
 
+					}
 				}
 			}
 		}
@@ -206,26 +196,9 @@ public class Level {
 
 	// if there is ore on X and Y, return it
 	public Ore selectOre(int x, int y) {
-		for (int s = 0; s < walkableEntities.size(); s++) {
-			Entity i = walkableEntities.get(s);
-			if (i instanceof Ore) {
-				if (i.getX() / 16 == x >> 4 && i.getY() / 16 == y / 16) {
-					return (Ore) i;
-				}
-			}
-		}
-		return null;
+		Entity entity = tiles[x/16][y/16].getEntity();
+		return entity instanceof Ore ? (Ore) entity : null;
 
-	}
-
-	// render the hard (not walkable) entities
-	public void renderHardEntites(Screen screen) {
-		hardEntities.forEach((Entity i) -> i.render(screen));
-	}
-
-	// render the soft (walkable) entities
-	public void renderSoftEntities(Screen screen) {
-		walkableEntities.forEach((Entity i) -> i.render(screen));
 	}
 
 	// 10% chance of there being a tree on each grass tile
@@ -235,7 +208,7 @@ public class Level {
 		}
 		int rand = Entity.RANDOM.nextInt(10);
 		if (rand == 1) {
-			addHardEntity(new Tree(x * 16, y * 16));
+			addEntity(new Tree(x * 16, y * 16), true);
 			getTile(x, y).setSolid(true);
 		}
 
@@ -250,22 +223,22 @@ public class Level {
 		if (rand <= 12) {
 			switch (rand) {
 			case 0:
-				walkableEntities.add(new Ore(x * 16, y * 16, OreType.GOLD));
+				tiles[x][y].setEntity(new Ore(x * 16, y * 16, OreType.GOLD), false);
 				break;
 			case 1:
-				walkableEntities.add(new Ore(x * 16, y * 16, OreType.IRON));
+				tiles[x][y].setEntity(new Ore(x * 16, y * 16, OreType.IRON), false);
 				break;
 			case 2:
-				walkableEntities.add(new Ore(x * 16, y * 16, OreType.COAL));
+				tiles[x][y].setEntity(new Ore(x * 16, y * 16, OreType.COAL), false);
 				break;
 			case 3:
-				walkableEntities.add(new Ore(x * 16, y * 16, OreType.COPPER));
+				tiles[x][y].setEntity(new Ore(x * 16, y * 16, OreType.COPPER), false);
 				break;
 			case 4:
-				walkableEntities.add(new Ore(x * 16, y * 16, OreType.CRYSTAL));
+				tiles[x][y].setEntity(new Ore(x * 16, y * 16, OreType.CRYSTAL), false);
 				break;
 			default:
-				walkableEntities.add(new Ore(x * 16, y * 16, OreType.STONE));
+				tiles[x][y].setEntity(new Ore(x * 16, y * 16, OreType.STONE), false);
 				break;
 			}
 		}
@@ -282,12 +255,25 @@ public class Level {
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
 				getTile(x, y).render(x, y, screen);
-				if (getItemOn(x * 16, y * 16) != null) {
-					getItemOn(x * 16, y * 16).render(screen);
-				}
+
 			}
 		}
 
+	}
+
+	public void renderHardEntities(int xScroll, int yScroll, Screen screen) {
+		screen.setOffset(xScroll, yScroll);
+		int x0 = xScroll / 16;
+		int x1 = (xScroll + screen.width + Sprite.SIZE) / 16;
+		int y0 = yScroll / 16;
+		int y1 = (yScroll + screen.height + Sprite.SIZE) / 16;
+
+		for (int y = y0; y < y1; y++) {
+			for (int x = x0; x < x1; x++) {
+				getTile(x, y).renderHard(screen);
+
+			}
+		}
 	}
 
 	// return the tile on x and y
@@ -295,17 +281,14 @@ public class Level {
 		return (x < 0 || x >= width || y < 0 || y >= height) ? Tile.voidTile : tiles[x][y];
 	}
 
-	public void addHardEntity(Entity entity) {
+	public void addEntity(Entity entity, boolean solid) {
 		if (entity != null) {
-			hardEntities.add(entity);
-			tiles[entity.getX() / 16][entity.getY() / 16].setSolid(true);
+			tiles[entity.getX() / 16][entity.getY() / 16].setEntity(entity, solid);
 		}
 	}
 
-	public void removeHardEntity(Entity entity) {
-		hardEntities.remove(entity);
-		tiles[entity.getX() / 16][entity.getY() / 16].setSolid(false);
-
+	public void removeEntity(Entity entity) {
+		tiles[entity.getX() / 16][entity.getY() / 16].removeEntity();
 	}
 
 }

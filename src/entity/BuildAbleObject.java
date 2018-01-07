@@ -19,11 +19,11 @@ public abstract class BuildAbleObject extends Entity {
 	public void setOpened(boolean open) {
 		this.open = open;
 		if (open) {
-			level.removeHardEntity(this);
-			level.walkableEntities.add(this);
+			level.removeEntity(this);
+			level.addEntity(this, false);
 		} else {
-			level.addHardEntity(this);
-			level.walkableEntities.remove(this);
+			level.removeEntity(this);
+			level.addEntity(this, true);
 		}
 	}
 
@@ -38,9 +38,9 @@ public abstract class BuildAbleObject extends Entity {
 		this.level = level;
 		setLocation(x * 16, y * 16);
 		if (isOpen()) {
-			level.walkableEntities.add(this);
+			level.addEntity(this, false);
 		} else {
-			level.addHardEntity(this);
+			level.addEntity(this, true);
 		}
 
 		initialised = true;

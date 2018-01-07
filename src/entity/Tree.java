@@ -32,7 +32,7 @@ public class Tree extends Resource {
 			chopped--;
 			return false;
 		} else {
-			worker.level.removeHardEntity(this);
+			worker.level.removeEntity(this);
 			worker.level.addItem(new Item("Logs", this.x, this.y, Sprite.logs, "Wooden logs", true));
 			return true;
 		}

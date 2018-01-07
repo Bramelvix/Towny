@@ -12,6 +12,7 @@ public class Tile {
 	private boolean visible; // is the tile visible
 	public static final int SIZE = 16; // fixed size
 	private Item item;
+	private Entity entity;
 
 	// two static tiles voidtile = black, darkgrass is dark green
 	public static Tile darkGrass = new Tile(Sprite.darkGrass, true, 0, 0);
@@ -33,6 +34,18 @@ public class Tile {
 	// render a tile
 	public void render(int x, int y, Screen screen) {
 		screen.renderSprite(x * 16, y * 16, sprite);
+		if (entity != null && !solid) {
+			entity.render(screen);
+		}
+		if (item != null) {
+			item.render(screen);
+		}
+	}
+
+	public void renderHard(Screen screen) {
+		if (solid && entity != null) {
+			entity.render(screen);
+		}
 	}
 
 	// steters
@@ -59,6 +72,20 @@ public class Tile {
 
 	public <T extends Item> void setItem(T item) {
 		this.item = item;
+	}
+
+	public <T extends Entity> void setEntity(T entity, boolean solid) {
+		this.entity = entity;
+		this.solid = solid;
+	}
+
+	public Entity getEntity() {
+		return entity;
+	}
+
+	public void removeEntity() {
+		this.entity = null;
+		this.solid = false;
 	}
 
 }
