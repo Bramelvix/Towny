@@ -64,40 +64,58 @@ public class Level {
 
 	// if there is a wall on x and y, return it
 	public Entity getHardEntityOn(int x, int y) {
-		return tiles[x][y].solid() ? tiles[x][y].getEntity() : null;
+		return tiles[x / 16][y / 16].solid() ? tiles[x / 16][y / 16].getEntity() : null;
 	}
 
-	// TODO beter maken, dit is shitty
-	public Point getNearestEmptySpot(int x, int y) {
-		int gedeeldex = x / 16;
-		int gedeeldey = y / 16;
-		if (isClearTile(gedeeldex, gedeeldey)) {
-			return new Point(gedeeldex, gedeeldey);
+	public Point getNearestEmptySpot(int xloc, int yloc) {
+		int x0 = xloc / 16;
+		int y0 = yloc / 16;
+		if (isClearTile(x0, y0)) {
+			return new Point(x0, y0);
 		} else {
-			for (int i = 1; (i < gedeeldex && i < gedeeldey); i++) {
-				if (isClearTile(gedeeldex - i, gedeeldey - i)) {
-					return new Point(gedeeldex - i, gedeeldey - i);
-				}
-				if (isClearTile(gedeeldex, gedeeldey - i)) {
-					return new Point(gedeeldex, gedeeldey - i);
-				}
-				if (isClearTile(gedeeldex + i, gedeeldey - i)) {
-					return new Point(gedeeldex + i, gedeeldey - i);
-				}
-				if (isClearTile(gedeeldex + i, gedeeldey)) {
-					return new Point(gedeeldex + i, gedeeldey);
-				}
-				if (isClearTile(gedeeldex + i, gedeeldey + i)) {
-					return new Point(gedeeldex + i, gedeeldey + i);
-				}
-				if (isClearTile(gedeeldex, gedeeldey + i)) {
-					return new Point(gedeeldex, gedeeldey + i);
-				}
-				if (isClearTile(gedeeldex - i, gedeeldey + i)) {
-					return new Point(gedeeldex - i, gedeeldey + i);
-				}
-				if (isClearTile(gedeeldex - i, gedeeldey)) {
-					return new Point(gedeeldex - i, gedeeldey);
+			for (int layer = 1; layer < 100; layer++) {
+				int x = layer - 1;
+				int y = 0;
+				int dx = 1;
+				int dy = 1;
+				int err = dx - (layer << 1);
+
+				while (x >= y) {
+					if (isClearTile(x0 + x, y0 + y)) {
+						return new Point(x0 + x, y0 + y);
+					}
+					if (isClearTile(x0 + y, y0 + x)) {
+						return new Point(x0 + y, y0 + x);
+					}
+					if (isClearTile(x0 - y, y0 + x)) {
+						return new Point(x0 - y, y0 + x);
+					}
+					if (isClearTile(x0 - x, y0 + y)) {
+						return new Point(x0 - x, y0 + y);
+					}
+					if (isClearTile(x0 - x, y0 - y)) {
+						return new Point(x0 - x, y0 - y);
+					}
+					if (isClearTile(x0 - y, y0 - x)) {
+						return new Point(x0 - y, y0 - x);
+					}
+					if (isClearTile(x0 + y, y0 - x)) {
+						return new Point(x0 + y, y0 - x);
+					}
+					if (isClearTile(x0 + x, y0 - y)) {
+						return new Point(x0 + x, y0 - y);
+					}
+
+					if (err <= 0) {
+						y++;
+						err += dy;
+						dy += 2;
+					}
+					if (err > 0) {
+						x--;
+						dx += 2;
+						err += dx - (layer << 1);
+					}
 				}
 			}
 			return null;
@@ -105,7 +123,7 @@ public class Level {
 	}
 
 	public Wall getWallOn(int x, int y) {
-		Entity entity = tiles[x/16][y/16].getEntity();
+		Entity entity = tiles[x / 16][y / 16].getEntity();
 		return entity instanceof Wall ? (Wall) entity : null;
 	}
 
@@ -196,7 +214,7 @@ public class Level {
 
 	// if there is ore on X and Y, return it
 	public Ore selectOre(int x, int y) {
-		Entity entity = tiles[x/16][y/16].getEntity();
+		Entity entity = tiles[x / 16][y / 16].getEntity();
 		return entity instanceof Ore ? (Ore) entity : null;
 
 	}

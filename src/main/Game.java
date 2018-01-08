@@ -542,9 +542,23 @@ public class Game implements Runnable {
 	}
 
 	private void renderMobs() {
-		mobs.forEach((Mob i) -> i.render(screen));
-		vills.forEach((Villager i) -> i.render(screen));
-		sols.forEach((Villager i) -> i.render(screen));
+		int x1 = (xScroll + screen.width + Sprite.SIZE);
+		int y1 = (yScroll + screen.height + Sprite.SIZE);
+		for (Mob i : mobs) {
+			if (i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
+				i.render(screen);
+			}
+		}
+		for (Villager i : vills) {
+			if (i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
+				i.render(screen);
+			}
+		}
+		for (Villager i : sols) {
+			if (i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
+				i.render(screen);
+			}
+		}
 	}
 
 	private void render() {
