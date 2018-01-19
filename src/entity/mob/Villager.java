@@ -167,8 +167,8 @@ public class Villager extends Humanoid {
 	}
 
 	// add a buildjob
-	public void addBuildJob(int x, int y, BuildAbleObject object) {
-		addJob(new Job(x, y, getNearestItemOfType(object.getResourceName()), object, this));
+	public void addBuildJob(int x, int y, BuildAbleObject object, String resource) {
+		addJob(new Job(x, y, getNearestItemOfType(resource), object, this));
 
 	}
 

@@ -10,7 +10,6 @@ public abstract class BuildAbleObject extends Entity {
 	protected byte condition = 0; // condition of the building (0=not built ,
 									// 100=
 	// done)
-	protected String resourceName;
 
 	public BuildAbleObject() {
 		setVisible(false);
@@ -65,10 +64,6 @@ public abstract class BuildAbleObject extends Entity {
 
 		}
 		return false;
-	}
-
-	public String getResourceName() {
-		return resourceName;
 	}
 
 }

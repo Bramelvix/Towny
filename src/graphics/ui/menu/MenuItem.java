@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import entity.Entity;
+import entity.mob.work.BuildingRecipe;
+import entity.mob.work.ItemRecipe;
 import entity.mob.work.Recipe;
 import input.Mouse;
 
@@ -42,8 +44,12 @@ public class MenuItem {
 
 	}
 
-	public MenuItem(Recipe recipe) {
+	public MenuItem(ItemRecipe recipe) {
 		this.text = CRAFT + " " + recipe.getRecipeName();
+		this.recipe = recipe;
+	}
+	public MenuItem(BuildingRecipe recipe) {
+		this.text = BUILD + " " + recipe.getRecipeName();
 		this.recipe = recipe;
 	}
 
@@ -82,8 +88,9 @@ public class MenuItem {
 		return text;
 	}
 
-	public Recipe getRecipe() {
-		return recipe;
+	@SuppressWarnings("unchecked") // again, shouldnt ever be a problem
+	public <T extends Recipe> T getRecipe() {
+		return (T) recipe;
 	}
 
 }

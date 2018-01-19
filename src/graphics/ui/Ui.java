@@ -1,8 +1,7 @@
 package graphics.ui;
 
 import java.awt.Graphics;
-
-import entity.BuildAbleObject;
+import entity.mob.work.BuildingRecipe;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.Menu;
 import graphics.ui.menu.MenuItem;
@@ -77,8 +76,8 @@ public class Ui {
 			menu.show(mouse);
 		}
 	}
-	public BuildAbleObject getBuildAbleObjectOutline() {
-		return outline.getBuildJobItem();
+	public BuildingRecipe getBuildRecipeOutline() {
+		return outline.getBuildRecipe();
 	}
 
 	public int getMenuIngameY() {
@@ -129,7 +128,7 @@ public class Ui {
 		return selection.getHeight();
 	}
 
-	public void showBuildSquare(Mouse mouse, int xoff, int yoff, boolean lockedSize, BuildAbleObject build) {
+	public void showBuildSquare(Mouse mouse, int xoff, int yoff, boolean lockedSize, BuildingRecipe build) {
 		outline.show(mouse, xoff, yoff, lockedSize, build);
 	}
 

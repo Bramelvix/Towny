@@ -18,8 +18,8 @@ public class Clothing extends Item {
 		this(name, vil.getX(), vil.getY(), sprite, tooltip, type);
 	}
 
-	public Clothing(Clothing e) {
-		this(e.getName(), e.getX(), e.getY(), e.sprite, e.getToolTip(), e.type);
+	public Clothing copy() {
+		return new Clothing(getName(), getX(), getY(), sprite, getToolTip(), type);
 	}
 
 	public ClothingType getType() {

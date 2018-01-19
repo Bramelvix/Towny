@@ -23,10 +23,11 @@ import entity.item.weapon.Weapon;
 import entity.mob.Mob;
 import entity.mob.Villager;
 import entity.mob.Zombie;
+import entity.mob.work.BuildingRecipe;
 import entity.mob.work.CraftJob;
 import entity.mob.work.FightJob;
 import entity.mob.work.MoveItemJob;
-import entity.mob.work.Recipe;
+import entity.mob.work.ItemRecipe;
 import entity.workstations.Anvil;
 import entity.workstations.Furnace;
 import graphics.Screen;
@@ -311,10 +312,12 @@ public class Game implements Runnable {
 			return;
 		} else if (UiIcons.isSawHover() && !ui.menuVisible() && mouse.getClickedLeft()) {
 			deselectAllVills();
-			ui.showMenuOn(mouse, new MenuItem(MenuItem.BUILD + " wooden wall"),
-					new MenuItem(MenuItem.BUILD + " stone wall"), new MenuItem(MenuItem.BUILD + " wooden door"),
-					new MenuItem(MenuItem.BUILD + " stone door"), new MenuItem(MenuItem.BUILD + " furnace"),
-					new MenuItem(MenuItem.BUILD + " anvil"), new MenuItem(MenuItem.CANCEL));
+			MenuItem[] items = new MenuItem[BuildingRecipe.RECIPES.length + 1];
+			for (int i = 0; i < BuildingRecipe.RECIPES.length; i++) {
+				items[i] = new MenuItem(BuildingRecipe.RECIPES[i]);
+			}
+			items[items.length - 1] = new MenuItem(MenuItem.CANCEL);
+			ui.showMenuOn(mouse, items);
 			return;
 		} else if (mouse.getClickedRight()) {
 			if (selectedvill != null) {
@@ -364,12 +367,14 @@ public class Game implements Runnable {
 				if (!level.getTile(blok[0] / 16, blok[1] / 16).solid()) {
 					Villager idle = getIdlestVil();
 					idle.setMovement(null);
-					idle.addBuildJob(blok[0], blok[1], ui.getBuildAbleObjectOutline());
+					idle.addBuildJob(blok[0], blok[1], ui.getBuildRecipeOutline().getProduct(),
+							ui.getBuildRecipeOutline().getResources()[0]);
 				}
 			}
 			ui.removeBuildSquare();
 			deselectAllVills();
 			ui.deSelectIcons();
+			return;
 		}
 		if (ui.menuVisible()) {
 			if (ui.getMenu().clickedOnItem(MenuItem.CANCEL, mouse)) {
@@ -407,36 +412,13 @@ public class Game implements Runnable {
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
-			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " wooden wall", mouse) && !ui.outlineIsVisible()) {
-				ui.showBuildSquare(mouse, xScroll, yScroll, false, new Wall(WallType.WOOD));
+			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD, mouse) && !ui.outlineIsVisible()) {
+				ui.showBuildSquare(mouse, xScroll, yScroll, false,
+						ui.getMenu().recipeFromMenuOption(mouse, MenuItem.BUILD));
 				ui.deSelectIcons();
 				ui.getMenu().hide();
 				return;
-			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " furnace", mouse) && !ui.outlineIsVisible()) {
-				ui.showBuildSquare(mouse, xScroll, yScroll, true, new Furnace());
-				ui.deSelectIcons();
-				ui.getMenu().hide();
-				return;
-			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " anvil", mouse) && !ui.outlineIsVisible()) {
-				ui.showBuildSquare(mouse, xScroll, yScroll, true, new Anvil());
-				ui.deSelectIcons();
-				ui.getMenu().hide();
-				return;
-			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " stone wall", mouse) && !ui.outlineIsVisible()) {
-				ui.showBuildSquare(mouse, xScroll, yScroll, true, new Wall(WallType.STONE));
-				ui.deSelectIcons();
-				ui.getMenu().hide();
-				return;
-			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " stone door", mouse) && !ui.outlineIsVisible()) {
-				ui.showBuildSquare(mouse, xScroll, yScroll, true, new Wall(WallType.STONE, true));
-				ui.deSelectIcons();
-				ui.getMenu().hide();
-				return;
-			} else if (ui.getMenu().clickedOnItem(MenuItem.BUILD + " wooden door", mouse) && !ui.outlineIsVisible()) {
-				ui.showBuildSquare(mouse, xScroll, yScroll, true, new Wall(WallType.WOOD, true));
-				ui.deSelectIcons();
-				ui.getMenu().hide();
-				return;
+
 			} else if ((ui.getMenu().clickedOnItem(MenuItem.PICKUP, mouse)
 					|| ui.getMenu().clickedOnItem(MenuItem.EQUIP, mouse)
 					|| ui.getMenu().clickedOnItem(MenuItem.WEAR, mouse)) && !ui.outlineIsVisible()) {
@@ -456,18 +438,18 @@ public class Game implements Runnable {
 				ui.getMenu().hide();
 				return;
 			} else if (ui.getMenu().clickedOnItem(MenuItem.SMELT, mouse)) {
-				MenuItem[] craftingOptions = new MenuItem[Recipe.FURNACE_RECIPES.length + 1];
-				for (int i = 0; i < Recipe.FURNACE_RECIPES.length; i++) {
-					craftingOptions[i] = new MenuItem(Recipe.FURNACE_RECIPES[i]);
+				MenuItem[] craftingOptions = new MenuItem[ItemRecipe.FURNACE_RECIPES.length + 1];
+				for (int i = 0; i < ItemRecipe.FURNACE_RECIPES.length; i++) {
+					craftingOptions[i] = new MenuItem(ItemRecipe.FURNACE_RECIPES[i]);
 				}
 				craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
 				ui.showMenuOn(mouse, craftingOptions);
 				return;
 
 			} else if (ui.getMenu().clickedOnItem(MenuItem.SMITH, mouse)) {
-				MenuItem[] craftingOptions = new MenuItem[Recipe.IRON_ANVIL_RECIPES.length + 1];
-				for (int i = 0; i < Recipe.IRON_ANVIL_RECIPES.length; i++) {
-					craftingOptions[i] = new MenuItem(Recipe.IRON_ANVIL_RECIPES[i]);
+				MenuItem[] craftingOptions = new MenuItem[ItemRecipe.IRON_ANVIL_RECIPES.length + 1];
+				for (int i = 0; i < ItemRecipe.IRON_ANVIL_RECIPES.length; i++) {
+					craftingOptions[i] = new MenuItem(ItemRecipe.IRON_ANVIL_RECIPES[i]);
 				}
 				craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
 				ui.showMenuOn(mouse, craftingOptions);
@@ -475,7 +457,7 @@ public class Game implements Runnable {
 
 			} else if (ui.getMenu().clickedOnItem(MenuItem.CRAFT, mouse)) {
 				Villager idle = getIdlestVil();
-				Recipe recipe = ui.getMenu().recipeFromCraftOption(mouse);
+				ItemRecipe recipe = ui.getMenu().recipeFromMenuOption(mouse, MenuItem.CRAFT);
 				if (recipe != null) {
 					idle.setMovement(null);
 					Item[] res = new Item[recipe.getResources().length];
@@ -489,10 +471,7 @@ public class Game implements Runnable {
 				}
 				return;
 			}
-
 		}
-		return;
-
 	}
 
 	private void moveCamera() {

@@ -2,7 +2,7 @@ package graphics.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import entity.BuildAbleObject;
+import entity.mob.work.BuildingRecipe;
 import input.Mouse;
 import map.Level;
 
@@ -22,7 +22,7 @@ public class BuildOutline {
 	private boolean visible; // is the outline visible
 	private Level level; // the map is needed to decide if a square is empty
 	private boolean lockedSize = false;
-	private BuildAbleObject build;
+	private BuildingRecipe build;
 
 	// rendering the outline
 	public void render(Graphics g) {
@@ -38,8 +38,9 @@ public class BuildOutline {
 															// EIND == SLEEP
 															// NAAR RECHTS
 					for (int i = 0; i < squarewidth; i++) {
-						g.setColor(notBuildable(((buildSquareXS / 3) >> 4) + i, ((buildSquareYS / 3) >> 4))
-								? notbuildable : buildable);
+						g.setColor(
+								notBuildable(((buildSquareXS / 3) >> 4) + i, ((buildSquareYS / 3) >> 4)) ? notbuildable
+										: buildable);
 						g.fillRect(buildSquareXSTeken + (i * WIDTH), buildSquareYSTeken, WIDTH, WIDTH);
 					}
 					return;
@@ -57,7 +58,8 @@ public class BuildOutline {
 															// SLEEP NAAR ONDER
 					for (int i = 0; i < squareheight; i++) {
 						g.setColor((notBuildable(((buildSquareXS / 3) >> 4), ((buildSquareYS / 3) >> 4) + i))
-								? notbuildable : buildable);
+								? notbuildable
+								: buildable);
 						g.fillRect(buildSquareXSTeken, buildSquareYSTeken + (WIDTH * i), WIDTH,
 								WIDTH * (squareheight - i));
 					}
@@ -183,7 +185,7 @@ public class BuildOutline {
 		update(mouse, xOff, yOff, false);
 	}
 
-	public BuildAbleObject getBuildJobItem() {
+	public BuildingRecipe getBuildRecipe() {
 		return build;
 	}
 
@@ -193,7 +195,7 @@ public class BuildOutline {
 	}
 
 	// show the outline
-	public void show(Mouse mouse, int xoff, int yoff, boolean lockedSize, BuildAbleObject build) {
+	public void show(Mouse mouse, int xoff, int yoff, boolean lockedSize, BuildingRecipe build) {
 		if (!visible) {
 			update(mouse, xoff, yoff, true);
 			visible = true;

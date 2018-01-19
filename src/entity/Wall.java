@@ -21,24 +21,27 @@ public class Wall extends BuildAbleObject {
 	}
 
 	private void decideSprites(WallType type, boolean door) {
+		String name = "";
 		switch (type) {
 		case WOOD:
+			name = name.concat("wooden ");
 			if (door) {
 				sprites = Sprite.WOODDOORSPRITES;
 			} else {
 				sprites = Sprite.WOODWALLSPRITES;
 			}
-			resourceName = "Logs";
 			break;
 		case STONE:
+			name = name.concat("stone ");
 			if (door) {
 				sprites = Sprite.STONEDOORSPRITES;
 			} else {
 				sprites = Sprite.STONEWALLSPRITES;
 			}
-			resourceName = "stones";
 			break;
 		}
+		name = name.concat(door ? "door" : "wall");
+		setName(name);
 	}
 
 	public Wall(WallType type, boolean door) {
@@ -89,7 +92,7 @@ public class Wall extends BuildAbleObject {
 	// called by villagers when they start building the wall.
 	public boolean initialise(int x, int y, Item material, Level level) {
 		boolean initGelukt = super.initialise(x, y, material, level);
-		if (initGelukt && material.getName().equals(resourceName)) {
+		if (initGelukt) {
 			checkSides();
 		}
 		if (door) {

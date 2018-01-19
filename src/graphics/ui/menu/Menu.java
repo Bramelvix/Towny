@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
-
 import entity.Entity;
 import entity.mob.work.Recipe;
 import input.Mouse;
@@ -129,8 +128,8 @@ public class Menu { // the menu is the little options menu that shows up when
 		return null;
 	}
 
-	public Recipe recipeFromCraftOption(Mouse mouse) {
-		MenuItem clickedItem = clickedItem(MenuItem.CRAFT, mouse);
+	public <T extends Recipe> T recipeFromMenuOption(Mouse mouse, String menuItem) {
+		MenuItem clickedItem = clickedItem(menuItem, mouse);
 		if (clickedItem != null) {
 			return clickedItem.getRecipe();
 		}
