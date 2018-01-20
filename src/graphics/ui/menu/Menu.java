@@ -119,6 +119,7 @@ public class Menu { // the menu is the little options menu that shows up when
 		return clickedItem(type, mouse) != null;
 	}
 
+
 	private MenuItem clickedItem(String type, Mouse mouse) {
 		for (MenuItem i : items) {
 			if (i.getText().contains((type)) && i.clicked(mouse)) {

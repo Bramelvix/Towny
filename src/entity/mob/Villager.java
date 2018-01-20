@@ -56,7 +56,7 @@ public class Villager extends Humanoid {
 		this.male = male;
 		initHair(false);
 		this.inventory = wearing;
-		this.holding = holding;
+		this.setHolding(holding);
 	}
 
 	public int getJobSize() {
@@ -76,8 +76,9 @@ public class Villager extends Humanoid {
 	// gets the item nearest to the villager with a specific name (and
 	// unreserved)
 	public Item getNearestItemOfType(String name) {
-		if (holding != null && holding.getName().equals(name))
-			return holding;
+		if (getHolding() != null && getHolding().getName().equals(name)) {
+			return getHolding();
+		}
 		Item closest = null;
 		Path path = null;
 		for (Item item : level.getItems()) {
@@ -122,8 +123,8 @@ public class Villager extends Humanoid {
 					return true;
 				}
 			}
-			dropItem(holding);
-			holding = e;
+			drop();
+			setHolding(e);
 			return true;
 		}
 		return false;
@@ -132,10 +133,10 @@ public class Villager extends Humanoid {
 
 	// drop the item the villager is holding
 	public void drop() {
-		if (holding != null) {
-			holding.removeReserved();
-			level.addItem(holding);
-			holding = null;
+		if (getHolding() != null) {
+			getHolding().removeReserved();
+			level.addItem(getHolding());
+			setHolding(null);
 		}
 	}
 
@@ -207,8 +208,8 @@ public class Villager extends Humanoid {
 		super.render(screen);
 		screen.renderSprite(x, y, hair); // renders the hair
 		inventory.render(screen);
-		if (holding != null) {
-			screen.renderSprite(x, y, holding.sprite); // renders the item the
+		if (getHolding() != null) {
+			screen.renderSprite(x, y, getHolding().sprite); // renders the item the
 														// villager is holding
 		}
 		if (this.isSelected()) {

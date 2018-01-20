@@ -102,7 +102,7 @@ public class Weapon extends Item {
 		case IRON:
 			strong = 1f;
 			break;
-		case BRONZE:
+		case COPPER:
 			strong = 0.75f;
 			break;
 		case CRYSTAL:
@@ -124,14 +124,14 @@ public class Weapon extends Item {
 		case IRON:
 			name = name.concat("Iron ");
 			break;
-		case BRONZE:
-			name = name.concat("Bronze ");
+		case COPPER:
+			name = name.concat("Copper ");
 			break;
 		case CRYSTAL:
 			name = name.concat("Crystal ");
 			break;
 		}
-		if (type == WeaponType.BOW && mat == WeaponMaterial.BRONZE)
+		if (type == WeaponType.BOW && mat == WeaponMaterial.COPPER)
 			return getRandomWeapon();
 		name = name.concat(type.toString().toLowerCase());
 		String tooltip = "a " + name.toLowerCase();

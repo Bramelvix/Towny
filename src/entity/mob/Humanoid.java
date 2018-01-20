@@ -14,10 +14,21 @@ public abstract class Humanoid extends Mob {
 		setLocation(x, y);
 	}
 
-	public Item holding; // item the mob is holding in his hands
+	private Item holding; // item the mob is holding in his hands
 
 	public <T extends Item> boolean holding(T item) {
 		return holding != null ? holding.equals(item) : false;
+	}
+
+	public <T extends Item> void setHolding(T item) {
+		holding = item;
+		if (holding != null) {
+			holding.setLocation(this.x, this.y);
+		}
+	}
+
+	public Item getHolding() {
+		return holding;
 	}
 
 	@Override

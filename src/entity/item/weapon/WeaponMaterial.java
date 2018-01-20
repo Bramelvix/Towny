@@ -3,7 +3,7 @@ package entity.item.weapon;
 import entity.Entity;
 
 public enum WeaponMaterial {
-	WOOD,GOLD,IRON,BRONZE,CRYSTAL;
+	WOOD,GOLD,IRON,COPPER,CRYSTAL;
 	
 	public static WeaponMaterial getWeaponRandMat() {
 		return WeaponMaterial.values()[Entity.RANDOM.nextInt(WeaponMaterial.values().length)];

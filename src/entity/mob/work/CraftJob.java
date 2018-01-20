@@ -99,7 +99,10 @@ public class CraftJob extends Job {
 					itemsUpdated = true;
 				}
 				if (craft()) {
-					worker.holding = product;
+					worker.setHolding(product);
+					if (worker.level.isClearTile(worker.getX() / 16, worker.getY() / 16)) {
+						worker.drop();
+					}
 					completed = true;
 				}
 

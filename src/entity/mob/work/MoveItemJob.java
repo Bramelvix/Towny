@@ -35,8 +35,8 @@ public class MoveItemJob extends Job {
 	protected void start() {
 		started = true;
 		if (!pickUpJob) {
-			if (worker.holding == null || (!worker.level.isClearTile(xloc / 16, yloc / 16)
-					&& !worker.level.itemAlreadyThere(xloc, yloc, worker.holding))) {
+			if (worker.getHolding() == null || (!worker.level.isClearTile(xloc / 16, yloc / 16)
+					&& !worker.level.itemAlreadyThere(xloc, yloc, worker.getHolding()))) {
 				completed = true;
 			}
 			return;

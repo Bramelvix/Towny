@@ -18,6 +18,10 @@ public class Item extends Entity {
 		this.tooltip = tooltip;
 	}
 
+	public boolean isSameType(Item item) {
+		return item.getName().equals(getName());
+	}
+
 	public Item(String name, int x, int y, Sprite sprite, boolean visible) {
 		this(name, x, y, sprite, "", visible);
 	}

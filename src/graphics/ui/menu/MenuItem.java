@@ -29,6 +29,12 @@ public class MenuItem {
 	public static final String CRAFT = "Craft";
 	public static final String SMELT = "Smelt";
 	public static final String SMITH = "Smith";
+	public static final String IRON = "Iron";
+	public static final String COPPER = "Copper";
+	public static final String GOLD = "Gold";
+	public static final String CRYSTAL = "Crystal";
+	public static final String WOOD = "Wood";
+
 	private Recipe recipe;
 	private Entity entity;
 
@@ -48,6 +54,7 @@ public class MenuItem {
 		this.text = CRAFT + " " + recipe.getRecipeName();
 		this.recipe = recipe;
 	}
+
 	public MenuItem(BuildingRecipe recipe) {
 		this.text = BUILD + " " + recipe.getRecipeName();
 		this.recipe = recipe;
@@ -84,6 +91,7 @@ public class MenuItem {
 	public boolean clicked(Mouse mouse) {
 		return hover && mouse.getClickedLeft();
 	}
+
 	public String getText() {
 		return text;
 	}

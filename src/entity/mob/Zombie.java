@@ -12,7 +12,7 @@ public class Zombie extends Humanoid {
 		super(level, x, y);
 		this.sprite = Sprite.zombie;
 		setName("zombie");
-		this.holding = Weapon.getRandomWeapon(this);
+		setHolding(Weapon.getRandomWeapon(this));
 
 	}
 
@@ -47,8 +47,8 @@ public class Zombie extends Humanoid {
 	@Override
 	public void render(Screen screen) {
 		super.render(screen);
-		if (holding != null) {
-			screen.renderSprite(x, y, holding.sprite); // renders the item the
+		if (getHolding() != null) {
+			screen.renderSprite(x, y, getHolding().sprite); // renders the item the
 														// zombie is holding
 		}
 	}

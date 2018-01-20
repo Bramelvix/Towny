@@ -140,10 +140,10 @@ public class Sprite {
 
 	// WEAPONS
 	public static final Sprite woodspear = new Sprite(44, 4, SpriteSheet.entities);
-	public static final Sprite bronzeaxe = new Sprite(42, 0, SpriteSheet.entities);
-	public static final Sprite bronzewarhammer = new Sprite(43, 0, SpriteSheet.entities);
-	public static final Sprite bronzepick = new Sprite(45, 0, SpriteSheet.entities);
-	public static final Sprite bronzehalbert = new Sprite(46, 0, SpriteSheet.entities);
+	public static final Sprite copperaxe = new Sprite(42, 0, SpriteSheet.entities);
+	public static final Sprite copperwarhammer = new Sprite(43, 0, SpriteSheet.entities);
+	public static final Sprite copperpick = new Sprite(45, 0, SpriteSheet.entities);
+	public static final Sprite copperhalbert = new Sprite(46, 0, SpriteSheet.entities);
 	public static final Sprite woodaxe = new Sprite(42, 5, SpriteSheet.entities);
 	public static final Sprite woodwarhammer = new Sprite(43, 5, SpriteSheet.entities);
 	public static final Sprite woodpick = new Sprite(45, 5, SpriteSheet.entities);
@@ -168,12 +168,12 @@ public class Sprite {
 	public static final Sprite crystalpick = new Sprite(50, 9, SpriteSheet.entities);
 	public static final Sprite crystalhalbert = new Sprite(51, 9, SpriteSheet.entities);
 	public static final Sprite woodsword = new Sprite(42, 6, SpriteSheet.entities);
-	public static final Sprite bronzesword = new Sprite(43, 6, SpriteSheet.entities);
+	public static final Sprite coppersword = new Sprite(43, 6, SpriteSheet.entities);
 	public static final Sprite ironsword = new Sprite(44, 6, SpriteSheet.entities);
 	public static final Sprite goldsword = new Sprite(45, 6, SpriteSheet.entities);
 	public static final Sprite crystalsword = new Sprite(46, 6, SpriteSheet.entities);
 	public static final Sprite wooddagger = new Sprite(42, 7, SpriteSheet.entities);
-	public static final Sprite bronzedagger = new Sprite(43, 7, SpriteSheet.entities);
+	public static final Sprite copperdagger = new Sprite(43, 7, SpriteSheet.entities);
 	public static final Sprite irondagger = new Sprite(44, 7, SpriteSheet.entities);
 	public static final Sprite golddagger = new Sprite(45, 7, SpriteSheet.entities);
 	public static final Sprite crystaldagger = new Sprite(46, 7, SpriteSheet.entities);
@@ -187,12 +187,12 @@ public class Sprite {
 	public static final Sprite ironheater = new Sprite(39, 0, SpriteSheet.entities);
 	public static final Sprite goldbuckler = new Sprite(33, 4, SpriteSheet.entities);
 	public static final Sprite goldheater = new Sprite(35, 3, SpriteSheet.entities);
-	public static final Sprite bronzebuckler = new Sprite(37, 4, SpriteSheet.entities);
-	public static final Sprite bronzeheater = new Sprite(39, 3, SpriteSheet.entities);
+	public static final Sprite copperbuckler = new Sprite(37, 4, SpriteSheet.entities);
+	public static final Sprite copperheater = new Sprite(39, 3, SpriteSheet.entities);
 	public static final Sprite crystalbuckler = new Sprite(37, 7, SpriteSheet.entities);
 	public static final Sprite crystalheater = new Sprite(39, 6, SpriteSheet.entities);
 	public static final Sprite woodheater = new Sprite(35, 0, SpriteSheet.entities);
-	public static final Sprite bronzespear = new Sprite(44, 1, SpriteSheet.entities);
+	public static final Sprite copperspear = new Sprite(44, 1, SpriteSheet.entities);
 
 	// furnace
 	public static final Sprite furnaceOff = new Sprite(12, 0, SpriteSheet.tiles);
@@ -251,28 +251,28 @@ public class Sprite {
 
 	public static Sprite getWeaponSprite(WeaponType type, WeaponMaterial mat) {
 		switch (mat) {
-		case BRONZE: {
+		case COPPER: {
 			switch (type) {
 			case AXE:
-				return bronzeaxe;
+				return copperaxe;
 			case BUCKLER:
-				return bronzebuckler;
+				return copperbuckler;
 			case DAGGER:
-				return bronzedagger;
+				return copperdagger;
 			case HALBERT:
-				return bronzehalbert;
+				return copperhalbert;
 			case HEATER:
-				return bronzeheater;
+				return copperheater;
 			case PICK:
-				return bronzepick;
+				return copperpick;
 			case SCIMITAR:
 				return bronzescimitar;
 			case SPEAR:
-				return bronzespear;
+				return copperspear;
 			case SWORD:
-				return bronzesword;
+				return coppersword;
 			case WARHAMMER:
-				return bronzewarhammer;
+				return copperwarhammer;
 			default:
 				return null;
 			}
