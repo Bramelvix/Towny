@@ -45,7 +45,7 @@ public class MenuItem {
 	}
 
 	public MenuItem(String text, Entity e) {
-		this(text);
+		this(text + " " + e.getName());
 		this.entity = e;
 
 	}
@@ -70,10 +70,6 @@ public class MenuItem {
 		return entity;
 	}
 
-	public static String getMenuItemText(String menuItem, Entity entity) {
-		return menuItem + " " + entity.getName();
-	}
-
 	// rendering the menuitem's text
 	public void render(Graphics g) {
 		g.setColor(hover ? Color.red : Color.black);
@@ -81,7 +77,7 @@ public class MenuItem {
 		g.drawString(text, x, y + 15);
 	}
 
-	// updateing the mouse hover
+	// updating the mouse hover
 	public void update(Mouse mouse) {
 		hover = ((((mouse.getTrueXPixels()) >= x) && ((mouse.getTrueXPixels()) <= x + width)
 				&& ((mouse.getTrueYPixels()) >= y) && ((mouse.getTrueYPixels()) <= y + 10)));

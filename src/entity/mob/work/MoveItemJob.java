@@ -10,7 +10,7 @@ public class MoveItemJob extends Job {
 		this(worker);
 		pickUpJob = true;
 		this.material = material;
-		if (this.worker.holding(this.material) || !this.material.isReserved(this.worker)) {
+		if (this.worker.isHolding(this.material) || !this.material.isReserved(this.worker)) {
 			completed = true;
 		} else {
 			this.material.setReserved(this.worker);
@@ -54,7 +54,7 @@ public class MoveItemJob extends Job {
 	public void execute() {
 		if (!completed && started) {
 			if (pickUpJob) {
-				if (worker.holding(material)) {
+				if (worker.isHolding(material)) {
 					completed = true;
 					return;
 				} else {

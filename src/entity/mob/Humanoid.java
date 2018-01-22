@@ -16,7 +16,7 @@ public abstract class Humanoid extends Mob {
 
 	private Item holding; // item the mob is holding in his hands
 
-	public <T extends Item> boolean holding(T item) {
+	public <T extends Item> boolean isHolding(T item) {
 		return holding != null ? holding.equals(item) : false;
 	}
 

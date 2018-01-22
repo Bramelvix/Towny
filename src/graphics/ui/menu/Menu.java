@@ -119,10 +119,14 @@ public class Menu { // the menu is the little options menu that shows up when
 		return clickedItem(type, mouse) != null;
 	}
 
+	public MenuItem clickedItem(String type, Mouse mouse) {
+		return clickedItem(mouse) != null && clickedItem(mouse).getText().contains(type) ? clickedItem(mouse) : null;
 
-	private MenuItem clickedItem(String type, Mouse mouse) {
+	}
+
+	public MenuItem clickedItem(Mouse mouse) {
 		for (MenuItem i : items) {
-			if (i.getText().contains((type)) && i.clicked(mouse)) {
+			if (i.clicked(mouse)) {
 				return i;
 			}
 		}
@@ -133,18 +137,6 @@ public class Menu { // the menu is the little options menu that shows up when
 		MenuItem clickedItem = clickedItem(menuItem, mouse);
 		if (clickedItem != null) {
 			return clickedItem.getRecipe();
-		}
-		return null;
-	}
-
-	@SuppressWarnings("unchecked") // shouldnt ever be a problem
-	public <T extends Entity> T getEntity(String... checkText) {
-		for (MenuItem item : items) {
-			for (String text : checkText) {
-				if (item.getText().contains(text)) {
-					return (T) item.getEntity();
-				}
-			}
 		}
 		return null;
 	}
