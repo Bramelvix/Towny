@@ -16,6 +16,7 @@ public class Weapon extends Item {
 	private WeaponType type;
 	private WeaponMaterial mat;
 
+	private Weapon(String name, int x, int y, Sprite sprite, String tooltip, WeaponType type, WeaponMaterial mat) {
 		super(name, x, y, sprite, tooltip, true);
 		this.mat = mat;
 		this.type = type;
