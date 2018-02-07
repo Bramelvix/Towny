@@ -554,7 +554,7 @@ public class Game implements Runnable {
 		}
 		Iterator<Villager> iVill = vills.iterator();
 		while (iVill.hasNext()) {
-			Mob i = iVill.next();
+			Villager i = iVill.next();
 			i.update();
 			if (i.getHealth() == 0) {
 				i.die();
@@ -563,7 +563,7 @@ public class Game implements Runnable {
 		}
 		Iterator<Villager> iSoll = sols.iterator();
 		while (iSoll.hasNext()) {
-			Mob i = iSoll.next();
+			Villager i = iSoll.next();
 			i.update();
 			if (i.getHealth() == 0) {
 				i.die();
