@@ -37,7 +37,7 @@ public class Ui {
 		menu = new Menu();
 		selection = new SelectionSquare();
 		map = new Minimap(1290, 8, level);
-		top = new TopBar(700, 15);
+		top = new TopBar(250, 5);
 		outline = new BuildOutline(level);
 	}
 

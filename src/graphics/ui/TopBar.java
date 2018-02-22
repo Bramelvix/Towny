@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import graphics.ui.icon.Icon;
 import input.Mouse;
+import main.Game;
 
 public class TopBar {
 	private int x, y; // x and y of the top left corner
@@ -92,45 +93,45 @@ public class TopBar {
 		if (visible) {
 			g.setColor(COL);
 			g.setFont(font);
-			g.fillRect(x, y, width, height);
+			g.fillRect(x*Game.SCALE, y*Game.SCALE, width, height);
 			g.setColor(Color.black);
-			g.drawImage(vilimg, x + 10, y + 17, null);
-			g.drawString("Villagers", x + 10, y + 12);
-			g.drawString(vilcount + "", x + 30, y + 82);
-			g.drawString("Speed: " + (speed - 2), x + 105, y + 25);
+			g.drawImage(vilimg, x*Game.SCALE + 10, y*Game.SCALE + 17, null);
+			g.drawString("Villagers", x*Game.SCALE + 10, y*Game.SCALE + 12);
+			g.drawString(vilcount + "", x*Game.SCALE + 30, y*Game.SCALE + 82);
+			g.drawString("Speed: " + (speed - 2), x*Game.SCALE + 105, y*Game.SCALE + 25);
 			if (!paused) {
-				g.drawImage(pauseimg, x + (width / 3) + 35, y + 30, null);
+				g.drawImage(pauseimg, x*Game.SCALE + (width / 3) + 35, y*Game.SCALE + 30, null);
 			} else {
-				g.drawImage(playimg, x + (width / 3) + 35, y + 30, null);
+				g.drawImage(playimg, x*Game.SCALE + (width / 3) + 35, y*Game.SCALE + 30, null);
 			}
-			g.drawImage(slowimg, x + (width >> 2) + 10, y + 35, null);
-			g.drawImage(fastimg, x + (width >> 1) + 20, y + 35, null);
-			g.drawImage(solimg, x + (width >> 1) + 70, y + 17, null);
-			g.drawString("Soldiers", x + (width >> 1) + 70, y + 12);
-			g.drawString(solcount + "", x + (width >> 1) + 90, y + 82);
+			g.drawImage(slowimg, x*Game.SCALE + (width >> 2) + 10, y*Game.SCALE + 35, null);
+			g.drawImage(fastimg, x*Game.SCALE + (width >> 1) + 20, y*Game.SCALE + 35, null);
+			g.drawImage(solimg, x*Game.SCALE + (width >> 1) + 70, y*Game.SCALE + 17, null);
+			g.drawString("Soldiers", x*Game.SCALE + (width >> 1) + 70, y*Game.SCALE + 12);
+			g.drawString(solcount + "", x*Game.SCALE + (width >> 1) + 90, y*Game.SCALE + 82);
 		}
 
 	}
 
 	// has the user clicked on the pause button
 	private boolean clickedOnPause(Mouse mouse) {
-		return (mouse.getTrueXPixels() >= x + (width / 3) + 35
-				&& mouse.getTrueXPixels() <= x + (width / 3) + 35 + pauseimg.getWidth(null)
-				&& mouse.getTrueYPixels() >= (y + 30) && mouse.getTrueYPixels() <= (y + 30) + pauseimg.getHeight(null)
+		return (mouse.getTrueXPixels() >= x*Game.SCALE + (width / 3) + 35
+				&& mouse.getTrueXPixels() <= x*Game.SCALE + (width / 3) + 35 + pauseimg.getWidth(null)
+				&& mouse.getTrueYPixels() >= (y*Game.SCALE + 30) && mouse.getTrueYPixels() <= (y*Game.SCALE + 30) + pauseimg.getHeight(null)
 				&& mouse.getClickedLeft());
 	}
 
 	private boolean clickedOnFast(Mouse mouse) {
-		return (mouse.getTrueXPixels() >= x + (width >> 1) + 20
-				&& mouse.getTrueXPixels() <= x + (width >> 1) + 20 + fastimg.getWidth(null)
-				&& mouse.getTrueYPixels() >= (y + 35) && mouse.getTrueYPixels() <= (y + 35) + fastimg.getHeight(null)
+		return (mouse.getTrueXPixels() >= x*Game.SCALE + (width >> 1) + 20
+				&& mouse.getTrueXPixels() <= x*Game.SCALE + (width >> 1) + 20 + fastimg.getWidth(null)
+				&& mouse.getTrueYPixels() >= (y*Game.SCALE + 35) && mouse.getTrueYPixels() <= (y*Game.SCALE + 35) + fastimg.getHeight(null)
 				&& mouse.getClickedLeft());
 	}
 
 	private boolean clickedOnSlow(Mouse mouse) {
-		return (mouse.getTrueXPixels() >= x + (width >> 2) + 10
-				&& mouse.getTrueXPixels() <= x + (width >> 2) + 10 + slowimg.getWidth(null)
-				&& mouse.getTrueYPixels() >= (y + 35) && mouse.getTrueYPixels() <= (y + 35) + slowimg.getHeight(null)
+		return (mouse.getTrueXPixels() >= x*Game.SCALE + (width >> 2) + 10
+				&& mouse.getTrueXPixels() <= x*Game.SCALE + (width >> 2) + 10 + slowimg.getWidth(null)
+				&& mouse.getTrueYPixels() >= (y*Game.SCALE + 35) && mouse.getTrueYPixels() <= (y*Game.SCALE + 35) + slowimg.getHeight(null)
 				&& mouse.getClickedLeft());
 	}
 
