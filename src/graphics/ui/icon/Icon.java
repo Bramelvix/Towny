@@ -6,6 +6,8 @@ import java.awt.Image;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+import main.Game;
+
 //icon on the bottom left of the screen (pickaxe, axe,...)
 public class Icon {
 	private int x, y; // x and y of the top left corner
@@ -19,10 +21,10 @@ public class Icon {
 	// constructor
 	public Icon(int x, int y, String path, int width, int height) {
 		this.path = path;
-		this.x = x;
-		WIDTH = width;
-		HEIGHT = height;
-		this.y = y;
+		this.x = x*Game.SCALE;
+		WIDTH = width*Game.SCALE;
+		HEIGHT = height*Game.SCALE;
+		this.y = y*Game.SCALE;
 		load();
 	}
 

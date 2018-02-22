@@ -46,10 +46,10 @@ import sound.Sound;
 
 public class Game implements Runnable {
 
-	private static final int width = 500;
-	private static final int height = width / 16 * 9;
+	public static final int width = 500;
+	public static final int height = width / 16 * 9;
 	private Thread thread;
-	private static final int SCALE = 3;
+	public static final int SCALE = 2;
 	private Level level;
 	private JFrame frame;
 	private boolean running = false;
