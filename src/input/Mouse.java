@@ -118,8 +118,8 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 		drag = true;
 		trueXpixels = arg0.getX();
 		trueYpixels = arg0.getY();
-		trueX = trueXpixels / 3;
-		trueY = trueYpixels / 3;
+		trueX = trueXpixels / Game.SCALE;
+		trueY = trueYpixels / Game.SCALE;
 		mouseX = trueX + game.xScroll;
 		mouseY = trueY + game.yScroll;
 		mouseTileX = mouseX / 16;
@@ -131,8 +131,8 @@ public class Mouse extends MouseAdapter implements MouseInputListener {
 	public void mouseMoved(MouseEvent arg0) {
 		trueXpixels = arg0.getX();
 		trueYpixels = arg0.getY();
-		trueX = trueXpixels / 3;
-		trueY = trueYpixels / 3;
+		trueX = trueXpixels / Game.SCALE;
+		trueY = trueYpixels / Game.SCALE;
 		mouseX = trueX + game.xScroll;
 		mouseY = trueY + game.yScroll;
 		mouseTileX = mouseX / 16;

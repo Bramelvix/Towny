@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import input.Mouse;
+import main.Game;
 
 public class SelectionSquare {
 	private static final Color COL = new Color(91, 94, 99, 110); // colour of
@@ -19,10 +20,10 @@ public class SelectionSquare {
 		startedDragging = mouse.getDrag();
 		if (visible) {
 			if (startedDragging) {
-				widthteken = mouse.getTrueX() * 3 - xcoord;
-				width = widthteken / 3;
-				heightteken = mouse.getTrueY() * 3 - ycoord;
-				height = heightteken / 3;
+				widthteken = mouse.getTrueX() * Game.SCALE - xcoord;
+				width = widthteken / Game.SCALE;
+				heightteken = mouse.getTrueY() * Game.SCALE - ycoord;
+				height = heightteken / Game.SCALE;
 			}
 		}
 
@@ -45,8 +46,8 @@ public class SelectionSquare {
 		if (!visible) {
 			x = mouse.getX();
 			y = mouse.getY();
-			xcoord = mouse.getTrueX() * 3;
-			ycoord = mouse.getTrueY() * 3;
+			xcoord = mouse.getTrueX() * Game.SCALE;
+			ycoord = mouse.getTrueY() * Game.SCALE;
 			visible = true;
 		}
 	}
