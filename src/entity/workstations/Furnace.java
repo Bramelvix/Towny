@@ -1,5 +1,6 @@
 package entity.workstations;
 
+import entity.BuildAbleObject;
 import graphics.Screen;
 import graphics.Sprite;
 
@@ -21,6 +22,12 @@ public class Furnace extends Workstation {
 				anmiationCounterTick();
 			}
 		}
+	}
+
+	@Override
+	public BuildAbleObject clone() {
+		// TODO Auto-generated method stub
+		return new Furnace();
 	}
 
 }

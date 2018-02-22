@@ -21,7 +21,8 @@ public class BuildingRecipe extends Recipe {
 	}
 
 	public <T extends BuildAbleObject> BuildAbleObject getProduct() {
-		return (BuildAbleObject) product;
+		// TODO: Instead of using .clone, find some other, cleaner way, to show seperate sprites
+		return ((BuildAbleObject) product).clone();
 	}
 
 }

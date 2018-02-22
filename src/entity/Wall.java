@@ -14,6 +14,7 @@ public class Wall extends BuildAbleObject {
 											// this wall
 	private Sprite[] sprites;
 	private boolean door;
+	private WallType type;
 
 	// basic constructor
 	public Wall(WallType type) {
@@ -21,6 +22,7 @@ public class Wall extends BuildAbleObject {
 	}
 
 	private void decideSprites(WallType type, boolean door) {
+		this.type = type;
 		String name = "";
 		switch (type) {
 		case WOOD:
@@ -160,5 +162,12 @@ public class Wall extends BuildAbleObject {
 		}
 
 	}
+
+	@Override
+	public BuildAbleObject clone() {
+		return new Wall(this.type, this.door);
+	}
+	
+	
 
 }

@@ -11,11 +11,11 @@ public class UiIcons {
 	// initialising the icons
 	public static void init() {
 		icons = new Icon[5];
-		icons[0] = new Icon(5, Game.height - 30, "/res/icons/tools/wood-axe.png", 30, 30);
-		icons[1] = new Icon(35, Game.height - 30, "/res/icons/tools/mining.png", 30, 30);
-		icons[2] = new Icon(65, Game.height - 30, "/res/icons/tools/sickle.png", 30, 30);
-		icons[3] = new Icon(95, Game.height - 30, "/res/icons/tools/saw.png", 30, 30);
-		icons[4] = new Icon(125, Game.height - 30, "/res/icons/tools/swords.png", 30, 30);
+		icons[0] = new Icon(5, 5, "/res/icons/tools/wood-axe.png", 30, 30);
+		icons[1] = new Icon(35, 5, "/res/icons/tools/mining.png", 30, 30);
+		icons[2] = new Icon(65, 5, "/res/icons/tools/sickle.png", 30, 30);
+		icons[3] = new Icon(95, 5, "/res/icons/tools/saw.png", 30, 30);
+		icons[4] = new Icon(125, 5, "/res/icons/tools/swords.png", 30, 30);
 
 	}
 

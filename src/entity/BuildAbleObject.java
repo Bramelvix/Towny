@@ -65,5 +65,8 @@ public abstract class BuildAbleObject extends Entity {
 		}
 		return false;
 	}
+	
+	
+	public abstract BuildAbleObject clone();
 
 }
