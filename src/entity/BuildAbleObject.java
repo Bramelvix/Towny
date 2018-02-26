@@ -5,7 +5,7 @@ import map.Level;
 import sound.Sound;
 
 public abstract class BuildAbleObject extends Entity {
-	private boolean open;
+	private boolean open; // can a villager walk over the object
 	public boolean initialised = false; // has the building been initialised
 	protected byte condition = 0; // condition of the building (0=not built ,
 									// 100=
@@ -15,7 +15,7 @@ public abstract class BuildAbleObject extends Entity {
 		setVisible(false);
 	}
 
-	public void setOpened(boolean open) {
+	public void setOpened(boolean open) { //the open value has to be changeable for certain objects like doors
 		this.open = open;
 		if (open) {
 			level.removeEntity(this);

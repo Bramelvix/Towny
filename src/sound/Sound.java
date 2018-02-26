@@ -13,6 +13,7 @@ public class Sound {
 	public static Clip drill;
 
 	// plays a soundclip
+	//TODO only one sound can be played at the same time
 	public static void speelGeluid(Clip clip) {
 		clip.setFramePosition(0);
 		clip.loop(0);

@@ -11,7 +11,7 @@ import sound.Sound;
 public class Ore extends Resource {
 	private byte mined = 100; // mined percentage (100 = unfinished / 0 =
 								// finished)
-	private Sprite itemSprite; // sprite for the item the ore drops when mined
+	private Item minedItem; // Item dropped when the ore is mined
 	private OreType type; // type of ore (iron, coal, gold,...)
 
 	// basic constructor
@@ -26,29 +26,36 @@ public class Ore extends Resource {
 	private void decideSprite() {
 		switch (type) {
 		case IRON:
-			setOre("iron ore",Sprite.ironOre, Sprite.ironChunk);
+			setOre(type.toString().toLowerCase() + " ore", Sprite.ironOre,
+					new Item(type.toString().toLowerCase() + " ore", this.x, this.y, Sprite.ironChunk, true));
 			break;
 		case GOLD:
-			setOre("gold ore",Sprite.goldOre, Sprite.goldChunk);
+			setOre(type.toString().toLowerCase() + " ore", Sprite.goldOre,
+					new Item(type.toString().toLowerCase() + " ore", this.x, this.y, Sprite.goldChunk, true));
 			break;
 		case COAL:
-			setOre("coal ore",Sprite.coalOre, Sprite.coalChunk);
+			setOre(type.toString().toLowerCase() + " ore", Sprite.coalOre,
+					new Item(type.toString().toLowerCase() + " ore", this.x, this.y, Sprite.coalChunk, true));
 			break;
 		case STONE:
-			setOre("stone",Sprite.getStone(), Sprite.stoneChunk);
+			setOre("stone", Sprite.getStone(),
+					new Item(type.toString().toLowerCase() + "s", this.x, this.y, Sprite.stoneChunk, true));
 			break;
 		case CRYSTAL:
-			setOre("crystal",Sprite.crystalOre, Sprite.crystalChunk);
+			setOre(type.toString().toLowerCase() + " ore", Sprite.crystalOre,
+					new Item(type.toString().toLowerCase(), this.x, this.y, Sprite.crystalChunk, true));
 			break;
 		case COPPER:
-			setOre("copper ore",Sprite.copperOre, Sprite.copperChunk);
+			setOre(type.toString().toLowerCase() + " ore", Sprite.copperOre,
+					new Item(type.toString().toLowerCase() + " ore", this.x, this.y, Sprite.copperChunk, true));
 			break;
 		}
 	}
-	private void setOre(String name, Sprite oreSprite, Sprite itemSprite) {
+
+	private void setOre(String name, Sprite oreSprite, Item item) {
 		setName(name);
 		this.sprite = oreSprite;
-		this.itemSprite = itemSprite;
+		this.minedItem = item;
 	}
 
 	// work method executed by the villager when mining
@@ -68,11 +75,7 @@ public class Ore extends Resource {
 			return false;
 		} else {
 			worker.level.removeEntity(this);
-			if (type == OreType.STONE) {
-				worker.level.addItem(new Item(type.name().toLowerCase() + "s", this.x, this.y, itemSprite, true));
-			} else {
-				worker.level.addItem(new Item(type.name().toLowerCase() + " ore", this.x, this.y, itemSprite, true));
-			}
+			worker.level.addItem(minedItem.copy());
 			return true;
 		}
 	}

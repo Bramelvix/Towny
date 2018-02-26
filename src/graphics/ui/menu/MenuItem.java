@@ -16,6 +16,7 @@ public class MenuItem {
 	private boolean hover; // is the mouse hovering over the item
 	private static final Font font = new Font("Dialog", Font.LAYOUT_LEFT_TO_RIGHT, 15); // font
 	// some static strings to use as menuitem texts
+	//TODO theres probably a better way to do this
 	public static final String CANCEL = "Cancel";
 	public static final String MOVE = "Move";
 	public static final String CHOP = "Chop";

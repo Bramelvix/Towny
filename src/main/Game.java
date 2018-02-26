@@ -11,12 +11,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.JFrame;
-
 import com.sun.xml.internal.ws.util.StringUtils;
-
 import entity.Entity;
 import entity.Ore;
-import entity.Resource;
 import entity.Tree;
 import entity.item.Clothing;
 import entity.item.ClothingType;
@@ -49,7 +46,7 @@ public class Game implements Runnable {
 	public static final int width = 500;
 	public static final int height = width / 16 * 9;
 	private Thread thread;
-	public static final int SCALE = 2;
+	public static final int SCALE = 3;
 	private Level level;
 	private JFrame frame;
 	private boolean running = false;
