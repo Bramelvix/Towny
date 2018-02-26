@@ -104,6 +104,7 @@ public class Job implements Workable {
 							if (!worker.level.isWalkAbleTile(xloc / 16, yloc / 16) && !buildJobObj.initialised) {
 								// wait if the buildLocation is blocked by an
 								// item or entity
+								System.out.println("Postponing Construction of: " + buildJobObj.toString());
 								return;
 							}
 							if (!buildJobObj.initialised) {
