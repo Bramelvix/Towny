@@ -11,6 +11,7 @@ Feel free to contribute to the game by fixing my terrible code, or adding new fe
  - Job assignment system sometimes malfunctions when assigning multiple jobs
  - Combat system is very buggy
  - Assigning more than one building job at once is bugged
+ - Sometimes a crafted bar is inivisble on when dropped on the ground right after crafting it
 
  
  **Planned improvements**
