@@ -11,11 +11,11 @@ import graphics.Sprite;
 
 public class ItemRecipe extends Recipe {
 
-	public static final ItemRecipe IRON_BAR = new ItemRecipe(new Item("iron bar", Sprite.ironBar, false), Furnace.class,
+	public static final ItemRecipe IRON_BAR = new ItemRecipe(new Item("iron bar", Sprite.ironBar, true), Furnace.class,
 			"iron ore", "coal ore");
-	public static final ItemRecipe GOLD_BAR = new ItemRecipe(new Item("gold bar", Sprite.goldBar, false), Furnace.class,
+	public static final ItemRecipe GOLD_BAR = new ItemRecipe(new Item("gold bar", Sprite.goldBar, true), Furnace.class,
 			"gold ore", "coal ore");
-	public static final ItemRecipe COPPER_BAR = new ItemRecipe(new Item("copper bar", Sprite.copperBar, false),
+	public static final ItemRecipe COPPER_BAR = new ItemRecipe(new Item("copper bar", Sprite.copperBar, true),
 			Furnace.class, "copper ore", "coal ore");
 	public static final ItemRecipe[] FURNACE_RECIPES = { IRON_BAR, GOLD_BAR, COPPER_BAR };
 	private static final ItemRecipe IRON_SWORD = new ItemRecipe(Weapon.getWeapon(WeaponType.SWORD, WeaponMaterial.IRON),

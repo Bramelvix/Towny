@@ -16,7 +16,7 @@ public class MenuItem {
 	private boolean hover; // is the mouse hovering over the item
 	private static final Font font = new Font("Dialog", Font.LAYOUT_LEFT_TO_RIGHT, 15); // font
 	// some static strings to use as menuitem texts
-	//TODO theres probably a better way to do this
+	// TODO theres probably a better way to do this
 	public static final String CANCEL = "Cancel";
 	public static final String MOVE = "Move";
 	public static final String CHOP = "Chop";
@@ -96,6 +96,11 @@ public class MenuItem {
 	@SuppressWarnings("unchecked") // again, shouldnt ever be a problem
 	public <T extends Recipe> T getRecipe() {
 		return (T) recipe;
+	}
+
+	public static boolean isEqualToAnyMaterial(String input) {
+		return input.equals(MenuItem.WOOD) || input.equals(MenuItem.IRON) || input.equals(MenuItem.COPPER)
+				|| input.equals(MenuItem.GOLD) || input.equals(MenuItem.CRYSTAL);
 	}
 
 }
