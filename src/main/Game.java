@@ -10,7 +10,8 @@ import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.JFrame;
+import javax.swing.*;
+
 import com.sun.xml.internal.ws.util.StringUtils;
 import entity.Entity;
 import entity.Ore;
@@ -82,7 +83,7 @@ public class Game implements Runnable {
 		frame.setTitle("Towny");
 		frame.add(canvas);
 		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		Sound.initSound();
@@ -501,33 +502,29 @@ public class Game implements Runnable {
 
 	}
 
+    private <T extends Mob> void update(T mob, Iterator<T> iterator) {
+        mob.update();
+        if (mob.getHealth() == 0) {
+            mob.die();
+            iterator.remove();
+        }
+    }
+
 	private void updateMobs() {
 		Iterator<Mob> iMob = mobs.iterator();
 		while (iMob.hasNext()) {
 			Mob i = iMob.next();
-			i.update();
-			if (i.getHealth() == 0) {
-				i.die();
-				iMob.remove();
-			}
+            update(i, iMob);
 		}
 		Iterator<Villager> iVill = vills.iterator();
 		while (iVill.hasNext()) {
 			Villager i = iVill.next();
-			i.update();
-			if (i.getHealth() == 0) {
-				i.die();
-				iVill.remove();
-			}
+            update(i, iVill);
 		}
 		Iterator<Villager> iSoll = sols.iterator();
 		while (iSoll.hasNext()) {
 			Villager i = iSoll.next();
-			i.update();
-			if (i.getHealth() == 0) {
-				i.die();
-				iSoll.remove();
-			}
+            update(i, iSoll);
 		}
 	}
 
