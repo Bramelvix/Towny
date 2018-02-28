@@ -26,28 +26,22 @@ public class Ore extends Resource {
 	private void decideSprite() {
 		switch (type) {
 		case IRON:
-			setOre(type.toString().toLowerCase() + " ore", Sprite.ironOre,
-					new Item(type.toString().toLowerCase() + " ore", this.x, this.y, Sprite.ironChunk, true));
+			setOre(type.toString().toLowerCase() + " ore", Sprite.ironOre, Item.stone.copy(this.x, this.y));
 			break;
 		case GOLD:
-			setOre(type.toString().toLowerCase() + " ore", Sprite.goldOre,
-					new Item(type.toString().toLowerCase() + " ore", this.x, this.y, Sprite.goldChunk, true));
+			setOre(type.toString().toLowerCase() + " ore", Sprite.goldOre, Item.gold_ore.copy(this.x, this.y));
 			break;
 		case COAL:
-			setOre(type.toString().toLowerCase() + " ore", Sprite.coalOre,
-					new Item(type.toString().toLowerCase() + " ore", this.x, this.y, Sprite.coalChunk, true));
+			setOre(type.toString().toLowerCase() + " ore", Sprite.coalOre, Item.coal_ore.copy(this.x, this.y));
 			break;
 		case STONE:
-			setOre("stone", Sprite.getStone(),
-					new Item(type.toString().toLowerCase() + "s", this.x, this.y, Sprite.stoneChunk, true));
+			setOre("stone", Sprite.getStone(), Item.stone.copy(this.x, this.y));
 			break;
 		case CRYSTAL:
-			setOre(type.toString().toLowerCase() + " ore", Sprite.crystalOre,
-					new Item(type.toString().toLowerCase(), this.x, this.y, Sprite.crystalChunk, true));
+			setOre(type.toString().toLowerCase() + " ore", Sprite.crystalOre, Item.crystal_ore.copy(this.x, this.y));
 			break;
 		case COPPER:
-			setOre(type.toString().toLowerCase() + " ore", Sprite.copperOre,
-					new Item(type.toString().toLowerCase() + " ore", this.x, this.y, Sprite.copperChunk, true));
+			setOre(type.toString().toLowerCase() + " ore", Sprite.copperOre, Item.copper_ore.copy(this.x, this.y));
 			break;
 		}
 	}

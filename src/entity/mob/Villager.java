@@ -75,17 +75,19 @@ public class Villager extends Humanoid {
 
 	// gets the item nearest to the villager with a specific name (and
 	// unreserved)
-	public Item getNearestItemOfType(String name) {
-		if (getHolding() != null && getHolding().getName().equals(name)) {
+	public Item getNearestItemOfType(Item item) {
+		if (getHolding() != null && getHolding().isSameType(item)) {
 			return getHolding();
 		}
 		Item closest = null;
 		Path path = null;
-		for (Item item : level.getItems()) {
-			if (item != null && item.getName().equals(name) && item.isReserved(this)) {
-				if (closest == null || path == null || (getPath(item.getX() >> 4, item.getY() >> 4) != null
-						&& path.getStepsSize() > getPath(item.getX() >> 4, item.getY() >> 4).getStepsSize())) {
-					closest = item;
+		for (Item level_item : level.getItems()) {
+			if (level_item != null && level_item.isSameType(item) && level_item.isReserved(this)) {
+				if (closest == null || path == null
+						|| (getPath(level_item.getX() >> 4, level_item.getY() >> 4) != null
+								&& path.getStepsSize() > getPath(level_item.getX() >> 4, level_item.getY() >> 4)
+										.getStepsSize())) {
+					closest = level_item;
 					path = getPath(closest.getX() >> 4, closest.getY() >> 4);
 				}
 			}
@@ -168,7 +170,7 @@ public class Villager extends Humanoid {
 	}
 
 	// add a buildjob
-	public void addBuildJob(int x, int y, BuildAbleObject object, String resource) {
+	public void addBuildJob(int x, int y, BuildAbleObject object, Item resource) {
 		addJob(new Job(x, y, getNearestItemOfType(resource), object, this));
 
 	}
@@ -210,7 +212,7 @@ public class Villager extends Humanoid {
 		inventory.render(screen);
 		if (getHolding() != null) {
 			screen.renderSprite(x, y, getHolding().sprite); // renders the item the
-														// villager is holding
+			// villager is holding
 		}
 		if (this.isSelected()) {
 			screen.renderSelection(x, y, this); // render the red square around

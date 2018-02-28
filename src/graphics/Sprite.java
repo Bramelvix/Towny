@@ -121,7 +121,8 @@ public class Sprite {
 	public static final Sprite stoneChunk = new Sprite(46, 10, SpriteSheet.tiles);
 	public static final Sprite coalChunk = new Sprite(47, 10, SpriteSheet.tiles);
 	public static final Sprite copperChunk = new Sprite(48, 10, SpriteSheet.tiles);
-	public static final Sprite crystalChunk = new Sprite(41, 23, SpriteSheet.tiles);
+	public static final Sprite crystalChunkUncut = new Sprite(41, 24, SpriteSheet.tiles);
+	public static final Sprite crystalChunkCut = new Sprite(41, 23, SpriteSheet.tiles);
 
 	// CLOTHES
 	public static final Sprite blacktrousers = new Sprite(4, 0, SpriteSheet.entities);

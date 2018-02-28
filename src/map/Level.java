@@ -128,7 +128,7 @@ public class Level {
 	}
 
 	public boolean itemAlreadyThere(int x, int y, Item i) {
-		return (getItemWithNameOn(x, y, i.getName()) != null);
+		return (getItemOn(x, y, i) != null);
 	}
 
 	public <T extends Workstation> T getNearestWorkstation(Class<T> workstation) {
@@ -146,8 +146,8 @@ public class Level {
 		return tiles[x / 16][y / 16].getItem();
 	}
 
-	public Item getItemWithNameOn(int x, int y, String name) {
-		if (getItemOn(x, y) != null && getItemOn(x, y).getName().equals(name)) {
+	public Item getItemOn(int x, int y, Item item) {
+		if (getItemOn(x, y) != null && getItemOn(x, y).isSameType(item)) {
 			return getItemOn(x, y);
 		} else {
 			return null;
