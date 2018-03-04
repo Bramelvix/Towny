@@ -4,6 +4,8 @@ import entity.item.Item;
 import entity.mob.Mob;
 import entity.mob.Villager;
 import graphics.Sprite;
+import graphics.SpriteHashtable;
+import graphics.SpritesheetHashtable;
 
 public class Weapon extends Item {
 	private float crush;
@@ -137,7 +139,7 @@ public class Weapon extends Item {
 		String tooltip = "a " + name.toLowerCase();
 		if (mat == WeaponMaterial.IRON)
 			tooltip = "an " + name.toLowerCase();
-		return new Weapon(name, 0, 0, Sprite.getWeaponSprite(type, mat), tooltip, type, mat);
+		return new Weapon(name, 0, 0, SpriteHashtable.getWeaponSprite(type, mat), tooltip, type, mat);
 	}
 
 	public boolean isShield() {

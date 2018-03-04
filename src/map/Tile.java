@@ -4,6 +4,7 @@ import entity.Entity;
 import entity.item.Item;
 import graphics.Screen;
 import graphics.Sprite;
+import graphics.SpriteHashtable;
 
 public class Tile {
 	public Sprite sprite; // tile's sprite
@@ -15,8 +16,8 @@ public class Tile {
 	private Entity entity;
 
 	// two static tiles voidtile = black, darkgrass is dark green
-	public static Tile darkGrass = new Tile(Sprite.darkGrass, true, 0, 0);
-	public static Tile voidTile = new Tile(Sprite.voidSprite, true, 0, 0);
+    public static Tile darkGrass = new Tile(SpriteHashtable.get(4), true, 0, 0);
+    public static Tile voidTile = new Tile(SpriteHashtable.get(3), true, 0, 0);
 
 	// constructors
 	public Tile(Sprite sprite, boolean solid, int x, int y) {

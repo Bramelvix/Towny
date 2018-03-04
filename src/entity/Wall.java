@@ -2,6 +2,7 @@ package entity;
 
 import entity.item.Item;
 import graphics.Sprite;
+import graphics.SpriteHashtable;
 import map.Level;
 import map.Tile;
 
@@ -28,17 +29,17 @@ public class Wall extends BuildAbleObject {
 		case WOOD:
 			name = name.concat("wooden ");
 			if (door) {
-				sprites = Sprite.WOODDOORSPRITES;
+				sprites = SpriteHashtable.WOODDOORSPRITES;
 			} else {
-				sprites = Sprite.WOODWALLSPRITES;
+				sprites = SpriteHashtable.WOODWALLSPRITES;
 			}
 			break;
 		case STONE:
 			name = name.concat("stone ");
 			if (door) {
-				sprites = Sprite.STONEDOORSPRITES;
+				sprites = SpriteHashtable.STONEDOORSPRITES;
 			} else {
-				sprites = Sprite.STONEWALLSPRITES;
+				sprites = SpriteHashtable.STONEWALLSPRITES;
 			}
 			break;
 		}

@@ -2,11 +2,12 @@ package entity.workstations;
 
 import entity.BuildAbleObject;
 import graphics.Sprite;
+import graphics.SpriteHashtable;
 
 public class Anvil extends Workstation {
 	public Anvil() {
 		super();
-		sprite = Sprite.anvil;
+        sprite = SpriteHashtable.get(85);
 		setName("anvil");
 	}
 

@@ -4,6 +4,7 @@ import entity.item.Item;
 import entity.mob.Villager;
 import graphics.Screen;
 import graphics.Sprite;
+import graphics.SpriteHashtable;
 import sound.Sound;
 
 public class Tree extends Resource {
@@ -12,8 +13,8 @@ public class Tree extends Resource {
 	// basic constructor
 	public Tree(int x, int y) {
 		super(x, y);
-		sprite = Sprite.treebottom;
-		extraSprite = Sprite.treetop;
+		sprite = SpriteHashtable.get(12);
+		extraSprite = SpriteHashtable.get(13);
 		setVisible(true);
 		setName("tree");
 	}

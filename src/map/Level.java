@@ -11,6 +11,7 @@ import entity.pathfinding.Point;
 import entity.workstations.Workstation;
 import graphics.Screen;
 import graphics.Sprite;
+import graphics.SpriteHashtable;
 
 public class Level {
 	private Tile[][] tiles; // array of tiles on the map
@@ -37,14 +38,14 @@ public class Level {
 		return items;
 	}
 
-	// adding an item to the list
+	// adding an item to the spritesheets
 	public <T extends Item> void addItem(T e) {
 		if (e != null) {
 			tiles[e.getX() / 16][e.getY() / 16].setItem(e);
 		}
 	}
 
-	// removing an item from the list
+	// removing an item from the spritesheets
 	public <T extends Item> void removeItem(T e) {
 		if (e != null) {
 			tiles[e.getX() / 16][e.getY() / 16].setItem(null);
@@ -172,10 +173,10 @@ public class Level {
 		for (int y = 0; y < height - 1; y++) {
 			for (int x = 0; x < width - 1; x++) {
 				if (noise[x + y * width] > 0.5) {
-					tiles[x][y] = new Tile(Sprite.getDirt(), false, x, y);
+					tiles[x][y] = new Tile(SpriteHashtable.getDirt(), false, x, y);
 					randOre(x, y);
 				} else {
-					tiles[x][y] = new Tile(Sprite.getGrass(), false, x, y);
+					tiles[x][y] = new Tile(SpriteHashtable.getGrass(), false, x, y);
 					randForest(x, y);
 				}
 			}

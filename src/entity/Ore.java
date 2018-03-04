@@ -6,6 +6,7 @@ import entity.mob.work.Job;
 import entity.mob.work.MoveItemJob;
 import entity.pathfinding.Point;
 import graphics.Sprite;
+import graphics.SpriteHashtable;
 import sound.Sound;
 
 public class Ore extends Resource {
@@ -26,22 +27,22 @@ public class Ore extends Resource {
 	private void decideSprite() {
 		switch (type) {
 		case IRON:
-			setOre(type.toString().toLowerCase() + " ore", Sprite.ironOre, Item.stone.copy(this.x, this.y));
+			setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(54), Item.stone.copy(this.x, this.y));
 			break;
 		case GOLD:
-			setOre(type.toString().toLowerCase() + " ore", Sprite.goldOre, Item.gold_ore.copy(this.x, this.y));
+			setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(56), Item.gold_ore.copy(this.x, this.y));
 			break;
 		case COAL:
-			setOre(type.toString().toLowerCase() + " ore", Sprite.coalOre, Item.coal_ore.copy(this.x, this.y));
+			setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(53), Item.coal_ore.copy(this.x, this.y));
 			break;
 		case STONE:
-			setOre("stone", Sprite.getStone(), Item.stone.copy(this.x, this.y));
+			setOre("stone", SpriteHashtable.getStone(), Item.stone.copy(this.x, this.y));
 			break;
 		case CRYSTAL:
-			setOre(type.toString().toLowerCase() + " ore", Sprite.crystalOre, Item.crystal_ore.copy(this.x, this.y));
+			setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(57), Item.crystal_ore.copy(this.x, this.y));
 			break;
 		case COPPER:
-			setOre(type.toString().toLowerCase() + " ore", Sprite.copperOre, Item.copper_ore.copy(this.x, this.y));
+			setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(55), Item.copper_ore.copy(this.x, this.y));
 			break;
 		}
 	}

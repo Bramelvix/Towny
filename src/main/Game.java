@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,6 +34,8 @@ import entity.workstations.Anvil;
 import entity.workstations.Furnace;
 import graphics.Screen;
 import graphics.Sprite;
+import graphics.SpriteHashtable;
+import graphics.SpritesheetHashtable;
 import graphics.ui.Ui;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.MenuItem;
@@ -67,11 +70,17 @@ public class Game implements Runnable {
 	private Canvas canvas;
 
 	public static void main(String[] args) {
-		new Game();
+		try {
+			new Game();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
-	public Game() {
+	public Game() throws Exception {
+		SpritesheetHashtable.registerSpritesheets();
+		SpriteHashtable.registerSprites();
 		canvas = new Canvas();
 		Dimension size = new Dimension(width * SCALE, height * SCALE);
 		canvas.setPreferredSize(size);
@@ -104,13 +113,13 @@ public class Game implements Runnable {
 
 	private void spawnvills() {
 		Villager vil1 = new Villager(144, 144, level);
-		vil1.addClothing(new Clothing("Brown Shirt", vil1, Sprite.brownShirt1, "A brown tshirt", ClothingType.SHIRT));
+		vil1.addClothing(new Clothing("Brown Shirt", vil1, SpriteHashtable.get(70), "A brown tshirt", ClothingType.SHIRT));
 		addVillager(vil1);
 		Villager vil2 = new Villager(144, 160, level);
-		vil2.addClothing(new Clothing("Green Shirt", vil2, Sprite.greenShirt1, "A green tshirt", ClothingType.SHIRT));
+		vil2.addClothing(new Clothing("Green Shirt", vil2, SpriteHashtable.get(74), "A green tshirt", ClothingType.SHIRT));
 		addVillager(vil2);
 		Villager vil3 = new Villager(160, 160, level);
-		vil3.addClothing(new Clothing("Green Shirt", vil3, Sprite.greenShirt2, "A green tshirt", ClothingType.SHIRT));
+		vil3.addClothing(new Clothing("Green Shirt", vil3, SpriteHashtable.get(75), "A green tshirt", ClothingType.SHIRT));
 		addVillager(vil3);
 
 	}

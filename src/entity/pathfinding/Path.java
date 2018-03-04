@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 //path for the villager to take to a destination
 public class Path {
-	private ArrayList<Point> steps = new ArrayList<Point>(); // list of steps to
+    private ArrayList<Point> steps = new ArrayList<Point>(); // spritesheets of steps to
 																// the
 																// destination
 	private boolean arrived = false; // has the villager arrived
@@ -56,17 +56,17 @@ public class Path {
 		return arrived;
 	}
 
-	// adds a step to the end of the list
+    // adds a step to the end of the spritesheets
 	public void appendStep(int x, int y) {
 		steps.add(new Point(x, y));
 	}
 
-	// adds a step to the front of the list
+    // adds a step to the front of the spritesheets
 	public void prependStep(int x, int y) {
 		steps.add(0, new Point(x, y));
 	}
 
-	//does the list already contain a step
+    //does the spritesheets already contain a step
 	public boolean contains(int x, int y) {
 		return steps.contains(new Point(x, y));
 	}

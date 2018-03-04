@@ -14,7 +14,7 @@ public class Menu { // the menu is the little options menu that shows up when
 	private int ingameX, ingameY;
 	private int width = 70; // width and height hardcoded
 	private int height = 20;
-	public List<MenuItem> items; // list of items on the menu
+    public List<MenuItem> items; // spritesheets of items on the menu
 	private List<Entity> menuItemEntities;
 	private boolean visible; // is the item visible
 	private Color colour = new Color(91, 94, 99, 210); // the grey-blue colour

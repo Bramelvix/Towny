@@ -3,6 +3,7 @@ package entity.mob;
 import entity.item.weapon.Weapon;
 import graphics.Screen;
 import graphics.Sprite;
+import graphics.SpriteHashtable;
 import map.Level;
 
 public class Zombie extends Humanoid {
@@ -10,7 +11,7 @@ public class Zombie extends Humanoid {
 
 	public Zombie(Level level, int x, int y) {
 		super(level, x, y);
-		this.sprite = Sprite.zombie;
+        this.sprite = SpriteHashtable.get(51);
 		setName("zombie");
 		setHolding(Weapon.getRandomWeapon(this));
 
@@ -21,7 +22,7 @@ public class Zombie extends Humanoid {
 		if (animationtimer != 0) {
 			animationtimer--;
 			if (animationtimer == 0) {
-				sprite = Sprite.zombie;
+                sprite = SpriteHashtable.get(51);
 			}
 		}
 		if (idleTime()) {
@@ -34,7 +35,7 @@ public class Zombie extends Humanoid {
 	@Override
 	public void hit(float damage) {
 		super.hit(damage);
-		sprite = Sprite.zombiehit;
+        sprite = SpriteHashtable.get(52);
 		animationtimer = 30;
 		move(0, -1);
 		move(0, -1);

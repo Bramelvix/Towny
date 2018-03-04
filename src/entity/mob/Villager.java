@@ -15,10 +15,11 @@ import entity.pathfinding.Path;
 import graphics.HairSprite;
 import graphics.Screen;
 import graphics.Sprite;
+import graphics.SpriteHashtable;
 import map.Level;
 
 public class Villager extends Humanoid {
-	public VillagerInventory inventory; // clothing item list
+	public VillagerInventory inventory; // clothing item spritesheets
 	public boolean male; // is the villager male
 	private Sprite hair; // hair sprite
 	private int hairnr; // hair number (needed for the hair sprite to be
@@ -28,7 +29,7 @@ public class Villager extends Humanoid {
 	// basic constructors
 	public Villager(int x, int y, Level level) {
 		this(level, x, y);
-		this.sprite = Sprite.getPerson();
+		this.sprite = SpriteHashtable.getPerson();
 		inventory = new VillagerInventory(this);
 		jobs = new ArrayList<Job>();
 		male = Entity.RANDOM.nextBoolean();
@@ -148,7 +149,7 @@ public class Villager extends Humanoid {
 		}
 	}
 
-	// add a job to the jobs list for the villager to do
+	// add a job to the jobs spritesheets for the villager to do
 	public void addJob(Resource e) {
 		if (e != null) {
 			addJob(new Job(e, this));
