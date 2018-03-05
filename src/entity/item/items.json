@@ -1,0 +1,76 @@
+
+{
+    "itemList": [
+      {
+        "id": "1",
+        "name": "logs",
+        "sprite": "58",
+        "tooltip": "Wooden Logs",
+        "weaponName": "Wood"
+      },
+      {
+        "id": "2",
+        "name": "iron ore",
+        "sprite": "59",
+        "tooltip": "A bar of solid iron",
+        "weaponName": "Iron"
+      },
+      {
+        "id": "3",
+        "name": "iron bar",
+        "sprite": "62",
+        "tooltip": "Iron ore"
+      },
+      {
+        "id": "4",
+        "name": "copper bar",
+        "sprite": "61",
+        "tooltip": "A bar of solid copper",
+        "weaponName": "Copper"
+      },
+      {
+        "id": "5",
+        "name": "copper ore",
+        "sprite": "66",
+        "tooltip": "Copper ore"
+      },
+      {
+        "id": "6",
+        "name": "gold bar",
+        "sprite": "60",
+        "tooltip": "A bar of solid gold",
+        "weaponName": "Gold"
+      },
+      {
+        "id": "7",
+        "name": "gold ore",
+        "sprite": "63",
+        "tooltip": "Gold ore"
+      },
+      {
+        "id": "8",
+        "name": "cut crystal",
+        "sprite": "68",
+        "tooltip": "A cut crystal",
+        "weaponName": "Crystal"
+      },
+      {
+        "id": "9",
+        "name": "crystal ore",
+        "sprite": "67",
+        "tooltip": "An uncut crystal"
+      },
+      {
+        "id": "10",
+        "name": "coal ore",
+        "sprite": "65",
+        "tooltip": "Coal ore"
+      },
+      {
+        "id": "11",
+        "name": "gold ore",
+        "sprite": "63",
+        "tooltip": "Some stone"
+      }
+    ]
+}

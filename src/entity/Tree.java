@@ -7,6 +7,8 @@ import graphics.Sprite;
 import graphics.SpriteHashtable;
 import sound.Sound;
 
+import java.io.FileNotFoundException;
+
 public class Tree extends Resource {
 	private byte chopped = 100;
 
@@ -34,7 +36,11 @@ public class Tree extends Resource {
 			return false;
 		} else {
 			worker.level.removeEntity(this);
-			worker.level.addItem(Item.logs.copy(this.x,this.y));
+			try {
+				worker.level.addItem(new Item(1, this.x, this.y, true));
+			} catch (FileNotFoundException e){
+				System.out.println("no file found");
+			}
 			return true;
 		}
 

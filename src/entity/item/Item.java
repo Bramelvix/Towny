@@ -4,8 +4,11 @@ import entity.Entity;
 import entity.mob.Villager;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
+import org.json.*;
 
-public class Item extends Entity {
+import java.io.*;
+
+public class Item extends Entity{
 	public static final Item logs = new Item("logs", SpriteHashtable.get(58), "Wooden logs");
 	public static final Item iron_bar = new Item("iron bar", SpriteHashtable.get(59), "a bar of solid iron");
 	public static final Item gold_bar = new Item("gold bar", SpriteHashtable.get(60), "a bar of solid gold");
@@ -18,6 +21,7 @@ public class Item extends Entity {
 	public static final Item stone = new Item("stone", SpriteHashtable.get(64), "some stones");
 	public static final Item cut_crystal = new Item("cut crystal", SpriteHashtable.get(68), "a cut crystal");
 
+	private final int id;
 	protected String tooltip; // the item's tooltip
 	private Villager reservedVil; // the villager that plans to pick the item
 									// up, or is already holding it
@@ -29,6 +33,22 @@ public class Item extends Entity {
 		setVisible(visible);
 		super.setName(name);
 		this.tooltip = tooltip;
+		id = 0;
+	}
+
+	public Item(int id, int x, int y, boolean visible){
+		super(x, y);
+		this.id = id;
+		setVisible(visible);
+		JSONArray itemList =  ItemList.jsonObj.getJSONArray("itemList");
+		for (int i = 0; i < itemList.length(); i++) {
+			JSONObject element = itemList.getJSONObject(i);
+			if (element.getInt("id") == id){
+				super.setName(element.getString("name"));
+				this.sprite = SpriteHashtable.get(element.getInt("sprite"));
+				this.tooltip = element.getString("tooltip");
+			}
+		}
 	}
 
 	public boolean isSameType(Item item) {
@@ -44,6 +64,7 @@ public class Item extends Entity {
 		this.sprite = sprite;
 		this.tooltip = tooltip;
 		setVisible(true);
+		id = 0;
 	}
 
 	public Item copy() {
@@ -57,6 +78,10 @@ public class Item extends Entity {
 	}
 
 	// getters and setters
+	public int getId() {
+		return id;
+	}
+
 	public String getToolTip() {
 		return tooltip;
 	}
@@ -71,6 +96,20 @@ public class Item extends Entity {
 
 	public void removeReserved() {
 		reservedVil = null;
+	}
+
+	private static class ItemList {
+		private static JSONTokener file;
+		protected static JSONObject jsonObj;
+
+		static{
+			try {
+				file = new JSONTokener(new FileInputStream("src/entity/item/items.json"));
+				jsonObj = new JSONObject(file);
+			} catch (FileNotFoundException e) {
+				System.out.println("File not found: items.json");
+			}
+		}
 	}
 
 }
