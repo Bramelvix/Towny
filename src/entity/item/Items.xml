@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<item>
+    <id>1</id>
+    <name>logs</name>
+    <sprite>58</sprite>
+    <tooltip>Wooden Logs</tooltip>
+    <weaponName>Wood</weaponName>
+</item>
+
+<item>
+    <id>2</id>
+    <name>iron ore</name>
+    <sprite>59</sprite>
+    <tooltip>A bar of solid iron</tooltip>
+    <weaponName>Iron</weaponName>
+</item>
+
+<item>
+    <id>3</id>
+    <name>iron bar</name>
+    <sprite>62</sprite>
+    <tooltip>Iron ore</tooltip>
+</item>
+
+<item>
+    <id>4</id>
+    <name>copper bar</name>
+    <sprite>61</sprite>
+    <tooltip>A bar of solid copper</tooltip>
+    <weaponName>Copper</weaponName>
+</item>
+
+<item>
+    <id>5</id>
+    <name>copper ore</name>
+    <sprite>66</sprite>
+    <tooltip>Copper ore</tooltip>
+</item>
+
+<item>
+    <id>6</id>
+    <name>gold bar</name>
+    <sprite>60</sprite>
+    <tooltip>A bar of solid gold</tooltip>
+    <weaponName>Gold</weaponName>
+</item>
+
+<item>
+    <id>7</id>
+    <name>gold ore</name>
+    <sprite>63</sprite>
+    <tooltip>Gold ore</tooltip>
+</item>
+
+<item>
+    <id>8</id>
+    <name>cut crystal</name>
+    <sprite>68</sprite>
+    <tooltip>A cut crystal</tooltip>
+    <weaponName>Crystal</weaponName>
+</item>
+
+<item>
+    <id>9</id>
+    <name>crystal ore</name>
+    <sprite>67</sprite>
+    <tooltip>An uncut crystal</tooltip>
+</item>
+
+<item>
+    <id>10</id>
+    <name>coal ore</name>
+    <sprite>65</sprite>
+    <tooltip>Coal ore</tooltip>
+</item>
+
+<item>
+    <id>11</id>
+    <name>gold ore</name>
+    <sprite>63</sprite>
+    <tooltip>Some stone</tooltip>
+</item>

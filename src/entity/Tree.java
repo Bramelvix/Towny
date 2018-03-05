@@ -36,11 +36,7 @@ public class Tree extends Resource {
 			return false;
 		} else {
 			worker.level.removeEntity(this);
-			try {
-				worker.level.addItem(new Item(1, this.x, this.y, true));
-			} catch (FileNotFoundException e){
-				System.out.println("no file found");
-			}
+			worker.level.addItem(new Item(1, this.x, this.y, true));
 			return true;
 		}
 
