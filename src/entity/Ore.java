@@ -27,7 +27,7 @@ public class Ore extends Resource {
 	private void decideSprite() {
 		switch (type) {
 		case IRON:
-			setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(54), Item.stone.copy(this.x, this.y));
+            setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(54), Item.iron_ore.copy(this.x, this.y));
 			break;
 		case GOLD:
 			setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(56), Item.gold_ore.copy(this.x, this.y));
