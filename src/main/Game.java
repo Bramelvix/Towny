@@ -7,7 +7,6 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +19,7 @@ import entity.Tree;
 import entity.item.Clothing;
 import entity.item.ClothingType;
 import entity.item.Item;
+import entity.item.ItemHashtable;
 import entity.item.weapon.Weapon;
 import entity.item.weapon.WeaponMaterial;
 import entity.mob.Mob;
@@ -81,6 +81,7 @@ public class Game implements Runnable {
 	public Game() throws Exception {
 		SpritesheetHashtable.registerSpritesheets();
 		SpriteHashtable.registerSprites();
+		ItemHashtable.registerItems();
 		canvas = new Canvas();
 		Dimension size = new Dimension(width * SCALE, height * SCALE);
 		canvas.setPreferredSize(size);
