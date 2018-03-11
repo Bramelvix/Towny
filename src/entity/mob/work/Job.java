@@ -1,6 +1,6 @@
 package entity.mob.work;
 
-import entity.BuildAbleObject;
+import entity.building.BuildAbleObject;
 import entity.Resource;
 import entity.item.Item;
 import entity.mob.Villager;

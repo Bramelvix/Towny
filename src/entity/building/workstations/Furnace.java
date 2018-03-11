@@ -1,8 +1,7 @@
-package entity.workstations;
+package entity.building.workstations;
 
-import entity.BuildAbleObject;
+import entity.building.BuildAbleObject;
 import graphics.Screen;
-import graphics.Sprite;
 import graphics.SpriteHashtable;
 
 public class Furnace extends Workstation {
@@ -27,7 +26,6 @@ public class Furnace extends Workstation {
 
 	@Override
 	public BuildAbleObject clone() {
-		// TODO Auto-generated method stub
 		return new Furnace();
 	}
 

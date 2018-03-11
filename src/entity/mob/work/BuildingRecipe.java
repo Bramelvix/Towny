@@ -1,12 +1,13 @@
 package entity.mob.work;
 
-import entity.BuildAbleObject;
-import entity.Wall;
-import entity.WallType;
+import entity.building.BuildAbleObject;
+import entity.building.container.Chest;
+import entity.building.wall.Wall;
+import entity.building.wall.WallType;
 import entity.item.Item;
 import entity.item.ItemHashtable;
-import entity.workstations.Anvil;
-import entity.workstations.Furnace;
+import entity.building.workstations.Anvil;
+import entity.building.workstations.Furnace;
 
 public class BuildingRecipe extends Recipe {
     private static final BuildingRecipe WOOD_WALL = new BuildingRecipe(new Wall(WallType.WOOD), ItemHashtable.get(1));
@@ -15,8 +16,9 @@ public class BuildingRecipe extends Recipe {
     private static final BuildingRecipe STONE_DOOR = new BuildingRecipe(new Wall(WallType.STONE, true), ItemHashtable.get(10));
     private static final BuildingRecipe FURNACE = new BuildingRecipe(new Furnace(), ItemHashtable.get(10));
     private static final BuildingRecipe ANVIL = new BuildingRecipe(new Anvil(), ItemHashtable.get(2));
+    private static final BuildingRecipe CHEST = new BuildingRecipe(new Chest(), ItemHashtable.get(1));
 
-    public static final BuildingRecipe[] RECIPES = {WOOD_WALL, STONE_WALL, WOOD_DOOR, STONE_DOOR, FURNACE, ANVIL};
+    public static final BuildingRecipe[] RECIPES = {WOOD_WALL, STONE_WALL, WOOD_DOOR, STONE_DOOR, FURNACE, ANVIL, CHEST};
 
     private <T extends BuildAbleObject> BuildingRecipe(T product, Item... resources) {
         super(product, resources);

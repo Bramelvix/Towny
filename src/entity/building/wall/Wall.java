@@ -1,5 +1,6 @@
-package entity;
+package entity.building.wall;
 
+import entity.building.BuildAbleObject;
 import entity.item.Item;
 import graphics.Sprite;
 import graphics.SpriteHashtable;

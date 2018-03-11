@@ -19,7 +19,7 @@ public class Weapon extends Item {
 	private WeaponMaterial mat;
 
 	private Weapon(String name, int x, int y, Sprite sprite, String tooltip, WeaponType type, WeaponMaterial mat) {
-		super(name, x, y, sprite, tooltip, true);
+		super(name, x, y, sprite, tooltip, true, 90); //TODO put all item options in itemhashtable
 		this.mat = mat;
 		this.type = type;
 		mat_strong = calcMatStrong(mat);

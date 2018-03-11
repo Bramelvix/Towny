@@ -10,7 +10,7 @@ public class Clothing extends Item {
 
 	// basic constructor
 	public Clothing(String name, int x, int y, Sprite sprite, String tooltip, ClothingType type) {
-		super(name, x, y, sprite, tooltip, true);
+		super(name, x, y, sprite, tooltip, true, 91); //TODO put all clothing options in itemHashtable
 		this.type = type;
 	}
 

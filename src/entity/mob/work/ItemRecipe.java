@@ -5,9 +5,9 @@ import entity.item.ItemHashtable;
 import entity.item.weapon.Weapon;
 import entity.item.weapon.WeaponMaterial;
 import entity.item.weapon.WeaponType;
-import entity.workstations.Anvil;
-import entity.workstations.Furnace;
-import entity.workstations.Workstation;
+import entity.building.workstations.Anvil;
+import entity.building.workstations.Furnace;
+import entity.building.workstations.Workstation;
 
 public class ItemRecipe extends Recipe {
 

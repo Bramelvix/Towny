@@ -1,6 +1,6 @@
-package entity.workstations;
+package entity.building.workstations;
 
-import entity.BuildAbleObject;
+import entity.building.BuildAbleObject;
 
 public abstract class Workstation extends BuildAbleObject{
 	private boolean running = false;

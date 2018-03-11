@@ -354,6 +354,7 @@ public class SpriteHashtable {
         registerSprite(137, new Sprite(39, 6, SpritesheetHashtable.get(2)));//crystalheater
         registerSprite(138, new Sprite(35, 0, SpritesheetHashtable.get(2)));//woodheater
         registerSprite(139, new Sprite(44, 1, SpritesheetHashtable.get(2)));//copperspear
+        registerSprite(140, new Sprite(38, 10, SpritesheetHashtable.get(1)));//chest
 
 
     }

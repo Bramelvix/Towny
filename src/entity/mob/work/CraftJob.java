@@ -2,7 +2,7 @@ package entity.mob.work;
 
 import entity.item.Item;
 import entity.mob.Villager;
-import entity.workstations.Workstation;
+import entity.building.workstations.Workstation;
 
 public class CraftJob extends Job {
 	private Item[] resources;

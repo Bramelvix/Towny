@@ -1,7 +1,6 @@
-package entity.workstations;
+package entity.building.workstations;
 
-import entity.BuildAbleObject;
-import graphics.Sprite;
+import entity.building.BuildAbleObject;
 import graphics.SpriteHashtable;
 
 public class Anvil extends Workstation {
@@ -13,7 +12,6 @@ public class Anvil extends Workstation {
 
 	@Override
 	public BuildAbleObject clone() {
-		// TODO Auto-generated method stub
 		return new Anvil();
 	}
 

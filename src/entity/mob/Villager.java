@@ -3,7 +3,7 @@ package entity.mob;
 import java.util.ArrayList;
 import java.util.List;
 
-import entity.BuildAbleObject;
+import entity.building.BuildAbleObject;
 import entity.Entity;
 import entity.Resource;
 import entity.item.Clothing;
