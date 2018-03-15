@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 //path for the villager to take to a destination
 public class Path {
-    private ArrayList<Point> steps = new ArrayList<Point>(); // spritesheets of steps to
+    private ArrayList<Point> steps = new ArrayList<>(); // spritesheets of steps to
 																// the
 																// destination
 	private boolean arrived = false; // has the villager arrived
@@ -31,11 +31,7 @@ public class Path {
 	}
 
 	public Point getStep(int index) {
-		if (index == steps.size()) {
-			arrived = true;
-		} else {
-			arrived = false;
-		}
+        arrived = index == steps.size();
 		if (index < steps.size()) {
 			return steps.get(index);
 		} else {

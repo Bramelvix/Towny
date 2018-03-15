@@ -14,7 +14,7 @@ public abstract class BuildAbleObject extends Entity {
         setVisible(false);
     }
 
-    public void setOpened(boolean open) { //the open value has to be changeable for certain objects like doors
+    protected void setOpened(boolean open) { //the open value has to be changeable for certain objects like doors
         this.open = open;
         if (open) {
             level.removeEntity(this);
@@ -25,13 +25,13 @@ public abstract class BuildAbleObject extends Entity {
         }
     }
 
-    public boolean isOpen() {
+    private boolean isOpen() {
         return open;
     }
 
-    public boolean initialise(int x, int y, Item material, Level level) {
+    public boolean initialiseFails(int x, int y, Item material, Level level) {
         if (material == null) {
-            return false;
+            return true;
         }
         this.level = level;
         setLocation(x * 16, y * 16);
@@ -42,7 +42,7 @@ public abstract class BuildAbleObject extends Entity {
         }
 
         initialised = true;
-        return true;
+        return false;
 
     }
 

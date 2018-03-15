@@ -1,14 +1,10 @@
 package entity;
 
-import entity.item.Item;
 import entity.item.ItemHashtable;
 import entity.mob.Villager;
 import graphics.Screen;
-import graphics.Sprite;
 import graphics.SpriteHashtable;
 import sound.Sound;
-
-import java.io.FileNotFoundException;
 
 public class Tree extends Resource {
     private byte chopped = 100;

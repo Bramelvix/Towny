@@ -1,7 +1,6 @@
 package entity.item;
 
 
-import graphics.Sprite;
 import graphics.SpriteHashtable;
 
 import java.util.Hashtable;

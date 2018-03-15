@@ -2,7 +2,6 @@ package entity.mob;
 
 import entity.item.weapon.Weapon;
 import graphics.Screen;
-import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;
 

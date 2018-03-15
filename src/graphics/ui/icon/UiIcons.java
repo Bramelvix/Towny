@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import input.Mouse;
 
 public class UiIcons {
-	public static Icon[] icons; // array of the 4 icons
+    private static Icon[] icons; // array of the 4 icons
 
 	// initialising the icons
 	public static void init() {
@@ -26,13 +26,13 @@ public class UiIcons {
 	}
 
 	// getters
-	public static boolean hoverOnAnyIcon() {
+    public static boolean hoverOnNoIcons() {
 		for (Icon i : icons) {
 			if (i.hoverOn()) {
-				return true;
-			}
-		}
-		return false;
+                return false;
+            }
+        }
+        return true;
 	}
 
 	public static boolean isWoodHover() {
@@ -76,7 +76,7 @@ public class UiIcons {
 	}
 
 	// update the icons
-	public static void update(Mouse mouse, boolean forceInvis) {
+    public static void update(Mouse mouse) {
 		for (Icon i : icons) {
 			i.setHoverOn((((mouse.getTrueXPixels()) >= i.getX())
 					&& ((mouse.getTrueXPixels()) <= i.getX() + (i.getWidth())) && ((mouse.getTrueYPixels()) >= i.getY())
@@ -100,7 +100,7 @@ public class UiIcons {
 	}
 
 	// selecting an icon
-	public static void setSelected(Mouse mouse) {
+    private static void setSelected(Mouse mouse) {
 		for (int i = 0; i < icons.length; i++) {
 			if (mouse.getClickedLeft() && icons[i].hoverOn() && allOtherIconsNotSelected(i)) {
 				icons[i].setSelect(true);
@@ -112,13 +112,6 @@ public class UiIcons {
 	public static void deSelect() {
 		for (Icon i : icons) {
 			i.setSelect(false);
-		}
-	}
-
-	// dehovering all icons
-	public static void deHover() {
-		for (Icon i : icons) {
-			i.setHoverOn(false);
 		}
 	}
 

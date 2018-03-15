@@ -28,7 +28,7 @@ public class Minimap {
 	private int xoff, yoff; // offset
 
 	// constructor
-	public Minimap(int x, int y, Level map) {
+    Minimap(int x, int y, Level map) {
 		this.x = x;
 		this.y = y;
 		width = 200;
@@ -73,8 +73,7 @@ public class Minimap {
 		int[] bandMasks = { 0xFF0000, 0xFF00, 0xFF, 0xFF000000 };
 		WritableRaster raster = Raster.createPackedRaster(buffer, width, height, width, bandMasks, null);
 		ColorModel cm = ColorModel.getRGBdefault();
-		BufferedImage image = new BufferedImage(cm, raster, cm.isAlphaPremultiplied(), null);
-		return image;
+        return new BufferedImage(cm, raster, cm.isAlphaPremultiplied(), null);
 	}
 
 }

@@ -8,8 +8,8 @@ import map.Tile;
 public class Screen {
 	public int width; // screen width
 	public int height; // screen height
-	public int[] pixels; // array of pixels
-	public int xOffset, yOffset; // the offset of the screen
+    private int[] pixels; // array of pixels
+    private int xOffset, yOffset; // the offset of the screen
 
 	// constructor
 	public Screen(int width, int height, int[] pixels) {
@@ -26,9 +26,9 @@ public class Screen {
 	}
 
 	// render the red square around selected entities
-	public void renderSelection(int xp, int yp, Entity e) {
-		xp -= xOffset;
-		yp -= yOffset;
+    public void renderSelection(Entity e) {
+        int xp = e.getX() - xOffset;
+        int yp = e.getY() - yOffset;
 		for (int y = 0; y < Sprite.SIZE; y++) {
 			int ya = y + yp;
 			for (int x = 0; x < Sprite.SIZE; x++) {
@@ -58,7 +58,7 @@ public class Screen {
 
 	}
 
-	public void renderSprite(int xp, int yp, Sprite e, boolean selected, boolean forceOffset) {
+    private void renderSprite(int xp, int yp, Sprite e, boolean selected, boolean forceOffset) {
 		if (forceOffset) {
 			xp -= xOffset;
 			yp -= yOffset;

@@ -75,8 +75,4 @@ public class SelectionSquare {
 		return (height < 0) ? height = -height : height;
 	}
 
-	public boolean isVisible() {
-		return visible;
-	}
-
 }

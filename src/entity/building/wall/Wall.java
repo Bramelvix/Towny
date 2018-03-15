@@ -95,14 +95,14 @@ public class Wall extends BuildAbleObject {
 
 	// called by villagers when they start building the wall.
 	public boolean initialise(int x, int y, Item material, Level level) {
-		boolean initGelukt = super.initialise(x, y, material, level);
+		boolean initGelukt = !super.initialiseFails(x, y, material, level);
 		if (initGelukt) {
 			checkSides();
 		}
 		if (door) {
 			setOpened(true);
 		}
-		return initGelukt;
+		return !initGelukt;
 
 	}
 

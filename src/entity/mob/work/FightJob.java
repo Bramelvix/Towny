@@ -45,16 +45,13 @@ public class FightJob extends Job {
 				if (target.getHealth() == 0) {
 					completed = true;
 				}
-				return;
 			} else {
 				if (worker.isMovementNull()) {
 					if (worker.getPath(xloc >> 4, yloc >> 4) != null) {
 						worker.setMovement(worker.getPath(xloc >> 4, yloc >> 4));
-						return;
 					} else {
 						worker.drop();
 						completed = true;
-						return;
 					}
 				} else {
 					worker.move();

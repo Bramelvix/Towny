@@ -5,9 +5,8 @@ import map.Level;
 
 //pathfinder I found on the internet
 public class PathFinder implements AStarHeuristic {
-	private final int MAXDIST = 500;
-	private ArrayList<Point> closed = new ArrayList<Point>();
-	private ArrayList<Point> open = new ArrayList<Point>();
+    private ArrayList<Point> closed = new ArrayList<>();
+    private ArrayList<Point> open = new ArrayList<>();
 	private Level level;
 	private Point[][] nodes;
 
@@ -24,9 +23,9 @@ public class PathFinder implements AStarHeuristic {
 	public static Path getShortest(Path[] paths) {
 		if (paths != null) {
 			Path shortest = null;
-			for (int i = 0; i < paths.length; i++) {
-				if (paths[i] != null) {
-					shortest = paths[i];
+            for (Path path : paths) {
+                if (path != null) {
+                    shortest = path;
 					break;
 				}
 			}
@@ -56,8 +55,7 @@ public class PathFinder implements AStarHeuristic {
 		open.clear();
 		open.add(nodes[sx][sy]);
 		nodes[tx][ty].setParent(null);
-		int maxDepth = 0;
-		while ((open.size() != 0) && (maxDepth < MAXDIST)) {
+        while (open.size() != 0) {
 			Point current = open.get(0);
 			if (current.equals(nodes[tx][ty])) {
 				break;
@@ -113,17 +111,13 @@ public class PathFinder implements AStarHeuristic {
 	}
 
 	private boolean isValidLocation(int xp, int yp) {
-		if (xp <= 0 || xp >= level.width || yp <= 0 || yp >= level.height) {
-			return false;
-		}
-		return level.isWalkAbleTile(xp, yp);
+        return xp > 0 && xp < level.width && yp > 0 && yp < level.height && level.isWalkAbleTile(xp, yp);
 	}
 
 	public float getCost(int x, int y, int tx, int ty) {
 		float dx = tx - x;
 		float dy = ty - y;
-		float result = (float) (Math.sqrt((dx * dx) + (dy * dy)));
-		return result;
+        return (float) (Math.sqrt((dx * dx) + (dy * dy)));
 	}
 
 }

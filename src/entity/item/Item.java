@@ -52,7 +52,7 @@ public class Item extends Entity {
         return id;
     }
 
-    public String getToolTip() {
+    String getToolTip() {
         return tooltip;
     }
 

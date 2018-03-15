@@ -4,18 +4,20 @@ import entity.building.BuildAbleObject;
 
 public abstract class Workstation extends BuildAbleObject{
 	private boolean running = false;
-	protected byte animationcounter = 0;
+    byte animationcounter = 0;
 
-	public Workstation() {
+    Workstation() {
 		super();
 	}
-	protected void anmiationCounterTick() {
+
+    void anmiationCounterTick() {
 		animationcounter++;
 		if (animationcounter==60) {
 			animationcounter = 0;
 		}
 	}
-	public boolean isRunning() {
+
+    boolean isRunning() {
 		return running;
 	}
 	public void setRunning(boolean running) {

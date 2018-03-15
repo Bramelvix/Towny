@@ -32,7 +32,7 @@ public class Ui {
 		return top.getSpeed();
 	}
 
-	public void init(Level level) {
+    private void init(Level level) {
 		UiIcons.init();
 		menu = new Menu();
 		selection = new SelectionSquare();
@@ -47,14 +47,6 @@ public class Ui {
 
 	public int[][] getOutlineCoords() {
 		return outline.getSquareCoords();
-	}
-
-	public int getOutlineXS() {
-		return outline.getTileXS();
-	}
-
-	public int getOutlineYS() {
-		return outline.getTileYS();
 	}
 
 	public boolean outlineIsVisible() {
@@ -138,7 +130,7 @@ public class Ui {
 
 	public void update(Mouse mouse, int xOff, int yOff) {
 		menu.update(mouse, outline.isVisible());
-		UiIcons.update(mouse, outline.isVisible());
+        UiIcons.update(mouse);
 		outline.update(mouse, xOff, yOff);
 		selection.update(mouse);
 		top.update(mouse);

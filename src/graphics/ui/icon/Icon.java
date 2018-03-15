@@ -19,7 +19,7 @@ public class Icon {
 	private Image image; // image
 
 	// constructor
-	public Icon(int x, int y, String path, int width, int height) {
+    Icon(int x, int y, String path, int width, int height) {
 		this.path = path;
 		this.x = x*Game.SCALE;
 		WIDTH = width*Game.SCALE;

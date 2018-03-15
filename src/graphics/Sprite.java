@@ -1,10 +1,5 @@
 package graphics;
 
-import java.util.Random;
-
-import entity.item.weapon.WeaponMaterial;
-import entity.item.weapon.WeaponType;
-import main.Game;
 import map.Tile;
 
 //sprites in the game

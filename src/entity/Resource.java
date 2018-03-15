@@ -5,7 +5,7 @@ import entity.mob.Villager;
 //superclass of gatherable resources such as trees and ore
 public abstract class Resource extends Entity {
 
-	public Resource(int x, int y) {
+    Resource(int x, int y) {
 		super(x, y);
 	}
 

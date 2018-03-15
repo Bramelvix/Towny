@@ -111,15 +111,15 @@ public class VillagerInventory {
 	}
 
 	public void dropAll() {
-		for (Clothing i : clothes) {
-			wearer.dropItem(i);
-			i.removeReserved();
-			i = null;
-		}
-		for (Weapon i : weapons) {
-			wearer.dropItem(i);
-			i.removeReserved();
-			i = null;
+        for (int i = 0; i < clothes.length; i++) {
+            wearer.dropItem(clothes[i]);
+            clothes[i].removeReserved();
+            clothes[i] = null;
+        }
+        for (int i = 0; i < weapons.length; i++) {
+            wearer.dropItem(weapons[i]);
+            weapons[i].removeReserved();
+            weapons[i] = null;
 		}
 
 	}

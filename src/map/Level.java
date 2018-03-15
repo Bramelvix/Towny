@@ -7,7 +7,6 @@ import entity.OreType;
 import entity.Tree;
 import entity.building.wall.Wall;
 import entity.item.Item;
-import entity.pathfinding.Point;
 import entity.building.workstations.Workstation;
 import graphics.Screen;
 import graphics.Sprite;
@@ -27,7 +26,7 @@ public class Level {
 	}
 
 	public ArrayList<Item> getItems() {
-		ArrayList<Item> items = new ArrayList<Item>();
+		ArrayList<Item> items = new ArrayList<>();
 		for (Tile[] row : tiles) {
 			for (Tile tile : row) {
 				if (tile.getItem() != null) {
@@ -54,7 +53,7 @@ public class Level {
 
 	// is the tile on X and Y clear (No items or entities or walls blocking it)
 	public boolean isClearTile(int x, int y) {
-		return tiles[x][y].getItem() == null ? isWalkAbleTile(x, y) : false;
+		return tiles[x][y].getItem() == null && isWalkAbleTile(x, y);
 
 	}
 
@@ -68,11 +67,11 @@ public class Level {
 		return tiles[x / 16][y / 16].solid() ? tiles[x / 16][y / 16].getEntity() : null;
 	}
 
-	public Point getNearestEmptySpot(int xloc, int yloc) {
+	public Tile getNearestEmptySpot(int xloc, int yloc) {
 		int x0 = xloc / 16;
 		int y0 = yloc / 16;
 		if (isClearTile(x0, y0)) {
-			return new Point(x0, y0);
+			return tiles[x0][y0];
 		} else {
 			for (int layer = 1; layer < 100; layer++) {
 				int x = layer - 1;
@@ -83,28 +82,28 @@ public class Level {
 
 				while (x >= y) {
 					if (isClearTile(x0 + x, y0 + y)) {
-						return new Point(x0 + x, y0 + y);
+						return tiles[x0 + x][y0 + y];
 					}
 					if (isClearTile(x0 + y, y0 + x)) {
-						return new Point(x0 + y, y0 + x);
+						return tiles[x0 + y][y0 + x];
 					}
 					if (isClearTile(x0 - y, y0 + x)) {
-						return new Point(x0 - y, y0 + x);
+						return tiles[x0 - y][y0 + x];
 					}
 					if (isClearTile(x0 - x, y0 + y)) {
-						return new Point(x0 - x, y0 + y);
+						return tiles[x0 - x][y0 + y];
 					}
 					if (isClearTile(x0 - x, y0 - y)) {
-						return new Point(x0 - x, y0 - y);
+						return tiles[x0 - x][y0 - y];
 					}
 					if (isClearTile(x0 - y, y0 - x)) {
-						return new Point(x0 - y, y0 - x);
+						return tiles[x0 - y][y0 - x];
 					}
 					if (isClearTile(x0 + y, y0 - x)) {
-						return new Point(x0 + y, y0 - x);
+						return tiles[x0 + y][y0 - x];
 					}
 					if (isClearTile(x0 + x, y0 - y)) {
-						return new Point(x0 + x, y0 - y);
+						return tiles[x0 + x][y0 - y];
 					}
 
 					if (err <= 0) {
@@ -128,9 +127,6 @@ public class Level {
 		return entity instanceof Wall ? (Wall) entity : null;
 	}
 
-	public boolean itemAlreadyThere(int x, int y, Item i) {
-		return (getItemOn(x, y, i) != null);
-	}
 
 	public <T extends Workstation> T getNearestWorkstation(Class<T> workstation) {
 		for (Tile[] row : tiles) {

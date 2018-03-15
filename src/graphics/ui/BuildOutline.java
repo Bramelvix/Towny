@@ -44,7 +44,6 @@ public class BuildOutline {
 										: buildable);
 						g.fillRect(buildSquareXSTeken + (i * WIDTH), buildSquareYSTeken, WIDTH, WIDTH);
 					}
-					return;
 				} else { // START RECHTS VAN EIND == SLEEP NAAR LINKS
 					for (int i = 0; i < squarewidth; i++) {
 						g.setColor((notBuildable((((buildSquareXS - (WIDTH * (squarewidth - 1))) / Game.SCALE) >> 4) + i,
@@ -52,7 +51,6 @@ public class BuildOutline {
 						g.fillRect(buildSquareXSTeken - (WIDTH * (squarewidth - 1)) + (i * WIDTH), buildSquareYSTeken,
 								WIDTH, WIDTH);
 					}
-					return;
 				}
 			} else {
 				if (buildSquareYSTeken < buildSquareYE) { // START BOVEN EIND ==
@@ -135,10 +133,6 @@ public class BuildOutline {
 
 	}
 
-	public int getLength() {
-		return (squarewidth > squareheight) ? squarewidth : squareheight;
-	}
-
 	public boolean isVisible() {
 		return visible;
 	}
@@ -147,13 +141,6 @@ public class BuildOutline {
 		return (buildSquareYS / Game.SCALE);
 	}
 
-	public int getTileXE() {
-		return (buildSquareXE / Game.SCALE);
-	}
-
-	public int getTileYE() {
-		return (buildSquareYE / Game.SCALE);
-	}
 
 	// update the outline
 	public void update(Mouse mouse, int xOff, int yOff, boolean force) {
@@ -191,7 +178,7 @@ public class BuildOutline {
 	}
 
 	// constructor
-	public BuildOutline(Level level) {
+    BuildOutline(Level level) {
 		this.level = level;
 	}
 

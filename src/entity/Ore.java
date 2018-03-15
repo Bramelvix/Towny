@@ -5,9 +5,9 @@ import entity.item.ItemHashtable;
 import entity.mob.Villager;
 import entity.mob.work.Job;
 import entity.mob.work.MoveItemJob;
-import entity.pathfinding.Point;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
+import map.Tile;
 import sound.Sound;
 
 public class Ore extends Resource {
@@ -59,8 +59,8 @@ public class Ore extends Resource {
 		if (!worker.level.isClearTile(this.x / 16, this.y / 16) && worker.level.getItemOn(this.x, this.y) != null
 				&& worker.level.getNearestEmptySpot(this.x, this.y) != null) {
 			worker.addJob(new MoveItemJob(worker.level.getItemOn(this.x, this.y), worker));
-			Point punt = worker.level.getNearestEmptySpot(this.x, this.y);
-			worker.addJob(new MoveItemJob(punt.x * 16, punt.y * 16, worker));
+            Tile tile = worker.level.getNearestEmptySpot(this.x, this.y);
+            worker.addJob(new MoveItemJob(tile.x * 16, tile.y * 16, worker));
 			worker.addJob(new Job(this, worker));
 			return true;
 		}

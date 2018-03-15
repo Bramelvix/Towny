@@ -5,7 +5,7 @@ import map.Level;
 
 public abstract class Humanoid extends Mob {
 
-	public Humanoid(Level level, int x, int y) {
+    Humanoid(Level level, int x, int y) {
 		super(level);
 		while (!level.isWalkAbleTile(x / 16, y / 16)) {
 			x += 16;
@@ -17,7 +17,7 @@ public abstract class Humanoid extends Mob {
 	private Item holding; // item the mob is holding in his hands
 
 	public <T extends Item> boolean isHolding(T item) {
-		return holding != null ? holding.equals(item) : false;
+        return holding != null && holding.equals(item);
 	}
 
 	public <T extends Item> void setHolding(T item) {

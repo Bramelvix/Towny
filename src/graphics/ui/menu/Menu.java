@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
-import entity.Entity;
 import entity.mob.work.Recipe;
 import input.Mouse;
 
@@ -14,8 +13,7 @@ public class Menu { // the menu is the little options menu that shows up when
 	private int ingameX, ingameY;
 	private int width = 70; // width and height hardcoded
 	private int height = 20;
-    public List<MenuItem> items; // spritesheets of items on the menu
-	private List<Entity> menuItemEntities;
+    private List<MenuItem> items; // spritesheets of items on the menu
 	private boolean visible; // is the item visible
 	private Color colour = new Color(91, 94, 99, 210); // the grey-blue colour
 														// of the background of
@@ -43,7 +41,7 @@ public class Menu { // the menu is the little options menu that shows up when
 	}
 
 	// setter
-	public void setVisible(boolean vis) {
+    private void setVisible(boolean vis) {
 		if (visible) {
 			visible = vis;
 		}
@@ -67,7 +65,6 @@ public class Menu { // the menu is the little options menu that shows up when
 	public void update(Mouse mouse, boolean forceinvisible) {
 		if (forceinvisible) {
 			hide();
-			return;
 		} else {
 			items.forEach((MenuItem i) -> i.update(mouse));
 			setVisible((((mouse.getTrueXPixels()) >= getX() - 10)
@@ -81,8 +78,7 @@ public class Menu { // the menu is the little options menu that shows up when
 	public Menu() {
 		x = 0;
 		y = 0;
-		items = new ArrayList<MenuItem>();
-		menuItemEntities = new ArrayList<Entity>();
+        items = new ArrayList<>();
 		setVisible(false);
 	}
 
@@ -115,11 +111,7 @@ public class Menu { // the menu is the little options menu that shows up when
 		return y;
 	}
 
-	public boolean clickedOnItem(String type, Mouse mouse) {
-		return clickedItem(type, mouse) != null;
-	}
-
-	public MenuItem clickedItem(String type, Mouse mouse) {
+    private MenuItem clickedItem(String type, Mouse mouse) {
 		return clickedItem(mouse) != null && clickedItem(mouse).getText().contains(type) ? clickedItem(mouse) : null;
 
 	}
@@ -142,7 +134,7 @@ public class Menu { // the menu is the little options menu that shows up when
 	}
 
 	// adding an item to the menu
-	public void addItem(MenuItem o) {
+    private void addItem(MenuItem o) {
 		if (o != null) {
 			if (!(items.contains(o))) {
 				o.init(this);
@@ -151,9 +143,6 @@ public class Menu { // the menu is the little options menu that shows up when
 					width += ((o.getText().length() * 10) - width);
 				}
 				height = height + 15;
-				if (o.getEntity() != null) {
-					menuItemEntities.add(o.getEntity());
-				}
 			}
 		}
 	}

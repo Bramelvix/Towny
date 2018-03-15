@@ -1,6 +1,5 @@
 package graphics;
 
-import main.Game;
 
 public class HairSprite extends Sprite {
 
