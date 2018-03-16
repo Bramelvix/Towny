@@ -179,6 +179,10 @@ public class BuildOutline {
 
 	// constructor
     BuildOutline(Level level) {
+		setLevel(level);
+	}
+
+	public void setLevel(Level level) {
 		this.level = level;
 	}
 

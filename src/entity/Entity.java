@@ -20,7 +20,7 @@ public abstract class Entity {
 	private String displayName;
 
 	// setters
-    protected void setVisible(boolean visible) {
+	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
 
