@@ -10,37 +10,11 @@ public class SpriteHashtable {
     private static final Hashtable<Integer, Sprite> table = new Hashtable<>();
     private static final Random rand = new Random(); // random object used for random distributionof sprites
 
-    public static final Sprite[] STONEWALLSPRITES = {
-            SpriteHashtable.get(22), SpriteHashtable.get(19),
-            SpriteHashtable.get(27), SpriteHashtable.get(18), SpriteHashtable.get(25), SpriteHashtable.get(21),
-            SpriteHashtable.get(26), SpriteHashtable.get(20), SpriteHashtable.get(17),
-            SpriteHashtable.get(24), SpriteHashtable.get(28), SpriteHashtable.get(23),
-            SpriteHashtable.get(16), SpriteHashtable.get(15), SpriteHashtable.get(14)
-    };
+    public static Sprite[] STONEWALLSPRITES;
+    public static Sprite[] WOODWALLSPRITES;
+    public static Sprite[] WOODDOORSPRITES;
+    public static Sprite[] STONEDOORSPRITES;
 
-    public static final Sprite[] WOODWALLSPRITES = {
-            SpriteHashtable.get(37), SpriteHashtable.get(34),
-            SpriteHashtable.get(42), SpriteHashtable.get(33), SpriteHashtable.get(40), SpriteHashtable.get(36),
-            SpriteHashtable.get(41), SpriteHashtable.get(35), SpriteHashtable.get(32),
-            SpriteHashtable.get(39), SpriteHashtable.get(43), SpriteHashtable.get(38),
-            SpriteHashtable.get(31), SpriteHashtable.get(30), SpriteHashtable.get(29)
-    };
-
-    public static final Sprite[] WOODDOORSPRITES = {
-            SpriteHashtable.get(45), SpriteHashtable.get(45),
-            SpriteHashtable.get(45), SpriteHashtable.get(44), SpriteHashtable.get(45),
-            SpriteHashtable.get(44), SpriteHashtable.get(44), SpriteHashtable.get(44),
-            SpriteHashtable.get(45), SpriteHashtable.get(44), SpriteHashtable.get(44),
-            SpriteHashtable.get(44), SpriteHashtable.get(44), SpriteHashtable.get(44)};
-
-    public static final Sprite[] STONEDOORSPRITES = {
-            SpriteHashtable.get(47), SpriteHashtable.get(47),
-            SpriteHashtable.get(47), SpriteHashtable.get(46), SpriteHashtable.get(47), SpriteHashtable.get(46),
-            SpriteHashtable.get(46), SpriteHashtable.get(46), SpriteHashtable.get(47),
-            SpriteHashtable.get(46), SpriteHashtable.get(46), SpriteHashtable.get(46),
-            SpriteHashtable.get(46), SpriteHashtable.get(46), SpriteHashtable.get(46),
-            SpriteHashtable.get(44)
-    };
 
     // return random grass sprite
     public static Sprite getGrass() {
@@ -355,7 +329,32 @@ public class SpriteHashtable {
         registerSprite(138, new Sprite(35, 0, SpritesheetHashtable.get(2)));//woodheater
         registerSprite(139, new Sprite(44, 1, SpritesheetHashtable.get(2)));//copperspear
         registerSprite(140, new Sprite(38, 10, SpritesheetHashtable.get(1)));//chest
+        STONEDOORSPRITES = new Sprite[]{
+                SpriteHashtable.get(47), SpriteHashtable.get(47),
+                SpriteHashtable.get(47), SpriteHashtable.get(46), SpriteHashtable.get(47), SpriteHashtable.get(46),
+                SpriteHashtable.get(46), SpriteHashtable.get(46), SpriteHashtable.get(47),
+                SpriteHashtable.get(46), SpriteHashtable.get(46), SpriteHashtable.get(46),
+                SpriteHashtable.get(46), SpriteHashtable.get(46), SpriteHashtable.get(46),
+                SpriteHashtable.get(44)};
 
+        WOODDOORSPRITES = new Sprite[]{
+                SpriteHashtable.get(45), SpriteHashtable.get(45),
+                SpriteHashtable.get(45), SpriteHashtable.get(44), SpriteHashtable.get(45),
+                SpriteHashtable.get(44), SpriteHashtable.get(44), SpriteHashtable.get(44),
+                SpriteHashtable.get(45), SpriteHashtable.get(44), SpriteHashtable.get(44),
+                SpriteHashtable.get(44), SpriteHashtable.get(44), SpriteHashtable.get(44)};
+        WOODWALLSPRITES = new Sprite[]{
+                SpriteHashtable.get(37), SpriteHashtable.get(34),
+                SpriteHashtable.get(42), SpriteHashtable.get(33), SpriteHashtable.get(40), SpriteHashtable.get(36),
+                SpriteHashtable.get(41), SpriteHashtable.get(35), SpriteHashtable.get(32),
+                SpriteHashtable.get(39), SpriteHashtable.get(43), SpriteHashtable.get(38),
+                SpriteHashtable.get(31), SpriteHashtable.get(30), SpriteHashtable.get(29)};
+        STONEWALLSPRITES = new Sprite[]{
+                SpriteHashtable.get(22), SpriteHashtable.get(19),
+                SpriteHashtable.get(27), SpriteHashtable.get(18), SpriteHashtable.get(25), SpriteHashtable.get(21),
+                SpriteHashtable.get(26), SpriteHashtable.get(20), SpriteHashtable.get(17),
+                SpriteHashtable.get(24), SpriteHashtable.get(28), SpriteHashtable.get(23),
+                SpriteHashtable.get(16), SpriteHashtable.get(15), SpriteHashtable.get(14)};
 
     }
 }

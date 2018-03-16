@@ -12,7 +12,6 @@ public class MoveItemJob extends Job {
         this(worker);
         pickUpJob = true;
         this.material = material;
-        System.out.println(this.material.isReserved(this.worker));
         if (this.worker.isHolding(this.material) || !this.material.isReserved(this.worker)) {
             completed = true;
         } else {
@@ -42,7 +41,6 @@ public class MoveItemJob extends Job {
             completed = true;
             return;
         }
-        System.out.println("Chest: " + (worker.level.getHardEntityOn(xloc, yloc) instanceof Chest));
         if (worker.level.getHardEntityOn(xloc, yloc) instanceof Chest) {
             chest = (Chest) worker.level.getHardEntityOn(xloc, yloc);
             worker.setMovement(worker.getPath(worker.level.getNearestEmptySpot(xloc, yloc)));
