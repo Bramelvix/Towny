@@ -7,27 +7,21 @@ import map.Tile;
 
 public class HardStone extends Ore {
 
-    private boolean topHasWall = false;
-    private boolean bottomHasWall = false;
-    private boolean leftHasWall = false;
-    private boolean rightHasWall = false;
-
     public HardStone(int x, int y) {
         super(x, y, OreType.STONE);
         this.minedItem = ItemHashtable.get(10, this.x, this.y);
-
     }
 
     public void checkSides(Level level) {
-        leftHasWall = null != level.selectOre(x - Tile.SIZE, y);
-        rightHasWall = null != level.selectOre(x + Tile.SIZE, y);
-        topHasWall = null != level.selectOre(x, y - Tile.SIZE);
-        bottomHasWall = null != level.selectOre(x, y + Tile.SIZE);
-        decideSprite();
+        boolean leftHasWall = null != level.selectOre(x - Tile.SIZE, y);
+        boolean rightHasWall = null != level.selectOre(x + Tile.SIZE, y);
+        boolean topHasWall = null != level.selectOre(x, y - Tile.SIZE);
+        boolean bottomHasWall = null != level.selectOre(x, y + Tile.SIZE);
+        decideSprite(leftHasWall, rightHasWall, topHasWall, bottomHasWall);
 
     }
 
-    private void decideSprite() {
+    private void decideSprite(boolean leftHasWall, boolean rightHasWall, boolean topHasWall, boolean bottomHasWall) {
         sprite = SpriteHashtable.get(161);
         if (topHasWall) {
             sprite = SpriteHashtable.get(176);

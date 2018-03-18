@@ -8,14 +8,6 @@ import map.Level;
 import map.Tile;
 
 public class Wall extends BuildAbleObject {
-    private boolean topHasWall = false; // is there a wall above this wall
-    private boolean bottomHasWall = false; // is there a wall below this wall
-    private boolean leftHasWall = false; // is there a wall to the left of this wall
-    private boolean rightHasWall = false; // is there a wall to the right of this wall
-    private boolean upRightHasWall = false;
-    private boolean downRightHasWall = false;
-    private boolean upLeftHasWall = false;
-    private boolean downLeftHasWall = false;
     private Sprite[] sprites;
     private boolean door;
     private WallType type;
@@ -68,15 +60,15 @@ public class Wall extends BuildAbleObject {
         Wall downLeft = level.getWallOn(x - Tile.SIZE, (y + Tile.SIZE));
         Wall upRight = level.getWallOn((x + Tile.SIZE), y - Tile.SIZE);
         Wall downRight = level.getWallOn((x + Tile.SIZE), y + Tile.SIZE);
-        leftHasWall = decideToCheckSides(left, eerstekeer);
-        rightHasWall = decideToCheckSides(right, eerstekeer);
-        topHasWall = decideToCheckSides(up, eerstekeer);
-        bottomHasWall = decideToCheckSides(down, eerstekeer);
-        upRightHasWall = decideToCheckSides(upRight, eerstekeer);
-        downRightHasWall = decideToCheckSides(downRight, eerstekeer);
-        upLeftHasWall = decideToCheckSides(upLeft, eerstekeer);
-        downLeftHasWall = decideToCheckSides(downLeft, eerstekeer);
-        decideSprite();
+        boolean leftHasWall = decideToCheckSides(left, eerstekeer);
+        boolean rightHasWall = decideToCheckSides(right, eerstekeer);
+        boolean topHasWall = decideToCheckSides(up, eerstekeer);
+        boolean bottomHasWall = decideToCheckSides(down, eerstekeer);
+        boolean upRightHasWall = decideToCheckSides(upRight, eerstekeer);
+        boolean downRightHasWall = decideToCheckSides(downRight, eerstekeer);
+        boolean upLeftHasWall = decideToCheckSides(upLeft, eerstekeer);
+        boolean downLeftHasWall = decideToCheckSides(downLeft, eerstekeer);
+        decideSprite(leftHasWall, rightHasWall, topHasWall, bottomHasWall, upRightHasWall, downRightHasWall, upLeftHasWall, downLeftHasWall);
 
     }
 
@@ -110,8 +102,7 @@ public class Wall extends BuildAbleObject {
 
     // decide the sprite for the wall, depending on the other 4 sides next to
     // the wall
-    private void decideSprite() {
-
+    private void decideSprite(boolean leftHasWall, boolean rightHasWall, boolean topHasWall, boolean bottomHasWall, boolean upRightHasWall, boolean downRightHasWall, boolean upLeftHasWall, boolean downLeftHasWall) {
         sprite = sprites[15];
         if (topHasWall) {
             if (bottomHasWall) {

@@ -162,12 +162,16 @@ public class Level {
 
     // generates a (slighty less) shitty random level
     private void generateLevel(int elevation) {
+        generateBorder();
         float[] noise = Generator.generateSimplexNoise(width, height, 11, Entity.RANDOM.nextInt(1000),
                 Entity.RANDOM.nextBoolean());
         for (int y = 1; y < height - 1; y++) {
             for (int x = 1; x < width - 1; x++) {
                 if (noise[x + y * width] > 0.5) {
                     tiles[x][y] = new Tile(SpriteHashtable.getDirt(), false, x, y);
+                    if (elevation > 0) {
+                        tiles[x][y] = new Tile(SpriteHashtable.getStone(), false, x, y);
+                    }
                 } else {
                     if (elevation > 0) {
                         tiles[x][y] = new Tile(SpriteHashtable.getStone(), false, x, y);
@@ -189,7 +193,7 @@ public class Level {
                 }
             }
         }
-        generateBorder();
+
 
     }
 
@@ -223,7 +227,7 @@ public class Level {
 
     // if there is ore on X and Y, return it
     public Ore selectOre(int x, int y) {
-        if (x <= 0 || x >= width || y <= 0 || y >= height) {
+        if (x <= 0 || x > (width - 1) * 16 || y <= 0 || y > (height - 1) * 16) {
             return null;
         }
         Entity entity = tiles[x / 16][y / 16].getEntity();
@@ -246,7 +250,7 @@ public class Level {
 
     // 10% chance of there being ore on a dirt tile
     private boolean randOre(int x, int y) {
-        if (x == 0 || x == width || y == 0 || y == height) {
+        if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
             return false;
         }
         int rand = Entity.RANDOM.nextInt(32);
@@ -274,7 +278,7 @@ public class Level {
     }
 
     private void spawnRock(int x, int y) {
-        if (x == 0 || x == width || y == 0 || y == height) {
+        if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
             return;
         }
         addEntity(new HardStone(x * 16, y * 16), true);
