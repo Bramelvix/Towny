@@ -180,7 +180,7 @@ public class SpriteHashtable {
 
     public static void registerSprite(int key, Sprite sprite) throws Exception {
         if (table.put(key, sprite) != null) {
-            throw new Exception("Duplicate key while registering sprites!");
+            throw new Exception("Duplicate key while registering sprite: " + key);
         }
     }
 
@@ -351,6 +351,26 @@ public class SpriteHashtable {
         registerSprite(158, new Sprite(39, 15, SpritesheetHashtable.get(1))); //woodenWallTLeftEXTRA
         registerSprite(153, new Sprite(40, 15, SpritesheetHashtable.get(1))); //woodenWallTBottomEXTRA
 
+        registerSprite(159, new Sprite(34, 15, SpritesheetHashtable.get(1))); //woodenWallNoSides
+        registerSprite(160, new Sprite(27, 15, SpritesheetHashtable.get(1))); //StoneWallNoSides
+
+        registerSprite(161, new Sprite(9, 0, SpritesheetHashtable.get(1))); //HardStoneNoSides
+        registerSprite(162, new Sprite(10, 0, SpritesheetHashtable.get(1))); //HardStoneBorderLeftS
+        registerSprite(163, new Sprite(11, 0, SpritesheetHashtable.get(1))); //HardStoneBorderRight
+        registerSprite(164, new Sprite(10, 1, SpritesheetHashtable.get(1))); //HardStoneCornerBottomRight
+        registerSprite(165, new Sprite(11, 1, SpritesheetHashtable.get(1))); //HardStoneCornerBottomLeft
+        registerSprite(166, new Sprite(10, 2, SpritesheetHashtable.get(1))); //HardStoneCornerTopRight
+        registerSprite(167, new Sprite(11, 2, SpritesheetHashtable.get(1))); //HardStoneCornerTopLeft
+        registerSprite(168, new Sprite(10, 3, SpritesheetHashtable.get(1))); //HardStoneBorderTop
+        registerSprite(169, new Sprite(11, 3, SpritesheetHashtable.get(1))); //HardStoneBorderBottom
+        registerSprite(170, new Sprite(10, 5, SpritesheetHashtable.get(1))); //HardStoneVertical
+        registerSprite(171, new Sprite(11, 5, SpritesheetHashtable.get(1))); //HardStoneEverySide
+        registerSprite(172, new Sprite(10, 6, SpritesheetHashtable.get(1))); //HardStoneURight
+        registerSprite(173, new Sprite(11, 6, SpritesheetHashtable.get(1))); //HardStoneULeft
+        registerSprite(174, new Sprite(11, 7, SpritesheetHashtable.get(1))); //HardStoneHoriztontal
+        registerSprite(175, new Sprite(10, 4, SpritesheetHashtable.get(1))); //HardStoneUBottom
+        registerSprite(176, new Sprite(11, 4, SpritesheetHashtable.get(1))); //HardStoneUTop
+
 
         STONEDOORSPRITES = new Sprite[]{
                 SpriteHashtable.get(47), SpriteHashtable.get(47),
@@ -358,20 +378,20 @@ public class SpriteHashtable {
                 SpriteHashtable.get(46), SpriteHashtable.get(46), SpriteHashtable.get(47),
                 SpriteHashtable.get(46), SpriteHashtable.get(46), SpriteHashtable.get(46),
                 SpriteHashtable.get(46), SpriteHashtable.get(46), SpriteHashtable.get(46),
-                SpriteHashtable.get(44)};
+                SpriteHashtable.get(44), SpriteHashtable.get(47)};
 
         WOODDOORSPRITES = new Sprite[]{
                 SpriteHashtable.get(45), SpriteHashtable.get(45),
                 SpriteHashtable.get(45), SpriteHashtable.get(44), SpriteHashtable.get(45),
                 SpriteHashtable.get(44), SpriteHashtable.get(44), SpriteHashtable.get(44),
                 SpriteHashtable.get(45), SpriteHashtable.get(44), SpriteHashtable.get(44),
-                SpriteHashtable.get(44), SpriteHashtable.get(44), SpriteHashtable.get(44)};
+                SpriteHashtable.get(44), SpriteHashtable.get(44), SpriteHashtable.get(44), SpriteHashtable.get(45)};
         WOODWALLSPRITES = new Sprite[]{
                 SpriteHashtable.get(37), SpriteHashtable.get(34),
                 SpriteHashtable.get(42), SpriteHashtable.get(33), SpriteHashtable.get(40), SpriteHashtable.get(36),
                 SpriteHashtable.get(41), SpriteHashtable.get(35), SpriteHashtable.get(32),
                 SpriteHashtable.get(39), SpriteHashtable.get(43), SpriteHashtable.get(38),
-                SpriteHashtable.get(31), SpriteHashtable.get(30), SpriteHashtable.get(29), SpriteHashtable.get(150),
+                SpriteHashtable.get(31), SpriteHashtable.get(30), SpriteHashtable.get(29), SpriteHashtable.get(159), SpriteHashtable.get(150),
                 SpriteHashtable.get(157), SpriteHashtable.get(156), SpriteHashtable.get(158), SpriteHashtable.get(153),
                 SpriteHashtable.get(151), SpriteHashtable.get(154), SpriteHashtable.get(152), SpriteHashtable.get(155)
         };
@@ -380,7 +400,7 @@ public class SpriteHashtable {
                 SpriteHashtable.get(27), SpriteHashtable.get(18), SpriteHashtable.get(25), SpriteHashtable.get(21),
                 SpriteHashtable.get(26), SpriteHashtable.get(20), SpriteHashtable.get(17),
                 SpriteHashtable.get(24), SpriteHashtable.get(28), SpriteHashtable.get(23),
-                SpriteHashtable.get(16), SpriteHashtable.get(15), SpriteHashtable.get(14), SpriteHashtable.get(141),
+                SpriteHashtable.get(16), SpriteHashtable.get(15), SpriteHashtable.get(14), SpriteHashtable.get(160), SpriteHashtable.get(141),
                 SpriteHashtable.get(143), SpriteHashtable.get(142), SpriteHashtable.get(144), SpriteHashtable.get(145),
                 SpriteHashtable.get(146), SpriteHashtable.get(148), SpriteHashtable.get(147), SpriteHashtable.get(149)
         };

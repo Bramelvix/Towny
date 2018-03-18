@@ -104,7 +104,7 @@ public class Game implements Runnable {
         mobs = new ArrayList<>();
         vills = new ArrayList<>();
         sols = new ArrayList<>();
-        ui = new Ui(map[5]);
+        ui = new Ui(map[currentLayerNumber]);
         spawnvills();
         spawnZombies();
 
@@ -116,7 +116,7 @@ public class Game implements Runnable {
     }
 
     private void generateLevel() {
-        map = new Level[50];
+        map = new Level[20];
         for (int i = 0; i < map.length; i++) {
             map[i] = new Level(100, 100, i);
         }
@@ -223,16 +223,12 @@ public class Game implements Runnable {
             } else if (currentLayerNumber > map.length - 1) {
                 currentLayerNumber = map.length - 1;
             }
-            System.out.println(currentLayerNumber);
+            ui.updateMinimap(map[currentLayerNumber]);
         }
-        if (paused != ui.isPaused())
-
-        {
+        if (paused != ui.isPaused()) {
             paused = ui.isPaused();
         }
-        if (speed != ui.getSpeed())
-
-        {
+        if (speed != ui.getSpeed()) {
             speed = ui.getSpeed();
             ns = 100000000.0 / speed;
         }

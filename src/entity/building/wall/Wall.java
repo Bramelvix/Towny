@@ -112,26 +112,26 @@ public class Wall extends BuildAbleObject {
     // the wall
     private void decideSprite() {
 
-        sprite = sprites[0];
+        sprite = sprites[15];
         if (topHasWall) {
             if (bottomHasWall) {
                 sprite = sprites[1];
                 if (leftHasWall) {
                     sprite = sprites[2];
                     if (!door && upLeftHasWall && downLeftHasWall) {
-                        sprite = sprites[18];
+                        sprite = sprites[19];
                     }
                     if (rightHasWall) {
                         sprite = sprites[3];
                         if (!door && upLeftHasWall && upRightHasWall && downLeftHasWall && downRightHasWall) {
-                            sprite = sprites[15];
+                            sprite = sprites[16];
                         }
                     }
                 } else {
                     if (rightHasWall) {
                         sprite = sprites[4];
                         if (!door && upRightHasWall && downRightHasWall) {
-                            sprite = sprites[17];
+                            sprite = sprites[18];
                         }
                     }
                 }
@@ -139,20 +139,22 @@ public class Wall extends BuildAbleObject {
                 if (leftHasWall) {
                     sprite = sprites[5];
                     if (!door && upLeftHasWall) {
-                        sprite = sprites[22];
+                        sprite = sprites[23];
                     }
                     if (rightHasWall) {
                         sprite = sprites[6];
                         if (!door && upLeftHasWall && upRightHasWall) {
-                            sprite = sprites[16];
+                            sprite = sprites[17];
                         }
                     }
                 } else {
                     if (rightHasWall) {
                         sprite = sprites[7];
                         if (!door && upRightHasWall) {
-                            sprite = sprites[20];
+                            sprite = sprites[21];
                         }
+                    } else {
+                        sprite = sprites[0];
                     }
                 }
             }
@@ -162,12 +164,12 @@ public class Wall extends BuildAbleObject {
                 if (leftHasWall) {
                     sprite = sprites[9];
                     if (!door && downLeftHasWall) {
-                        sprite = sprites[23];
+                        sprite = sprites[24];
                     }
                     if (rightHasWall) {
                         sprite = sprites[10];
                         if (!door && downLeftHasWall && downRightHasWall) {
-                            sprite = sprites[19];
+                            sprite = sprites[20];
                         }
                     }
 
@@ -175,7 +177,7 @@ public class Wall extends BuildAbleObject {
                     if (rightHasWall) {
                         sprite = sprites[11];
                         if (!door && downRightHasWall) {
-                            sprite = sprites[21];
+                            sprite = sprites[22];
                         }
                     }
                 }

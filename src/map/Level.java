@@ -2,10 +2,7 @@ package map;
 
 import java.util.ArrayList;
 
-import entity.Entity;
-import entity.Ore;
-import entity.OreType;
-import entity.Tree;
+import entity.*;
 import entity.building.wall.Wall;
 import entity.item.Item;
 import entity.building.workstations.Workstation;
@@ -167,13 +164,13 @@ public class Level {
     private void generateLevel(int elevation) {
         float[] noise = Generator.generateSimplexNoise(width, height, 11, Entity.RANDOM.nextInt(1000),
                 Entity.RANDOM.nextBoolean());
-        for (int y = 0; y < height - 1; y++) {
-            for (int x = 0; x < width - 1; x++) {
+        for (int y = 1; y < height - 1; y++) {
+            for (int x = 1; x < width - 1; x++) {
                 if (noise[x + y * width] > 0.5) {
                     tiles[x][y] = new Tile(SpriteHashtable.getDirt(), false, x, y);
                 } else {
                     if (elevation > 0) {
-                        tiles[x][y] = new Tile(SpriteHashtable.getDirt(), false, x, y);
+                        tiles[x][y] = new Tile(SpriteHashtable.getStone(), false, x, y);
                         if (!randOre(x, y)) {
                             spawnRock(x, y);
                         }
@@ -181,6 +178,14 @@ public class Level {
                         tiles[x][y] = new Tile(SpriteHashtable.getGrass(), false, x, y);
                         randForest(x, y);
                     }
+                }
+            }
+        }
+        for (int y = 1; y < height - 1; y++) {
+            for (int x = 1; x < width - 1; x++) {
+                Entity e = tiles[x][y].getEntity();
+                if (e != null && e instanceof HardStone) {
+                    ((HardStone) e).checkSides(this);
                 }
             }
         }
@@ -218,6 +223,9 @@ public class Level {
 
     // if there is ore on X and Y, return it
     public Ore selectOre(int x, int y) {
+        if (x <= 0 || x >= width || y <= 0 || y >= height) {
+            return null;
+        }
         Entity entity = tiles[x / 16][y / 16].getEntity();
         return entity instanceof Ore ? (Ore) entity : null;
 
@@ -269,7 +277,7 @@ public class Level {
         if (x == 0 || x == width || y == 0 || y == height) {
             return;
         }
-        tiles[x][y].setEntity(new Ore(x * 16, y * 16, OreType.STONE), false);
+        addEntity(new HardStone(x * 16, y * 16), true);
 
     }
 

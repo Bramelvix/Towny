@@ -1,5 +1,6 @@
 package entity;
 
+import entity.building.wall.Wall;
 import entity.item.Item;
 import entity.item.ItemHashtable;
 import entity.mob.Villager;
@@ -13,8 +14,9 @@ import sound.Sound;
 public class Ore extends Resource {
 	private byte mined = 100; // mined percentage (100 = unfinished / 0 =
 								// finished)
-	private Item minedItem; // Item dropped when the ore is mined
+								protected Item minedItem; // Item dropped when the ore is mined
 	private OreType type; // type of ore (iron, coal, gold,...)
+
 
 	// basic constructor
 	public Ore(int x, int y, OreType type) {
@@ -36,9 +38,6 @@ public class Ore extends Resource {
 		case COAL:
 			setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(53), ItemHashtable.get(8, this.x, this.y));
 			break;
-		case STONE:
-			setOre("stone", SpriteHashtable.getStone(), ItemHashtable.get(10, this.x, this.y));
-			break;
 		case CRYSTAL:
 			setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(57), ItemHashtable.get(9, this.x, this.y));
 			break;
@@ -53,6 +52,7 @@ public class Ore extends Resource {
 		this.sprite = oreSprite;
 		this.minedItem = item;
 	}
+
 
 	// work method executed by the villager when mining
 	public boolean work(Villager worker) {

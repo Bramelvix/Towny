@@ -148,7 +148,6 @@ public class Mouse extends MouseAdapter implements MouseInputListener, MouseWhee
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         mouseWheelDirection = e.getWheelRotation();
-        System.out.println(mouseWheelDirection);
     }
 
     public int getTrueX() {
