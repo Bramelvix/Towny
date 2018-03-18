@@ -4,6 +4,8 @@ import entity.Entity;
 import entity.Tree;
 import map.Tile;
 
+import java.util.List;
+
 //the game screen (the game world and the items in it, NOT INCLUDING THE UI)
 public class Screen {
 	public int width; // screen width
@@ -55,7 +57,12 @@ public class Screen {
 	// render sprites
 	public void renderSprite(int xp, int yp, Sprite e) {
 		renderSprite(xp, yp, e, false, true);
+	}
 
+	public void renderMultiSprite(int xp, int yp, List<Sprite> e) {
+		for (Sprite sprite : e) {
+			renderSprite(xp, yp, sprite, false, true);
+		}
 	}
 
     private void renderSprite(int xp, int yp, Sprite e, boolean selected, boolean forceOffset) {
@@ -73,7 +80,7 @@ public class Screen {
 				if (selected && (x == 0 || x == Sprite.SIZE - 1 || y == 0)) {
 					col = 0xf44242;
 				}
-				if (col != 0xffff00ff) {
+				if (col != 0xffff00ff) { //what the actual fuck is this bram
 					pixels[xa + ya * width] = col;
 				}
 			}

@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import graphics.Screen;
@@ -13,6 +15,7 @@ public abstract class Entity {
 	public static final Random RANDOM = new Random(); // random needed for
 														// various chance
 														// calculations
+	public List<Sprite> spriteList = new ArrayList<>(); // when an entity has multiple sprites
 	public Sprite sprite; // the entity's sprite
 	public Sprite extraSprite; // extra sprite for large entities (like trees)
 	private boolean visible; // is the entity visible or not
@@ -79,6 +82,8 @@ public abstract class Entity {
 
 	// render method
 	public void render(Screen screen) {
-		screen.renderSprite(x, y, sprite);
+		if (spriteList.size() > 0) screen.renderMultiSprite(x, y, spriteList);
+		else screen.renderSprite(x, y, sprite);
+
 	}
 }

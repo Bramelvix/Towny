@@ -1,6 +1,7 @@
 package entity;
 
 import entity.item.ItemHashtable;
+import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;
 import map.Tile;
@@ -17,66 +18,48 @@ public class HardStone extends Ore {
         boolean rightHasWall = null != level.selectOre(x + Tile.SIZE, y);
         boolean topHasWall = null != level.selectOre(x, y - Tile.SIZE);
         boolean bottomHasWall = null != level.selectOre(x, y + Tile.SIZE);
-        decideSprite(leftHasWall, rightHasWall, topHasWall, bottomHasWall);
+
+        boolean topRightHasWall = null != level.selectOre(x + Tile.SIZE, y - Tile.SIZE);
+        boolean bottomRightHasWall = null != level.selectOre(x + Tile.SIZE, y + Tile.SIZE);
+        boolean bottomLeftHasWall = null != level.selectOre(x - Tile.SIZE, y + Tile.SIZE);
+        boolean topLeftHasWall = null != level.selectOre(x - Tile.SIZE, y - Tile.SIZE);
+        decideSprite(leftHasWall, rightHasWall, topHasWall, bottomHasWall, topRightHasWall, bottomRightHasWall, bottomLeftHasWall, topLeftHasWall);
 
     }
 
-    private void decideSprite(boolean leftHasWall, boolean rightHasWall, boolean topHasWall, boolean bottomHasWall) {
-        sprite = SpriteHashtable.get(161);
-        if (topHasWall) {
-            sprite = SpriteHashtable.get(176);
-            if (bottomHasWall) {
-                sprite = SpriteHashtable.get(170);
-                if (leftHasWall) {
-                    sprite = SpriteHashtable.get(163);
-                    if (rightHasWall) {
-                        sprite = SpriteHashtable.get(171);
-                    }
-                } else {
-                    if (rightHasWall) {
-                        sprite = SpriteHashtable.get(162);
+    private void decideSprite(boolean leftHasWall, boolean rightHasWall, boolean topHasWall, boolean bottomHasWall, boolean topRightHasWall, boolean bottomRightHasWall, boolean bottomLeftHasWall, boolean topLeftHasWall) {
+        //initial sprite
+        spriteList.add(SpriteHashtable.get(161));
+        sprite = SpriteHashtable.get(161); //sprite needs to be set, idk
 
-                    }
-                }
-            } else {
-                if (leftHasWall) {
-                    sprite = SpriteHashtable.get(167);
+        //check if places are empty
+        if(!topHasWall) spriteList.add(SpriteHashtable.get(164));;
+        if(!rightHasWall) spriteList.add(SpriteHashtable.get(163));;
+        if(!bottomHasWall) spriteList.add(SpriteHashtable.get(165));;
+        if(!leftHasWall) spriteList.add(SpriteHashtable.get(162));;
 
-                    if (rightHasWall) {
-                        sprite = SpriteHashtable.get(169);
-                    }
-                } else {
-                    if (rightHasWall) {
-                        sprite = SpriteHashtable.get(166);
-                    }
-                }
-            }
-        } else {
-            if (bottomHasWall) {
-                sprite = SpriteHashtable.get(175);
-                if (leftHasWall) {
-                    SpriteHashtable.get(165);
-                    if (rightHasWall) {
-                        SpriteHashtable.get(168);
-                    }
+        // top right corner
+        if(!topHasWall && !rightHasWall) spriteList.add(SpriteHashtable.get(167));
+        else if(!rightHasWall) spriteList.add(SpriteHashtable.get(172));
+        else if(!topHasWall) spriteList.add(SpriteHashtable.get(174));
+        else if(!topRightHasWall) spriteList.add(SpriteHashtable.get(183));
 
-                } else {
-                    if (rightHasWall) {
-                        sprite = SpriteHashtable.get(164);
-                    }
-                }
-            } else {
-                if (leftHasWall) {
-                    sprite = SpriteHashtable.get(173);
-                    if (rightHasWall) {
-                        sprite = SpriteHashtable.get(174);
-                    }
-                } else {
-                    if (rightHasWall) {
-                        sprite = SpriteHashtable.get(172);
-                    }
-                }
-            }
-        }
+        // bottom right corner
+        if(!bottomHasWall && !rightHasWall) spriteList.add(SpriteHashtable.get(169));
+        else if(!rightHasWall && bottomHasWall) spriteList.add(SpriteHashtable.get(173));
+        else if(!bottomHasWall && rightHasWall) spriteList.add(SpriteHashtable.get(181));
+        else if(!bottomRightHasWall) spriteList.add(SpriteHashtable.get(185));
+
+        // bottom left corner
+        if(!bottomHasWall && !leftHasWall) spriteList.add(SpriteHashtable.get(168));
+        else if(!leftHasWall) spriteList.add(SpriteHashtable.get(170));
+        else if(!bottomHasWall) spriteList.add(SpriteHashtable.get(180));
+        else if(!bottomLeftHasWall) spriteList.add(SpriteHashtable.get(184));
+
+        // top left corner
+        if(!topHasWall && !leftHasWall) spriteList.add(SpriteHashtable.get(166));
+        else if(!leftHasWall) spriteList.add(SpriteHashtable.get(171));
+        else if(!topHasWall) spriteList.add(SpriteHashtable.get(175));
+        else if(!topLeftHasWall) spriteList.add(SpriteHashtable.get(182));
     }
 }
