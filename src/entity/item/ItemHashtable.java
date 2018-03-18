@@ -11,7 +11,7 @@ public abstract class ItemHashtable {
 
     public static void registerItem(int key, Item item) throws Exception {
         if (table.put(key, item) != null) {
-            throw new Exception("Duplicate key while registering items!");
+            throw new Exception("Duplicate key while registering item: " + key);
         }
     }
 

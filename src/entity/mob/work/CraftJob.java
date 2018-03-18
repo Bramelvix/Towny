@@ -55,6 +55,7 @@ public class CraftJob extends Job {
                 }
                 if (craft()) {
                     worker.setHolding(product);
+                    product.setVisible(true);
                     if (worker.level.isClearTile(worker.getX() / 16, worker.getY() / 16)) {
                         worker.drop();
                     }

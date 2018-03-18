@@ -7,7 +7,7 @@ public class SpritesheetHashtable {
 
     public static void registerSpritesheet(int key, Spritesheet sheet) throws Exception {
         if (table.put(key, sheet) != null) {
-            throw new Exception("Duplicate key while registering spritesheets!");
+            throw new Exception("Duplicate key while registering spritesheet: " + key);
         }
     }
 

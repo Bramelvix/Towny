@@ -145,4 +145,8 @@ public class Ui {
 		top.updateCounts(solcount, vilcount);
 	}
 
+    public void updateMinimap(Level level) {
+        map.update(level);
+    }
+
 }

@@ -52,7 +52,7 @@ public class Game implements Runnable {
     public static final int height = width / 16 * 9;
     private Thread thread;
     public static final int SCALE = 3;
-    private Level level;
+    private Level[] map;
     private JFrame frame;
     private boolean running = false;
     private Mouse mouse;
@@ -69,6 +69,7 @@ public class Game implements Runnable {
     private Screen screen;
     private BufferedImage image;
     private Canvas canvas;
+    private int currentLayerNumber = 0;
 
     public static void main(String[] args) {
         try {
@@ -99,28 +100,36 @@ public class Game implements Runnable {
         frame.setVisible(true);
         Sound.initSound();
         mouse = new Mouse(this);
-        level = new Level(100, 100);
+        generateLevel();
         mobs = new ArrayList<>();
         vills = new ArrayList<>();
         sols = new ArrayList<>();
-        ui = new Ui(level);
+        ui = new Ui(map[currentLayerNumber]);
         spawnvills();
         spawnZombies();
 
         canvas.addKeyListener(new Keyboard());
         canvas.addMouseListener(mouse);
         canvas.addMouseMotionListener(mouse);
+        canvas.addMouseWheelListener(mouse);
         start();
     }
 
+    private void generateLevel() {
+        map = new Level[20];
+        for (int i = 0; i < map.length; i++) {
+            map[i] = new Level(100, 100, i);
+        }
+    }
+
     private void spawnvills() {
-        Villager vil1 = new Villager(144, 144, level);
+        Villager vil1 = new Villager(144, 144, map[currentLayerNumber]);
         vil1.addClothing(new Clothing("Brown Shirt", vil1, SpriteHashtable.get(70), "A brown tshirt", ClothingType.SHIRT));
         addVillager(vil1);
-        Villager vil2 = new Villager(144, 160, level);
+        Villager vil2 = new Villager(144, 160, map[currentLayerNumber]);
         vil2.addClothing(new Clothing("Green Shirt", vil2, SpriteHashtable.get(74), "A green tshirt", ClothingType.SHIRT));
         addVillager(vil2);
-        Villager vil3 = new Villager(160, 160, level);
+        Villager vil3 = new Villager(160, 160, map[currentLayerNumber]);
         vil3.addClothing(new Clothing("Green Shirt", vil3, SpriteHashtable.get(75), "A green tshirt", ClothingType.SHIRT));
         addVillager(vil3);
 
@@ -129,7 +138,7 @@ public class Game implements Runnable {
     private void spawnZombies() {
         int teller = Entity.RANDOM.nextInt(5) + 1;
         for (int i = 0; i < teller; i++) {
-            Zombie zomb = new Zombie(level, Entity.RANDOM.nextInt(256) + 16, Entity.RANDOM.nextInt(256) + 16);
+            Zombie zomb = new Zombie(map[currentLayerNumber], Entity.RANDOM.nextInt(256) + 16, Entity.RANDOM.nextInt(256) + 16);
             mobs.add(zomb);
         }
     }
@@ -207,6 +216,15 @@ public class Game implements Runnable {
     private void updateUI() {
         ui.update(mouse, xScroll, yScroll);
         moveCamera();
+        if (mouse.getMouseWheelMoved() != 0) {
+            currentLayerNumber += mouse.getMouseWheelMoved();
+            if (currentLayerNumber < 0) {
+                currentLayerNumber = 0;
+            } else if (currentLayerNumber > map.length - 1) {
+                currentLayerNumber = map.length - 1;
+            }
+            ui.updateMinimap(map[currentLayerNumber]);
+        }
         if (paused != ui.isPaused()) {
             paused = ui.isPaused();
         }
@@ -270,7 +288,7 @@ public class Game implements Runnable {
                 int height = ui.getSelectionHeight();
                 for (int xs = x; xs < (x + width); xs += 16) {
                     for (int ys = y; ys < (y + height); ys += 16) {
-                        Tree tree = level.selectTree(xs, ys);
+                        Tree tree = map[currentLayerNumber].selectTree(xs, ys);
                         if (tree != null) {
                             tree.setSelected(true);
                         }
@@ -285,7 +303,7 @@ public class Game implements Runnable {
                 int height = ui.getSelectionHeight();
                 for (int xs = x; xs < (x + width); xs += 16) {
                     for (int ys = y; ys < (y + height); ys += 16) {
-                        Tree tree = level.selectTree(xs, ys, false);
+                        Tree tree = map[currentLayerNumber].selectTree(xs, ys, false);
                         if (tree != null) {
                             Villager idle = getIdlestVil();
                             idle.addJob(tree);
@@ -299,11 +317,11 @@ public class Game implements Runnable {
             }
             return;
         } else if (((UiIcons.isMiningSelected()) && UiIcons.hoverOnNoIcons() && mouse.getClickedLeft())
-                && (level.selectOre(mouse.getX(), mouse.getY()) != null)) {
+                && (map[currentLayerNumber].selectOre(mouse.getX(), mouse.getY()) != null)) {
             Villager idle = getIdlestVil();
             idle.setMovement(null);
             deselectAllVills();
-            idle.addJob(level.selectOre(mouse.getX(), mouse.getY()));
+            idle.addJob(map[currentLayerNumber].selectOre(mouse.getX(), mouse.getY()));
             ui.deSelectIcons();
             return;
 
@@ -336,11 +354,11 @@ public class Game implements Runnable {
                 List<MenuItem> options = new ArrayList<>();
                 if (selectedvill.getHolding() != null)
                     options.add(new MenuItem((MenuItem.DROP + " " + selectedvill.getHolding().getName())));
-                Tree boom = level.selectTree(mouse.getX(), mouse.getY());
+                Tree boom = map[currentLayerNumber].selectTree(mouse.getX(), mouse.getY());
                 if (boom != null) {
                     options.add(new MenuItem((MenuItem.CHOP), boom));
                 }
-                Ore ore = level.selectOre(mouse.getX(), mouse.getY());
+                Ore ore = map[currentLayerNumber].selectOre(mouse.getX(), mouse.getY());
                 if (ore != null) {
                     options.add(new MenuItem((MenuItem.MINE), ore));
                 }
@@ -348,7 +366,7 @@ public class Game implements Runnable {
                 if (mob != null) {
                     options.add(new MenuItem((MenuItem.FIGHT), mob));
                 }
-                Item item = level.getItemOn(mouse.getX(), mouse.getY());
+                Item item = map[currentLayerNumber].getItemOn(mouse.getX(), mouse.getY());
                 if (item != null) {
                     if (item instanceof Weapon) {
                         options.add(new MenuItem((MenuItem.EQUIP), item));
@@ -359,8 +377,8 @@ public class Game implements Runnable {
                     }
 
                 }
-                if (level.getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Chest) {
-                    Chest chest = (Chest) level.getHardEntityOn(mouse.getX(), mouse.getY());
+                if (map[currentLayerNumber].getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Chest) {
+                    Chest chest = (Chest) map[currentLayerNumber].getHardEntityOn(mouse.getX(), mouse.getY());
                     for (Item i : chest.getItems()) {
                         options.add(new MenuItem((MenuItem.PICKUP), i));
                     }
@@ -370,9 +388,9 @@ public class Game implements Runnable {
                 options.add(new MenuItem(MenuItem.CANCEL));
                 ui.showMenuOn(mouse, options.toArray(new MenuItem[0]));
             } else {
-                if (level.getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Furnace) {
+                if (map[currentLayerNumber].getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Furnace) {
                     ui.showMenuOn(mouse, new MenuItem(MenuItem.SMELT), new MenuItem(MenuItem.CANCEL));
-                } else if (level.getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Anvil) {
+                } else if (map[currentLayerNumber].getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Anvil) {
                     ui.showMenuOn(mouse, new MenuItem(MenuItem.SMITH), new MenuItem(MenuItem.CANCEL));
                 } else {
                     ui.showMenuOn(mouse, new MenuItem(MenuItem.CANCEL));
@@ -383,7 +401,7 @@ public class Game implements Runnable {
         if (ui.outlineIsVisible() && !ui.menuVisible() && mouse.getReleased() && UiIcons.hoverOnNoIcons()) {
             int[][] coords = ui.getOutlineCoords();
             for (int[] blok : coords) {
-                if (!level.getTile(blok[0] / 16, blok[1] / 16).solid()) {
+                if (!map[currentLayerNumber].getTile(blok[0] / 16, blok[1] / 16).solid()) {
                     Villager idle = getIdlestVil();
                     idle.setMovement(null);
                     idle.addBuildJob(blok[0], blok[1], ui.getBuildRecipeOutline().getProduct(),
@@ -463,7 +481,7 @@ public class Game implements Runnable {
                             res[i] = idle.getNearestItemOfType(recipe.getResources()[i]);
                         }
                         idle.addJob(new CraftJob(idle, res, recipe.getProduct(),
-                                level.getNearestWorkstation(recipe.getWorkstationClass())));
+                                map[currentLayerNumber].getNearestWorkstation(recipe.getWorkstationClass())));
                         ui.deSelectIcons();
                         ui.getMenu().hide();
                     }
@@ -493,13 +511,13 @@ public class Game implements Runnable {
         if (Keyboard.getKeyPressed(KeyEvent.VK_UP) && yScroll > 0) {
             yScroll -= 2;
         }
-        if (Keyboard.getKeyPressed(KeyEvent.VK_DOWN) && yScroll < (level.height * Tile.SIZE) - 1 - height) {
+        if (Keyboard.getKeyPressed(KeyEvent.VK_DOWN) && yScroll < (map[currentLayerNumber].height * Tile.SIZE) - 1 - height) {
             yScroll += 2;
         }
         if (Keyboard.getKeyPressed(KeyEvent.VK_LEFT) && xScroll > 0) {
             xScroll -= 2;
         }
-        if (Keyboard.getKeyPressed(KeyEvent.VK_RIGHT) && xScroll < (level.width * Tile.SIZE) - width - 1) {
+        if (Keyboard.getKeyPressed(KeyEvent.VK_RIGHT) && xScroll < (map[currentLayerNumber].width * Tile.SIZE) - width - 1) {
             xScroll += 2;
         }
 
@@ -535,17 +553,17 @@ public class Game implements Runnable {
         int x1 = (xScroll + screen.width + Sprite.SIZE);
         int y1 = (yScroll + screen.height + Sprite.SIZE);
         for (Mob i : mobs) {
-            if (i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
+            if (i.level.equals(map[currentLayerNumber]) && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
                 i.render(screen);
             }
         }
         for (Villager i : vills) {
-            if (i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
+            if (i.level.equals(map[currentLayerNumber]) && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
                 i.render(screen);
             }
         }
         for (Villager i : sols) {
-            if (i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
+            if (i.level.equals(map[currentLayerNumber]) && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
                 i.render(screen);
             }
         }
@@ -558,9 +576,9 @@ public class Game implements Runnable {
             return;
         }
         screen.clear();
-        level.render(xScroll, yScroll, screen);
+        map[currentLayerNumber].render(xScroll, yScroll, screen);
         renderMobs();
-        level.renderHardEntities(xScroll, yScroll, screen);
+        map[currentLayerNumber].renderHardEntities(xScroll, yScroll, screen);
         Graphics g = bs.getDrawGraphics();
         g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         g.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
