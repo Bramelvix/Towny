@@ -33,10 +33,10 @@ public class HardStone extends Ore {
         sprite = SpriteHashtable.get(161); //sprite needs to be set, idk
 
         //check if places are empty
-        if(!topHasWall) spriteList.add(SpriteHashtable.get(164));;
-        if(!rightHasWall) spriteList.add(SpriteHashtable.get(163));;
-        if(!bottomHasWall) spriteList.add(SpriteHashtable.get(165));;
-        if(!leftHasWall) spriteList.add(SpriteHashtable.get(162));;
+        if (!topHasWall) spriteList.add(SpriteHashtable.get(164));
+        if (!rightHasWall) spriteList.add(SpriteHashtable.get(163));
+        if (!bottomHasWall) spriteList.add(SpriteHashtable.get(165));
+        if (!leftHasWall) spriteList.add(SpriteHashtable.get(162));
 
         // top right corner
         if(!topHasWall && !rightHasWall) spriteList.add(SpriteHashtable.get(167));
@@ -45,10 +45,12 @@ public class HardStone extends Ore {
         else if(!topRightHasWall) spriteList.add(SpriteHashtable.get(183));
 
         // bottom right corner
+
         if(!bottomHasWall && !rightHasWall) spriteList.add(SpriteHashtable.get(169));
-        else if(!rightHasWall && bottomHasWall) spriteList.add(SpriteHashtable.get(173));
-        else if(!bottomHasWall && rightHasWall) spriteList.add(SpriteHashtable.get(181));
+        else if (!rightHasWall) spriteList.add(SpriteHashtable.get(173));
+        else if (!bottomHasWall) spriteList.add(SpriteHashtable.get(181));
         else if(!bottomRightHasWall) spriteList.add(SpriteHashtable.get(185));
+
 
         // bottom left corner
         if(!bottomHasWall && !leftHasWall) spriteList.add(SpriteHashtable.get(168));
