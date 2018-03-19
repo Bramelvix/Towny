@@ -35,15 +35,20 @@ public class Job implements Workable {
     }
 
     public Job(int xloc, int yloc, Item mat, BuildAbleObject object, Villager worker) {
-        this(xloc, yloc, worker);
+        this(xloc, yloc, object, worker);
         needsMaterial = true;
-        buildJobObj = object;
         material = mat;
-        buildJob = true;
         if (material == null) {
             completed = true;
         }
 
+    }
+
+    public Job(int xloc, int yloc, BuildAbleObject object, Villager worker) { //construction job that requires no building materials
+        this(xloc, yloc, worker);
+        buildJob = true;
+        buildJobObj = object;
+        needsMaterial = false;
     }
 
     public Job(Resource e, Villager worker) {
@@ -96,14 +101,13 @@ public class Job implements Workable {
                         }
                     } else {
                         if (buildJob && buildJobObj != null) {
-                            if (!worker.level.isWalkAbleTile(xloc / 16, yloc / 16) && !buildJobObj.initialised) {
-                                // wait if the buildLocation is blocked by an
-                                // item or entity
+                            if (!worker.level.tileIsEmpty(xloc / 16, yloc / 16) && !buildJobObj.initialised) {
+                                // wait if the buildLocation is blocked by an item or entity
                                 System.out.println("Postponing Construction of: " + buildJobObj.toString());
                                 return;
                             }
                             if (!buildJobObj.initialised) {
-                                completed = buildJobObj.initialiseFails(xloc / 16, yloc / 16, material, worker.level);
+                                buildJobObj.initialise(xloc / 16, yloc / 16, worker.level);
                             }
                             completed = buildJobObj.build();
                             worker.setHolding(null);

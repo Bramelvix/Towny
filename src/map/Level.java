@@ -63,6 +63,10 @@ public class Level {
         return !tiles[x][y].solid();
     }
 
+    public boolean tileIsEmpty(int x, int y) {//no mobs, no items, no buildings,...
+        return isWalkAbleTile(x, y) && isClearTile(x, y) && tiles[x][y].getEntity() == null;
+    }
+
     // if there is a wall on x and y, return it
     public Entity getHardEntityOn(int x, int y) {
         return tiles[x / 16][y / 16].solid() ? tiles[x / 16][y / 16].getEntity() : null;

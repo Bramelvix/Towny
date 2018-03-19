@@ -13,8 +13,8 @@ public class Tree extends Resource {
     // basic constructor
     public Tree(int x, int y) {
         super(x, y);
-        sprite = SpriteHashtable.get(12);
-        extraSprite = SpriteHashtable.get(13);
+        sprites.add(SpriteHashtable.get(12));
+        sprites.add(SpriteHashtable.get(13));
         setVisible(true);
         setName("tree");
     }

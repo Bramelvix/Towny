@@ -29,7 +29,8 @@ public class Mouse extends MouseAdapter implements MouseInputListener, MouseWhee
     private boolean clickedRechts; // has the right mousebutton been clicked
     private boolean drag; // has the mouse been dragged
     private int mouseWheelDirection; // has the mousewheel moved
-    private boolean released; // has the mouse been released
+    private boolean releasedLeft; // has the left mouse been released
+    private boolean releasedRight; // has the left mouse been released
 
     // constructor
     public Mouse(Game game) {
@@ -87,7 +88,12 @@ public class Mouse extends MouseAdapter implements MouseInputListener, MouseWhee
     @Override
     public void mouseReleased(MouseEvent arg0) {
         mouseB = -1;
-        released = true;
+        if (arg0.getButton() == 1) {
+            releasedLeft = true;
+        }
+        if (arg0.getButton() == 3) {
+            releasedRight = true;
+        }
 
     }
 
@@ -99,14 +105,19 @@ public class Mouse extends MouseAdapter implements MouseInputListener, MouseWhee
         return clickedRechts;
     }
 
-    public boolean getReleased() {
-        return released;
+    public boolean getReleasedLeft() {
+        return releasedLeft;
+    }
+
+    public boolean getReleasedRight() {
+        return releasedRight;
     }
 
     public void reset() {
         clickedLinks = false;
         clickedRechts = false;
-        released = false;
+        releasedLeft = false;
+        releasedRight = false;
         if (mouseB != 1) {
             drag = false;
         }
@@ -129,6 +140,7 @@ public class Mouse extends MouseAdapter implements MouseInputListener, MouseWhee
         mouseY = trueY + game.yScroll;
         mouseTileX = mouseX / 16;
         mouseTileY = mouseY / 16;
+        
 
     }
 

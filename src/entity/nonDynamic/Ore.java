@@ -50,7 +50,7 @@ public class Ore extends Resource {
 
     private void setOre(String name, Sprite oreSprite, Item item) {
         setName(name);
-        this.sprite = oreSprite;
+        this.sprites.add(oreSprite);
         this.minedItem = item;
     }
 
@@ -92,39 +92,37 @@ public class Ore extends Resource {
     }
 
     private void decideSprite(boolean leftHasWall, boolean rightHasWall, boolean topHasWall, boolean bottomHasWall, boolean topRightHasWall, boolean bottomRightHasWall, boolean bottomLeftHasWall, boolean topLeftHasWall) {
-        //initial sprite
-        spriteList.add(sprite);
 
         //check if places are empty
-        if (!topHasWall) spriteList.add(SpriteHashtable.get(164));
-        if (!rightHasWall) spriteList.add(SpriteHashtable.get(163));
-        if (!bottomHasWall) spriteList.add(SpriteHashtable.get(165));
-        if (!leftHasWall) spriteList.add(SpriteHashtable.get(162));
+        if (!topHasWall) sprites.add(SpriteHashtable.get(164));
+        if (!rightHasWall) sprites.add(SpriteHashtable.get(163));
+        if (!bottomHasWall) sprites.add(SpriteHashtable.get(165));
+        if (!leftHasWall) sprites.add(SpriteHashtable.get(162));
 
         // top right corner
-        if (!topHasWall && !rightHasWall) spriteList.add(SpriteHashtable.get(167));
-        else if (!rightHasWall) spriteList.add(SpriteHashtable.get(172));
-        else if (!topHasWall) spriteList.add(SpriteHashtable.get(174));
-        else if (!topRightHasWall) spriteList.add(SpriteHashtable.get(183));
+        if (!topHasWall && !rightHasWall) sprites.add(SpriteHashtable.get(167));
+        else if (!rightHasWall) sprites.add(SpriteHashtable.get(172));
+        else if (!topHasWall) sprites.add(SpriteHashtable.get(174));
+        else if (!topRightHasWall) sprites.add(SpriteHashtable.get(183));
 
         // bottom right corner
 
-        if (!bottomHasWall && !rightHasWall) spriteList.add(SpriteHashtable.get(169));
-        else if (!rightHasWall) spriteList.add(SpriteHashtable.get(173));
-        else if (!bottomHasWall) spriteList.add(SpriteHashtable.get(181));
-        else if (!bottomRightHasWall) spriteList.add(SpriteHashtable.get(185));
+        if (!bottomHasWall && !rightHasWall) sprites.add(SpriteHashtable.get(169));
+        else if (!rightHasWall) sprites.add(SpriteHashtable.get(173));
+        else if (!bottomHasWall) sprites.add(SpriteHashtable.get(181));
+        else if (!bottomRightHasWall) sprites.add(SpriteHashtable.get(185));
 
 
         // bottom left corner
-        if (!bottomHasWall && !leftHasWall) spriteList.add(SpriteHashtable.get(168));
-        else if (!leftHasWall) spriteList.add(SpriteHashtable.get(170));
-        else if (!bottomHasWall) spriteList.add(SpriteHashtable.get(180));
-        else if (!bottomLeftHasWall) spriteList.add(SpriteHashtable.get(184));
+        if (!bottomHasWall && !leftHasWall) sprites.add(SpriteHashtable.get(168));
+        else if (!leftHasWall) sprites.add(SpriteHashtable.get(170));
+        else if (!bottomHasWall) sprites.add(SpriteHashtable.get(180));
+        else if (!bottomLeftHasWall) sprites.add(SpriteHashtable.get(184));
 
         // top left corner
-        if (!topHasWall && !leftHasWall) spriteList.add(SpriteHashtable.get(166));
-        else if (!leftHasWall) spriteList.add(SpriteHashtable.get(171));
-        else if (!topHasWall) spriteList.add(SpriteHashtable.get(175));
-        else if (!topLeftHasWall) spriteList.add(SpriteHashtable.get(182));
+        if (!topHasWall && !leftHasWall) sprites.add(SpriteHashtable.get(166));
+        else if (!leftHasWall) sprites.add(SpriteHashtable.get(171));
+        else if (!topHasWall) sprites.add(SpriteHashtable.get(175));
+        else if (!topLeftHasWall) sprites.add(SpriteHashtable.get(182));
     }
 }

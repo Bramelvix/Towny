@@ -56,6 +56,10 @@ public class UiIcons {
 		return icons[4].hoverOn();
 	}
 
+	public static boolean isShovelHover() {
+		return icons[5].hoverOn();
+	}
+
 	public static boolean isWoodSelected() {
 		return icons[0].isSelected();
 	}
@@ -74,6 +78,10 @@ public class UiIcons {
 
 	public static boolean isSwordsSelected() {
 		return icons[4].isSelected();
+	}
+
+	public static boolean isShovelSelected() {
+		return icons[5].isSelected();
 	}
 
 	// update the icons

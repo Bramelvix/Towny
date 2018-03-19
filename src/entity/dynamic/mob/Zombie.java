@@ -48,8 +48,7 @@ public class Zombie extends Humanoid {
 	public void render(Screen screen) {
 		super.render(screen);
 		if (getHolding() != null) {
-			screen.renderSprite(x, y, getHolding().sprite); // renders the item the
-														// zombie is holding
+            screen.renderSprite(x, y, getHolding().sprites.get(0)); // renders the item the zombie is holding
 		}
 	}
 

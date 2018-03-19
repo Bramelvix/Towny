@@ -14,6 +14,7 @@ import javax.swing.*;
 
 import com.sun.xml.internal.ws.util.StringUtils;
 import entity.Entity;
+import entity.dynamic.mob.work.*;
 import entity.nonDynamic.Ore;
 import entity.nonDynamic.Tree;
 import entity.nonDynamic.building.container.Chest;
@@ -26,11 +27,6 @@ import entity.dynamic.item.weapon.WeaponMaterial;
 import entity.dynamic.mob.Mob;
 import entity.dynamic.mob.Villager;
 import entity.dynamic.mob.Zombie;
-import entity.dynamic.mob.work.BuildingRecipe;
-import entity.dynamic.mob.work.CraftJob;
-import entity.dynamic.mob.work.FightJob;
-import entity.dynamic.mob.work.MoveItemJob;
-import entity.dynamic.mob.work.ItemRecipe;
 import entity.nonDynamic.building.workstations.Anvil;
 import entity.nonDynamic.building.workstations.Furnace;
 import graphics.Screen;
@@ -296,7 +292,7 @@ public class Game implements Runnable {
                 }
                 return;
             }
-            if (mouse.getReleased()) {
+            if (mouse.getReleasedLeft()) {
                 int x = ui.getSelectionX();
                 int y = ui.getSelectionY();
                 int width = ui.getSelectionWidth();
@@ -322,6 +318,12 @@ public class Game implements Runnable {
             idle.setMovement(null);
             deselectAllVills();
             idle.addJob(map[currentLayerNumber].selectOre(mouse.getX(), mouse.getY()));
+            ui.deSelectIcons();
+            return;
+
+        } else if (UiIcons.isShovelHover() && !ui.menuVisible() && mouse.getClickedLeft()) {
+            deselectAllVills();
+            ui.showBuildSquare(mouse, xScroll, yScroll, false, BuildingRecipe.STAIRSDOWN);
             ui.deSelectIcons();
             return;
 
@@ -398,10 +400,10 @@ public class Game implements Runnable {
 
             }
         }
-        if (ui.outlineIsVisible() && !ui.menuVisible() && mouse.getReleased() && UiIcons.hoverOnNoIcons()) {
+        if (ui.outlineIsVisible() && !ui.menuVisible() && mouse.getReleasedLeft() && UiIcons.hoverOnNoIcons()) {
             int[][] coords = ui.getOutlineCoords();
             for (int[] blok : coords) {
-                if (!map[currentLayerNumber].getTile(blok[0] / 16, blok[1] / 16).solid()) {
+                if (map[currentLayerNumber].tileIsEmpty(blok[0] / 16, blok[1] / 16)) {
                     Villager idle = getIdlestVil();
                     idle.setMovement(null);
                     idle.addBuildJob(blok[0], blok[1], ui.getBuildRecipeOutline().getProduct(),

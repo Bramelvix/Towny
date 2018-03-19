@@ -14,7 +14,7 @@ public class Item extends Entity {
     // basic constructors
     protected Item(String name, int x, int y, Sprite sprite, String tooltip, boolean visible, int id) {
         super(x, y);
-        this.sprite = sprite;
+        sprites.add(sprite);
         setVisible(visible);
         super.setName(name);
         this.tooltip = tooltip;
@@ -31,14 +31,14 @@ public class Item extends Entity {
 
     protected Item(String name, Sprite sprite, String tooltip, int id) {
         super.setName(name);
-        this.sprite = sprite;
+        sprites.add(sprite);
         this.tooltip = tooltip;
         setVisible(true);
         this.id = id;
     }
 
     public Item copy() {
-        return new Item(this.getName(), this.x, this.y, this.sprite, this.getToolTip(), this.isVisible(), this.getId());
+        return new Item(this.getName(), this.x, this.y, this.sprites.get(0), this.getToolTip(), this.isVisible(), this.getId());
     }
 
     public Item copy(int x, int y) {

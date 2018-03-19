@@ -29,10 +29,7 @@ public abstract class BuildAbleObject extends Entity {
         return open;
     }
 
-    public boolean initialiseFails(int x, int y, Item material, Level level) {
-        if (material == null) {
-            return true;
-        }
+    public void initialise(int x, int y, Level level) {
         this.level = level;
         setLocation(x * 16, y * 16);
         if (isOpen()) {
@@ -42,7 +39,6 @@ public abstract class BuildAbleObject extends Entity {
         }
 
         initialised = true;
-        return false;
 
     }
 

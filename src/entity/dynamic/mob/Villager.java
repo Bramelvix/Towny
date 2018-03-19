@@ -3,6 +3,7 @@ package entity.dynamic.mob;
 import java.util.ArrayList;
 import java.util.List;
 
+import entity.dynamic.mob.work.BuildingRecipe;
 import entity.nonDynamic.building.BuildAbleObject;
 import entity.Entity;
 import entity.nonDynamic.Resource;
@@ -197,7 +198,11 @@ public class Villager extends Humanoid {
 
     // add a buildjob
     public void addBuildJob(int x, int y, BuildAbleObject object, Item resource) {
-        addJob(new Job(x, y, getNearestItemOfType(resource), object, this));
+        if (resource == null) {
+            addJob(new Job(x, y, object, this));
+        } else {
+            addJob(new Job(x, y, getNearestItemOfType(resource), object, this));
+        }
 
     }
 
@@ -237,12 +242,10 @@ public class Villager extends Humanoid {
         screen.renderSprite(x, y, hair); // renders the hair
         inventory.render(screen);
         if (getHolding() != null) {
-            screen.renderSprite(x, y, getHolding().sprite); // renders the item the
-            // villager is holding
+            screen.renderSprite(x, y, getHolding().sprites.get(0)); // renders the item the villager is holding
         }
         if (this.isSelected()) {
-            screen.renderSelection(this); // render the red square around
-            // selected villagers
+            screen.renderSelection(this); // render the red square around selected villagers
         }
 
     }

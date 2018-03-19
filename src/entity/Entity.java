@@ -15,9 +15,7 @@ public abstract class Entity {
 	public static final Random RANDOM = new Random(); // random needed for
 														// various chance
 														// calculations
-	public List<Sprite> spriteList = new ArrayList<>(); // when an entity has multiple sprites
-	public Sprite sprite; // the entity's sprite
-	public Sprite extraSprite; // extra sprite for large entities (like trees)
+                                                        public List<Sprite> sprites; // the entity's sprites
 	private boolean visible; // is the entity visible or not
 	private boolean selected = false;
 	private String displayName;
@@ -45,7 +43,7 @@ public abstract class Entity {
 	}
 
 	public Entity() {
-		super();
+        sprites = new ArrayList<>();
 	}
 
 	// getters
@@ -67,6 +65,7 @@ public abstract class Entity {
 
 	// basic constructor
 	public Entity(int x, int y) {
+        this();
 		setLocation(x, y);
 	}
 
@@ -82,8 +81,8 @@ public abstract class Entity {
 
 	// render method
 	public void render(Screen screen) {
-		if (spriteList.size() > 0) screen.renderMultiSprite(x, y, spriteList);
-		else screen.renderSprite(x, y, sprite);
+        if (sprites.size() > 1) screen.renderMultiSprite(x, y, sprites);
+        else screen.renderSprite(x, y, sprites.get(0));
 
 	}
 }
