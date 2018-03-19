@@ -32,7 +32,6 @@ Feel free to contribute to the game by fixing my terrible code, or adding new fe
  - Skills
  - NPC factions
  - Trading
- - Elevation and underground caves
  - More building materials and recipes
  - Beds and sleeping mechanic
  - Day/night cycle
