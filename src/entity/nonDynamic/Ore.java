@@ -94,35 +94,33 @@ public class Ore extends Resource {
     private void decideSprite(boolean leftHasWall, boolean rightHasWall, boolean topHasWall, boolean bottomHasWall, boolean topRightHasWall, boolean bottomRightHasWall, boolean bottomLeftHasWall, boolean topLeftHasWall) {
 
         //check if places are empty
-        if (!topHasWall) sprites.add(SpriteHashtable.get(164));
-        if (!rightHasWall) sprites.add(SpriteHashtable.get(163));
-        if (!bottomHasWall) sprites.add(SpriteHashtable.get(165));
-        if (!leftHasWall) sprites.add(SpriteHashtable.get(162));
+        if (!topHasWall) sprites.add(SpriteHashtable.get(164)); //3
+        if (!rightHasWall) sprites.add(SpriteHashtable.get(163)); //2
+        if (!bottomHasWall) sprites.add(SpriteHashtable.get(165)); //4
+        if (!leftHasWall) sprites.add(SpriteHashtable.get(162)); //1
 
         // top right corner
-        if (!topHasWall && !rightHasWall) sprites.add(SpriteHashtable.get(167));
-        else if (!rightHasWall) sprites.add(SpriteHashtable.get(172));
-        else if (!topHasWall) sprites.add(SpriteHashtable.get(174));
-        else if (!topRightHasWall) sprites.add(SpriteHashtable.get(183));
+        if (!topHasWall && !rightHasWall) sprites.add(SpriteHashtable.get(167)); //6
+        else if (!rightHasWall) sprites.add(SpriteHashtable.get(172)); //11
+        else if (!topHasWall) sprites.add(SpriteHashtable.get(174)); //13
+        else if (!topRightHasWall) sprites.add(SpriteHashtable.get(181)); //20
 
         // bottom right corner
-
-        if (!bottomHasWall && !rightHasWall) sprites.add(SpriteHashtable.get(169));
-        else if (!rightHasWall) sprites.add(SpriteHashtable.get(173));
-        else if (!bottomHasWall) sprites.add(SpriteHashtable.get(181));
-        else if (!bottomRightHasWall) sprites.add(SpriteHashtable.get(185));
-
+        if (!bottomHasWall && !rightHasWall) sprites.add(SpriteHashtable.get(169)); //8
+        else if (!rightHasWall) sprites.add(SpriteHashtable.get(173)); //12
+        else if (!bottomHasWall) sprites.add(SpriteHashtable.get(177)); //16
+        else if (!bottomRightHasWall) sprites.add(SpriteHashtable.get(179)); //18
 
         // bottom left corner
-        if (!bottomHasWall && !leftHasWall) sprites.add(SpriteHashtable.get(168));
-        else if (!leftHasWall) sprites.add(SpriteHashtable.get(170));
-        else if (!bottomHasWall) sprites.add(SpriteHashtable.get(180));
-        else if (!bottomLeftHasWall) sprites.add(SpriteHashtable.get(184));
+        if (!bottomHasWall && !leftHasWall) sprites.add(SpriteHashtable.get(168)); //7
+        else if (!leftHasWall) sprites.add(SpriteHashtable.get(170)); //9
+        else if (!bottomHasWall) sprites.add(SpriteHashtable.get(176)); //15
+        else if (!bottomLeftHasWall) sprites.add(SpriteHashtable.get(178)); //17
 
         // top left corner
         if (!topHasWall && !leftHasWall) sprites.add(SpriteHashtable.get(166));
-        else if (!leftHasWall) sprites.add(SpriteHashtable.get(171));
-        else if (!topHasWall) sprites.add(SpriteHashtable.get(175));
-        else if (!topLeftHasWall) sprites.add(SpriteHashtable.get(182));
+        else if (!leftHasWall) sprites.add(SpriteHashtable.get(171)); //10
+        else if (!topHasWall) sprites.add(SpriteHashtable.get(175)); //14
+        else if (!topLeftHasWall) sprites.add(SpriteHashtable.get(180)); //19
     }
 }
