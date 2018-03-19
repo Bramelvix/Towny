@@ -339,13 +339,12 @@ public class SpriteHashtable {
         registerSprite(173, new Sprite(11, 5, SpritesheetHashtable.get(1)));
         registerSprite(174, new Sprite(10, 6, SpritesheetHashtable.get(1)));
         registerSprite(175, new Sprite(11, 6, SpritesheetHashtable.get(1)));
-        //GAP
+        registerSprite(176, new Sprite(10, 7, SpritesheetHashtable.get(1)));
+        registerSprite(177, new Sprite(11, 7, SpritesheetHashtable.get(1)));
+        registerSprite(178, new Sprite(10, 8, SpritesheetHashtable.get(1)));
+        registerSprite(179, new Sprite(11, 8, SpritesheetHashtable.get(1)));
         registerSprite(180, new Sprite(10, 9, SpritesheetHashtable.get(1)));
         registerSprite(181, new Sprite(11, 9, SpritesheetHashtable.get(1)));
-        registerSprite(182, new Sprite(6, 6, SpritesheetHashtable.get(1)));
-        registerSprite(183, new Sprite(7, 6, SpritesheetHashtable.get(1)));
-        registerSprite(184, new Sprite(8, 6, SpritesheetHashtable.get(1)));
-        registerSprite(185, new Sprite(9, 6, SpritesheetHashtable.get(1)));
 
         registerSprite(186, new Sprite(35, 14, SpritesheetHashtable.get(1))); //WoodNoSides
         registerSprite(187, new Sprite(39, 12, SpritesheetHashtable.get(1)));
