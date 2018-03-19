@@ -3,9 +3,12 @@ package map;
 import java.util.ArrayList;
 
 import entity.*;
-import entity.building.wall.Wall;
-import entity.item.Item;
-import entity.building.workstations.Workstation;
+import entity.nonDynamic.building.wall.Wall;
+import entity.dynamic.item.Item;
+import entity.nonDynamic.building.workstations.Workstation;
+import entity.nonDynamic.Ore;
+import entity.nonDynamic.OreType;
+import entity.nonDynamic.Tree;
 import graphics.Screen;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
@@ -188,8 +191,8 @@ public class Level {
         for (int y = 1; y < height - 1; y++) {
             for (int x = 1; x < width - 1; x++) {
                 Entity e = tiles[x][y].getEntity();
-                if (e != null && e instanceof HardStone) {
-                    ((HardStone) e).checkSides(this);
+                if (e != null && e instanceof Ore) {
+                    ((Ore) e).checkSides(this);
                 }
             }
         }
@@ -243,7 +246,6 @@ public class Level {
         int rand = Entity.RANDOM.nextInt(10);
         if (rand == 1) {
             addEntity(new Tree(x * 16, y * 16), true);
-            getTile(x, y).setSolid(true);
         }
 
     }
@@ -257,19 +259,19 @@ public class Level {
         if (rand <= 4) {
             switch (rand) {
                 case 0:
-                    tiles[x][y].setEntity(new Ore(x * 16, y * 16, OreType.GOLD), false);
+                    addEntity(new Ore(x * 16, y * 16, OreType.GOLD), true);
                     break;
                 case 1:
-                    tiles[x][y].setEntity(new Ore(x * 16, y * 16, OreType.IRON), false);
+                    addEntity(new Ore(x * 16, y * 16, OreType.IRON), true);
                     break;
                 case 2:
-                    tiles[x][y].setEntity(new Ore(x * 16, y * 16, OreType.COAL), false);
+                    addEntity(new Ore(x * 16, y * 16, OreType.COAL), true);
                     break;
                 case 3:
-                    tiles[x][y].setEntity(new Ore(x * 16, y * 16, OreType.COPPER), false);
+                    addEntity(new Ore(x * 16, y * 16, OreType.COPPER), true);
                     break;
                 case 4:
-                    tiles[x][y].setEntity(new Ore(x * 16, y * 16, OreType.CRYSTAL), false);
+                    addEntity(new Ore(x * 16, y * 16, OreType.CRYSTAL), true);
                     break;
             }
             return true;
@@ -281,7 +283,7 @@ public class Level {
         if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
             return;
         }
-        addEntity(new HardStone(x * 16, y * 16), true);
+        addEntity(new Ore(x * 16, y * 16, OreType.STONE), true);
 
     }
 
@@ -322,7 +324,7 @@ public class Level {
         return (x < 0 || x >= width || y < 0 || y >= height) ? Tile.voidTile : tiles[x][y];
     }
 
-    public void addEntity(Entity entity, boolean solid) {
+    public <T extends Entity> void addEntity(T entity, boolean solid) {
         if (entity != null) {
             tiles[entity.getX() / 16][entity.getY() / 16].setEntity(entity, solid);
         }

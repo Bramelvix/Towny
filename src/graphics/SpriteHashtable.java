@@ -1,7 +1,7 @@
 package graphics;
 
-import entity.item.weapon.WeaponMaterial;
-import entity.item.weapon.WeaponType;
+import entity.dynamic.item.weapon.WeaponMaterial;
+import entity.dynamic.item.weapon.WeaponType;
 
 import java.util.Hashtable;
 import java.util.Random;
@@ -202,36 +202,30 @@ public class SpriteHashtable {
         registerSprite(11, new Sprite(8, 1, SpritesheetHashtable.get(1))); //sand2
         registerSprite(12, new Sprite(13, 11, SpritesheetHashtable.get(1))); //treebottom
         registerSprite(13, new Sprite(13, 10, SpritesheetHashtable.get(1))); //treetop
-        registerSprite(14, new Sprite(27, 12, SpritesheetHashtable.get(1))); //stoneWallHorizontalRight
-        registerSprite(15, new Sprite(28, 12, SpritesheetHashtable.get(1))); //stoneWallHorizontalBoth
-        registerSprite(16, new Sprite(29, 12, SpritesheetHashtable.get(1))); //stoneWallHorizontalLeft
-        registerSprite(17, new Sprite(27, 13, SpritesheetHashtable.get(1))); //stoneWallVerticalBottom
-        registerSprite(18, new Sprite(28, 13, SpritesheetHashtable.get(1))); //stoneWall4sides
-        registerSprite(19, new Sprite(29, 13, SpritesheetHashtable.get(1))); //stoneWallVerticalBoth
-        registerSprite(20, new Sprite(30, 13, SpritesheetHashtable.get(1))); //stoneWallCornerTopRight
-        registerSprite(21, new Sprite(31, 13, SpritesheetHashtable.get(1))); //stoneWallCornerTopLeft
-        registerSprite(22, new Sprite(27, 14, SpritesheetHashtable.get(1))); //stoneWallVerticalTop
-        registerSprite(23, new Sprite(30, 12, SpritesheetHashtable.get(1))); //stoneWallCornerBottomRight
-        registerSprite(24, new Sprite(31, 12, SpritesheetHashtable.get(1))); //stoneWallCornerBottomLeft
-        registerSprite(25, new Sprite(32, 12, SpritesheetHashtable.get(1))); //stoneWallTRight
-        registerSprite(26, new Sprite(33, 12, SpritesheetHashtable.get(1))); //stoneWallTTop
-        registerSprite(27, new Sprite(31, 13, SpritesheetHashtable.get(1))); //stoneWallTLeft
-        registerSprite(28, new Sprite(32, 13, SpritesheetHashtable.get(1))); //stoneWallTBottom
-        registerSprite(29, new Sprite(34, 12, SpritesheetHashtable.get(1))); //woodenWallHorizontalRight
-        registerSprite(30, new Sprite(35, 12, SpritesheetHashtable.get(1))); //woodenWallHorizontalBoth
-        registerSprite(31, new Sprite(36, 12, SpritesheetHashtable.get(1))); //woodenWallHorizontalLeft
-        registerSprite(32, new Sprite(34, 13, SpritesheetHashtable.get(1))); //woodenWallVerticalBottom
-        registerSprite(33, new Sprite(35, 13, SpritesheetHashtable.get(1))); //woodenWall4sides
-        registerSprite(34, new Sprite(36, 13, SpritesheetHashtable.get(1))); //woodenWallVerticalBoth
-        registerSprite(35, new Sprite(37, 13, SpritesheetHashtable.get(1))); //woodenWallCornerTopRight
-        registerSprite(36, new Sprite(38, 13, SpritesheetHashtable.get(1))); //woodenWallCornerTopLeft
-        registerSprite(37, new Sprite(34, 14, SpritesheetHashtable.get(1))); //woodenWallVerticalTop
-        registerSprite(38, new Sprite(37, 12, SpritesheetHashtable.get(1))); //woodenWallCornerBottomRight
-        registerSprite(39, new Sprite(38, 12, SpritesheetHashtable.get(1))); //woodenWallCornerBottomLeft
-        registerSprite(40, new Sprite(39, 12, SpritesheetHashtable.get(1))); //woodenWallTRight
-        registerSprite(41, new Sprite(40, 12, SpritesheetHashtable.get(1))); //woodenWallTTop
-        registerSprite(42, new Sprite(39, 13, SpritesheetHashtable.get(1))); //woodenWallTLeft
-        registerSprite(43, new Sprite(40, 13, SpritesheetHashtable.get(1))); //woodenWallTBottom
+        registerSprite(14, new Sprite(27, 15, SpritesheetHashtable.get(1))); //StoneNoSides
+        registerSprite(15, new Sprite(32, 13, SpritesheetHashtable.get(1)));
+        registerSprite(16, new Sprite(33, 13, SpritesheetHashtable.get(1)));
+        registerSprite(17, new Sprite(32, 14, SpritesheetHashtable.get(1)));
+        registerSprite(18, new Sprite(33, 14, SpritesheetHashtable.get(1)));
+        registerSprite(19, new Sprite(32, 15, SpritesheetHashtable.get(1)));
+        registerSprite(20, new Sprite(33, 15, SpritesheetHashtable.get(1)));
+        registerSprite(21, new Sprite(32, 16, SpritesheetHashtable.get(1)));
+        registerSprite(22, new Sprite(33, 16, SpritesheetHashtable.get(1)));
+        registerSprite(23, new Sprite(32, 17, SpritesheetHashtable.get(1)));
+        registerSprite(24, new Sprite(33, 17, SpritesheetHashtable.get(1)));
+        registerSprite(25, new Sprite(32, 18, SpritesheetHashtable.get(1)));
+        registerSprite(26, new Sprite(33, 18, SpritesheetHashtable.get(1)));
+        registerSprite(27, new Sprite(32, 19, SpritesheetHashtable.get(1)));
+        registerSprite(28, new Sprite(33, 19, SpritesheetHashtable.get(1)));
+        registerSprite(33, new Sprite(32, 22, SpritesheetHashtable.get(1)));
+        registerSprite(34, new Sprite(33, 22, SpritesheetHashtable.get(1)));
+        registerSprite(35, new Sprite(27, 18, SpritesheetHashtable.get(1)));
+        registerSprite(36, new Sprite(28, 18, SpritesheetHashtable.get(1)));
+        registerSprite(37, new Sprite(29, 18, SpritesheetHashtable.get(1)));
+        registerSprite(38, new Sprite(30, 18, SpritesheetHashtable.get(1)));
+        registerSprite(39, new Sprite(38, 10, SpritesheetHashtable.get(1)));//chest
+        //GAP
+
         registerSprite(44, new Sprite(32, 1, SpritesheetHashtable.get(1))); //woodenDoorHorizontal
         registerSprite(45, new Sprite(37, 1, SpritesheetHashtable.get(1))); //woodenDoorVertical
         registerSprite(46, new Sprite(32, 2, SpritesheetHashtable.get(1)));//stoneDoorHorizontal
@@ -328,31 +322,7 @@ public class SpriteHashtable {
         registerSprite(137, new Sprite(39, 6, SpritesheetHashtable.get(2)));//crystalheater
         registerSprite(138, new Sprite(35, 0, SpritesheetHashtable.get(2)));//woodheater
         registerSprite(139, new Sprite(44, 1, SpritesheetHashtable.get(2)));//copperspear
-        registerSprite(140, new Sprite(38, 10, SpritesheetHashtable.get(1)));//chest
-
-        //These sprites have their inside sides coloured in, so multiple walls placed togheter look like one giant block
-        registerSprite(141, new Sprite(28, 14, SpritesheetHashtable.get(1))); //stoneWall4sidesEXTRA
-        registerSprite(142, new Sprite(32, 14, SpritesheetHashtable.get(1))); //stoneWallTRightEXTRA
-        registerSprite(143, new Sprite(33, 14, SpritesheetHashtable.get(1))); //stoneWallTTopEXTRA
-        registerSprite(144, new Sprite(31, 15, SpritesheetHashtable.get(1))); //stoneWallTLeftEXTRA
-        registerSprite(145, new Sprite(32, 15, SpritesheetHashtable.get(1))); //stoneWallTBottomEXTRA
-        registerSprite(146, new Sprite(30, 15, SpritesheetHashtable.get(1))); //stoneWallCornerTopRightEXTRA
-        registerSprite(147, new Sprite(31, 15, SpritesheetHashtable.get(1))); //stoneWallCornerTopLeftEXTRA
-        registerSprite(148, new Sprite(30, 14, SpritesheetHashtable.get(1))); //stoneWallCornerBottomRightEXTRA
-        registerSprite(149, new Sprite(31, 14, SpritesheetHashtable.get(1))); //stoneWallCornerBottomLeftEXTRA
-
-        registerSprite(150, new Sprite(35, 14, SpritesheetHashtable.get(1))); //woodenWall4sidesEXTRA
-        registerSprite(151, new Sprite(37, 15, SpritesheetHashtable.get(1))); //woodenWallCornerTopRightEXTRA
-        registerSprite(152, new Sprite(38, 15, SpritesheetHashtable.get(1))); //woodenWallCornerTopLeftEXTRA
-        registerSprite(154, new Sprite(37, 14, SpritesheetHashtable.get(1))); //woodenWallCornerBottomRightEXTRA
-        registerSprite(155, new Sprite(38, 14, SpritesheetHashtable.get(1))); //woodenWallCornerBottomLeftEXTRA
-        registerSprite(156, new Sprite(39, 14, SpritesheetHashtable.get(1))); //woodenWallTRightEXTRA
-        registerSprite(157, new Sprite(40, 14, SpritesheetHashtable.get(1))); //woodenWallTTopEXTRA
-        registerSprite(158, new Sprite(39, 15, SpritesheetHashtable.get(1))); //woodenWallTLeftEXTRA
-        registerSprite(153, new Sprite(40, 15, SpritesheetHashtable.get(1))); //woodenWallTBottomEXTRA
-
-        registerSprite(159, new Sprite(34, 15, SpritesheetHashtable.get(1))); //woodenWallNoSides
-        registerSprite(160, new Sprite(27, 15, SpritesheetHashtable.get(1))); //StoneWallNoSides
+        //GAP
 
         registerSprite(161, new Sprite(9, 0, SpritesheetHashtable.get(1))); //HardStoneNoSides
         registerSprite(162, new Sprite(10, 0, SpritesheetHashtable.get(1)));
@@ -369,10 +339,7 @@ public class SpriteHashtable {
         registerSprite(173, new Sprite(11, 5, SpritesheetHashtable.get(1)));
         registerSprite(174, new Sprite(10, 6, SpritesheetHashtable.get(1)));
         registerSprite(175, new Sprite(11, 6, SpritesheetHashtable.get(1)));
-        registerSprite(176, new Sprite(10, 7, SpritesheetHashtable.get(1)));
-        registerSprite(177, new Sprite(11, 7, SpritesheetHashtable.get(1)));
-        registerSprite(178, new Sprite(10, 8, SpritesheetHashtable.get(1)));
-        registerSprite(179, new Sprite(11, 8, SpritesheetHashtable.get(1)));
+        //GAP
         registerSprite(180, new Sprite(10, 9, SpritesheetHashtable.get(1)));
         registerSprite(181, new Sprite(11, 9, SpritesheetHashtable.get(1)));
         registerSprite(182, new Sprite(6, 6, SpritesheetHashtable.get(1)));
@@ -380,38 +347,29 @@ public class SpriteHashtable {
         registerSprite(184, new Sprite(8, 6, SpritesheetHashtable.get(1)));
         registerSprite(185, new Sprite(9, 6, SpritesheetHashtable.get(1)));
 
-        STONEDOORSPRITES = new Sprite[]{
-                SpriteHashtable.get(47), SpriteHashtable.get(47),
-                SpriteHashtable.get(47), SpriteHashtable.get(46), SpriteHashtable.get(47), SpriteHashtable.get(46),
-                SpriteHashtable.get(46), SpriteHashtable.get(46), SpriteHashtable.get(47),
-                SpriteHashtable.get(46), SpriteHashtable.get(46), SpriteHashtable.get(46),
-                SpriteHashtable.get(46), SpriteHashtable.get(46), SpriteHashtable.get(46),
-                SpriteHashtable.get(44), SpriteHashtable.get(47)};
+        registerSprite(186, new Sprite(35, 14, SpritesheetHashtable.get(1))); //WoodNoSides
+        registerSprite(187, new Sprite(39, 12, SpritesheetHashtable.get(1)));
+        registerSprite(188, new Sprite(40, 12, SpritesheetHashtable.get(1)));
+        registerSprite(189, new Sprite(39, 13, SpritesheetHashtable.get(1)));
+        registerSprite(190, new Sprite(40, 13, SpritesheetHashtable.get(1)));
+        registerSprite(191, new Sprite(39, 14, SpritesheetHashtable.get(1)));
+        registerSprite(192, new Sprite(40, 14, SpritesheetHashtable.get(1)));
+        registerSprite(193, new Sprite(39, 15, SpritesheetHashtable.get(1)));
+        registerSprite(194, new Sprite(40, 15, SpritesheetHashtable.get(1)));
+        registerSprite(195, new Sprite(39, 16, SpritesheetHashtable.get(1)));
+        registerSprite(196, new Sprite(40, 16, SpritesheetHashtable.get(1)));
+        registerSprite(197, new Sprite(39, 17, SpritesheetHashtable.get(1)));
+        registerSprite(198, new Sprite(40, 17, SpritesheetHashtable.get(1)));
+        registerSprite(199, new Sprite(39, 18, SpritesheetHashtable.get(1)));
+        registerSprite(200, new Sprite(40, 18, SpritesheetHashtable.get(1)));
+        //GAP
+        registerSprite(205, new Sprite(39, 21, SpritesheetHashtable.get(1)));
+        registerSprite(206, new Sprite(40, 21, SpritesheetHashtable.get(1)));
+        registerSprite(207, new Sprite(35, 17, SpritesheetHashtable.get(1)));
+        registerSprite(208, new Sprite(36, 17, SpritesheetHashtable.get(1)));
+        registerSprite(209, new Sprite(37, 17, SpritesheetHashtable.get(1)));
+        registerSprite(210, new Sprite(38, 17, SpritesheetHashtable.get(1)));
 
-        WOODDOORSPRITES = new Sprite[]{
-                SpriteHashtable.get(45), SpriteHashtable.get(45),
-                SpriteHashtable.get(45), SpriteHashtable.get(44), SpriteHashtable.get(45),
-                SpriteHashtable.get(44), SpriteHashtable.get(44), SpriteHashtable.get(44),
-                SpriteHashtable.get(45), SpriteHashtable.get(44), SpriteHashtable.get(44),
-                SpriteHashtable.get(44), SpriteHashtable.get(44), SpriteHashtable.get(44), SpriteHashtable.get(45)};
-        WOODWALLSPRITES = new Sprite[]{
-                SpriteHashtable.get(37), SpriteHashtable.get(34),
-                SpriteHashtable.get(42), SpriteHashtable.get(33), SpriteHashtable.get(40), SpriteHashtable.get(36),
-                SpriteHashtable.get(41), SpriteHashtable.get(35), SpriteHashtable.get(32),
-                SpriteHashtable.get(39), SpriteHashtable.get(43), SpriteHashtable.get(38),
-                SpriteHashtable.get(31), SpriteHashtable.get(30), SpriteHashtable.get(29), SpriteHashtable.get(159), SpriteHashtable.get(150),
-                SpriteHashtable.get(157), SpriteHashtable.get(156), SpriteHashtable.get(158), SpriteHashtable.get(153),
-                SpriteHashtable.get(151), SpriteHashtable.get(154), SpriteHashtable.get(152), SpriteHashtable.get(155)
-        };
-        STONEWALLSPRITES = new Sprite[]{
-                SpriteHashtable.get(22), SpriteHashtable.get(19),
-                SpriteHashtable.get(27), SpriteHashtable.get(18), SpriteHashtable.get(25), SpriteHashtable.get(21),
-                SpriteHashtable.get(26), SpriteHashtable.get(20), SpriteHashtable.get(17),
-                SpriteHashtable.get(24), SpriteHashtable.get(28), SpriteHashtable.get(23),
-                SpriteHashtable.get(16), SpriteHashtable.get(15), SpriteHashtable.get(14), SpriteHashtable.get(160), SpriteHashtable.get(141),
-                SpriteHashtable.get(143), SpriteHashtable.get(142), SpriteHashtable.get(144), SpriteHashtable.get(145),
-                SpriteHashtable.get(146), SpriteHashtable.get(148), SpriteHashtable.get(147), SpriteHashtable.get(149)
-        };
 
     }
 }

@@ -1,7 +1,8 @@
 package graphics.ui;
 
 import java.awt.Graphics;
-import entity.mob.work.BuildingRecipe;
+
+import entity.dynamic.mob.work.BuildingRecipe;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.Menu;
 import graphics.ui.menu.MenuItem;

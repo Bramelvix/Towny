@@ -1,7 +1,7 @@
 package map;
 
 import entity.Entity;
-import entity.item.Item;
+import entity.dynamic.item.Item;
 import graphics.Screen;
 import graphics.Sprite;
 import graphics.SpriteHashtable;

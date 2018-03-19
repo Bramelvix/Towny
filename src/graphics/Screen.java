@@ -1,7 +1,7 @@
 package graphics;
 
 import entity.Entity;
-import entity.Tree;
+import entity.nonDynamic.Tree;
 import map.Tile;
 
 import java.util.List;

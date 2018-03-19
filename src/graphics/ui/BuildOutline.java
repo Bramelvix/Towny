@@ -2,7 +2,8 @@ package graphics.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import entity.mob.work.BuildingRecipe;
+
+import entity.dynamic.mob.work.BuildingRecipe;
 import input.Mouse;
 import main.Game;
 import map.Level;

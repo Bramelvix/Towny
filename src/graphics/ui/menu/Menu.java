@@ -4,7 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
-import entity.mob.work.Recipe;
+
+import entity.dynamic.mob.work.Recipe;
 import input.Mouse;
 
 public class Menu { // the menu is the little options menu that shows up when

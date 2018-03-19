@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import entity.Entity;
-import entity.mob.work.BuildingRecipe;
-import entity.mob.work.ItemRecipe;
-import entity.mob.work.Recipe;
+import entity.dynamic.mob.work.BuildingRecipe;
+import entity.dynamic.mob.work.ItemRecipe;
+import entity.dynamic.mob.work.Recipe;
 import input.Mouse;
 
 public class MenuItem {
