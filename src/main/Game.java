@@ -211,7 +211,8 @@ public class Game implements Runnable {
 
     private void updateUI() {
         ui.update(mouse, xScroll, yScroll);
-        moveCamera();
+        //moveCamera();
+        getKeyPositions();
         if (mouse.getMouseWheelMoved() != 0) {
             currentLayerNumber += mouse.getMouseWheelMoved();
             if (currentLayerNumber < 0) {
@@ -509,20 +510,27 @@ public class Game implements Runnable {
         }
     }
 
-    private void moveCamera() {
+    private void moveCamera(int xScroll, int yScroll) {
+        this.xScroll += xScroll;
+        this.yScroll += yScroll;
+    }
+
+    private void getKeyPositions() {
+        int _yScroll = 0;
+        int _xScroll = 0;
         if (Keyboard.getKeyPressed(KeyEvent.VK_UP) && yScroll > 0) {
-            yScroll -= 2;
+            _yScroll -= 2;
         }
         if (Keyboard.getKeyPressed(KeyEvent.VK_DOWN) && yScroll < (map[currentLayerNumber].height * Tile.SIZE) - 1 - height) {
-            yScroll += 2;
+            _yScroll += 2;
         }
         if (Keyboard.getKeyPressed(KeyEvent.VK_LEFT) && xScroll > 0) {
-            xScroll -= 2;
+            _xScroll -= 2;
         }
         if (Keyboard.getKeyPressed(KeyEvent.VK_RIGHT) && xScroll < (map[currentLayerNumber].width * Tile.SIZE) - width - 1) {
-            xScroll += 2;
+            _xScroll += 2;
         }
-
+        moveCamera(_xScroll, _yScroll);
     }
 
     private <T extends Mob> void update(T mob, Iterator<T> iterator) {

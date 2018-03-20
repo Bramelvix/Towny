@@ -32,6 +32,10 @@ public class Mouse extends MouseAdapter implements MouseInputListener, MouseWhee
     private boolean releasedLeft; // has the left mouse been released
     private boolean releasedRight; // has the left mouse been released
 
+    private boolean isMiddlePressed = false;
+    private int dragOffsetX = 0;
+    private int dragOffsetY = 0;
+
     // constructor
     public Mouse(Game game) {
         this.game = game;
@@ -82,7 +86,17 @@ public class Mouse extends MouseAdapter implements MouseInputListener, MouseWhee
     @Override
     public void mousePressed(MouseEvent arg0) {
         mouseB = arg0.getButton();
-
+        if (arg0.getButton() == 2) {
+            isMiddlePressed = true;
+            trueXpixels = arg0.getX();
+            trueYpixels = arg0.getY();
+            trueX = trueXpixels / Game.SCALE;
+            trueY = trueYpixels / Game.SCALE;
+            mouseX = trueX + game.xScroll;
+            mouseY = trueY + game.yScroll;
+            dragOffsetX = mouseX;
+            dragOffsetY = mouseY;
+        }
     }
 
     @Override
@@ -90,6 +104,9 @@ public class Mouse extends MouseAdapter implements MouseInputListener, MouseWhee
         mouseB = -1;
         if (arg0.getButton() == 1) {
             releasedLeft = true;
+        }
+        if (arg0.getButton() == 2) {
+            isMiddlePressed = false;
         }
         if (arg0.getButton() == 3) {
             releasedRight = true;
@@ -140,8 +157,13 @@ public class Mouse extends MouseAdapter implements MouseInputListener, MouseWhee
         mouseY = trueY + game.yScroll;
         mouseTileX = mouseX / 16;
         mouseTileY = mouseY / 16;
-        
 
+        if (isMiddlePressed) {
+            int deltaX = (game.xScroll)-mouseX;
+            int deltaY = (game.yScroll)-mouseY;
+            game.xScroll = deltaX+dragOffsetX;
+            game.yScroll = deltaY+dragOffsetY;
+        }
     }
 
     @Override
