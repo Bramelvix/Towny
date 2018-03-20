@@ -5,14 +5,15 @@ import entity.dynamic.mob.Villager;
 import entity.nonDynamic.Resource;
 import graphics.Screen;
 import graphics.SpriteHashtable;
+import map.Level;
 import sound.Sound;
 
 public class Tree extends Resource {
     private byte chopped = 100;
 
     // basic constructor
-    public Tree(int x, int y) {
-        super(x, y);
+    public Tree(int x, int y, int z, Level level) {
+        super(x, y, z, level);
         sprites.add(SpriteHashtable.get(12));
         sprites.add(SpriteHashtable.get(13));
         setVisible(true);
@@ -33,8 +34,8 @@ public class Tree extends Resource {
             chopped--;
             return false;
         } else {
-            worker.level.removeEntity(this);
-            worker.level.addItem(ItemHashtable.get(1, this.x, this.y));
+            level.removeEntity(this);
+            level.addItem(ItemHashtable.get(1, this.x, this.y, this.z));
             return true;
         }
 

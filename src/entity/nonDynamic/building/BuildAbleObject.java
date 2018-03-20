@@ -2,10 +2,11 @@ package entity.nonDynamic.building;
 
 import entity.Entity;
 import entity.dynamic.item.Item;
+import entity.nonDynamic.StaticEntity;
 import map.Level;
 import sound.Sound;
 
-public abstract class BuildAbleObject extends Entity {
+public abstract class BuildAbleObject extends StaticEntity {
     private boolean open; // can a villager walk over the object
     public boolean initialised = false; // has the building been initialised
     private byte condition = 0; // condition of the building (0=not built ,100= done)
@@ -31,7 +32,7 @@ public abstract class BuildAbleObject extends Entity {
 
     public void initialise(int x, int y, Level level) {
         this.level = level;
-        setLocation(x * 16, y * 16);
+        setLocation(x * 16, y * 16, z);
         if (isOpen()) {
             level.addEntity(this, false);
         } else {

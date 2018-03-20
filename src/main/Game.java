@@ -119,13 +119,13 @@ public class Game implements Runnable {
     }
 
     private void spawnvills() {
-        Villager vil1 = new Villager(144, 144, map[currentLayerNumber]);
+        Villager vil1 = new Villager(144, 144, 0, map);
         vil1.addClothing(new Clothing("Brown Shirt", vil1, SpriteHashtable.get(70), "A brown tshirt", ClothingType.SHIRT));
         addVillager(vil1);
-        Villager vil2 = new Villager(144, 160, map[currentLayerNumber]);
+        Villager vil2 = new Villager(144, 160, 0, map);
         vil2.addClothing(new Clothing("Green Shirt", vil2, SpriteHashtable.get(74), "A green tshirt", ClothingType.SHIRT));
         addVillager(vil2);
-        Villager vil3 = new Villager(160, 160, map[currentLayerNumber]);
+        Villager vil3 = new Villager(160, 160, 0, map);
         vil3.addClothing(new Clothing("Green Shirt", vil3, SpriteHashtable.get(75), "A green tshirt", ClothingType.SHIRT));
         addVillager(vil3);
 
@@ -134,7 +134,7 @@ public class Game implements Runnable {
     private void spawnZombies() {
         int teller = Entity.RANDOM.nextInt(5) + 1;
         for (int i = 0; i < teller; i++) {
-            Zombie zomb = new Zombie(map[currentLayerNumber], Entity.RANDOM.nextInt(256) + 16, Entity.RANDOM.nextInt(256) + 16);
+            Zombie zomb = new Zombie(map, Entity.RANDOM.nextInt(256) + 16, Entity.RANDOM.nextInt(256) + 16, 0);
             mobs.add(zomb);
         }
     }
@@ -243,7 +243,7 @@ public class Game implements Runnable {
 
     private Villager anyVillHoverOn(int x, int y) {
         for (Villager i : vills) {
-            if (i.hoverOn(x, y))
+            if (i.hoverOn(x, y, currentLayerNumber))
                 return i;
         }
         return null;
@@ -259,7 +259,7 @@ public class Game implements Runnable {
 
     private Mob anyMobHoverOn(int x, int y) {
         for (Mob i : mobs) {
-            if (i.hoverOn(x, y))
+            if (i.hoverOn(x, y, currentLayerNumber))
                 return i;
         }
         return null;
@@ -407,7 +407,7 @@ public class Game implements Runnable {
                 if (map[currentLayerNumber].tileIsEmpty(blok[0] / 16, blok[1] / 16)) {
                     Villager idle = getIdlestVil();
                     idle.setMovement(null);
-                    idle.addBuildJob(blok[0], blok[1], ui.getBuildRecipeOutline().getProduct(),
+                    idle.addBuildJob(blok[0], blok[1], currentLayerNumber, ui.getBuildRecipeOutline().getProduct(),
                             ui.getBuildRecipeOutline().getResources()[0]);
                 }
             }
@@ -563,17 +563,17 @@ public class Game implements Runnable {
         int x1 = (xScroll + screen.width + Sprite.SIZE);
         int y1 = (yScroll + screen.height + Sprite.SIZE);
         for (Mob i : mobs) {
-            if (i.level.equals(map[currentLayerNumber]) && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
+            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
                 i.render(screen);
             }
         }
         for (Villager i : vills) {
-            if (i.level.equals(map[currentLayerNumber]) && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
+            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
                 i.render(screen);
             }
         }
         for (Villager i : sols) {
-            if (i.level.equals(map[currentLayerNumber]) && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
+            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
                 i.render(screen);
             }
         }

@@ -16,11 +16,13 @@ import graphics.SpriteHashtable;
 public class Level {
     private Tile[][] tiles; // array of tiles on the map
     public int width, height; // map with and height
+    public int depth;
 
     // basic constructor
     public Level(int height, int width, int elevation) {
         this.width = width;
         this.height = height;
+        depth = elevation;
         tiles = new Tile[width][height];
         generateLevel(elevation);
 
@@ -249,7 +251,7 @@ public class Level {
         }
         int rand = Entity.RANDOM.nextInt(10);
         if (rand == 1) {
-            addEntity(new Tree(x * 16, y * 16), true);
+            addEntity(new Tree(x * 16, y * 16, depth, this), true);
         }
 
     }
@@ -263,19 +265,19 @@ public class Level {
         if (rand <= 4) {
             switch (rand) {
                 case 0:
-                    addEntity(new Ore(x * 16, y * 16, OreType.GOLD), true);
+                    addEntity(new Ore(x * 16, y * 16, depth, this, OreType.GOLD), true);
                     break;
                 case 1:
-                    addEntity(new Ore(x * 16, y * 16, OreType.IRON), true);
+                    addEntity(new Ore(x * 16, y * 16, depth, this, OreType.IRON), true);
                     break;
                 case 2:
-                    addEntity(new Ore(x * 16, y * 16, OreType.COAL), true);
+                    addEntity(new Ore(x * 16, y * 16, depth, this, OreType.COAL), true);
                     break;
                 case 3:
-                    addEntity(new Ore(x * 16, y * 16, OreType.COPPER), true);
+                    addEntity(new Ore(x * 16, y * 16, depth, this, OreType.COPPER), true);
                     break;
                 case 4:
-                    addEntity(new Ore(x * 16, y * 16, OreType.CRYSTAL), true);
+                    addEntity(new Ore(x * 16, y * 16, depth, this, OreType.CRYSTAL), true);
                     break;
             }
             return true;
@@ -287,7 +289,7 @@ public class Level {
         if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
             return;
         }
-        addEntity(new Ore(x * 16, y * 16, OreType.STONE), true);
+        addEntity(new Ore(x * 16, y * 16, depth, this, OreType.STONE), true);
 
     }
 

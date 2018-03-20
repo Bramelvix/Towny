@@ -37,13 +37,13 @@ public class MoveItemJob extends Job {
     @Override
     protected void start() {
         started = true;
-        if (!pickUpJob && (worker.getHolding() == null || (!worker.level.isClearTile(xloc / 16, yloc / 16) && !(worker.level.getHardEntityOn(xloc, yloc) instanceof Chest)))) {
+        if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[worker.getZ()].isClearTile(xloc / 16, yloc / 16) && !(worker.levels[worker.getZ()].getHardEntityOn(xloc, yloc) instanceof Chest)))) {
             completed = true;
             return;
         }
-        if (worker.level.getHardEntityOn(xloc, yloc) instanceof Chest) {
-            chest = (Chest) worker.level.getHardEntityOn(xloc, yloc);
-            worker.setMovement(worker.getPath(worker.level.getNearestEmptySpot(xloc, yloc)));
+        if (worker.levels[worker.getZ()].getHardEntityOn(xloc, yloc) instanceof Chest) {
+            chest = (Chest) worker.levels[worker.getZ()].getHardEntityOn(xloc, yloc);
+            worker.setMovement(worker.getPath(worker.levels[worker.getZ()].getNearestEmptySpot(xloc, yloc)));
         } else {
             worker.setMovement(worker.getPath(xloc / 16, yloc / 16));
         }
@@ -57,13 +57,13 @@ public class MoveItemJob extends Job {
                     completed = true;
                 } else {
                     if (chest != null) {
-                        if (worker.aroundTile(material.getX(), material.getY())) {
+                        if (worker.aroundTile(material.getX(), material.getY(), material.getZ())) {
                             if (worker.pickUp(material, chest)) {
                                 completed = true;
                             }
                             return;
                         }
-                    } else if (worker.onSpot(material.getX(), material.getY())) {
+                    } else if (worker.onSpot(material.getX(), material.getY(), material.getZ())) {
                         if (worker.pickUp(material)) {
                             completed = true;
                         }
@@ -81,12 +81,12 @@ public class MoveItemJob extends Job {
 
             } else {
                 if (chest != null) {
-                    if (worker.aroundTile(xloc, yloc)) {
+                    if (worker.aroundTile(xloc, yloc, zloc)) {
                         worker.drop(chest);
                         completed = true;
                         return;
                     }
-                } else if (worker.onSpot(xloc, yloc)) {
+                } else if (worker.onSpot(xloc, yloc, zloc)) {
                     worker.drop();
                     completed = true;
                     return;

@@ -18,8 +18,8 @@ public class Ore extends Resource {
 
 
     // basic constructor
-    public Ore(int x, int y, OreType type) {
-        super(x, y);
+    public Ore(int x, int y, int z, Level level, OreType type) {
+        super(x, y, z, level);
         decideSprite(type);
         setVisible(true);
     }
@@ -28,22 +28,22 @@ public class Ore extends Resource {
     private void decideSprite(OreType type) {
         switch (type) {
             case IRON:
-                setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(54), ItemHashtable.get(5, this.x, this.y));
+                setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(54), ItemHashtable.get(5, this.x, this.y, this.z));
                 break;
             case GOLD:
-                setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(56), ItemHashtable.get(7, this.x, this.y));
+                setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(56), ItemHashtable.get(7, this.x, this.y, this.z));
                 break;
             case COAL:
-                setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(53), ItemHashtable.get(8, this.x, this.y));
+                setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(53), ItemHashtable.get(8, this.x, this.y, this.z));
                 break;
             case CRYSTAL:
-                setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(57), ItemHashtable.get(9, this.x, this.y));
+                setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(57), ItemHashtable.get(9, this.x, this.y, this.z));
                 break;
             case COPPER:
-                setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(55), ItemHashtable.get(6, this.x, this.y));
+                setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(55), ItemHashtable.get(6, this.x, this.y, this.z));
                 break;
             case STONE:
-                setOre(type.toString().toLowerCase(), SpriteHashtable.get(161), ItemHashtable.get(10, this.x, this.y));
+                setOre(type.toString().toLowerCase(), SpriteHashtable.get(161), ItemHashtable.get(10, this.x, this.y, this.z));
                 break;
         }
     }
@@ -57,10 +57,10 @@ public class Ore extends Resource {
 
     // work method executed by the villager when mining
     public boolean work(Villager worker) {
-        if (!worker.level.isClearTile(this.x / 16, this.y / 16) && worker.level.getItemOn(this.x, this.y) != null
-                && worker.level.getNearestEmptySpot(this.x, this.y) != null) {
-            worker.addJob(new MoveItemJob(worker.level.getItemOn(this.x, this.y), worker));
-            Tile tile = worker.level.getNearestEmptySpot(this.x, this.y);
+        if (!level.isClearTile(this.x / 16, this.y / 16) && level.getItemOn(this.x, this.y) != null
+                && level.getNearestEmptySpot(this.x, this.y) != null) {
+            worker.addJob(new MoveItemJob(level.getItemOn(this.x, this.y), worker));
+            Tile tile = level.getNearestEmptySpot(this.x, this.y);
             worker.addJob(new MoveItemJob(tile.x * 16, tile.y * 16, worker));
             worker.addJob(new Job(this, worker));
             return true;
@@ -71,8 +71,8 @@ public class Ore extends Resource {
             mined--;
             return false;
         } else {
-            worker.level.removeEntity(this);
-            worker.level.addItem(minedItem.copy());
+            level.removeEntity(this);
+            level.addItem(minedItem.copy());
             return true;
         }
     }

@@ -22,7 +22,7 @@ public class CraftJob extends Job {
                 completed = true;
                 return;
             }
-            Tile empty = worker.level.getNearestEmptySpot(station.getX(), station.getY());
+            Tile empty = worker.levels[worker.getZ()].getNearestEmptySpot(station.getX(), station.getY());
             if (empty != null) {
                 int stationDropPuntx = empty.x * 16;
                 int stationDropPunty = empty.y * 16;
@@ -39,7 +39,7 @@ public class CraftJob extends Job {
     @Override
     public void execute() {
         if (started && !completed) {
-            if (!worker.aroundTile(station.getX(), station.getY())) {
+            if (!worker.aroundTile(station.getX(), station.getY(), station.getZ())) {
                 if (worker.isMovementNull()) {
                     completed = true;
                 } else {
@@ -49,14 +49,14 @@ public class CraftJob extends Job {
                 if (!itemsUpdated) {
                     station.setRunning(true);
                     for (Item i : resources) {
-                        worker.level.removeItem(i);
+                        worker.levels[worker.getZ()].removeItem(i);
                     }
                     itemsUpdated = true;
                 }
                 if (craft()) {
                     worker.setHolding(product);
                     product.setVisible(true);
-                    if (worker.level.isClearTile(worker.getX() / 16, worker.getY() / 16)) {
+                    if (worker.levels[worker.getZ()].isClearTile(worker.getX() / 16, worker.getY() / 16)) {
                         worker.drop();
                     }
                     completed = true;

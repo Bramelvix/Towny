@@ -16,7 +16,7 @@ public abstract class Container extends BuildAbleObject {
 
     public <T extends Item> void addItemTo(T item) {
         if (!isFull()) {
-            item.setLocation(x, y);
+            item.setLocation(x, y, z);
             items.add(item);
         }
     }

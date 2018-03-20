@@ -8,7 +8,7 @@ import entity.dynamic.mob.Villager;
 public class Job implements Workable {
     boolean completed; // is the job done
     Item material; // what materials are needed for the job (like logs for a wall)
-    int xloc, yloc; // the x and y location of the job
+    int xloc, yloc, zloc; // the x and y location of the job
     private boolean needsMaterial; // does the worker still need the materials
     Villager worker; // the villager doing the job
     private Resource jobObj; // the resource the worker needs to gather
@@ -18,11 +18,12 @@ public class Job implements Workable {
     private boolean goingToPickUpItem = false;
 
     // constructors
-    private Job(int xloc, int yloc, Villager worker) {
+    private Job(int xloc, int yloc, int zloc, Villager worker) {
         this(worker);
         completed = false;
         this.xloc = xloc;
         this.yloc = yloc;
+        this.zloc = zloc;
         needsMaterial = false;
     }
 
@@ -34,8 +35,8 @@ public class Job implements Workable {
         return completed;
     }
 
-    public Job(int xloc, int yloc, Item mat, BuildAbleObject object, Villager worker) {
-        this(xloc, yloc, object, worker);
+    public Job(int xloc, int yloc, int zloc, Item mat, BuildAbleObject object, Villager worker) {
+        this(xloc, yloc, zloc, object, worker);
         needsMaterial = true;
         material = mat;
         if (material == null) {
@@ -44,15 +45,15 @@ public class Job implements Workable {
 
     }
 
-    public Job(int xloc, int yloc, BuildAbleObject object, Villager worker) { //construction job that requires no building materials
-        this(xloc, yloc, worker);
+    public Job(int xloc, int yloc, int zloc, BuildAbleObject object, Villager worker) { //construction job that requires no building materials
+        this(xloc, yloc, zloc, worker);
         buildJob = true;
         buildJobObj = object;
         needsMaterial = false;
     }
 
     public Job(Resource e, Villager worker) {
-        this(e.getX(), e.getY(), worker);
+        this(e.getX(), e.getY(), e.getZ(), worker);
         jobObj = e;
 
     }
@@ -88,7 +89,7 @@ public class Job implements Workable {
             goPickupItem();
         } else {
             if (!completed && started) {
-                if (!worker.aroundTile(xloc, yloc)) {
+                if (!worker.aroundTile(xloc, yloc, zloc)) {
                     if (worker.isMovementNull()) {
                         completed = true;
                     } else {
@@ -101,13 +102,13 @@ public class Job implements Workable {
                         }
                     } else {
                         if (buildJob && buildJobObj != null) {
-                            if (!worker.level.tileIsEmpty(xloc / 16, yloc / 16) && !buildJobObj.initialised) {
+                            if (!worker.levels[worker.getZ()].tileIsEmpty(xloc / 16, yloc / 16) && !buildJobObj.initialised) {
                                 // wait if the buildLocation is blocked by an item or entity
                                 System.out.println("Postponing Construction of: " + buildJobObj.toString());
                                 return;
                             }
                             if (!buildJobObj.initialised) {
-                                buildJobObj.initialise(xloc / 16, yloc / 16, worker.level);
+                                buildJobObj.initialise(xloc / 16, yloc / 16, worker.levels[worker.getZ()]);
                             }
                             completed = buildJobObj.build();
                             worker.setHolding(null);

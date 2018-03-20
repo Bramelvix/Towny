@@ -19,8 +19,8 @@ public abstract class ItemHashtable {
         return table.get(key).copy();
     }
 
-    public static Item get(int key, int x, int y) {
-        return table.get(key).copy(x, y);
+    public static Item get(int key, int x, int y, int z) {
+        return table.get(key).copy(x, y, z);
     }
 
     public static void registerItems() throws Exception {

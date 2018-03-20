@@ -29,9 +29,9 @@ public class Villager extends Humanoid {
     private List<Job> jobs; // jobs the villager needs to do
 
     // basic constructors
-    public Villager(int x, int y, Level level) {
-        this(level, x, y);
-        this.sprite = SpriteHashtable.getPerson();
+    public Villager(int x, int y, int z, Level[] levels) {
+        this(levels, x, y, z);
+        this.sprites.add(SpriteHashtable.getPerson());
         inventory = new VillagerInventory(this);
         jobs = new ArrayList<>();
         male = Entity.RANDOM.nextBoolean();
@@ -49,12 +49,12 @@ public class Villager extends Humanoid {
         return 10;
     }
 
-    private Villager(Level level, int x, int y) {
-        super(level, x, y);
+    private Villager(Level[] levels, int x, int y, int z) {
+        super(levels, x, y, z);
     }
 
-    public Villager(int x, int y, Level level, int hairnr, VillagerInventory wearing, Item holding, boolean male) {
-        this(x, y, level);
+    public Villager(int x, int y, int z, Level[] levels, int hairnr, VillagerInventory wearing, Item holding, boolean male) {
+        this(x, y, z, levels);
         this.hairnr = hairnr;
         this.male = male;
         initHair(false);
@@ -84,7 +84,7 @@ public class Villager extends Humanoid {
         }
         Item closest = null;
         Path path = null;
-        for (Item level_item : level.getItems()) {
+        for (Item level_item : levels[z].getItems()) {
             if (level_item != null && level_item.isSameType(item) && level_item.isReserved(this)) {
                 if (closest == null || path == null
                         || (getPath(level_item.getX() >> 4, level_item.getY() >> 4) != null
@@ -116,9 +116,9 @@ public class Villager extends Humanoid {
 
     // pickup an item
     public <T extends Item> boolean pickUp(T e) {
-        if (onSpot(e.getX(), e.getY())) {
+        if (onSpot(e.getX(), e.getY(), e.getZ())) {
             e.setReserved(this);
-            level.removeItem(e);
+            levels[z].removeItem(e);
             pickUpItem(e);
             return true;
         }
@@ -144,13 +144,13 @@ public class Villager extends Humanoid {
     public void drop() {
         if (getHolding() != null) {
             getHolding().removeReserved();
-            level.addItem(getHolding());
+            levels[z].addItem(getHolding());
             setHolding(null);
         }
     }
 
     public void drop(Chest chest) {
-        if (getHolding() != null && this.aroundTile(chest.getX(), chest.getY())) {
+        if (getHolding() != null && this.aroundTile(chest.getX(), chest.getY(), chest.getZ())) {
             chest.addItemTo(getHolding());
             getHolding().removeReserved();
             setHolding(null);
@@ -158,7 +158,7 @@ public class Villager extends Humanoid {
     }
 
     public <T extends Item> boolean pickUp(T e, Chest chest) {
-        if (aroundTile(chest.getX(), chest.getY())) {
+        if (aroundTile(chest.getX(), chest.getY(), chest.getZ())) {
             Item item = chest.takeItem(e);
             if (item != null) {
                 pickUpItem(item);
@@ -171,7 +171,7 @@ public class Villager extends Humanoid {
 
     public <T extends Item> void dropItem(T item) {
         if (item != null) {
-            level.addItem(item);
+            levels[z].addItem(item);
         }
     }
 
@@ -197,11 +197,11 @@ public class Villager extends Humanoid {
     }
 
     // add a buildjob
-    public void addBuildJob(int x, int y, BuildAbleObject object, Item resource) {
+    public void addBuildJob(int x, int y, int z, BuildAbleObject object, Item resource) {
         if (resource == null) {
-            addJob(new Job(x, y, object, this));
+            addJob(new Job(x, y, z, object, this));
         } else {
-            addJob(new Job(x, y, getNearestItemOfType(resource), object, this));
+            addJob(new Job(x, y, z, getNearestItemOfType(resource), object, this));
         }
 
     }
@@ -217,7 +217,7 @@ public class Villager extends Humanoid {
             }
             move();
         }
-        inventory.update(x, y);
+        inventory.update(x, y, z);
 
     }
 

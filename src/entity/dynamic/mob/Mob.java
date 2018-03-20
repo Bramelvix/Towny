@@ -6,13 +6,12 @@ import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
 import entity.pathfinding.Point;
 import graphics.Screen;
-import graphics.Sprite;
 import map.Level;
 import map.Tile;
 
 //abstract mob class for villagers and monsters/animals to extend
 public abstract class Mob extends Entity {
-    public Sprite sprite;
+    public Level[] levels; // level in which the entity is placed
     private int idletimer = getIdleTimer();// timer for the mob to idle
     private Direction dir;
     private static PathFinder finder;
@@ -20,14 +19,10 @@ public abstract class Mob extends Entity {
     private int armour = 0;
     private Path movement; // path for the Mob to follow
     private int counter; // counter of steps along the path
-    private boolean arrived = false; // has the mob arrived at the path's
-    // destination
+    private boolean arrived = false; // has the mob arrived at the path's destination
 
-    // move a mob with a combination of x
-    // direction and y direction (both
-    // between -1 and 1). example: for x -1
-    // is left and 1 is right.
-    public void move(int xa, int ya) { // redelijk korte notatie
+    // move a mob with a combination of x direction and y direction (both between -1 and 1).
+    public void move(int xa, int ya) {
         if (xa > 0) {
             if (ya > 0) {
                 dir = Direction.RECHTS_OMLAAG;
@@ -105,7 +100,7 @@ public abstract class Mob extends Entity {
             if (!arrived) {
                 Point step = movement.getStep(counter);
                 if (step != null) {
-                    if (!level.isWalkAbleTile(step.x, step.y)) {
+                    if (!levels[z].isWalkAbleTile(step.x, step.y)) {
                         int destx = movement.getXdest();
                         int desty = movement.getYdest();
                         movement = getShortest(destx, desty);
@@ -123,15 +118,15 @@ public abstract class Mob extends Entity {
     }
 
     // is the mob around a tile (x and y in pixels)
-    public boolean aroundTile(int endx, int endy) {
-        return ((this.x <= ((endx + 16))) && (this.x >= ((endx - 16)))
+    public boolean aroundTile(int endx, int endy, int endz) {
+        return (this.z == endz && (this.x <= ((endx + 16))) && (this.x >= ((endx - 16)))
                 && ((this.y >= ((endy - 16))) && (this.y <= ((endy + 16)))));
 
     }
 
 
-    public boolean onSpot(int x, int y) {
-        return (this.x / 16 == x / 16 && this.y / 16 == y / 16);
+    public boolean onSpot(int x, int y, int z) {
+        return (this.z == z && this.x / 16 == x / 16 && this.y / 16 == y / 16);
     }
 
     // pathfinder
@@ -151,10 +146,10 @@ public abstract class Mob extends Entity {
     }
 
     // constructor
-    Mob(Level level) {
+    Mob(Level[] levels) {
         super();
-        this.level = level;
-        finder = new PathFinder(level);
+        this.levels = levels;
+        finder = new PathFinder(levels[z]);
     }
 
     public abstract void die();
@@ -185,13 +180,13 @@ public abstract class Mob extends Entity {
     // calculates collision
     private boolean collision() {
         return ((dir == Direction.OMLAAG || dir == Direction.LINKS_OMLAAG || dir == Direction.RECHTS_OMLAAG)
-                || level.getTile((x / 16), ((y + 1) / 16)).solid())
+                || levels[z].getTile((x / 16), ((y + 1) / 16)).solid())
                 && ((dir == Direction.OMHOOG || dir == Direction.LINKS_OMHOOG || dir == Direction.RECHTS_OMHOOG)
-                || level.getTile((x / 16), ((y - 1) / 16)).solid())
+                || levels[z].getTile((x / 16), ((y - 1) / 16)).solid())
                 && ((dir == Direction.LINKS || dir == Direction.LINKS_OMHOOG || dir == Direction.LINKS_OMLAAG)
-                || level.getTile(((x - 1) / 16), (y / 16)).solid())
+                || levels[z].getTile(((x - 1) / 16), (y / 16)).solid())
                 && ((dir == Direction.RECHTS || dir == Direction.RECHTS_OMHOOG || dir == Direction.RECHTS_OMLAAG)
-                || level.getTile(((x + 1) / 16), (y / 16)).solid()) && (level.getTile((x / 16), (y / 16)).solid() || level.getTile(((x + 1) / 16), ((y + 1) / 16)).solid());
+                || levels[z].getTile(((x + 1) / 16), (y / 16)).solid()) && (levels[z].getTile((x / 16), (y / 16)).solid() || levels[z].getTile(((x + 1) / 16), ((y + 1) / 16)).solid());
 
     }
 
@@ -207,6 +202,6 @@ public abstract class Mob extends Entity {
 
     // method to render onto the screen
     public void render(Screen screen) {
-        screen.renderSprite(x, y, this.sprite); // renders the body
+        screen.renderMultiSprite(x, y, this.sprites); // renders the body
     }
 }

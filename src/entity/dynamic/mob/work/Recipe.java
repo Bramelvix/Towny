@@ -8,12 +8,15 @@ public class Recipe {
     Entity product;
 
     <T extends Entity> Recipe(T product, Item[] res) {
-        this.product = product;
-        if (res == null) {
-            resources = new Item[1];
-        } else {
+        this(product);
+        if (res != null) {
             this.resources = res;
         }
+    }
+
+    <T extends Entity> Recipe(T product) {
+        this.product = product;
+        resources = new Item[1];
     }
 
     public String getRecipeName() {
