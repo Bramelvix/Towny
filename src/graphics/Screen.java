@@ -49,27 +49,25 @@ public class Screen {
 
     // render trees
     public void renderTree(int xp, int yp, Tree e) {
-        renderSprite(xp, yp, e.sprites.get(0), e.isSelected(), true);
-        renderSprite(xp, yp - Tile.SIZE, e.sprites.get(1), e.isSelected(), true);
+        renderSprite(xp, yp, e.sprites.get(0), e.isSelected());
+        renderSprite(xp, yp - Tile.SIZE, e.sprites.get(1), e.isSelected());
 
     }
 
     // render sprites
     public void renderSprite(int xp, int yp, Sprite e) {
-        renderSprite(xp, yp, e, false, true);
+        renderSprite(xp, yp, e, false);
     }
 
     public void renderMultiSprite(int xp, int yp, List<Sprite> e) {
         for (Sprite sprite : e) {
-            renderSprite(xp, yp, sprite, false, true);
+            renderSprite(xp, yp, sprite, false);
         }
     }
 
-    private void renderSprite(int xp, int yp, Sprite e, boolean selected, boolean forceOffset) {
-        if (forceOffset) {
-            xp -= xOffset;
-            yp -= yOffset;
-        }
+    private void renderSprite(int xp, int yp, Sprite e, boolean selected) {
+        xp -= xOffset;
+        yp -= yOffset;
         for (int y = 0; y < Sprite.SIZE; y++) {
             int ya = y + yp;
             for (int x = 0; x < Sprite.SIZE; x++) {
