@@ -37,15 +37,15 @@ public class MoveItemJob extends Job {
     @Override
     protected void start() {
         started = true;
-        if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[worker.getZ()].isClearTile(xloc / 16, yloc / 16) && !(worker.levels[worker.getZ()].getHardEntityOn(xloc, yloc) instanceof Chest)))) {
+        if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[worker.getZ()].isClearTile(xloc / 16, yloc / 16) && !(worker.levels[worker.getZ()].getEntityOn(xloc, yloc) instanceof Chest)))) {
             completed = true;
             return;
         }
-        if (worker.levels[worker.getZ()].getHardEntityOn(xloc, yloc) instanceof Chest) {
-            chest = (Chest) worker.levels[worker.getZ()].getHardEntityOn(xloc, yloc);
-            worker.setMovement(worker.getPath(worker.levels[worker.getZ()].getNearestEmptySpot(xloc, yloc)));
+        if (worker.levels[worker.getZ()].getEntityOn(xloc, yloc) instanceof Chest) {
+            chest = (Chest) worker.levels[worker.getZ()].getEntityOn(xloc, yloc);
+            worker.setPath(worker.getPath(worker.levels[worker.getZ()].getNearestEmptySpot(xloc, yloc)));
         } else {
-            worker.setMovement(worker.getPath(xloc / 16, yloc / 16));
+            worker.setPath(worker.getPath(xloc / 16, yloc / 16));
         }
 
     }

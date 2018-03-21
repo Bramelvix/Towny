@@ -14,7 +14,6 @@ public abstract class Mob extends Entity {
     public Level[] levels; // level in which the entity is placed
     private int idletimer = getIdleTimer();// timer for the mob to idle
     private Direction dir;
-    private static PathFinder finder;
     private int health = 100;
     private int armour = 0;
     private Path movement; // path for the Mob to follow
@@ -69,7 +68,7 @@ public abstract class Mob extends Entity {
         return movement == null;
     }
 
-    public void setMovement(Path path) {
+    public void setPath(Path path) {
         movement = path;
         counter = 0;
         arrived = false;
@@ -149,7 +148,6 @@ public abstract class Mob extends Entity {
     Mob(Level[] levels) {
         super();
         this.levels = levels;
-        finder = new PathFinder(levels[z]);
     }
 
     public abstract void die();
@@ -159,7 +157,7 @@ public abstract class Mob extends Entity {
 
     // pathfinder method
     public Path getPath(int tx, int ty) {
-        return finder.findPath(x / 16, y / 16, tx, ty);
+        return PathFinder.findPath(x / 16, y / 16, tx, ty, levels[z]);
 
     }
 
@@ -180,7 +178,8 @@ public abstract class Mob extends Entity {
     // calculates collision
     private boolean collision() {
         return ((dir == Direction.OMLAAG || dir == Direction.LINKS_OMLAAG || dir == Direction.RECHTS_OMLAAG)
-                || levels[z].getTile((x / 16), ((y + 1) / 16)).solid())
+                ||
+                levels[z].getTile((x / 16), ((y + 1) / 16)).solid())
                 && ((dir == Direction.OMHOOG || dir == Direction.LINKS_OMHOOG || dir == Direction.RECHTS_OMHOOG)
                 || levels[z].getTile((x / 16), ((y - 1) / 16)).solid())
                 && ((dir == Direction.LINKS || dir == Direction.LINKS_OMHOOG || dir == Direction.LINKS_OMLAAG)

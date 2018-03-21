@@ -15,7 +15,7 @@ public class FightJob extends Job {
 
     @Override
     protected void start() {
-        worker.setMovement(worker.getPath(xloc >> 4, yloc >> 4));
+        worker.setPath(worker.getPath(xloc >> 4, yloc >> 4));
         if (worker.isMovementNull()) {
             completed = true;
         }
@@ -48,7 +48,7 @@ public class FightJob extends Job {
             } else {
                 if (worker.isMovementNull()) {
                     if (worker.getPath(xloc >> 4, yloc >> 4) != null) {
-                        worker.setMovement(worker.getPath(xloc >> 4, yloc >> 4));
+                        worker.setPath(worker.getPath(xloc >> 4, yloc >> 4));
                     } else {
                         worker.drop();
                         completed = true;

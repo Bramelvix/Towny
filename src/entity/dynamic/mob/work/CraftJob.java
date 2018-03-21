@@ -79,7 +79,7 @@ public class CraftJob extends Job {
 
     @Override
     protected void start() {
-        worker.setMovement(worker.getShortest(station.getX() >> 4, station.getY() >> 4));
+        worker.setPath(worker.getShortest(station.getX() >> 4, station.getY() >> 4));
         completed = worker.isMovementNull();
         started = true;
     }

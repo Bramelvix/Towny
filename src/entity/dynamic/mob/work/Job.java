@@ -18,7 +18,7 @@ public class Job implements Workable {
     private boolean goingToPickUpItem = false;
 
     // constructors
-    private Job(int xloc, int yloc, int zloc, Villager worker) {
+    protected Job(int xloc, int yloc, int zloc, Villager worker) {
         this(worker);
         completed = false;
         this.xloc = xloc;
@@ -70,7 +70,7 @@ public class Job implements Workable {
     }
 
     protected void start() {
-        worker.setMovement(worker.getShortest(xloc / 16, yloc / 16));
+        worker.setPath(worker.getShortest(xloc / 16, yloc / 16));
         completed = worker.isMovementNull();
         started = true;
     }
@@ -102,13 +102,13 @@ public class Job implements Workable {
                         }
                     } else {
                         if (buildJob && buildJobObj != null) {
-                            if (!worker.levels[worker.getZ()].tileIsEmpty(xloc / 16, yloc / 16) && !buildJobObj.initialised) {
+                            if (!worker.levels[zloc].tileIsEmpty(xloc / 16, yloc / 16) && !buildJobObj.initialised) {
                                 // wait if the buildLocation is blocked by an item or entity
                                 System.out.println("Postponing Construction of: " + buildJobObj.toString());
                                 return;
                             }
                             if (!buildJobObj.initialised) {
-                                buildJobObj.initialise(xloc / 16, yloc / 16, worker.levels[worker.getZ()]);
+                                buildJobObj.initialise(xloc / 16, yloc / 16, worker.levels, zloc);
                             }
                             completed = buildJobObj.build();
                             worker.setHolding(null);

@@ -66,8 +66,8 @@ public class Tile {
 		this.solid = solid;
 	}
 
-	public Entity getEntity() {
-		return entity;
+	public <T extends Entity> T getEntity() {
+		return (T) entity;
 	}
 
 	public void removeEntity() {

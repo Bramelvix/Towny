@@ -57,14 +57,6 @@ public class Ore extends Resource {
 
     // work method executed by the villager when mining
     public boolean work(Villager worker) {
-        if (!level.isClearTile(this.x / 16, this.y / 16) && level.getItemOn(this.x, this.y) != null
-                && level.getNearestEmptySpot(this.x, this.y) != null) {
-            worker.addJob(new MoveItemJob(level.getItemOn(this.x, this.y), worker));
-            Tile tile = level.getNearestEmptySpot(this.x, this.y);
-            worker.addJob(new MoveItemJob(tile.x * 16, tile.y * 16, worker));
-            worker.addJob(new Job(this, worker));
-            return true;
-        }
         if (mined > 0) {
             if (mined % 20 == 0)
                 Sound.speelGeluid(Sound.stoneMining);

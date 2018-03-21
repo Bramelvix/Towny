@@ -8,6 +8,7 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.event.MouseInputListener;
 
 import main.Game;
+import map.Tile;
 
 public class Mouse extends MouseAdapter implements MouseInputListener, MouseWheelListener {
     // used to register the mouse on the screen
@@ -148,7 +149,9 @@ public class Mouse extends MouseAdapter implements MouseInputListener, MouseWhee
 
     @Override
     public void mouseDragged(MouseEvent arg0) {
-        drag = true;
+        if (clickedLinks) {
+            drag = true;
+        }
         trueXpixels = arg0.getX();
         trueYpixels = arg0.getY();
         trueX = trueXpixels / Game.SCALE;
@@ -161,7 +164,10 @@ public class Mouse extends MouseAdapter implements MouseInputListener, MouseWhee
         if (isMiddlePressed) {
             int deltaX = (game.xScroll)-mouseX;
             int deltaY = (game.yScroll)-mouseY;
-            game.xScroll = deltaX+dragOffsetX;
+            if (deltaX + dragOffsetX >= 0 && deltaX + dragOffsetX <= (game.map[game.currentLayerNumber].width * Tile.SIZE) - game.width) {
+                game.xScroll = deltaX + dragOffsetX;
+            }
+            if (deltaY + dragOffsetY >= 0 && deltaY + dragOffsetY <= (game.map[game.currentLayerNumber].height * Tile.SIZE) - game.height)
             game.yScroll = deltaY+dragOffsetY;
         }
     }

@@ -11,8 +11,8 @@ import entity.nonDynamic.building.workstations.Workstation;
 
 public class ItemRecipe extends Recipe {
 
-	public static final ItemRecipe IRON_BAR = new ItemRecipe(ItemHashtable.get(2), Furnace.class, ItemHashtable.get(5),
-			ItemHashtable.get(8));
+    public static final ItemRecipe IRON_BAR = new ItemRecipe(ItemHashtable.get(2), Furnace.class, ItemHashtable.get(1));//,
+    //ItemHashtable.get(8));
 	public static final ItemRecipe GOLD_BAR = new ItemRecipe(ItemHashtable.get(3), Furnace.class, ItemHashtable.get(7),
 			ItemHashtable.get(8));
 	public static final ItemRecipe COPPER_BAR = new ItemRecipe(ItemHashtable.get(4), Furnace.class, ItemHashtable.get(6),

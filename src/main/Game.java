@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.*;
-
 import com.sun.xml.internal.ws.util.StringUtils;
 import entity.Entity;
 import entity.dynamic.mob.work.*;
@@ -29,6 +28,7 @@ import entity.dynamic.mob.Villager;
 import entity.dynamic.mob.Zombie;
 import entity.nonDynamic.building.workstations.Anvil;
 import entity.nonDynamic.building.workstations.Furnace;
+import entity.pathfinding.PathFinder;
 import graphics.Screen;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
@@ -48,24 +48,24 @@ public class Game implements Runnable {
     public static final int height = width / 16 * 9;
     private Thread thread;
     public static final int SCALE = 3;
-    private Level[] map;
+    public Level[] map;
     private JFrame frame;
     private boolean running = false;
     private Mouse mouse;
-    private List<Villager> vills;
-    private List<Villager> sols;
-    private List<Mob> mobs;
+    private ArrayList<Villager> vills;
+    private ArrayList<Villager> sols;
+    private ArrayList<Mob> mobs;
     private Ui ui;
     private boolean paused = false;
-    private byte speed = 6;
-    private double ns = 100000000.0 / speed;
+    private byte speed = 60;
+    private double ns = 1000000000.0 / speed;
     private Villager selectedvill;
     public int xScroll = 0;
     public int yScroll = 0;
     private Screen screen;
     private BufferedImage image;
     private Canvas canvas;
-    private int currentLayerNumber = 0;
+    public int currentLayerNumber = 0;
 
     public static void main(String[] args) {
         try {
@@ -101,9 +101,10 @@ public class Game implements Runnable {
         vills = new ArrayList<>();
         sols = new ArrayList<>();
         ui = new Ui(map[currentLayerNumber]);
+        PathFinder.init(100, 100);
+
         spawnvills();
         spawnZombies();
-
         canvas.addKeyListener(new Keyboard());
         canvas.addMouseListener(mouse);
         canvas.addMouseMotionListener(mouse);
@@ -122,12 +123,12 @@ public class Game implements Runnable {
         Villager vil1 = new Villager(144, 144, 0, map);
         vil1.addClothing(new Clothing("Brown Shirt", vil1, SpriteHashtable.get(70), "A brown tshirt", ClothingType.SHIRT));
         addVillager(vil1);
-        Villager vil2 = new Villager(144, 160, 0, map);
-        vil2.addClothing(new Clothing("Green Shirt", vil2, SpriteHashtable.get(74), "A green tshirt", ClothingType.SHIRT));
-        addVillager(vil2);
-        Villager vil3 = new Villager(160, 160, 0, map);
-        vil3.addClothing(new Clothing("Green Shirt", vil3, SpriteHashtable.get(75), "A green tshirt", ClothingType.SHIRT));
-        addVillager(vil3);
+        // Villager vil2 = new Villager(144, 160, 0, map);
+        //vil2.addClothing(new Clothing("Green Shirt", vil2, SpriteHashtable.get(74), "A green tshirt", ClothingType.SHIRT));
+        //addVillager(vil2);
+        //Villager vil3 = new Villager(160, 160, 0, map);
+        //vil3.addClothing(new Clothing("Green Shirt", vil3, SpriteHashtable.get(75), "A green tshirt", ClothingType.SHIRT));
+        //addVillager(vil3);
 
     }
 
@@ -211,7 +212,6 @@ public class Game implements Runnable {
 
     private void updateUI() {
         ui.update(mouse, xScroll, yScroll);
-        //moveCamera();
         getKeyPositions();
         if (mouse.getMouseWheelMoved() != 0) {
             currentLayerNumber += mouse.getMouseWheelMoved();
@@ -316,7 +316,7 @@ public class Game implements Runnable {
         } else if (((UiIcons.isMiningSelected()) && UiIcons.hoverOnNoIcons() && mouse.getClickedLeft())
                 && (map[currentLayerNumber].selectOre(mouse.getX(), mouse.getY()) != null)) {
             Villager idle = getIdlestVil();
-            idle.setMovement(null);
+            idle.setPath(null);
             deselectAllVills();
             idle.addJob(map[currentLayerNumber].selectOre(mouse.getX(), mouse.getY()));
             ui.deSelectIcons();
@@ -331,7 +331,7 @@ public class Game implements Runnable {
         } else if (((UiIcons.isSwordsSelected()) && UiIcons.hoverOnNoIcons() && mouse.getClickedLeft())
                 && (anyMobHoverOn(mouse) != null)) {
             Villager idle = getIdlestVil();
-            idle.setMovement(null);
+            idle.setPath(null);
             deselectAllVills();
             idle.addJob(new FightJob(idle, anyMobHoverOn(mouse)));
             ui.deSelectIcons();
@@ -380,8 +380,8 @@ public class Game implements Runnable {
                     }
 
                 }
-                if (map[currentLayerNumber].getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Chest) {
-                    Chest chest = (Chest) map[currentLayerNumber].getHardEntityOn(mouse.getX(), mouse.getY());
+                if (map[currentLayerNumber].getEntityOn(mouse.getX(), mouse.getY()) instanceof Chest) {
+                    Chest chest = (Chest) map[currentLayerNumber].getEntityOn(mouse.getX(), mouse.getY());
                     for (Item i : chest.getItems()) {
                         options.add(new MenuItem((MenuItem.PICKUP), i));
                     }
@@ -391,9 +391,9 @@ public class Game implements Runnable {
                 options.add(new MenuItem(MenuItem.CANCEL));
                 ui.showMenuOn(mouse, options.toArray(new MenuItem[0]));
             } else {
-                if (map[currentLayerNumber].getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Furnace) {
+                if (map[currentLayerNumber].getEntityOn(mouse.getX(), mouse.getY()) instanceof Furnace) {
                     ui.showMenuOn(mouse, new MenuItem(MenuItem.SMELT), new MenuItem(MenuItem.CANCEL));
-                } else if (map[currentLayerNumber].getHardEntityOn(mouse.getX(), mouse.getY()) instanceof Anvil) {
+                } else if (map[currentLayerNumber].getEntityOn(mouse.getX(), mouse.getY()) instanceof Anvil) {
                     ui.showMenuOn(mouse, new MenuItem(MenuItem.SMITH), new MenuItem(MenuItem.CANCEL));
                 } else {
                     ui.showMenuOn(mouse, new MenuItem(MenuItem.CANCEL));
@@ -406,7 +406,7 @@ public class Game implements Runnable {
             for (int[] blok : coords) {
                 if (map[currentLayerNumber].tileIsEmpty(blok[0] / 16, blok[1] / 16)) {
                     Villager idle = getIdlestVil();
-                    idle.setMovement(null);
+                    idle.setPath(null);
                     idle.addBuildJob(blok[0], blok[1], currentLayerNumber, ui.getBuildRecipeOutline().getProduct(),
                             ui.getBuildRecipeOutline().getResources()[0]);
                 }
@@ -427,24 +427,25 @@ public class Game implements Runnable {
                     }
                 } else if (item.getText().contains(MenuItem.MOVE)) {
                     selectedvill.resetAll();
-                    selectedvill.setMovement(selectedvill.getPath(mouse.getTileX(), mouse.getTileY()));
+                    selectedvill.addJob(new MoveJob(mouse.getX(), mouse.getY(), currentLayerNumber, selectedvill));
+                    //selectedvill.setPath(selectedvill.getPath(mouse.getTileX(), mouse.getTileY()));
                     deselect(selectedvill);
                     ui.deSelectIcons();
                     ui.getMenu().hide();
                 } else if (item.getText().contains(MenuItem.CHOP)) {
-                    selectedvill.setMovement(null);
+                    selectedvill.setPath(null);
                     selectedvill.addJob((Tree) item.getEntity());
                     deselect(selectedvill);
                     ui.deSelectIcons();
                     ui.getMenu().hide();
                 } else if (item.getText().contains(MenuItem.FIGHT)) {
-                    selectedvill.setMovement(null);
+                    selectedvill.setPath(null);
                     selectedvill.addJob(new FightJob(selectedvill, (Mob) item.getEntity()));
                     deselect(selectedvill);
                     ui.deSelectIcons();
                     ui.getMenu().hide();
                 } else if (item.getText().contains(MenuItem.MINE)) {
-                    selectedvill.setMovement(null);
+                    selectedvill.setPath(null);
                     selectedvill.addJob((Ore) item.getEntity());
                     deselect(selectedvill);
                     ui.deSelectIcons();
@@ -455,14 +456,14 @@ public class Game implements Runnable {
                     ui.getMenu().hide();
                 } else if ((item.getText().contains(MenuItem.PICKUP) || item.getText().contains(MenuItem.EQUIP)
                         || item.getText().contains(MenuItem.WEAR)) && !ui.outlineIsVisible()) {
-                    selectedvill.setMovement(null);
+                    selectedvill.setPath(null);
                     Item e = (Item) item.getEntity();
                     selectedvill.addJob(new MoveItemJob(e, selectedvill));
                     ui.deSelectIcons();
                     deselect(selectedvill);
                     ui.getMenu().hide();
                 } else if (item.getText().contains(MenuItem.DROP) && !ui.outlineIsVisible()) {
-                    selectedvill.setMovement(null);
+                    selectedvill.setPath(null);
                     selectedvill.addJob(new MoveItemJob(ui.getMenuIngameX(), ui.getMenuIngameY(), selectedvill));
                     ui.deSelectIcons();
                     deselect(selectedvill);
@@ -478,13 +479,13 @@ public class Game implements Runnable {
                     Villager idle = getIdlestVil();
                     ItemRecipe recipe = ui.getMenu().recipeFromMenuOption(mouse, MenuItem.CRAFT);
                     if (recipe != null) {
-                        idle.setMovement(null);
+                        idle.setPath(null);
                         Item[] res = new Item[recipe.getResources().length];
                         for (int i = 0; i < res.length; i++) {
                             res[i] = idle.getNearestItemOfType(recipe.getResources()[i]);
                         }
                         idle.addJob(new CraftJob(idle, res, recipe.getProduct(),
-                                map[currentLayerNumber].getNearestWorkstation(recipe.getWorkstationClass())));
+                                map[currentLayerNumber].getNearestWorkstation(recipe.getWorkstationClass(), idle.getX(), idle.getY())));
                         ui.deSelectIcons();
                         ui.getMenu().hide();
                     }
@@ -518,13 +519,13 @@ public class Game implements Runnable {
     private void getKeyPositions() {
         int _yScroll = 0;
         int _xScroll = 0;
-        if (Keyboard.getKeyPressed(KeyEvent.VK_UP) && yScroll > 0) {
+        if (Keyboard.getKeyPressed(KeyEvent.VK_UP) && yScroll > 1) {
             _yScroll -= 2;
         }
         if (Keyboard.getKeyPressed(KeyEvent.VK_DOWN) && yScroll < (map[currentLayerNumber].height * Tile.SIZE) - 1 - height) {
             _yScroll += 2;
         }
-        if (Keyboard.getKeyPressed(KeyEvent.VK_LEFT) && xScroll > 0) {
+        if (Keyboard.getKeyPressed(KeyEvent.VK_LEFT) && xScroll > 1) {
             _xScroll -= 2;
         }
         if (Keyboard.getKeyPressed(KeyEvent.VK_RIGHT) && xScroll < (map[currentLayerNumber].width * Tile.SIZE) - width - 1) {

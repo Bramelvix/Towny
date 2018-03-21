@@ -76,8 +76,8 @@ public class Wall extends BuildAbleObject {
     }
 
     // called by villagers when they start building the wall.
-    public void initialise(int x, int y, Level level) {
-        super.initialise(x, y, level);
+    public void initialise(int x, int y, Level[] levels, int depth) {
+        super.initialise(x, y, levels, depth);
         checkSides();
         if (door) {
             setOpened(true);

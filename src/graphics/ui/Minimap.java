@@ -38,7 +38,7 @@ public class Minimap {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 pixels[y + x * width] = map.getTile(y / 2, x / 2).sprite.pixels[0];
-                Entity e = map.getHardEntityOn((y * 16) / 2, (x * 16) / 2);
+                Entity e = map.getEntityOn((y * 16) / 2, (x * 16) / 2);
                 if (e != null) {
                     pixels[y + x * width] = e.sprites.get(0).pixels[10];
                 }

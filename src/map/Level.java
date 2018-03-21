@@ -1,8 +1,11 @@
 package map;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.function.BiPredicate;
 
 import entity.*;
+import entity.nonDynamic.building.Stairs;
 import entity.nonDynamic.building.wall.Wall;
 import entity.dynamic.item.Item;
 import entity.nonDynamic.building.workstations.Workstation;
@@ -69,15 +72,18 @@ public class Level {
         return isWalkAbleTile(x, y) && isClearTile(x, y) && tiles[x][y].getEntity() == null;
     }
 
-    // if there is a wall on x and y, return it
-    public Entity getHardEntityOn(int x, int y) {
-        return tiles[x / 16][y / 16].solid() ? tiles[x / 16][y / 16].getEntity() : null;
+    public <T extends Entity> T getEntityOn(int x, int y) {
+        return tiles[x / 16][y / 16].getEntity();
     }
 
     public Tile getNearestEmptySpot(int xloc, int yloc) {
+        return getNearestSpotThatHasX(xloc, yloc, this::isClearTile);
+    }
+
+    public Tile getNearestSpotThatHasX(int xloc, int yloc, BiPredicate<Integer, Integer> p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
         int x0 = xloc / 16;
         int y0 = yloc / 16;
-        if (isClearTile(x0, y0)) {
+        if (p.test(x0, y0)) {
             return tiles[x0][y0];
         } else {
             for (int layer = 1; layer < 100; layer++) {
@@ -86,30 +92,29 @@ public class Level {
                 int dx = 1;
                 int dy = 1;
                 int err = dx - (layer << 1);
-
                 while (x >= y) {
-                    if (isClearTile(x0 + x, y0 + y)) {
+                    if (p.test(x0 + x, y0 + y)) {
                         return tiles[x0 + x][y0 + y];
                     }
-                    if (isClearTile(x0 + y, y0 + x)) {
+                    if (p.test(x0 + y, y0 + x)) {
                         return tiles[x0 + y][y0 + x];
                     }
-                    if (isClearTile(x0 - y, y0 + x)) {
+                    if (p.test(x0 - y, y0 + x)) {
                         return tiles[x0 - y][y0 + x];
                     }
-                    if (isClearTile(x0 - x, y0 + y)) {
+                    if (p.test(x0 - x, y0 + y)) {
                         return tiles[x0 - x][y0 + y];
                     }
-                    if (isClearTile(x0 - x, y0 - y)) {
+                    if (p.test(x0 - x, y0 - y)) {
                         return tiles[x0 - x][y0 - y];
                     }
-                    if (isClearTile(x0 - y, y0 - x)) {
+                    if (p.test(x0 - y, y0 - x)) {
                         return tiles[x0 - y][y0 - x];
                     }
-                    if (isClearTile(x0 + y, y0 - x)) {
+                    if (p.test(x0 + y, y0 - x)) {
                         return tiles[x0 + y][y0 - x];
                     }
-                    if (isClearTile(x0 + x, y0 - y)) {
+                    if (p.test(x0 + x, y0 - y)) {
                         return tiles[x0 + x][y0 - y];
                     }
 
@@ -130,32 +135,48 @@ public class Level {
     }
 
     public Wall getWallOn(int x, int y) {
-        Entity entity = tiles[x / 16][y / 16].getEntity();
-        return entity instanceof Wall ? (Wall) entity : null;
+        return getEntityOn(x, y) instanceof Wall ? (Wall) getEntityOn(x, y) : null;
+    }
+
+    public <T extends Workstation> T getNearestWorkstation(Class<T> workstation, int x, int y) {
+        if (getNearestSpotThatHasX(x, y, this::hasWorkStation) != null) {
+            return workstation.cast(getNearestSpotThatHasX(x, y, this::hasWorkStation).getEntity());
+        } else {
+            return null;
+        }
+    }
+
+    public Stairs getNearestStairs(int x, int y, boolean top) { //gets the nearest stairs object on the map
+        if (top) {
+            if (getNearestSpotThatHasX(x, y, this::hasTopStairs) != null) {
+                return (Stairs) getNearestSpotThatHasX(x, y, this::hasTopStairs).getEntity();
+            } else {
+                return null;
+            }
+        } else {
+            if (getNearestSpotThatHasX(x, y, this::hasBottomStairs) != null) {
+                return (Stairs) getNearestSpotThatHasX(x, y, this::hasBottomStairs).getEntity();
+            } else {
+                return null;
+            }
+        }
+    }
+
+    private boolean hasBottomStairs(int x, int y) {
+        return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 && tiles[x][y].getEntity() instanceof Stairs && !((Stairs) (tiles[x][y].getEntity())).isTop();
+    }
+
+    private boolean hasTopStairs(int x, int y) {
+        return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 && tiles[x][y].getEntity() instanceof Stairs && ((Stairs) (tiles[x][y].getEntity())).isTop();
     }
 
 
-    public <T extends Workstation> T getNearestWorkstation(Class<T> workstation) {
-        for (Tile[] row : tiles) {
-            for (Tile e : row) {
-                if (workstation.isInstance(e.getEntity())) {
-                    return workstation.cast(e.getEntity());
-                }
-            }
-        }
-        return null;
+    private boolean hasWorkStation(int x, int y) {
+        return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 && tiles[x][y].getEntity() instanceof Workstation;
     }
 
     public Item getItemOn(int x, int y) {
         return tiles[x / 16][y / 16].getItem();
-    }
-
-    public Item getItemOn(int x, int y, Item item) {
-        if (getItemOn(x, y) != null && getItemOn(x, y).isSameType(item)) {
-            return getItemOn(x, y);
-        } else {
-            return null;
-        }
     }
 
     // generate the green border around the map
@@ -336,8 +357,12 @@ public class Level {
         }
     }
 
+    public void removeEntity(int x, int y) {
+        tiles[x][y].removeEntity();
+    }
+
     public void removeEntity(Entity entity) {
-        tiles[entity.getX() / 16][entity.getY() / 16].removeEntity();
+        removeEntity(entity.getX() / 16, entity.getY() / 16);
     }
 
 }

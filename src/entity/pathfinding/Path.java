@@ -39,7 +39,7 @@ public class Path {
 		}
 	}
 
-	public void setDest(int x, int y) {
+    public Path(int x, int y) {
 		xdest = x;
 		ydest = y;
 	}

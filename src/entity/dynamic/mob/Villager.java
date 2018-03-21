@@ -3,7 +3,6 @@ package entity.dynamic.mob;
 import java.util.ArrayList;
 import java.util.List;
 
-import entity.dynamic.mob.work.BuildingRecipe;
 import entity.nonDynamic.building.BuildAbleObject;
 import entity.Entity;
 import entity.nonDynamic.Resource;
@@ -232,7 +231,7 @@ public class Villager extends Humanoid {
 
     public void resetAll() {
         jobs.clear();
-        setMovement(null);
+        setPath(null);
     }
 
     // render onto the screen
