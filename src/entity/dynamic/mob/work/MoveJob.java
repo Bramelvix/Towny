@@ -79,8 +79,9 @@ public class MoveJob extends Job {
                 if (stairs != null) {
                     stairs.goOnStairs(worker);
                 }
-                worker.setPath(paths.get(counter));
                 counter++;
+                worker.setPath(paths.get(counter));
+
 
             } else {
                 worker.move();

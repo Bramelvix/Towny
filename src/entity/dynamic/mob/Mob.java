@@ -48,9 +48,9 @@ public abstract class Mob extends Entity {
     }
 
     void idle() {
-        while (movement == null) {
-            movement = getPath((x / 16) + Entity.RANDOM.nextInt(4) - 2, (y / 16) + Entity.RANDOM.nextInt(4) - 2);
-        }
+       // while (movement == null) {
+        //    movement = getPath((x / 16) + Entity.RANDOM.nextInt(4) - 2, (y / 16) + Entity.RANDOM.nextInt(4) - 2);
+       // }
 
     }
 

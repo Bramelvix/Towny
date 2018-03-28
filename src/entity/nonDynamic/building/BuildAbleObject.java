@@ -32,7 +32,7 @@ public abstract class BuildAbleObject extends StaticEntity {
 
     public void initialise(int x, int y, Level[] levels, int depth) {
         this.level = levels[depth];
-        setLocation(x * 16, y * 16, z);
+        setLocation(x * 16, y * 16, depth);
         if (isOpen()) {
             level.addEntity(this, false);
         } else {

@@ -7,6 +7,7 @@ import entity.dynamic.mob.Villager;
 public class MoveItemJob extends Job {
     private boolean pickUpJob; // is the job a pickup or drop job
     private Chest chest;
+    private Item material;
 
     public MoveItemJob(Item material, Villager worker) {
         this(worker);

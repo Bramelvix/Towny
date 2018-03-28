@@ -29,12 +29,12 @@ public class Stairs extends BuildAbleObject {
             if (top && depth != levels.length - 1) {
                 levels[depth + 1].removeEntity(x, y);
                 Stairs otherPart = new Stairs(false);
-                otherPart.initialise(x, y, levels, depth, false);
+                otherPart.initialise(x, y, levels, depth+1, false);
                 levels[depth + 1].addEntity(otherPart, false);
             } else if (depth != 0) {
                 levels[depth - 1].removeEntity(x, y);
                 Stairs otherPart = new Stairs(true);
-                otherPart.initialise(x, y, levels, depth, false);
+                otherPart.initialise(x, y, levels, depth-1, false);
                 levels[depth - 1].addEntity(otherPart, false);
             }
         }
@@ -42,9 +42,9 @@ public class Stairs extends BuildAbleObject {
     }
 
     public void goOnStairs(Villager villager) {
-        if (top && z > 1) {
+        if (!top && z > 0) { //GO UP
             villager.setLocation(x, y, z - 1);
-        } else if (z < villager.levels.length - 1) {
+        } else if (top && z < villager.levels.length - 1) { //GO DOWN
             villager.setLocation(x, y, z + 1);
         }
     }

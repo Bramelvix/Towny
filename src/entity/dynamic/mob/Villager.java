@@ -3,6 +3,8 @@ package entity.dynamic.mob;
 import java.util.ArrayList;
 import java.util.List;
 
+import entity.dynamic.mob.work.BuildJob;
+import entity.dynamic.mob.work.GatherJob;
 import entity.nonDynamic.building.BuildAbleObject;
 import entity.Entity;
 import entity.nonDynamic.Resource;
@@ -177,7 +179,7 @@ public class Villager extends Humanoid {
     // add a job to the jobs spritesheets for the villager to do
     public void addJob(Resource e) {
         if (e != null) {
-            addJob(new Job(e, this));
+            addJob(new GatherJob(e, this));
         }
 
     }
@@ -198,9 +200,9 @@ public class Villager extends Humanoid {
     // add a buildjob
     public void addBuildJob(int x, int y, int z, BuildAbleObject object, Item resource) {
         if (resource == null) {
-            addJob(new Job(x, y, z, object, this));
+            addJob(new BuildJob(x, y, z, object, this));
         } else {
-            addJob(new Job(x, y, z, getNearestItemOfType(resource), object, this));
+            addJob(new BuildJob(x, y, z, getNearestItemOfType(resource), object, this));
         }
 
     }
