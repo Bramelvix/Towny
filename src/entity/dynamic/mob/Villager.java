@@ -22,12 +22,11 @@ import graphics.SpriteHashtable;
 import map.Level;
 
 public class Villager extends Humanoid {
-    private VillagerInventory inventory; // clothing item spritesheets
+    private VillagerInventory inventory; // clothing item list
     private boolean male; // is the villager male (true = male, false = female)
     private Sprite hair; // hair sprite
-    private int hairnr; // hair number (needed for the hair sprite to be
-    // decided)
-    private List<Job> jobs; // jobs the villager needs to do
+    private int hairnr; // hair number (needed for the hair sprite to be decided)
+    private ArrayList<Job> jobs; // jobs the villager needs to do
 
     // basic constructors
     public Villager(int x, int y, int z, Level[] levels) {
@@ -77,8 +76,7 @@ public class Villager extends Humanoid {
 
     }
 
-    // gets the item nearest to the villager with a specific name (and
-    // unreserved)
+    // gets the item nearest to the villager(of the same kind and unreserved)
     public Item getNearestItemOfType(Item item) {
         if (getHolding() != null && getHolding().isSameType(item)) {
             return getHolding();
@@ -129,11 +127,11 @@ public class Villager extends Humanoid {
 
     private <T extends Item> void pickUpItem(T e) {
         if (e instanceof Weapon) {
-            inventory.addWeapon((Weapon) e);
+            addWeapon((Weapon) e);
             return;
         } else {
             if (e instanceof Clothing) {
-                inventory.addClothing((Clothing) e);
+                addClothing((Clothing) e);
                 return;
             }
         }
@@ -190,9 +188,9 @@ public class Villager extends Humanoid {
         }
     }
 
-    public void addJob(Job e, int prio) {
+    public void addJob(Job e, int index) {
         if (e != null) {
-            jobs.add(prio, e);
+            jobs.add(index, e);
         }
 
     }

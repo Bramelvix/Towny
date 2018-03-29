@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.*;
+
 import com.sun.xml.internal.ws.util.StringUtils;
 import entity.Entity;
 import entity.dynamic.mob.work.*;
@@ -102,7 +103,6 @@ public class Game implements Runnable {
         sols = new ArrayList<>();
         ui = new Ui(map[currentLayerNumber]);
         PathFinder.init(100, 100);
-
         spawnvills();
         spawnZombies();
         canvas.addKeyListener(new Keyboard());
@@ -123,12 +123,12 @@ public class Game implements Runnable {
         Villager vil1 = new Villager(144, 144, 0, map);
         vil1.addClothing(new Clothing("Brown Shirt", vil1, SpriteHashtable.get(70), "A brown tshirt", ClothingType.SHIRT));
         addVillager(vil1);
-        // Villager vil2 = new Villager(144, 160, 0, map);
-        //vil2.addClothing(new Clothing("Green Shirt", vil2, SpriteHashtable.get(74), "A green tshirt", ClothingType.SHIRT));
-        //addVillager(vil2);
-        //Villager vil3 = new Villager(160, 160, 0, map);
-        //vil3.addClothing(new Clothing("Green Shirt", vil3, SpriteHashtable.get(75), "A green tshirt", ClothingType.SHIRT));
-        //addVillager(vil3);
+        Villager vil2 = new Villager(144, 160, 0, map);
+        vil2.addClothing(new Clothing("Green Shirt", vil2, SpriteHashtable.get(74), "A green tshirt", ClothingType.SHIRT));
+        addVillager(vil2);
+        Villager vil3 = new Villager(160, 160, 0, map);
+        vil3.addClothing(new Clothing("Green Shirt", vil3, SpriteHashtable.get(75), "A green tshirt", ClothingType.SHIRT));
+        addVillager(vil3);
 
     }
 

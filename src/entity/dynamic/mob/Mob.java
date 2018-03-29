@@ -102,7 +102,7 @@ public abstract class Mob extends Entity {
                     if (!levels[z].isWalkAbleTile(step.x, step.y)) {
                         int destx = movement.getXdest();
                         int desty = movement.getYdest();
-                        movement = getShortest(destx, desty);
+                        movement = getPathAround(destx, desty);
                         return;
                     }
                     moveTo(step.x * 16, step.y * 16);
@@ -117,9 +117,9 @@ public abstract class Mob extends Entity {
     }
 
     // is the mob around a tile (x and y in pixels)
-    public boolean aroundTile(int endx, int endy, int endz) {
-        return (this.z == endz && (this.x <= ((endx + 16))) && (this.x >= ((endx - 16)))
-                && ((this.y >= ((endy - 16))) && (this.y <= ((endy + 16)))));
+    public boolean aroundTile(int x, int y, int z) {
+        return (this.z == z && (this.x <= ((x + 16))) && (this.x >= ((x - 16)))
+                && ((this.y >= ((y - 16))) && (this.y <= ((y + 16)))));
 
     }
 
@@ -128,15 +128,13 @@ public abstract class Mob extends Entity {
         return (this.z == z && this.x / 16 == x / 16 && this.y / 16 == y / 16);
     }
 
-    // pathfinder
-
+    // pathfinder method
     public Path getPath(Tile tile) {
         return getPath(tile.x, tile.y);
     }
 
-    public Path getShortest(int x, int y) {
-        return PathFinder
-                .getShortest(new Path[]{getPath(x - 1, y), getPath(x + 1, y), getPath(x, y - 1), getPath(x, y + 1)});
+    public Path getPathAround(int x, int y) {
+        return PathFinder.findPathAround(this.x / 16, this.y / 16, x, y, levels[z]);
     }
 
     // getter

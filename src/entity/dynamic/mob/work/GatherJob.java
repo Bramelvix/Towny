@@ -15,11 +15,7 @@ public class GatherJob extends Job {
     public void execute() {
         if (!completed && started) {
             if (!worker.aroundTile(xloc, yloc, zloc)) {
-                if (worker.isMovementNull()) {
-                    completed = true;
-                } else {
-                    worker.move();
-                }
+                worker.addJob(new MoveJob(xloc,yloc,zloc,worker,false),0);
             } else {
                 if (jobObj.work(worker)) {
                     completed = true;

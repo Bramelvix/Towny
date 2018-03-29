@@ -10,21 +10,27 @@ import java.util.ArrayList;
 public class MoveJob extends Job {
     private ArrayList<Path> paths;
     private int counter = 0;
+    private boolean exactLocation;
 
-    public MoveJob(int xloc, int yloc, int zloc, Villager worker) {
+    public MoveJob(int xloc, int yloc, int zloc, Villager worker) { //movejob to move to this exact tile
+        this(xloc, yloc, zloc, worker, true);
+    }
+
+    public MoveJob(int xloc, int yloc, int zloc, Villager worker, boolean exactLocation) { //movejob to move to a tile or around this tile
         super(xloc, yloc, zloc, worker);
+        this.exactLocation = exactLocation;
     }
 
     @Override
     protected void start() {
         paths = new ArrayList<>();
         started = true;
-        if (worker.onSpot(xloc, yloc, zloc)) {
+        if ((exactLocation && worker.onSpot(xloc, yloc, zloc)) || (!exactLocation && worker.aroundTile(xloc, yloc, zloc))) {
             completed = true;
             return;
         }
         if (zloc == worker.getZ()) {
-            Path path = worker.getPath(xloc / 16, yloc / 16);
+            Path path = exactLocation ? worker.getPath(xloc / 16, yloc / 16) : worker.getPathAround(xloc / 16, yloc / 16);
             if (path != null) {
                 paths.add(path);
             } else { //no path
@@ -46,18 +52,18 @@ public class MoveJob extends Job {
                     Path path = PathFinder.findPath(startx / 16, starty / 16, stairsX / 16, stairsY / 16, worker.levels[worker.getZ() + (up ? i : -i)]);
                     if (path != null) {
                         paths.add(path);
-                    } else { //no stairs
+                    } else { //no path
                         completed = true;
                         return;
                     }
-                } else { //no path
+                } else { //no stairs
                     completed = true;
                     return;
                 }
-
             }
-            Path path = PathFinder.findPath(stairsX / 16, stairsY / 16, xloc / 16, yloc / 16, worker.levels[zloc]);
-            if (path == null) { //no path
+            Path path = exactLocation ? PathFinder.findPath(stairsX / 16, stairsY / 16, xloc / 16, yloc / 16, worker.levels[zloc]) : PathFinder.findPathAround(stairsX / 16, stairsY / 16, xloc / 16, yloc / 16, worker.levels[zloc]);
+            if ((exactLocation &&(xloc / 16) == (stairsX / 16) && (yloc / 16) == (stairsY / 16)) || (!exactLocation && (stairsX <= ((xloc + 16))) && (stairsX >= ((xloc - 16)) && ((stairsY >= ((yloc - 16))) && (stairsY <= ((yloc + 16))))))) {
+            } else if (path == null) { //no path
                 completed = true;
                 return;
             } else {
@@ -70,24 +76,30 @@ public class MoveJob extends Job {
 
     public void execute() {
         if (!completed && started) {
+            // System.out.println(worker.getX()/16 + ":" + worker.getY()/16 + ":::" + paths.get(counter).getXdest()+ ":" + paths.get(counter).getYdest());
             if (worker.onSpot(paths.get(counter).getXdest() * 16, paths.get(counter).getYdest() * 16, worker.getZ())) {
                 if (counter == paths.size() - 1) {
                     completed = true;
+                    if (zloc != worker.getZ()) {
+                        goOnStairs();
+                    }
                     return;
                 }
-                Stairs stairs = worker.levels[worker.getZ()].getEntityOn(worker.getX(), worker.getY());
-                if (stairs != null) {
-                    stairs.goOnStairs(worker);
-                }
+                goOnStairs();
                 counter++;
                 worker.setPath(paths.get(counter));
-
-
             } else {
                 worker.move();
             }
         } else {
             start();
+        }
+    }
+
+    private void goOnStairs() {
+        Stairs stairs = worker.levels[worker.getZ()].getEntityOn(worker.getX(), worker.getY());
+        if (stairs != null) {
+            stairs.goOnStairs(worker);
         }
     }
 }
