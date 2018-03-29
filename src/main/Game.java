@@ -101,7 +101,7 @@ public class Game implements Runnable {
         mobs = new ArrayList<>();
         vills = new ArrayList<>();
         sols = new ArrayList<>();
-        ui = new Ui(map[currentLayerNumber]);
+        ui = new Ui(map);
         PathFinder.init(100, 100);
         spawnvills();
         spawnZombies();
@@ -211,7 +211,7 @@ public class Game implements Runnable {
     }
 
     private void updateUI() {
-        ui.update(mouse, xScroll, yScroll);
+        ui.update(mouse, xScroll, yScroll, currentLayerNumber);
         getKeyPositions();
         if (mouse.getMouseWheelMoved() != 0) {
             currentLayerNumber += mouse.getMouseWheelMoved();
@@ -220,7 +220,7 @@ public class Game implements Runnable {
             } else if (currentLayerNumber > map.length - 1) {
                 currentLayerNumber = map.length - 1;
             }
-            ui.updateMinimap(map[currentLayerNumber]);
+            ui.updateMinimap(map, currentLayerNumber);
         }
         if (paused != ui.isPaused()) {
             paused = ui.isPaused();
@@ -324,7 +324,7 @@ public class Game implements Runnable {
 
         } else if (UiIcons.isShovelHover() && !ui.menuVisible() && mouse.getClickedLeft()) {
             deselectAllVills();
-            ui.showBuildSquare(mouse, xScroll, yScroll, false, BuildingRecipe.STAIRSDOWN);
+            ui.showBuildSquare(mouse, xScroll, yScroll, false, BuildingRecipe.STAIRSDOWN,currentLayerNumber);
             ui.deSelectIcons();
             return;
 
@@ -451,7 +451,7 @@ public class Game implements Runnable {
                     ui.deSelectIcons();
                     ui.getMenu().hide();
                 } else if (item.getText().contains(MenuItem.BUILD) && !ui.outlineIsVisible()) {
-                    ui.showBuildSquare(mouse, xScroll, yScroll, false, item.getRecipe());
+                    ui.showBuildSquare(mouse, xScroll, yScroll, false, item.getRecipe(),currentLayerNumber);
                     ui.deSelectIcons();
                     ui.getMenu().hide();
                 } else if ((item.getText().contains(MenuItem.PICKUP) || item.getText().contains(MenuItem.EQUIP)

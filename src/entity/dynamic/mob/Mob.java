@@ -13,7 +13,6 @@ import map.Tile;
 public abstract class Mob extends Entity {
     public Level[] levels; // level in which the entity is placed
     private int idletimer = getIdleTimer();// timer for the mob to idle
-    private Direction dir;
     private int health = 100;
     private int armour = 0;
     private Path movement; // path for the Mob to follow
@@ -22,6 +21,7 @@ public abstract class Mob extends Entity {
 
     // move a mob with a combination of x direction and y direction (both between -1 and 1).
     public void move(int xa, int ya) {
+        Direction dir;
         if (xa > 0) {
             if (ya > 0) {
                 dir = Direction.RECHTS_OMLAAG;
@@ -40,7 +40,7 @@ public abstract class Mob extends Entity {
                 dir = (ya > 0) ? Direction.OMLAAG : Direction.OMHOOG;
             }
         }
-        if (!collision()) {
+        if (!collision(dir)) {
             x += xa;
             y += ya;
         }
@@ -174,7 +174,7 @@ public abstract class Mob extends Entity {
     }
 
     // calculates collision
-    private boolean collision() {
+    private boolean collision(Direction dir) {
         return ((dir == Direction.OMLAAG || dir == Direction.LINKS_OMLAAG || dir == Direction.RECHTS_OMLAAG)
                 ||
                 levels[z].getTile((x / 16), ((y + 1) / 16)).solid())

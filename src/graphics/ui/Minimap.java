@@ -16,8 +16,8 @@ public class Minimap {
 
     private int width, height; // width and height of the minimap
     private int x, y; // x and y of the top left corner
+    private int z;
     private int[] pixels; // pixels array
-    private static Level map; // map being shown
     private Image img; // image being rendered
     private static final Color COL = new Color(91, 94, 99, 110); // colour of the small rectangle on the minimap showing where the screen is
     private int xoff, yoff; // offset
@@ -26,6 +26,7 @@ public class Minimap {
     Minimap(int x, int y, Level map) {
         this.x = x;
         this.y = y;
+        this.z = 0;
         width = 200;
         height = 200;
         pixels = new int[(width) * (height)];
@@ -49,8 +50,11 @@ public class Minimap {
 
     }
 
-    public void update(Level map) {
-        init(map);
+    public void update(Level[] map, int z) {
+        if (this.z != z) {
+            this.z = z;
+            init(map[z]);
+        }
     }
 
     // render the minimap
