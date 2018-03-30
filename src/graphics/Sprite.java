@@ -21,6 +21,9 @@ public class Sprite {
 		pixels = new int[SIZE * SIZE];
 	}
 
+	public Sprite(int[] pixels){
+		this.pixels = pixels;
+	}
 
 	// load a sprites pixels into the pixel array
 	private void load() {

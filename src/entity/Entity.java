@@ -14,6 +14,7 @@ public abstract class Entity {
     public static final Random RANDOM = new Random(); // random needed for
     // various chance
     // calculations
+    public Sprite dynamicSprite;
     public List<Sprite> sprites; // the entity's sprites
     private boolean visible; // is the entity visible or not
     private boolean selected = false;
@@ -85,8 +86,9 @@ public abstract class Entity {
 
     // render method
     public void render(Screen screen) {
-        if (sprites.size() > 1) screen.renderMultiSprite(x, y, sprites);
-        else screen.renderSprite(x, y, sprites.get(0));
+        if (dynamicSprite != null) screen.renderSprite(x,y,dynamicSprite);
+        else if (sprites.size() > 1) screen.renderMultiSprite(x, y, sprites);
+        else screen.renderSprite(x, y, sprites.get(0)); //isn't this redundant?
 
     }
 }

@@ -76,9 +76,9 @@ public class Screen {
                     continue;
                 int col = e.pixels[x + y * Sprite.SIZE];
                 if (selected && (x == 0 || x == Sprite.SIZE - 1 || y == 0)) {
-                    col = 0xf44242;
+                    col = 0xf44242; //red
                 }
-                if (col != 0xffff00ff) { //what the actual fuck is this bram
+                if (col != 0xffff00ff) { //pink
                     pixels[xa + ya * width] = col;
                 }
             }
