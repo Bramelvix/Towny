@@ -101,7 +101,6 @@ public class Game {
         glfwShowWindow(window);
         GL.createCapabilities();
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        glEnable(GL_DEPTH_TEST);
         //set up projection matrix; allows us to draw.
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -206,6 +205,8 @@ public class Game {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         map[currentLayerNumber].render(xScroll,yScroll);
+        renderMobs();
+        map[currentLayerNumber].renderHardEntities(xScroll,yScroll);
         glfwSwapBuffers(window);
     }
 
@@ -573,17 +574,17 @@ public class Game {
         int y1 = (yScroll + height*SCALE + Sprite.SIZE);
         for (Mob i : mobs) {
             if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
-                //i.render();
+                i.render();
             }
         }
         for (Villager i : vills) {
             if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
-                //i.render();
+                i.render();
             }
         }
         for (Villager i : sols) {
             if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
-               // i.render();
+                i.render();
             }
         }
     }

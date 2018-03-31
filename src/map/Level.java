@@ -329,10 +329,10 @@ public class Level {
     }
 
     public void renderHardEntities(int xScroll, int yScroll) {
-        int x0 = xScroll / 16;
-        int x1 = (xScroll + Game.width  + Sprite.SIZE) / 16;
-        int y0 = yScroll / 16;
-        int y1 = (yScroll + Game.height + Sprite.SIZE) / 16;
+        int x0 = xScroll/3 / 16;
+        int x1 = (xScroll/3 + Game.width + Sprite.SIZE) / 16;
+        int y0 = yScroll/3 / 16;
+        int y1 = (yScroll/3 + Game.height + Sprite.SIZE) / 16;
 
         for (int y = y0; y < y1; y++) {
             for (int x = x0; x < x1; x++) {

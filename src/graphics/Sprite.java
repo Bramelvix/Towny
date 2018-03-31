@@ -77,19 +77,24 @@ public class Sprite {
         glBegin(GL_QUADS);
         {
             glTexCoord2f(0, 0);
-            glVertex2f(x, y);
+            glVertex2f(x*Game.SCALE,y*Game.SCALE);
 
-            glTexCoord2f(1, 0);
-            glVertex2f((x+SIZE)* Game.SCALE, 0);
+            glTexCoord2f(0, 1);
+            glVertex2f(x*Game.SCALE, (y+SIZE)* Game.SCALE);
 
             glTexCoord2f(1, 1);
             glVertex2f((x+SIZE)* Game.SCALE, (y+SIZE)* Game.SCALE);
 
-            glTexCoord2f(0, 1);
-            glVertex2f(0, (y+SIZE)* Game.SCALE);
+            glTexCoord2f(1, 0);
+            glVertex2f((x+SIZE)* Game.SCALE, y*Game.SCALE);
+
+
+
+
         }
         glEnd();
         glPopMatrix();
+        glBindTexture(GL_TEXTURE_2D,0);
     }
 
 

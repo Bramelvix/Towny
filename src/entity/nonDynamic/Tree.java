@@ -22,6 +22,9 @@ public class Tree extends Resource {
 
     // render method to render onto the screen
     public void render() {
+        super.render();
+        topsprite.draw(x,y-Sprite.SIZE);
+
     }
 
     // work method (same as in the Ore class)

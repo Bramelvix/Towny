@@ -5,6 +5,7 @@ import entity.pathfinding.Direction;
 import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
 import entity.pathfinding.Point;
+import graphics.Sprite;
 import map.Level;
 import map.Tile;
 

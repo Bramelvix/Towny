@@ -29,16 +29,16 @@ public class Tile {
 	public void render(int x, int y) {
     	sprite.draw(x,y);
 		if (entity != null && !solid) {
-			entity.sprite.draw(x,y);
+			entity.render();
 		}
 		if (item != null) {
-			item.sprite.draw(x,y);
+			item.render();
 		}
 	}
 
 	public void renderHard() {
 		if (solid && entity != null) {
-			entity.sprite.draw(x,y);
+			entity.render();
 		}
 	}
 
