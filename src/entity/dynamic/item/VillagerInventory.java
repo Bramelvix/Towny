@@ -2,7 +2,6 @@ package entity.dynamic.item;
 
 import entity.dynamic.item.weapon.Weapon;
 import entity.dynamic.mob.Villager;
-import graphics.Screen;
 
 public class VillagerInventory {
     private Clothing[] clothes;
@@ -16,15 +15,15 @@ public class VillagerInventory {
         weapons = new Weapon[2]; // 0 = weaponhand, 1 = shieldhand
     }
 
-    public void render(Screen screen) {
+    public void render() {
         for (Clothing i : clothes) {
             if (i != null) {
-                i.render(screen);
+                i.sprite.draw(i.getX(),i.getY());
             }
         }
         for (Weapon i : weapons) {
             if (i != null) {
-                i.render(screen);
+                i.sprite.draw(i.getX(),i.getY());
             }
         }
     }

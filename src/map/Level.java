@@ -1,7 +1,6 @@
 package map;
 
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
 import java.util.function.BiPredicate;
 
 import entity.*;
@@ -12,9 +11,9 @@ import entity.nonDynamic.building.workstations.Workstation;
 import entity.nonDynamic.Ore;
 import entity.nonDynamic.OreType;
 import entity.nonDynamic.Tree;
-import graphics.Screen;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
+import main.Game;
 
 public class Level {
     private Tile[][] tiles; // array of tiles on the map
@@ -315,32 +314,29 @@ public class Level {
     }
 
     // render the tiles
-    public void render(int xScroll, int yScroll, Screen screen) {
-        screen.setOffset(xScroll, yScroll);
-        int x0 = xScroll / 16;
-        int x1 = (xScroll + screen.width + Sprite.SIZE) / 16;
-        int y0 = yScroll / 16;
-        int y1 = (yScroll + screen.height + Sprite.SIZE) / 16;
-
+    public void render(int xScroll, int yScroll) {
+        int x0 = xScroll/3 / 16;
+        int x1 = (xScroll/3 + Game.width + Sprite.SIZE) / 16;
+        int y0 = yScroll/3 / 16;
+        int y1 = (yScroll/3 + Game.height + Sprite.SIZE) / 16;
         for (int y = y0; y < y1; y++) {
             for (int x = x0; x < x1; x++) {
-                getTile(x, y).render(x, y, screen);
+                getTile(x, y).render(x*Sprite.SIZE, y*Sprite.SIZE);
 
             }
         }
 
     }
 
-    public void renderHardEntities(int xScroll, int yScroll, Screen screen) {
-        screen.setOffset(xScroll, yScroll);
+    public void renderHardEntities(int xScroll, int yScroll) {
         int x0 = xScroll / 16;
-        int x1 = (xScroll + screen.width + Sprite.SIZE) / 16;
+        int x1 = (xScroll + Game.width  + Sprite.SIZE) / 16;
         int y0 = yScroll / 16;
-        int y1 = (yScroll + screen.height + Sprite.SIZE) / 16;
+        int y1 = (yScroll + Game.height + Sprite.SIZE) / 16;
 
         for (int y = y0; y < y1; y++) {
             for (int x = x0; x < x1; x++) {
-                getTile(x, y).renderHard(screen);
+                getTile(x, y).renderHard();
 
             }
         }

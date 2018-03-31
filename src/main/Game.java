@@ -30,7 +30,6 @@ import entity.dynamic.mob.Zombie;
 import entity.nonDynamic.building.workstations.Anvil;
 import entity.nonDynamic.building.workstations.Furnace;
 import entity.pathfinding.PathFinder;
-import graphics.Screen;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import graphics.SpritesheetHashtable;
@@ -41,16 +40,24 @@ import input.Keyboard;
 import input.Mouse;
 import map.Level;
 import map.Tile;
+import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL;
 import sound.Sound;
 
-public class Game implements Runnable {
+import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.glfw.GLFW.glfwShowWindow;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+
+public class Game {
 
     public static final int width = 500;
     public static final int height = width / 16 * 9;
     private Thread thread;
     public static final int SCALE = 3;
     public Level[] map;
-    private JFrame frame;
     private boolean running = false;
     private Mouse mouse;
     private ArrayList<Villager> vills;
@@ -63,10 +70,8 @@ public class Game implements Runnable {
     private Villager selectedvill;
     public int xScroll = 0;
     public int yScroll = 0;
-    private Screen screen;
-    private BufferedImage image;
-    private Canvas canvas;
     public int currentLayerNumber = 0;
+    private long window;
 
     public static void main(String[] args) {
         try {
@@ -78,23 +83,35 @@ public class Game implements Runnable {
     }
 
     private Game() throws Exception {
+        init();
+        loop();
+    }
+    private void init() throws Exception{
+        if (glfwInit() != true) {
+            System.err.println("GLFW failed to initialize");
+        }
+        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+        window = glfwCreateWindow(width*SCALE, height*SCALE, "Towny", 0, 0);
+        if (window == 0) {
+            System.err.println("Window failed to be created");
+        }
+        GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        glfwSetWindowPos(window, 100, 100);
+        glfwMakeContextCurrent(window);
+        glfwShowWindow(window);
+        GL.createCapabilities();
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glEnable(GL_DEPTH_TEST);
+        //set up projection matrix; allows us to draw.
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(0, width*SCALE, height*SCALE, 0.0f, 0.0f, 1.0f);
+        glMatrixMode(GL_MODELVIEW);
+        System.out.println("OpenGL: " + glGetString(GL_VERSION));
+        glEnable(GL_TEXTURE_2D);
         SpritesheetHashtable.registerSpritesheets();
         SpriteHashtable.registerSprites();
         ItemHashtable.registerItems();
-        canvas = new Canvas();
-        Dimension size = new Dimension(width * SCALE, height * SCALE);
-        canvas.setPreferredSize(size);
-        image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
-        screen = new Screen(width, height, pixels);
-        frame = new JFrame();
-        frame.setResizable(false);
-        frame.setTitle("Towny");
-        frame.add(canvas);
-        frame.pack();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
         Sound.initSound();
         mouse = new Mouse(this);
         generateLevel();
@@ -105,11 +122,6 @@ public class Game implements Runnable {
         PathFinder.init(100, 100);
         spawnvills();
         spawnZombies();
-        canvas.addKeyListener(new Keyboard());
-        canvas.addMouseListener(mouse);
-        canvas.addMouseMotionListener(mouse);
-        canvas.addMouseWheelListener(mouse);
-        start();
     }
 
     private void generateLevel() {
@@ -156,20 +168,15 @@ public class Game implements Runnable {
         }
     }
 
-    private synchronized void start() {
-        running = true;
-        thread = new Thread(this);
-        thread.start();
-    }
 
-    public void run() {
+
+    private void loop() {
         long lastTime = System.nanoTime();
         long timer = System.currentTimeMillis();
         double delta = 0;
-        int updates = 0;
         long now;
-        int frames = 0;
-        while (running) {
+        GL.createCapabilities();
+        while (!glfwWindowShouldClose(window)) {
             now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
@@ -177,32 +184,32 @@ public class Game implements Runnable {
                 updateUI();
                 if (!paused) {
                     update();
-                    updates++;
                 }
                 delta--;
                 mouse.reset();
             }
-            render();
-            frames++;
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer = System.currentTimeMillis();
-                frame.setTitle("Towny - fps: " + frames + " , updates: " + updates);
-                updates = 0;
-                frames = 0;
             }
+
+            draw();
+
+            glfwPollEvents();
         }
+        glfwFreeCallbacks(window);
+        glfwDestroyWindow(window);
+        glfwTerminate();
 
     }
-
-    private synchronized void stop() {
-        running = false;
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private void draw() {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        map[currentLayerNumber].render(xScroll,yScroll);
+        glfwSwapBuffers(window);
     }
+
+
 
     private void update() {
         updateMobs();
@@ -324,7 +331,7 @@ public class Game implements Runnable {
 
         } else if (UiIcons.isShovelHover() && !ui.menuVisible() && mouse.getClickedLeft()) {
             deselectAllVills();
-            ui.showBuildSquare(mouse, xScroll, yScroll, false, BuildingRecipe.STAIRSDOWN,currentLayerNumber);
+            ui.showBuildSquare(mouse, xScroll, yScroll, false, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
             ui.deSelectIcons();
             return;
 
@@ -451,7 +458,7 @@ public class Game implements Runnable {
                     ui.deSelectIcons();
                     ui.getMenu().hide();
                 } else if (item.getText().contains(MenuItem.BUILD) && !ui.outlineIsVisible()) {
-                    ui.showBuildSquare(mouse, xScroll, yScroll, false, item.getRecipe(),currentLayerNumber);
+                    ui.showBuildSquare(mouse, xScroll, yScroll, false, item.getRecipe(), currentLayerNumber);
                     ui.deSelectIcons();
                     ui.getMenu().hide();
                 } else if ((item.getText().contains(MenuItem.PICKUP) || item.getText().contains(MenuItem.EQUIP)
@@ -514,21 +521,22 @@ public class Game implements Runnable {
     private void moveCamera(int xScroll, int yScroll) {
         this.xScroll += xScroll;
         this.yScroll += yScroll;
+        glTranslatef(-this.xScroll, -this.yScroll, 0);
     }
 
     private void getKeyPositions() {
         int _yScroll = 0;
         int _xScroll = 0;
-        if (Keyboard.getKeyPressed(KeyEvent.VK_UP) && yScroll > 1) {
+        if (glfwGetKey(window,GLFW_KEY_UP)==1 && yScroll > 1) {
             _yScroll -= 2;
         }
-        if (Keyboard.getKeyPressed(KeyEvent.VK_DOWN) && yScroll < (map[currentLayerNumber].height * Tile.SIZE) - 1 - height) {
+        if (glfwGetKey(window,GLFW_KEY_DOWN)==1 && yScroll < (map[currentLayerNumber].height * Tile.SIZE) - 1 - height) {
             _yScroll += 2;
         }
-        if (Keyboard.getKeyPressed(KeyEvent.VK_LEFT) && xScroll > 1) {
+        if (glfwGetKey(window,GLFW_KEY_LEFT)==1 && xScroll > 1) {
             _xScroll -= 2;
         }
-        if (Keyboard.getKeyPressed(KeyEvent.VK_RIGHT) && xScroll < (map[currentLayerNumber].width * Tile.SIZE) - width - 1) {
+        if (glfwGetKey(window,GLFW_KEY_RIGHT)==1 && xScroll < (map[currentLayerNumber].width * Tile.SIZE) - width - 1) {
             _xScroll += 2;
         }
         moveCamera(_xScroll, _yScroll);
@@ -561,43 +569,24 @@ public class Game implements Runnable {
     }
 
     private void renderMobs() {
-        int x1 = (xScroll + screen.width + Sprite.SIZE);
-        int y1 = (yScroll + screen.height + Sprite.SIZE);
+        int x1 = (xScroll + width*SCALE + Sprite.SIZE);
+        int y1 = (yScroll + height*SCALE + Sprite.SIZE);
         for (Mob i : mobs) {
             if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
-                i.render(screen);
+                //i.render();
             }
         }
         for (Villager i : vills) {
             if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
-                i.render(screen);
+                //i.render();
             }
         }
         for (Villager i : sols) {
             if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
-                i.render(screen);
+               // i.render();
             }
         }
     }
 
-    private void render() {
-        BufferStrategy bs = canvas.getBufferStrategy();
-        if (bs == null) {
-            canvas.createBufferStrategy(3);
-            return;
-        }
-        screen.clear();
-        map[currentLayerNumber].render(xScroll, yScroll, screen);
-        renderMobs();
-        map[currentLayerNumber].renderHardEntities(xScroll, yScroll, screen);
-        Graphics g = bs.getDrawGraphics();
-        g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        g.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
-        ui.setOffset(xScroll, yScroll);
-        ui.render(g);
-        g.dispose();
-        bs.show();
-
-    }
 
 }

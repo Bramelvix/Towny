@@ -13,7 +13,7 @@ public class Item extends Entity {
     // basic constructors
     protected Item(String name, int x, int y, int z, Sprite sprite, String tooltip, boolean visible, int id) {
         super(x, y, z);
-        sprites.add(sprite);
+        this.sprite = sprite;
         setVisible(visible);
         super.setName(name);
         this.tooltip = tooltip;
@@ -30,14 +30,14 @@ public class Item extends Entity {
 
     protected Item(String name, Sprite sprite, String tooltip, int id) {
         super.setName(name);
-        sprites.add(sprite);
+        this.sprite = sprite;
         this.tooltip = tooltip;
         setVisible(true);
         this.id = id;
     }
 
     public Item copy() {
-        return new Item(this.getName(), this.x, this.y, this.z, this.sprites.get(0), this.getToolTip(), this.isVisible(), this.getId());
+        return new Item(this.getName(), this.x, this.y, this.z, this.sprite, this.getToolTip(), this.isVisible(), this.getId());
     }
 
     public Item copy(int x, int y, int z) {

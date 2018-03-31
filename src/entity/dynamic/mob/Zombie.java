@@ -1,7 +1,6 @@
 package entity.dynamic.mob;
 
 import entity.dynamic.item.weapon.Weapon;
-import graphics.Screen;
 import graphics.SpriteHashtable;
 import map.Level;
 
@@ -10,7 +9,7 @@ public class Zombie extends Humanoid {
 
     public Zombie(Level[] levels, int x, int y, int z) {
         super(levels, x, y, z);
-        sprites.add(SpriteHashtable.get(51));
+        sprite = SpriteHashtable.get(51);
         setName("zombie");
         setHolding(Weapon.getRandomWeapon(this));
 
@@ -21,8 +20,7 @@ public class Zombie extends Humanoid {
         if (animationtimer != 0) {
             animationtimer--;
             if (animationtimer == 0) {
-                sprites.clear();
-                sprites.add(SpriteHashtable.get(51));
+                sprite = SpriteHashtable.get(51);
             }
         }
         if (idleTime()) {
@@ -35,8 +33,7 @@ public class Zombie extends Humanoid {
     @Override
     public void hit(float damage) {
         super.hit(damage);
-        sprites.clear();
-        sprites.add(SpriteHashtable.get(51));
+        sprite = SpriteHashtable.get(51);
         animationtimer = 30;
         move(0, -1);
         move(0, -1);
@@ -47,10 +44,10 @@ public class Zombie extends Humanoid {
     }
 
     @Override
-    public void render(Screen screen) {
-        super.render(screen);
+    public void render() {
+        super.render();
         if (getHolding() != null) {
-            screen.renderSprite(x, y, getHolding().sprites.get(0)); // renders the item the zombie is holding
+            getHolding().sprite.draw(x,y);// renders the item the zombie is holding
         }
     }
 

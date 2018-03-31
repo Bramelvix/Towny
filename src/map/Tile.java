@@ -2,7 +2,6 @@ package map;
 
 import entity.Entity;
 import entity.dynamic.item.Item;
-import graphics.Screen;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 
@@ -27,19 +26,19 @@ public class Tile {
 	}
 
 	// render a tile
-	public void render(int x, int y, Screen screen) {
-		screen.renderSprite(x * 16, y * 16, sprite);
+	public void render(int x, int y) {
+    	sprite.draw(x,y);
 		if (entity != null && !solid) {
-			entity.render(screen);
+			entity.sprite.draw(x,y);
 		}
 		if (item != null) {
-			item.render(screen);
+			item.sprite.draw(x,y);
 		}
 	}
 
-	public void renderHard(Screen screen) {
+	public void renderHard() {
 		if (solid && entity != null) {
-			entity.render(screen);
+			entity.sprite.draw(x,y);
 		}
 	}
 

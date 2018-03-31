@@ -146,7 +146,7 @@ public class Weapon extends Item {
     }
 
     public Weapon copy() {
-        return new Weapon(this.getName(), this.x, this.y, this.z, this.sprites.get(0), this.tooltip, this.type, this.mat);
+        return new Weapon(this.getName(), this.x, this.y, this.z, this.sprite, this.tooltip, this.type, this.mat);
     }
 
 }

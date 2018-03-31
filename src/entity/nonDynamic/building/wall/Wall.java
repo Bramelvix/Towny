@@ -87,7 +87,7 @@ public class Wall extends BuildAbleObject {
     // decide the sprite for the wall, depending on the other 4 sides next to
     // the wall
     private void decideSprite(boolean leftHasWall, boolean rightHasWall, boolean topHasWall, boolean bottomHasWall, boolean topRightHasWall, boolean bottomRightHasWall, boolean topLeftHasWall, boolean bottomLeftHasWall) {
-        if (door) {
+       /* if (door) {
             if (topHasWall || bottomHasWall) {
                 this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 47 : 45));
             } else {
@@ -127,7 +127,8 @@ public class Wall extends BuildAbleObject {
         else if (!leftHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 24 : 196));
         else if (!topHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 28 : 200));
         else if (!topLeftHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 35 : 207));
-
+*/
+       sprite = SpriteHashtable.getSand();
     }
 
     @Override
