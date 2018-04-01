@@ -19,13 +19,13 @@ public class Ui {
     private SelectionSquare selection;
 
     // rendering the ui
-    public void render(Graphics g) {
-        UiIcons.render(g);
-        menu.render(g);
-        top.render(g);
-        map.render(g);
-        outline.render(g);
-        selection.render(g);
+    public void render(int xOff, int yOff) {
+        UiIcons.render(xOff,yOff);
+        menu.render();
+        //top.render(g);
+        //map.render(g);
+        outline.render();
+       //selection.render(g);
 
     }
 

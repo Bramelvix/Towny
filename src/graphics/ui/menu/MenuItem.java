@@ -7,6 +7,7 @@ import entity.Entity;
 import entity.dynamic.mob.work.BuildingRecipe;
 import entity.dynamic.mob.work.ItemRecipe;
 import entity.dynamic.mob.work.Recipe;
+import graphics.OpenglUtils;
 import input.Mouse;
 
 public class MenuItem {
@@ -72,10 +73,8 @@ public class MenuItem {
 	}
 
 	// rendering the menuitem's text
-	public void render(Graphics g) {
-		g.setColor(hover ? Color.red : Color.black);
-		g.setFont(font);
-		g.drawString(text, x, y + 15);
+	public void render() {
+		OpenglUtils.menuItemDraw(x,y,text,hover);
 	}
 
 	// updating the mouse hover

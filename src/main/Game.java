@@ -1,16 +1,8 @@
 package main;
 
-import java.awt.Canvas;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.*;
 
 import com.sun.xml.internal.ws.util.StringUtils;
 import entity.Entity;
@@ -36,7 +28,6 @@ import graphics.SpritesheetHashtable;
 import graphics.ui.Ui;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.MenuItem;
-import input.Keyboard;
 import input.Mouse;
 import map.Level;
 import map.Tile;
@@ -90,24 +81,25 @@ public class Game {
         if (glfwInit() != true) {
             System.err.println("GLFW failed to initialize");
         }
-        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+        glfwWindowHint(GLFW_RESIZABLE,GLFW_FALSE);
         window = glfwCreateWindow(width*SCALE, height*SCALE, "Towny", 0, 0);
         if (window == 0) {
             System.err.println("Window failed to be created");
         }
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-        glfwSetWindowPos(window, 100, 100);
+        glfwSetWindowPos(window, (vidmode.width()-(width*SCALE))/2, (vidmode.height() - (height*SCALE))/2);
         glfwMakeContextCurrent(window);
         glfwShowWindow(window);
         GL.createCapabilities();
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        //set up projection matrix; allows us to draw.
         glMatrixMode(GL_PROJECTION);
+        glfwSwapInterval(0); //0 = VSYNC OFF, 1= VSYNC ON
+
         glLoadIdentity();
         glOrtho(0, width*SCALE, height*SCALE, 0.0f, 0.0f, 1.0f);
         glMatrixMode(GL_MODELVIEW);
-        System.out.println("OpenGL: " + glGetString(GL_VERSION));
         glEnable(GL_TEXTURE_2D);
+        glEnable(GL_BLEND);
         SpritesheetHashtable.registerSpritesheets();
         SpriteHashtable.registerSprites();
         ItemHashtable.registerItems();
@@ -180,6 +172,7 @@ public class Game {
             delta += (now - lastTime) / ns;
             lastTime = now;
             while (delta >= 1) {
+                glfwPollEvents();
                 updateUI();
                 if (!paused) {
                     update();
@@ -194,7 +187,7 @@ public class Game {
 
             draw();
 
-            glfwPollEvents();
+
         }
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);
@@ -203,10 +196,11 @@ public class Game {
     }
     private void draw() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         map[currentLayerNumber].render(xScroll,yScroll);
         renderMobs();
         map[currentLayerNumber].renderHardEntities(xScroll,yScroll);
+        ui.render(xScroll,yScroll);
         glfwSwapBuffers(window);
     }
 
@@ -436,7 +430,6 @@ public class Game {
                 } else if (item.getText().contains(MenuItem.MOVE)) {
                     selectedvill.resetAll();
                     selectedvill.addJob(new MoveJob(mouse.getX(), mouse.getY(), currentLayerNumber, selectedvill));
-                    //selectedvill.setPath(selectedvill.getPath(mouse.getTileX(), mouse.getTileY()));
                     deselect(selectedvill);
                     ui.deSelectIcons();
                     ui.getMenu().hide();
@@ -520,25 +513,26 @@ public class Game {
     }
 
     private void moveCamera(int xScroll, int yScroll) {
+        glTranslatef(-xScroll, -yScroll, 0);
         this.xScroll += xScroll;
         this.yScroll += yScroll;
-        glTranslatef(-this.xScroll, -this.yScroll, 0);
+
     }
 
     private void getKeyPositions() {
         int _yScroll = 0;
         int _xScroll = 0;
         if (glfwGetKey(window,GLFW_KEY_UP)==1 && yScroll > 1) {
-            _yScroll -= 2;
+            _yScroll -= 6;
         }
         if (glfwGetKey(window,GLFW_KEY_DOWN)==1 && yScroll < (map[currentLayerNumber].height * Tile.SIZE) - 1 - height) {
-            _yScroll += 2;
+            _yScroll += 6;
         }
         if (glfwGetKey(window,GLFW_KEY_LEFT)==1 && xScroll > 1) {
-            _xScroll -= 2;
+            _xScroll -= 6;
         }
         if (glfwGetKey(window,GLFW_KEY_RIGHT)==1 && xScroll < (map[currentLayerNumber].width * Tile.SIZE) - width - 1) {
-            _xScroll += 2;
+            _xScroll += 6;
         }
         moveCamera(_xScroll, _yScroll);
     }
@@ -570,20 +564,20 @@ public class Game {
     }
 
     private void renderMobs() {
-        int x1 = (xScroll + width*SCALE + Sprite.SIZE);
-        int y1 = (yScroll + height*SCALE + Sprite.SIZE);
+        int x1 = (xScroll / 3 + Game.width + Sprite.SIZE);
+        int y1 = (yScroll / 3 + Game.height + Sprite.SIZE);
         for (Mob i : mobs) {
-            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
+            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll/3 && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll/3 && i.getY() - 16 <= y1) {
                 i.render();
             }
         }
         for (Villager i : vills) {
-            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
+            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll/3 && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll/3 && i.getY() - 16 <= y1) {
                 i.render();
             }
         }
         for (Villager i : sols) {
-            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
+            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll/3 && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll/3 && i.getY() - 16 <= y1) {
                 i.render();
             }
         }

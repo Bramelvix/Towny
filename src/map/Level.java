@@ -315,13 +315,13 @@ public class Level {
 
     // render the tiles
     public void render(int xScroll, int yScroll) {
-        int x0 = xScroll/3 / 16;
-        int x1 = (xScroll/3 + Game.width + Sprite.SIZE) / 16;
-        int y0 = yScroll/3 / 16;
-        int y1 = (yScroll/3 + Game.height + Sprite.SIZE) / 16;
+        int x0 = xScroll / 3 / 16;
+        int x1 = (xScroll / 3 + Game.width + Sprite.SIZE) / 16;
+        int y0 = yScroll / 3 / 16;
+        int y1 = (yScroll / 3 + Game.height + Sprite.SIZE) / 16;
         for (int y = y0; y < y1; y++) {
             for (int x = x0; x < x1; x++) {
-                getTile(x, y).render(x*Sprite.SIZE, y*Sprite.SIZE);
+                getTile(x, y).render(x * Sprite.SIZE, y * Sprite.SIZE);
 
             }
         }
@@ -329,10 +329,10 @@ public class Level {
     }
 
     public void renderHardEntities(int xScroll, int yScroll) {
-        int x0 = xScroll/3 / 16;
-        int x1 = (xScroll/3 + Game.width + Sprite.SIZE) / 16;
-        int y0 = yScroll/3 / 16;
-        int y1 = (yScroll/3 + Game.height + Sprite.SIZE) / 16;
+        int x0 = xScroll / 3 / 16;
+        int x1 = (xScroll / 3 + Game.width + Sprite.SIZE*2) / 16;
+        int y0 = yScroll / 3 / 16;
+        int y1 = (yScroll / 3 + Game.height + Sprite.SIZE*2) / 16;
 
         for (int y = y0; y < y1; y++) {
             for (int x = x0; x < x1; x++) {

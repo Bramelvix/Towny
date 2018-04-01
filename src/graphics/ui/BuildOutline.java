@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import entity.dynamic.mob.work.BuildingRecipe;
+import graphics.OpenglUtils;
 import input.Mouse;
 import main.Game;
 import map.Level;
@@ -28,50 +29,38 @@ public class BuildOutline {
     private int z = 0;
 
     // rendering the outline
-    public void render(Graphics g) {
+    public void render() {
         if (visible) {
             if (lockedSize || buildSquareXE == 0 && buildSquareYE == 0) {
-                g.setColor(
-                        notBuildable(((buildSquareXS / Game.SCALE) >> 4), (buildSquareYS / Game.SCALE) >> 4, z) ? notbuildable : buildable);
-                g.fillRect(buildSquareXSTeken, buildSquareYSTeken, WIDTH, WIDTH);
+                OpenglUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken,WIDTH,notBuildable(((buildSquareXS / Game.SCALE) >> 4), (buildSquareYS / Game.SCALE) >> 4, z) ? notbuildable : buildable);
                 return;
             }
             if (squarewidth > squareheight) {
-                if (buildSquareXSTeken < buildSquareXE) { // START LINKS VAN
-                    // EIND == SLEEP
-                    // NAAR RECHTS
+                if (buildSquareXSTeken < buildSquareXE) { // START LINKS VAN EIND == SLEEP NAAR RECHTS
                     for (int i = 0; i < squarewidth; i++) {
-                        g.setColor(
-                                notBuildable(((buildSquareXS / Game.SCALE) >> 4) + i, ((buildSquareYS / Game.SCALE) >> 4), z) ? notbuildable
-                                        : buildable);
-                        g.fillRect(buildSquareXSTeken + (i * WIDTH), buildSquareYSTeken, WIDTH, WIDTH);
+                        OpenglUtils.buildOutlineDraw(buildSquareXSTeken + (i * WIDTH),buildSquareYSTeken,WIDTH,notBuildable(((buildSquareXS / Game.SCALE) >> 4) + i, ((buildSquareYS / Game.SCALE) >> 4), z) ? notbuildable
+                                : buildable);
                     }
                 } else { // START RECHTS VAN EIND == SLEEP NAAR LINKS
                     for (int i = 0; i < squarewidth; i++) {
-                        g.setColor((notBuildable((((buildSquareXS - (WIDTH * (squarewidth - 1))) / Game.SCALE) >> 4) + i,
+                        OpenglUtils.buildOutlineDraw(buildSquareXSTeken - (WIDTH * (squarewidth - 1)) + (i * WIDTH),buildSquareYSTeken,WIDTH,(notBuildable((((buildSquareXS - (WIDTH * (squarewidth - 1))) / Game.SCALE) >> 4) + i,
                                 ((buildSquareYS / Game.SCALE) >> 4), z)) ? notbuildable : buildable);
-                        g.fillRect(buildSquareXSTeken - (WIDTH * (squarewidth - 1)) + (i * WIDTH), buildSquareYSTeken,
-                                WIDTH, WIDTH);
                     }
                 }
             } else {
-                if (buildSquareYSTeken < buildSquareYE) { // START BOVEN EIND ==
-                    // SLEEP NAAR ONDER
+                if (buildSquareYSTeken < buildSquareYE) { // START BOVEN EIND == SLEEP NAAR ONDER
                     for (int i = 0; i < squareheight; i++) {
-                        g.setColor((notBuildable(((buildSquareXS / Game.SCALE) >> 4), ((buildSquareYS / Game.SCALE) >> 4) + i, z))
+                        OpenglUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken + (WIDTH * i), WIDTH* (squareheight - i),(notBuildable(((buildSquareXS / Game.SCALE) >> 4), ((buildSquareYS / Game.SCALE) >> 4) + i, z))
                                 ? notbuildable
                                 : buildable);
-                        g.fillRect(buildSquareXSTeken, buildSquareYSTeken + (WIDTH * i), WIDTH,
-                                WIDTH * (squareheight - i));
                     }
                     return;
                 } else { // START ONDER EIND == SLEEP NAAR BOVEN
                     for (int i = 0; i < squareheight; i++) {
-                        g.setColor((notBuildable(((buildSquareXS / Game.SCALE) >> 4),
+
+                        OpenglUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken - (WIDTH * (squareheight - 1)) + (i * WIDTH),WIDTH,(notBuildable(((buildSquareXS / Game.SCALE) >> 4),
                                 (((buildSquareYS - (WIDTH * (squareheight - 1))) / Game.SCALE) >> 4) + i, z)) ? notbuildable
                                 : buildable);
-                        g.fillRect(buildSquareXSTeken, buildSquareYSTeken - (WIDTH * (squareheight - 1)) + (i * WIDTH),
-                                WIDTH, WIDTH);
                     }
                     return;
                 }

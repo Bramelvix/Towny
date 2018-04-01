@@ -7,9 +7,7 @@ import input.Mouse;
 import main.Game;
 
 public class SelectionSquare {
-	private static final Color COL = new Color(91, 94, 99, 110); // colour of
-																	// the
-																	// square
+	private static final Color COL = new Color(91, 94, 99, 110); // colour of the square
 	private int x, y; // INGAME
 	private int xcoord, ycoord; // ONSCREEN
 	private int width, height, widthteken, heightteken;

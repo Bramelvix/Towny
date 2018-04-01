@@ -17,9 +17,9 @@ public class Mouse extends MouseAdapter implements MouseInputListener, MouseWhee
     // (/3), WITH OFFSET
     private int mouseY = -1;
     private int mouseB = -1; // the mouse button pressed
-    private int mouseTileX = -1; // the x and y of the tiles in the game that
+    public int mouseTileX = -1; // the x and y of the tiles in the game that
     // the mouse is on
-    private int mouseTileY = -1;
+    public int mouseTileY = -1;
     private int trueX = -1; // x and y coord on the screen, in ingame pixels
     // (/3), WITHOUT OFFSET
     private int trueY = -1;

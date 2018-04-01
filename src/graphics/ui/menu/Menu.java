@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.dynamic.mob.work.Recipe;
+import graphics.OpenglUtils;
 import input.Mouse;
 
 public class Menu { // the menu is the little options menu that shows up when
@@ -16,16 +17,12 @@ public class Menu { // the menu is the little options menu that shows up when
 	private int height = 20;
     private List<MenuItem> items; // spritesheets of items on the menu
 	private boolean visible; // is the item visible
-	private Color colour = new Color(91, 94, 99, 210); // the grey-blue colour
-														// of the background of
-														// the menu
 
 	// render method
-	public void render(Graphics g) {
+	public void render() {
 		if (visible) {
-			g.setColor(colour);
-			g.fillRect(x, y, width, height);
-			items.forEach((MenuItem i) -> i.render(g));
+			OpenglUtils.menuDraw(x,y,width,height);
+			items.forEach((MenuItem i) -> i.render());
 		}
 	}
 
