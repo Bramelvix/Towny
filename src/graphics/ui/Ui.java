@@ -7,6 +7,7 @@ import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.Menu;
 import graphics.ui.menu.MenuItem;
 import input.Mouse;
+import main.Game;
 import map.Level;
 
 //main class used to manage the ui
@@ -22,7 +23,7 @@ public class Ui {
     public void render(int xOff, int yOff) {
         UiIcons.render(xOff,yOff);
         menu.render();
-        //top.render(g);
+        top.render(xOff,yOff);
         //map.render(g);
         outline.render();
        //selection.render(g);
@@ -38,7 +39,7 @@ public class Ui {
         menu = new Menu();
         selection = new SelectionSquare();
         map = new Minimap(1290, 8,levels[0]);
-        top = new TopBar(250, 5);
+        top = new TopBar();
         outline = new BuildOutline(levels);
     }
 

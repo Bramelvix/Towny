@@ -23,7 +23,7 @@ public class Icon {
         this.x = x;
         this.y = y;
         load(path);
-        id = OpenglUtils.loadTexture(pixels, size);
+        id = OpenglUtils.loadTexture(pixels, size,size);
     }
 
     // getters
@@ -66,14 +66,7 @@ public class Icon {
     private void load(String path) {
         try {
             BufferedImage before = ImageIO.read(Icon.class.getResource(path));
-            int w = before.getWidth();
-            int h = before.getHeight();
-
-            AffineTransform at = new AffineTransform();
-            at.scale(scaleValue, scaleValue); //this is to scale the images from 512px to 90 px
-            AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-            BufferedImage after = new BufferedImage( (int)(w*scaleValue), (int)(h*scaleValue), BufferedImage.TYPE_INT_ARGB);
-            after = scaleOp.filter(before, after);
+            BufferedImage after = OpenglUtils.getScaledBufferedImage(before,scaleValue,scaleValue);
             size = after.getWidth();
             pixels = new int[size * size];
             after.getRGB(0, 0, size, size, pixels, 0, size);

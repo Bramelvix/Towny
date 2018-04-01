@@ -11,11 +11,11 @@ public class Sprite {
     protected Sprite(int x, int y, Spritesheet sheet) {
         pixels = load(x * SIZE + (x * sheet.getMargin()),
                 y * SIZE + (y * sheet.getMargin()), SIZE, sheet);
-        id = OpenglUtils.loadTexture(pixels, SIZE);
+        id = OpenglUtils.loadTexture(pixels, SIZE,SIZE);
     }
 
     public Sprite(int[] pixels) {
-        id = OpenglUtils.loadTexture(pixels, SIZE);
+        id = OpenglUtils.loadTexture(pixels, SIZE,SIZE);
     }
     public Sprite() {
         id = 0;
