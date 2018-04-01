@@ -1,11 +1,15 @@
 package main;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import com.sun.xml.internal.ws.util.StringUtils;
 import entity.Entity;
+import entity.dynamic.item.weapon.WeaponType;
 import entity.dynamic.mob.work.*;
 import entity.nonDynamic.Ore;
 import entity.nonDynamic.Tree;
@@ -22,18 +26,24 @@ import entity.dynamic.mob.Zombie;
 import entity.nonDynamic.building.workstations.Anvil;
 import entity.nonDynamic.building.workstations.Furnace;
 import entity.pathfinding.PathFinder;
+import graphics.OpenglUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import graphics.SpritesheetHashtable;
 import graphics.ui.Ui;
+import graphics.ui.icon.Icon;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.MenuItem;
 import input.Mouse;
 import map.Level;
 import map.Tile;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import sound.Sound;
+
+import javax.imageio.ImageIO;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -94,7 +104,7 @@ public class Game {
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glMatrixMode(GL_PROJECTION);
         glfwSwapInterval(0); //0 = VSYNC OFF, 1= VSYNC ON
-
+        setIcon();
         glLoadIdentity();
         glOrtho(0, width*SCALE, height*SCALE, 0.0f, 0.0f, 1.0f);
         glMatrixMode(GL_MODELVIEW);
@@ -114,6 +124,25 @@ public class Game {
         spawnvills();
         spawnZombies();
     }
+    private void setIcon() {
+        try {
+            BufferedImage img = ImageIO.read(Icon.class.getResource("/res/icons/soldier.png"));
+            int width = img.getWidth();
+            int height = img.getHeight();
+            int[] pixels = new int[width * height];
+            img.getRGB(0, 0, width, height, pixels, 0, width);
+            ByteBuffer buffer = OpenglUtils.getByteBuffer(pixels,width,height);
+            GLFWImage image = GLFWImage.malloc();
+            image.set(width, height, buffer);
+            GLFWImage.Buffer images = GLFWImage.malloc(1);
+            images.put(0, image);
+            glfwSetWindowIcon(window, images);
+            images.free();
+            image.free();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void generateLevel() {
         map = new Level[20];
@@ -124,7 +153,7 @@ public class Game {
 
     private void spawnvills() {
         Villager vil1 = new Villager(144, 144, 0, map);
-        vil1.addClothing(new Clothing("Brown Shirt", vil1, SpriteHashtable.get(70), "A brown tshirt", ClothingType.SHIRT));
+        vil1.addClothing(new Clothing("Brown Shirt", vil1, SpriteHashtable.get(43), "A brown tshirt", ClothingType.SHIRT));
         addVillager(vil1);
         Villager vil2 = new Villager(144, 160, 0, map);
         vil2.addClothing(new Clothing("Green Shirt", vil2, SpriteHashtable.get(74), "A green tshirt", ClothingType.SHIRT));
@@ -139,6 +168,7 @@ public class Game {
         int teller = Entity.RANDOM.nextInt(5) + 1;
         for (int i = 0; i < teller; i++) {
             Zombie zomb = new Zombie(map, Entity.RANDOM.nextInt(256) + 16, Entity.RANDOM.nextInt(256) + 16, 0);
+            zomb.setHolding(Weapon.getWeapon(WeaponType.BUCKLER,WeaponMaterial.CRYSTAL));
             mobs.add(zomb);
         }
     }

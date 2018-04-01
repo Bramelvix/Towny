@@ -226,7 +226,8 @@ public class SpriteHashtable {
         registerSprite(39, new Sprite(38, 10, SpritesheetHashtable.get(1)));//chest
         registerSprite(40, new Sprite(36, 18, SpritesheetHashtable.get(1))); //stairs Top
         registerSprite(41, new Sprite(34, 18, SpritesheetHashtable.get(1))); //stairs bottom
-        registerSprite(42,new Sprite(5,6,SpritesheetHashtable.get(1))); //TESTSPRITE
+        registerSprite(42,new Sprite(3,6,SpritesheetHashtable.get(2))); //turquoise trousers long
+        registerSprite(43,new Sprite(13,0,SpritesheetHashtable.get(2))); //blacksmith apron turquoise
         //GAP
 
         registerSprite(44, new Sprite(32, 1, SpritesheetHashtable.get(1))); //woodenDoorHorizontal

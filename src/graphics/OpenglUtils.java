@@ -14,18 +14,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public abstract class OpenglUtils {
     public static int loadTexture(int[] pixels, int width, int height) {
-        ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4); //4 for RGBA, 3 for RGB
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int pixel = pixels[y * width + x];
-                buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
-                buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
-                buffer.put((byte) (pixel & 0xFF));               // Blue component
-                buffer.put((byte) ((pixel >> 24) & 0xFF));    // Alpha component. Only for RGBA
-            }
-        }
-        buffer.flip();
+        ByteBuffer buffer = getByteBuffer(pixels,width,height);
         int textureID = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
         //Setup wrap mode
@@ -38,6 +27,20 @@ public abstract class OpenglUtils {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
         //Return the texture ID so we can bind it later again
         return textureID;
+    }
+    public static ByteBuffer getByteBuffer(int[] pixels, int width, int height) {
+        ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4); //4 for RGBA, 3 for RGB
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int pixel = pixels[y * width + x];
+                buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
+                buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
+                buffer.put((byte) (pixel & 0xFF));               // Blue component
+                buffer.put((byte) ((pixel >> 24) & 0xFF));    // Alpha component. Only for RGBA
+            }
+        }
+        buffer.flip();
+        return buffer;
     }
 
     public static void draw(int id, int x, int y, int size) { //draw ingame shit which needs to be scaled up
