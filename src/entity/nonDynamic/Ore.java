@@ -129,7 +129,9 @@ public class Ore extends Resource {
                 for (int y = 0; y < SIZE; y++) {
                     for (int x = 0; x < SIZE; x++) {
                         int pixel = sprite.pixels[x+y*SIZE];
-                        if (!(pixel == 0xffff00ff)) pixels[x+y*SIZE] = pixel;
+                        if (!(pixel == 0x00FFFFFF)) {
+                            pixels[x + y * SIZE] = pixel;
+                        }
                     }
                 }
             }
