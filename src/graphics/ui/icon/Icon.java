@@ -58,8 +58,8 @@ public class Icon {
     }
 
     //render the icon on the screen
-    public void render(int xoff, int yoff) {
-		OpenglUtils.iconDraw(id,x+xoff,y+yoff,size,selected||hover);
+    public void render() {
+		OpenglUtils.iconDraw(id,x,y,size,selected||hover);
     }
 
     //load the image

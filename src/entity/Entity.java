@@ -1,11 +1,9 @@
 package entity;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import graphics.Sprite;
-import input.Mouse;
+import input.MousePosition;
 
 public abstract class Entity {
     protected int x, y, z; // x and y of the entity
@@ -71,8 +69,8 @@ public abstract class Entity {
     }
 
     // does the mouse hover over the entity
-    public boolean hoverOn(Mouse mouse, int z) {
-        return hoverOn(mouse.getX(), mouse.getY(), z);
+    public boolean hoverOn(int z) {
+        return hoverOn(MousePosition.getX(), MousePosition.getY(), z);
     }
 
     // does the mouse hover over the entity

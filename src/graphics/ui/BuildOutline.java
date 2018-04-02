@@ -1,13 +1,15 @@
 package graphics.ui;
 
 import java.awt.Color;
-import java.awt.Graphics;
 
 import entity.dynamic.mob.work.BuildingRecipe;
 import graphics.OpenglUtils;
-import input.Mouse;
+import input.MouseButton;
+import input.MousePosition;
 import main.Game;
 import map.Level;
+
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 //the green or red outline used to select where to build things
 public class BuildOutline {
@@ -32,25 +34,25 @@ public class BuildOutline {
     public void render() {
         if (visible) {
             if (lockedSize || buildSquareXE == 0 && buildSquareYE == 0) {
-                OpenglUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken,WIDTH,notBuildable(((buildSquareXS / Game.SCALE) >> 4), (buildSquareYS / Game.SCALE) >> 4, z) ? notbuildable : buildable);
+                OpenglUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken,WIDTH,notBuildable((((buildSquareXS) / Game.SCALE) /16), ((buildSquareYS) / Game.SCALE) /16, z) ? notbuildable : buildable);
                 return;
             }
             if (squarewidth > squareheight) {
                 if (buildSquareXSTeken < buildSquareXE) { // START LINKS VAN EIND == SLEEP NAAR RECHTS
                     for (int i = 0; i < squarewidth; i++) {
-                        OpenglUtils.buildOutlineDraw(buildSquareXSTeken + (i * WIDTH),buildSquareYSTeken,WIDTH,notBuildable(((buildSquareXS / Game.SCALE) >> 4) + i, ((buildSquareYS / Game.SCALE) >> 4), z) ? notbuildable
+                        OpenglUtils.buildOutlineDraw(buildSquareXSTeken + (i * WIDTH),buildSquareYSTeken,WIDTH,notBuildable((((buildSquareXS) / Game.SCALE) /16) + i, (((buildSquareYS) / Game.SCALE) /16), z) ? notbuildable
                                 : buildable);
                     }
                 } else { // START RECHTS VAN EIND == SLEEP NAAR LINKS
                     for (int i = 0; i < squarewidth; i++) {
-                        OpenglUtils.buildOutlineDraw(buildSquareXSTeken - (WIDTH * (squarewidth - 1)) + (i * WIDTH),buildSquareYSTeken,WIDTH,(notBuildable((((buildSquareXS - (WIDTH * (squarewidth - 1))) / Game.SCALE) >> 4) + i,
-                                ((buildSquareYS / Game.SCALE) >> 4), z)) ? notbuildable : buildable);
+                        OpenglUtils.buildOutlineDraw(buildSquareXSTeken - (WIDTH * (squarewidth - 1)) + (i * WIDTH),buildSquareYSTeken,WIDTH,(notBuildable(((((buildSquareXS) - (WIDTH * (squarewidth - 1))) / Game.SCALE) /16) + i,
+                                (((buildSquareYS) / Game.SCALE) /16), z)) ? notbuildable : buildable);
                     }
                 }
             } else {
                 if (buildSquareYSTeken < buildSquareYE) { // START BOVEN EIND == SLEEP NAAR ONDER
                     for (int i = 0; i < squareheight; i++) {
-                        OpenglUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken + (WIDTH * i), WIDTH* (squareheight - i),(notBuildable(((buildSquareXS / Game.SCALE) >> 4), ((buildSquareYS / Game.SCALE) >> 4) + i, z))
+                        OpenglUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken + (WIDTH * i), WIDTH* (squareheight - i),(notBuildable((((buildSquareXS) / Game.SCALE) /16), (((buildSquareYS) / Game.SCALE) /16) + i, z))
                                 ? notbuildable
                                 : buildable);
                     }
@@ -58,8 +60,8 @@ public class BuildOutline {
                 } else { // START ONDER EIND == SLEEP NAAR BOVEN
                     for (int i = 0; i < squareheight; i++) {
 
-                        OpenglUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken - (WIDTH * (squareheight - 1)) + (i * WIDTH),WIDTH,(notBuildable(((buildSquareXS / Game.SCALE) >> 4),
-                                (((buildSquareYS - (WIDTH * (squareheight - 1))) / Game.SCALE) >> 4) + i, z)) ? notbuildable
+                        OpenglUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken - (WIDTH * (squareheight - 1)) + (i * WIDTH),WIDTH,(notBuildable((((buildSquareXS) / Game.SCALE) /16),
+                                ((((buildSquareYS) - (WIDTH * (squareheight - 1))) / Game.SCALE) /16) + i, z)) ? notbuildable
                                 : buildable);
                     }
                     return;
@@ -78,40 +80,39 @@ public class BuildOutline {
     // getters
     public int[][] getSquareCoords() {
         int[][] coords;
+        System.out.println(buildSquareXE + ":::"+buildSquareYE);
         if (buildSquareXE == 0 && buildSquareYE == 0) {
             coords = new int[1][2];
             coords[0][0] = (buildSquareXS / Game.SCALE);
             coords[0][1] = (buildSquareYS / Game.SCALE);
+            System.out.println(buildSquareXS/Game.SCALE + "::" + buildSquareYS/Game.SCALE);
         } else {
             if (squarewidth > squareheight) {
-                if (buildSquareXSTeken < buildSquareXE) { // START LINKS VAN
-                    // EIND == SLEEP
-                    // NAAR RECHTS
+                if (buildSquareXSTeken < buildSquareXE) { // START LINKS VAN EIND == SLEEP NAAR RECHTS
                     coords = new int[squarewidth][2];
                     for (int i = 0; i < squarewidth; i++) {
-                        coords[i][0] = (buildSquareXS / Game.SCALE) + (i << 4);
+                        coords[i][0] = (buildSquareXS / Game.SCALE) + (i *16);
                         coords[i][1] = (buildSquareYS / Game.SCALE);
                     }
                 } else { // START RECHTS VAN EIND == SLEEP NAAR LINKS
                     coords = new int[squarewidth][2];
                     for (int i = 0; i < squarewidth; i++) {
-                        coords[i][0] = (((buildSquareXS - (WIDTH * (squarewidth - 1))))) + (i << 4);
+                        coords[i][0] = (((buildSquareXS - (WIDTH * (squarewidth - 1))))) + (i *16);
                         coords[i][1] = ((buildSquareYS / Game.SCALE));
                     }
                 }
             } else {
-                if (buildSquareYSTeken < buildSquareYE) { // START BOVEN EIND ==
-                    // SLEEP NAAR ONDER
+                if (buildSquareYSTeken < buildSquareYE) { // START BOVEN EIND == SLEEP NAAR ONDER
                     coords = new int[squareheight][2];
                     for (int i = 0; i < squareheight; i++) {
                         coords[i][0] = (buildSquareXS / Game.SCALE);
-                        coords[i][1] = (buildSquareYS / Game.SCALE) + (i << 4);
+                        coords[i][1] = (buildSquareYS / Game.SCALE) + (i *16);
                     }
                 } else { // START ONDER EIND == SLEEP NAAR BOVEN
                     coords = new int[squareheight][2];
                     for (int i = 0; i < squareheight; i++) {
                         coords[i][0] = (buildSquareXS / Game.SCALE);
-                        coords[i][1] = (buildSquareYS - (WIDTH * (squareheight - 1)) / Game.SCALE) + (i << 4);
+                        coords[i][1] = (buildSquareYS - (WIDTH * (squareheight - 1)) / Game.SCALE) + (i *16);
                     }
                 }
             }
@@ -126,35 +127,35 @@ public class BuildOutline {
 
 
     // update the outline
-    public void update(Mouse mouse, int xOff, int yOff, boolean force, int z) {
+    public void update(int xOff, int yOff, boolean force, int z) {
         this.z = z;
-        if (visible || force) {
-            if (mouse.getDrag() && !lockedSize) {
-                buildSquareXE = (mouse.getTileX() << 4) * Game.SCALE;
-                buildSquareYE = (mouse.getTileY() << 4) * Game.SCALE;
-                squarewidth = Math.abs(((buildSquareXE >> 4) / Game.SCALE) - ((buildSquareXS >> 4) / Game.SCALE)) + 1;
-                squareheight = Math.abs(((buildSquareYE >> 4) / Game.SCALE) - ((buildSquareYS >> 4) / Game.SCALE)) + 1;
+        if (visible || force) { //TODO fix this aids
+            /*if (MouseButton.heldDown(GLFW_MOUSE_BUTTON_LEFT) && !lockedSize) {
+                buildSquareXE = ((MousePosition.getTileX() * 16) * Game.SCALE);
+                buildSquareYE = ((MousePosition.getTileY() * 16) * Game.SCALE);
+                squarewidth = Math.abs(((buildSquareXE / 16) / Game.SCALE) - ((buildSquareXS / 16) / Game.SCALE)) + 1;
+                squareheight = Math.abs(((buildSquareYE / 16) / Game.SCALE) - ((buildSquareYS / 16) / Game.SCALE)) + 1;
                 if (squareheight > squarewidth) {
                     squarewidth = 1;
                 } else {
                     squareheight = 1;
                 }
-            } else {
-                buildSquareXS = ((mouse.getTileX() << 4) * Game.SCALE);
-                buildSquareXSTeken = ((mouse.getTileX() << 4) * Game.SCALE) - (xOff * Game.SCALE);
-                buildSquareYS = ((mouse.getTileY() << 4) * Game.SCALE);
-                buildSquareYSTeken = ((mouse.getTileY() << 4) * Game.SCALE) - (yOff * Game.SCALE);
+            } else {*/
+                buildSquareXS = ((MousePosition.getTileX() * 16) * Game.SCALE);
+                buildSquareXSTeken = ((MousePosition.getTileX() * 16) * Game.SCALE)-xOff;
+                buildSquareYS = ((MousePosition.getTileY() * 16) * Game.SCALE);
+                buildSquareYSTeken = ((MousePosition.getTileY() * 16) * Game.SCALE)-yOff;
                 squarewidth = 1;
                 squareheight = 1;
                 buildSquareXE = 0;
                 buildSquareYE = 0;
 
-            }
+          //  }
         }
     }
 
-    public void update(Mouse mouse, int xOff, int yOff,int z) {
-        update(mouse, xOff, yOff, false,z);
+    public void update(int xOff, int yOff,int z) {
+        update(xOff, yOff, false,z);
     }
 
     public BuildingRecipe getBuildRecipe() {
@@ -171,12 +172,12 @@ public class BuildOutline {
     }
 
     // show the outline
-    public void show(Mouse mouse, int xoff, int yoff, int z,boolean lockedSize, BuildingRecipe build) {
+    public void show(int xoff, int yoff, int z,boolean lockedSize, BuildingRecipe build) {
         if (!visible) {
-            update(mouse, xoff, yoff, true,z);
+            update(xoff, yoff, true,z);
             visible = true;
-            buildSquareXS = (mouse.getTileX() << 4) * Game.SCALE;
-            buildSquareYS = (mouse.getTileY() << 4) * Game.SCALE;
+            buildSquareXS = (MousePosition.getTileX() *16) * Game.SCALE;
+            buildSquareYS = (MousePosition.getTileY() *16) * Game.SCALE;
             squarewidth = 1;
             squareheight = 1;
             this.build = build;

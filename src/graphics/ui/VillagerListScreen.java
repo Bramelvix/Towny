@@ -1,5 +1,6 @@
 package graphics.ui;
 
+
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -17,5 +18,6 @@ public class VillagerListScreen {
 			g.fillRect(x, y, width, height);
 		}
 	}
+
 
 }

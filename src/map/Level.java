@@ -15,6 +15,8 @@ import graphics.Sprite;
 import graphics.SpriteHashtable;
 import main.Game;
 
+import static org.lwjgl.opengl.GL11.glTranslatef;
+
 public class Level {
     private Tile[][] tiles; // array of tiles on the map
     public int width, height; // map with and height
@@ -315,6 +317,7 @@ public class Level {
 
     // render the tiles
     public void render(int xScroll, int yScroll) {
+        glTranslatef(-xScroll, -yScroll, 0);
         int x0 = xScroll / 3 / 16;
         int x1 = (xScroll / 3 + Game.width + Sprite.SIZE) / 16;
         int y0 = yScroll / 3 / 16;
@@ -325,10 +328,12 @@ public class Level {
 
             }
         }
+        glTranslatef(xScroll, yScroll, 0);
 
     }
 
     public void renderHardEntities(int xScroll, int yScroll) {
+        glTranslatef(-xScroll, -yScroll, 0);
         int x0 = xScroll / 3 / 16;
         int x1 = (xScroll / 3 + Game.width + Sprite.SIZE*2) / 16;
         int y0 = yScroll / 3 / 16;
@@ -340,6 +345,7 @@ public class Level {
 
             }
         }
+        glTranslatef(xScroll, yScroll, 0);
     }
 
     // return the tile on x and y

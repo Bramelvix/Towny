@@ -34,13 +34,15 @@ import graphics.ui.Ui;
 import graphics.ui.icon.Icon;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.MenuItem;
-import input.Mouse;
+import input.Keyboard;
+import input.MouseButton;
+import input.MousePosition;
 import map.Level;
 import map.Tile;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.system.CallbackI;
 import sound.Sound;
 
 import javax.imageio.ImageIO;
@@ -56,11 +58,8 @@ public class Game {
 
     public static final int width = 500;
     public static final int height = width / 16 * 9;
-    private Thread thread;
     public static final int SCALE = 3;
     public Level[] map;
-    private boolean running = false;
-    private Mouse mouse;
     private ArrayList<Villager> vills;
     private ArrayList<Villager> sols;
     private ArrayList<Mob> mobs;
@@ -87,17 +86,18 @@ public class Game {
         init();
         loop();
     }
-    private void init() throws Exception{
-        if (glfwInit() != true) {
+
+    private void init() throws Exception {
+        if (!glfwInit()) {
             System.err.println("GLFW failed to initialize");
         }
-        glfwWindowHint(GLFW_RESIZABLE,GLFW_FALSE);
-        window = glfwCreateWindow(width*SCALE, height*SCALE, "Towny", 0, 0);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+        window = glfwCreateWindow(width * SCALE, height * SCALE, "Towny", 0, 0);
         if (window == 0) {
             System.err.println("Window failed to be created");
         }
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-        glfwSetWindowPos(window, (vidmode.width()-(width*SCALE))/2, (vidmode.height() - (height*SCALE))/2);
+        glfwSetWindowPos(window, (vidmode.width() - (width * SCALE)) / 2, (vidmode.height() - (height * SCALE)) / 2);
         glfwMakeContextCurrent(window);
         glfwShowWindow(window);
         GL.createCapabilities();
@@ -106,15 +106,18 @@ public class Game {
         glfwSwapInterval(0); //0 = VSYNC OFF, 1= VSYNC ON
         setIcon();
         glLoadIdentity();
-        glOrtho(0, width*SCALE, height*SCALE, 0.0f, 0.0f, 1.0f);
+        glOrtho(0, width * SCALE, height * SCALE, 0.0f, 0.0f, 1.0f);
         glMatrixMode(GL_MODELVIEW);
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_BLEND);
+        glfwSetKeyCallback(window, new Keyboard());
+        glfwSetMouseButtonCallback(window, new MouseButton());
+        glfwSetCursorPosCallback(window, new MousePosition(this));
+        glfwSetScrollCallback(window, this::scroll);
         SpritesheetHashtable.registerSpritesheets();
         SpriteHashtable.registerSprites();
         ItemHashtable.registerItems();
         Sound.initSound();
-        mouse = new Mouse(this);
         generateLevel();
         mobs = new ArrayList<>();
         vills = new ArrayList<>();
@@ -124,6 +127,7 @@ public class Game {
         spawnvills();
         spawnZombies();
     }
+
     private void setIcon() {
         try {
             BufferedImage img = ImageIO.read(Icon.class.getResource("/res/icons/soldier.png"));
@@ -131,7 +135,7 @@ public class Game {
             int height = img.getHeight();
             int[] pixels = new int[width * height];
             img.getRGB(0, 0, width, height, pixels, 0, width);
-            ByteBuffer buffer = OpenglUtils.getByteBuffer(pixels,width,height);
+            ByteBuffer buffer = OpenglUtils.getByteBuffer(pixels, width, height);
             GLFWImage image = GLFWImage.malloc();
             image.set(width, height, buffer);
             GLFWImage.Buffer images = GLFWImage.malloc(1);
@@ -168,7 +172,7 @@ public class Game {
         int teller = Entity.RANDOM.nextInt(5) + 1;
         for (int i = 0; i < teller; i++) {
             Zombie zomb = new Zombie(map, Entity.RANDOM.nextInt(256) + 16, Entity.RANDOM.nextInt(256) + 16, 0);
-            zomb.setHolding(Weapon.getWeapon(WeaponType.BUCKLER,WeaponMaterial.CRYSTAL));
+            zomb.setHolding(Weapon.getWeapon(WeaponType.BUCKLER, WeaponMaterial.CRYSTAL));
             mobs.add(zomb);
         }
     }
@@ -190,7 +194,6 @@ public class Game {
     }
 
 
-
     private void loop() {
         long lastTime = System.nanoTime();
         long timer = System.currentTimeMillis();
@@ -208,7 +211,6 @@ public class Game {
                     update();
                 }
                 delta--;
-                mouse.reset();
             }
 
             if (System.currentTimeMillis() - timer > 1000) {
@@ -224,16 +226,16 @@ public class Game {
         glfwTerminate();
 
     }
+
     private void draw() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        map[currentLayerNumber].render(xScroll,yScroll);
+        map[currentLayerNumber].render(xScroll, yScroll);
         renderMobs();
-        map[currentLayerNumber].renderHardEntities(xScroll,yScroll);
-        ui.render(xScroll,yScroll);
+        map[currentLayerNumber].renderHardEntities(xScroll, yScroll);
+        ui.render();
         glfwSwapBuffers(window);
     }
-
 
 
     private void update() {
@@ -243,23 +245,28 @@ public class Game {
     }
 
     private void updateUI() {
-        ui.update(mouse, xScroll, yScroll, currentLayerNumber);
-        getKeyPositions();
-        if (mouse.getMouseWheelMoved() != 0) {
-            currentLayerNumber += mouse.getMouseWheelMoved();
-            if (currentLayerNumber < 0) {
-                currentLayerNumber = 0;
-            } else if (currentLayerNumber > map.length - 1) {
-                currentLayerNumber = map.length - 1;
-            }
-            ui.updateMinimap(map, currentLayerNumber);
-        }
+        ui.update(xScroll, yScroll, currentLayerNumber);
+        moveCamera();
+
         if (paused != ui.isPaused()) {
             paused = ui.isPaused();
         }
         if (speed != ui.getSpeed()) {
             speed = ui.getSpeed();
             ns = 100000000.0 / speed;
+        }
+
+    }
+
+    private void scroll(long window, double v, double v1) {
+        if ((currentLayerNumber <= map.length-1 && v1 > 0) || (currentLayerNumber >= 0 && v1 < 0)) {
+            currentLayerNumber -= v1;
+            if (currentLayerNumber < 0) {
+                currentLayerNumber = 0;
+            } else if (currentLayerNumber > map.length - 1) {
+                currentLayerNumber = map.length - 1;
+            }
+            //ui.updateMinimap(map, currentLayerNumber);
         }
 
     }
@@ -281,13 +288,6 @@ public class Game {
         return null;
     }
 
-    private Villager anyVillHoverOn(Mouse mouse) {
-        return anyVillHoverOn(mouse.getX(), mouse.getY());
-    }
-
-    private Mob anyMobHoverOn(Mouse mouse) {
-        return anyMobHoverOn(mouse.getX(), mouse.getY());
-    }
 
     private Mob anyMobHoverOn(int x, int y) {
         for (Mob i : mobs) {
@@ -309,8 +309,8 @@ public class Game {
 
     private void updateMouse() {
         if ((UiIcons.isWoodSelected()) && UiIcons.hoverOnNoIcons()) {
-            if (mouse.getMouseB() == 1) {
-                ui.showSelectionSquare(mouse);
+            if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
+                ui.showSelectionSquare();
                 int x = ui.getSelectionX();
                 int y = ui.getSelectionY();
                 int width = ui.getSelectionWidth();
@@ -325,7 +325,7 @@ public class Game {
                 }
                 return;
             }
-            if (mouse.getReleasedLeft()) {
+            if (MouseButton.wasReleased(GLFW_MOUSE_BUTTON_LEFT)) {
                 int x = ui.getSelectionX();
                 int y = ui.getSelectionY();
                 int width = ui.getSelectionWidth();
@@ -345,63 +345,63 @@ public class Game {
 
             }
             return;
-        } else if (((UiIcons.isMiningSelected()) && UiIcons.hoverOnNoIcons() && mouse.getClickedLeft())
-                && (map[currentLayerNumber].selectOre(mouse.getX(), mouse.getY()) != null)) {
+        } else if (((UiIcons.isMiningSelected()) && UiIcons.hoverOnNoIcons() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT))
+                && (map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY()) != null)) {
             Villager idle = getIdlestVil();
             idle.setPath(null);
             deselectAllVills();
-            idle.addJob(map[currentLayerNumber].selectOre(mouse.getX(), mouse.getY()));
+            idle.addJob(map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY()));
             ui.deSelectIcons();
             return;
 
-        } else if (UiIcons.isShovelHover() && !ui.menuVisible() && mouse.getClickedLeft()) {
+        } else if (UiIcons.isShovelHover() && !ui.menuVisible() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
             deselectAllVills();
-            ui.showBuildSquare(mouse, xScroll, yScroll, false, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
+            ui.showBuildSquare(xScroll, yScroll, false, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
             ui.deSelectIcons();
             return;
 
-        } else if (((UiIcons.isSwordsSelected()) && UiIcons.hoverOnNoIcons() && mouse.getClickedLeft())
-                && (anyMobHoverOn(mouse) != null)) {
+        } else if (((UiIcons.isSwordsSelected()) && UiIcons.hoverOnNoIcons() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT))
+                && (anyMobHoverOn(MousePosition.getX(), MousePosition.getY()) != null)) {
             Villager idle = getIdlestVil();
             idle.setPath(null);
             deselectAllVills();
-            idle.addJob(new FightJob(idle, anyMobHoverOn(mouse)));
+            idle.addJob(new FightJob(idle, anyMobHoverOn(MousePosition.getX(), MousePosition.getY())));
             ui.deSelectIcons();
             return;
 
-        } else if (mouse.getClickedLeft() && anyVillHoverOn(mouse) != null && !ui.outlineIsVisible()) {
+        } else if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT) && anyVillHoverOn(MousePosition.getX(), MousePosition.getY()) != null && !ui.outlineIsVisible()) {
             deselectAllVills();
-            selectedvill = anyVillHoverOn(mouse);
+            selectedvill = anyVillHoverOn(MousePosition.getX(), MousePosition.getY());
             selectedvill.setSelected(true);
             ui.deSelectIcons();
             return;
-        } else if (UiIcons.isSawHover() && !ui.menuVisible() && mouse.getClickedLeft()) {
+        } else if (UiIcons.isSawHover() && !ui.menuVisible() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
             deselectAllVills();
             MenuItem[] items = new MenuItem[BuildingRecipe.RECIPES.length + 1];
             for (int i = 0; i < BuildingRecipe.RECIPES.length; i++) {
                 items[i] = new MenuItem(BuildingRecipe.RECIPES[i]);
             }
             items[items.length - 1] = new MenuItem(MenuItem.CANCEL);
-            ui.showMenuOn(mouse, items);
+            ui.showMenu(items);
             return;
-        } else if (mouse.getClickedRight()) {
+        } else if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_RIGHT)) {
             if (selectedvill != null) {
                 List<MenuItem> options = new ArrayList<>();
                 if (selectedvill.getHolding() != null)
                     options.add(new MenuItem((MenuItem.DROP + " " + selectedvill.getHolding().getName())));
-                Tree boom = map[currentLayerNumber].selectTree(mouse.getX(), mouse.getY());
+                Tree boom = map[currentLayerNumber].selectTree(MousePosition.getX(), MousePosition.getY());
                 if (boom != null) {
                     options.add(new MenuItem((MenuItem.CHOP), boom));
                 }
-                Ore ore = map[currentLayerNumber].selectOre(mouse.getX(), mouse.getY());
+                Ore ore = map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY());
                 if (ore != null) {
                     options.add(new MenuItem((MenuItem.MINE), ore));
                 }
-                Mob mob = anyMobHoverOn(mouse);
+                Mob mob = anyMobHoverOn(MousePosition.getX(), MousePosition.getY());
                 if (mob != null) {
                     options.add(new MenuItem((MenuItem.FIGHT), mob));
                 }
-                Item item = map[currentLayerNumber].getItemOn(mouse.getX(), mouse.getY());
+                Item item = map[currentLayerNumber].getItemOn(MousePosition.getX(), MousePosition.getY());
                 if (item != null) {
                     if (item instanceof Weapon) {
                         options.add(new MenuItem((MenuItem.EQUIP), item));
@@ -412,8 +412,8 @@ public class Game {
                     }
 
                 }
-                if (map[currentLayerNumber].getEntityOn(mouse.getX(), mouse.getY()) instanceof Chest) {
-                    Chest chest = (Chest) map[currentLayerNumber].getEntityOn(mouse.getX(), mouse.getY());
+                if (map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY()) instanceof Chest) {
+                    Chest chest = (Chest) map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY());
                     for (Item i : chest.getItems()) {
                         options.add(new MenuItem((MenuItem.PICKUP), i));
                     }
@@ -421,19 +421,19 @@ public class Game {
                     options.add(new MenuItem(MenuItem.MOVE));
                 }
                 options.add(new MenuItem(MenuItem.CANCEL));
-                ui.showMenuOn(mouse, options.toArray(new MenuItem[0]));
+                ui.showMenu(options.toArray(new MenuItem[0]));
             } else {
-                if (map[currentLayerNumber].getEntityOn(mouse.getX(), mouse.getY()) instanceof Furnace) {
-                    ui.showMenuOn(mouse, new MenuItem(MenuItem.SMELT), new MenuItem(MenuItem.CANCEL));
-                } else if (map[currentLayerNumber].getEntityOn(mouse.getX(), mouse.getY()) instanceof Anvil) {
-                    ui.showMenuOn(mouse, new MenuItem(MenuItem.SMITH), new MenuItem(MenuItem.CANCEL));
+                if (map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY()) instanceof Furnace) {
+                    ui.showMenu(new MenuItem(MenuItem.SMELT), new MenuItem(MenuItem.CANCEL));
+                } else if (map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY()) instanceof Anvil) {
+                    ui.showMenu(new MenuItem(MenuItem.SMITH), new MenuItem(MenuItem.CANCEL));
                 } else {
-                    ui.showMenuOn(mouse, new MenuItem(MenuItem.CANCEL));
+                    ui.showMenu(new MenuItem(MenuItem.CANCEL));
                 }
 
             }
         }
-        if (ui.outlineIsVisible() && !ui.menuVisible() && mouse.getReleasedLeft() && UiIcons.hoverOnNoIcons()) {
+        if (ui.outlineIsVisible() && !ui.menuVisible() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT) && UiIcons.hoverOnNoIcons()) {
             int[][] coords = ui.getOutlineCoords();
             for (int[] blok : coords) {
                 if (map[currentLayerNumber].tileIsEmpty(blok[0] / 16, blok[1] / 16)) {
@@ -449,7 +449,7 @@ public class Game {
             return;
         }
         if (ui.menuVisible()) {
-            MenuItem item = ui.getMenu().clickedItem(mouse);
+            MenuItem item = ui.getMenu().clickedItem();
             if (item != null) {
                 if (item.getText().contains(MenuItem.CANCEL)) {
                     ui.getMenu().hide();
@@ -459,7 +459,7 @@ public class Game {
                     }
                 } else if (item.getText().contains(MenuItem.MOVE)) {
                     selectedvill.resetAll();
-                    selectedvill.addJob(new MoveJob(mouse.getX(), mouse.getY(), currentLayerNumber, selectedvill));
+                    selectedvill.addJob(new MoveJob(MousePosition.getX(), MousePosition.getY(), currentLayerNumber, selectedvill));
                     deselect(selectedvill);
                     ui.deSelectIcons();
                     ui.getMenu().hide();
@@ -482,7 +482,7 @@ public class Game {
                     ui.deSelectIcons();
                     ui.getMenu().hide();
                 } else if (item.getText().contains(MenuItem.BUILD) && !ui.outlineIsVisible()) {
-                    ui.showBuildSquare(mouse, xScroll, yScroll, false, item.getRecipe(), currentLayerNumber);
+                    ui.showBuildSquare(xScroll, yScroll, false, item.getRecipe(), currentLayerNumber);
                     ui.deSelectIcons();
                     ui.getMenu().hide();
                 } else if ((item.getText().contains(MenuItem.PICKUP) || item.getText().contains(MenuItem.EQUIP)
@@ -505,10 +505,10 @@ public class Game {
                         craftingOptions[i] = new MenuItem(ItemRecipe.FURNACE_RECIPES[i]);
                     }
                     craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
-                    ui.showMenuOn(mouse, craftingOptions);
+                    ui.showMenu(craftingOptions);
                 } else if (item.getText().contains(MenuItem.CRAFT)) {
                     Villager idle = getIdlestVil();
-                    ItemRecipe recipe = ui.getMenu().recipeFromMenuOption(mouse, MenuItem.CRAFT);
+                    ItemRecipe recipe = ui.getMenu().recipeFromMenuOption(MenuItem.CRAFT);
                     if (recipe != null) {
                         idle.setPath(null);
                         Item[] res = new Item[recipe.getResources().length];
@@ -527,7 +527,7 @@ public class Game {
                                 StringUtils.capitalize(WeaponMaterial.values()[i].toString().toLowerCase()));
                     }
                     craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
-                    ui.showMenuOn(mouse, craftingOptions);
+                    ui.showMenu(craftingOptions);
                 } else if (MenuItem.isEqualToAnyMaterial(item.getText())) {
                     ItemRecipe[] recipes = ItemRecipe
                             .smithingRecipesFromWeaponMaterial(WeaponMaterial.valueOf(item.getText().toUpperCase()));
@@ -536,32 +536,30 @@ public class Game {
                         craftingOptions[i] = new MenuItem(recipes[i]);
                     }
                     craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
-                    ui.showMenuOn(mouse, craftingOptions);
+                    ui.showMenu(craftingOptions);
                 }
             }
         }
     }
 
-    private void moveCamera(int xScroll, int yScroll) {
-        glTranslatef(-xScroll, -yScroll, 0);
+    public void moveCamera(int xScroll, int yScroll) {
         this.xScroll += xScroll;
         this.yScroll += yScroll;
-
     }
 
-    private void getKeyPositions() {
+    private void moveCamera() {
         int _yScroll = 0;
         int _xScroll = 0;
-        if (glfwGetKey(window,GLFW_KEY_UP)==1 && yScroll > 1) {
+        if (Keyboard.isKeyDown(GLFW_KEY_UP) && yScroll > 1) {
             _yScroll -= 6;
         }
-        if (glfwGetKey(window,GLFW_KEY_DOWN)==1 && yScroll < (map[currentLayerNumber].height * Tile.SIZE) - 1 - height) {
+        if (Keyboard.isKeyDown(GLFW_KEY_DOWN) && yScroll < ((map[currentLayerNumber].height * Tile.SIZE) - 1 - height) * SCALE) {
             _yScroll += 6;
         }
-        if (glfwGetKey(window,GLFW_KEY_LEFT)==1 && xScroll > 1) {
+        if (Keyboard.isKeyDown(GLFW_KEY_LEFT) && xScroll > 1) {
             _xScroll -= 6;
         }
-        if (glfwGetKey(window,GLFW_KEY_RIGHT)==1 && xScroll < (map[currentLayerNumber].width * Tile.SIZE) - width - 1) {
+        if (Keyboard.isKeyDown(GLFW_KEY_RIGHT) && xScroll < ((map[currentLayerNumber].width * Tile.SIZE) - width - 1) * SCALE) {
             _xScroll += 6;
         }
         moveCamera(_xScroll, _yScroll);
@@ -594,23 +592,25 @@ public class Game {
     }
 
     private void renderMobs() {
-        int x1 = (xScroll / 3 + Game.width + Sprite.SIZE);
-        int y1 = (yScroll / 3 + Game.height + Sprite.SIZE);
+        int x1 = (xScroll / 3 + width + Sprite.SIZE);
+        int y1 = (yScroll / 3 + height + Sprite.SIZE);
+        glTranslatef(-xScroll, -yScroll, 0);
         for (Mob i : mobs) {
-            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll/3 && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll/3 && i.getY() - 16 <= y1) {
+            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll / 3 && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll / 3 && i.getY() - 16 <= y1) {
                 i.render();
             }
         }
         for (Villager i : vills) {
-            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll/3 && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll/3 && i.getY() - 16 <= y1) {
+            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll / 3 && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll / 3 && i.getY() - 16 <= y1) {
                 i.render();
             }
         }
         for (Villager i : sols) {
-            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll/3 && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll/3 && i.getY() - 16 <= y1) {
+            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll / 3 && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll / 3 && i.getY() - 16 <= y1) {
                 i.render();
             }
         }
+        glTranslatef(xScroll, yScroll, 0);
     }
 
 

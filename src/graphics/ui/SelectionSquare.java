@@ -3,8 +3,11 @@ package graphics.ui;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import input.Mouse;
+import input.MouseButton;
+import input.MousePosition;
 import main.Game;
+
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class SelectionSquare {
 	private static final Color COL = new Color(91, 94, 99, 110); // colour of the square
@@ -14,13 +17,13 @@ public class SelectionSquare {
 	private boolean visible;
 	private boolean startedDragging;
 
-	public void update(Mouse mouse) {
-		startedDragging = mouse.getDrag();
+	public void update() {
+		startedDragging = MouseButton.heldDown(GLFW_MOUSE_BUTTON_LEFT);
 		if (visible) {
 			if (startedDragging) {
-				widthteken = mouse.getTrueX() * Game.SCALE - xcoord;
+				widthteken = MousePosition.getTrueX() * Game.SCALE - xcoord;
 				width = widthteken / Game.SCALE;
-				heightteken = mouse.getTrueY() * Game.SCALE - ycoord;
+				heightteken = MousePosition.getTrueY() * Game.SCALE - ycoord;
 				height = heightteken / Game.SCALE;
 			}
 		}
@@ -40,12 +43,12 @@ public class SelectionSquare {
 		widthteken = 0;
 	}
 
-	public void show(Mouse mouse) {
+	public void show() {
 		if (!visible) {
-			x = mouse.getX();
-			y = mouse.getY();
-			xcoord = mouse.getTrueX() * Game.SCALE;
-			ycoord = mouse.getTrueY() * Game.SCALE;
+			x = MousePosition.getX();
+			y = MousePosition.getY();
+			xcoord = MousePosition.getTrueX() * Game.SCALE;
+			ycoord = MousePosition.getTrueY() * Game.SCALE;
 			visible = true;
 		}
 	}

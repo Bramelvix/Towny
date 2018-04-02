@@ -1,9 +1,9 @@
 package graphics.ui.icon;
 
-import java.awt.Graphics;
+import input.MouseButton;
+import input.MousePosition;
 
-import graphics.OpenglUtils;
-import input.Mouse;
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class UiIcons {
     private static Icon[] icons; // array of the 4 icons
@@ -21,9 +21,9 @@ public class UiIcons {
 	}
 
 	// rendering the icons on the screen
-	public static void render(int xOff, int yOff) {
+	public static void render() {
 		for (Icon i : icons) {
-			i.render(xOff,yOff);
+			i.render();
 		}
 
 	}
@@ -87,13 +87,13 @@ public class UiIcons {
 	}
 
 	// update the icons
-    public static void update(Mouse mouse) {
+    public static void update() {
 		for (Icon i : icons) {
-			i.setHoverOn((((mouse.getTrueXPixels()) >= i.getX())
-					&& ((mouse.getTrueXPixels()) <= i.getX() + (i.getSize())) && ((mouse.getTrueYPixels()) >= i.getY())
-					&& ((mouse.getTrueYPixels()) <= i.getY() + (i.getSize()))));
+			i.setHoverOn((((MousePosition.getTrueXPixels()) >= i.getX())
+					&& ((MousePosition.getTrueXPixels()) <= i.getX() + (i.getSize())) && ((MousePosition.getTrueYPixels()) >= i.getY())
+					&& ((MousePosition.getTrueYPixels()) <= i.getY() + (i.getSize()))));
 		}
-		setSelected(mouse);
+		setSelected();
 
 	}
 
@@ -111,9 +111,9 @@ public class UiIcons {
 	}
 
 	// selecting an icon
-    private static void setSelected(Mouse mouse) {
+    private static void setSelected() {
 		for (int i = 0; i < icons.length; i++) {
-			if (mouse.getClickedLeft() && icons[i].hoverOn() && allOtherIconsNotSelected(i)) {
+			if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT) && icons[i].hoverOn() && allOtherIconsNotSelected(i)) {
 				icons[i].setSelect(true);
 			}
 		}
