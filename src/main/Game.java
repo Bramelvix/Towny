@@ -247,7 +247,6 @@ public class Game {
     private void updateUI() {
         ui.update(xScroll, yScroll, currentLayerNumber);
         moveCamera();
-
         if (paused != ui.isPaused()) {
             paused = ui.isPaused();
         }
@@ -275,15 +274,16 @@ public class Game {
         Villager lowest = vills.get(0);
         for (Villager i : vills) {
             if (i.getJobSize() < lowest.getJobSize())
-                return i;
+                lowest = i;
         }
         return lowest;
     }
 
     private Villager anyVillHoverOn(int x, int y) {
         for (Villager i : vills) {
-            if (i.hoverOn(x, y, currentLayerNumber))
+            if (i.hoverOn(x, y, currentLayerNumber)) {
                 return i;
+            }
         }
         return null;
     }
@@ -291,8 +291,9 @@ public class Game {
 
     private Mob anyMobHoverOn(int x, int y) {
         for (Mob i : mobs) {
-            if (i.hoverOn(x, y, currentLayerNumber))
+            if (i.hoverOn(x, y, currentLayerNumber)) {
                 return i;
+            }
         }
         return null;
     }
@@ -413,7 +414,7 @@ public class Game {
 
                 }
                 if (map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY()) instanceof Chest) {
-                    Chest chest = (Chest) map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY());
+                    Chest chest =  map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY());
                     for (Item i : chest.getItems()) {
                         options.add(new MenuItem((MenuItem.PICKUP), i));
                     }

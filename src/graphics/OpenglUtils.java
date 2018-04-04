@@ -128,7 +128,6 @@ public abstract class OpenglUtils {
         glColor3f(1.0f,1.0f,1.0f);
     }
     public static void buildOutlineDraw(int x, int y, int size, Color color) {
-
         drawFilledSquare(x,y,size,size,color.getRed()/255f,color.getGreen()/255f,color.getBlue()/255f,color.getAlpha()/255f);
     }
 

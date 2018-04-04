@@ -80,12 +80,10 @@ public class BuildOutline {
     // getters
     public int[][] getSquareCoords() {
         int[][] coords;
-        System.out.println(buildSquareXE + ":::"+buildSquareYE);
         if (buildSquareXE == 0 && buildSquareYE == 0) {
             coords = new int[1][2];
             coords[0][0] = (buildSquareXS / Game.SCALE);
             coords[0][1] = (buildSquareYS / Game.SCALE);
-            System.out.println(buildSquareXS/Game.SCALE + "::" + buildSquareYS/Game.SCALE);
         } else {
             if (squarewidth > squareheight) {
                 if (buildSquareXSTeken < buildSquareXE) { // START LINKS VAN EIND == SLEEP NAAR RECHTS

@@ -181,11 +181,11 @@ public class Level {
     }
 
     // generate the green border around the map
-    private void generateBorder() {
+    private void generateBorder(int depth) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (x == 0 || y == 0 || x == width - 1 || y == height - 1) {
-                    tiles[x][y] = Tile.darkGrass;
+                    tiles[x][y] = depth == 0 ? Tile.darkGrass : Tile.darkStone;
                 }
             }
         }
@@ -193,7 +193,7 @@ public class Level {
 
     // generates a (slighty less) shitty random level
     private void generateLevel(int elevation) {
-        generateBorder();
+        generateBorder(elevation);
         float[] noise = Generator.generateSimplexNoise(width, height, 11, Entity.RANDOM.nextInt(1000),
                 Entity.RANDOM.nextBoolean());
         for (int y = 1; y < height - 1; y++) {
@@ -201,16 +201,16 @@ public class Level {
                 if (noise[x + y * width] > 0.5) {
                     tiles[x][y] = new Tile(SpriteHashtable.getDirt(), false, x, y);
                     if (elevation > 0) {
-                        tiles[x][y] = new Tile(SpriteHashtable.getStone(), false, x, y);
+                        tiles[x][y] = new Tile(SpriteHashtable.getStone(), false,x,y);
                     }
                 } else {
                     if (elevation > 0) {
-                        tiles[x][y] = new Tile(SpriteHashtable.getStone(), false, x, y);
+                        tiles[x][y] = new Tile(SpriteHashtable.getStone(), false,x,y);
                         if (!randOre(x, y)) {
                             spawnRock(x, y);
                         }
                     } else {
-                        tiles[x][y] = new Tile(SpriteHashtable.getGrass(), false, x, y);
+                        tiles[x][y] = new Tile(SpriteHashtable.getGrass(), false,x,y);
                         randForest(x, y);
                     }
                 }

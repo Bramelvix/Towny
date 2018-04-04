@@ -15,8 +15,10 @@ import entity.dynamic.item.weapon.Weapon;
 import entity.dynamic.mob.work.Job;
 import entity.pathfinding.Path;
 import graphics.HairSprite;
+import graphics.OpenglUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
+import main.Game;
 import map.Level;
 
 public class Villager extends Humanoid {
@@ -242,7 +244,7 @@ public class Villager extends Humanoid {
             getHolding().sprite.draw(x,y);// renders the item the villager is holding
         }
         if (this.isSelected()) {
-            //screen.renderSelection(this); // render the red square around selected villagers
+            OpenglUtils.drawSelection(x* Game.SCALE,y*Game.SCALE,Sprite.SIZE* Game.SCALE);// render the red square around selected villagers
         }
 
     }
