@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -7,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.sun.xml.internal.ws.util.StringUtils;
 import com.sun.xml.internal.ws.util.StringUtils;
 import entity.Entity;
 import entity.dynamic.item.weapon.WeaponType;
@@ -42,7 +44,6 @@ import map.Tile;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.system.CallbackI;
 import sound.Sound;
 
 import javax.imageio.ImageIO;
@@ -241,6 +242,7 @@ public class Game {
     private void update() {
         updateMobs();
         updateMouse();
+        MouseButton.resetLeftAndRight();
 
     }
 
@@ -265,7 +267,7 @@ public class Game {
             } else if (currentLayerNumber > map.length - 1) {
                 currentLayerNumber = map.length - 1;
             }
-            //ui.updateMinimap(map, currentLayerNumber);
+            ui.updateMinimap(map, currentLayerNumber);
         }
 
     }
@@ -357,7 +359,7 @@ public class Game {
 
         } else if (UiIcons.isShovelHover() && !ui.menuVisible() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
             deselectAllVills();
-            ui.showBuildSquare(xScroll, yScroll, false, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
+            ui.showBuildSquare(xScroll, yScroll, true, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
             ui.deSelectIcons();
             return;
 
@@ -543,9 +545,10 @@ public class Game {
         }
     }
 
-    public void moveCamera(int xScroll, int yScroll) {
+    private void moveCamera(int xScroll, int yScroll) {
         this.xScroll += xScroll;
         this.yScroll += yScroll;
+        ui.setOffset(this.xScroll, this.yScroll);
     }
 
     private void moveCamera() {

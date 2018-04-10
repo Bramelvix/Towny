@@ -1,11 +1,7 @@
 package input;
 
-import main.Game;
-import map.Tile;
 import org.lwjgl.glfw.GLFWMouseButtonCallbackI;
-
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class MouseButton implements GLFWMouseButtonCallbackI {
     private static boolean[] released = new boolean[3];
@@ -48,10 +44,12 @@ public class MouseButton implements GLFWMouseButtonCallbackI {
         return released[button];
     }
 
-    public static void resetReleased() {
-        for (int i = 0; i < released.length; i++) {
-            released[i] = false;
-        }
+    public static void resetLeftAndRight() {
+        released[GLFW_MOUSE_BUTTON_LEFT] = false;
+        pressed[GLFW_MOUSE_BUTTON_LEFT] = false;
+        released[GLFW_MOUSE_BUTTON_RIGHT] = false;
+        pressed[GLFW_MOUSE_BUTTON_RIGHT] = false;
+
     }
 
     public static boolean heldDown(int button) {

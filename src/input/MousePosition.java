@@ -35,10 +35,10 @@ public class MousePosition implements GLFWCursorPosCallbackI {
         if (MouseButton.heldDown(GLFW_MOUSE_BUTTON_MIDDLE)) {
             int deltaX = -trueXpixels;
             int deltaY = -trueYpixels;
-            if (deltaX + MouseButton.getDragOffsetX() >= 0 && deltaX + MouseButton.getDragOffsetX() <= ((game.map[game.currentLayerNumber].width * Tile.SIZE) - game.width)*game.SCALE) {
+            if (deltaX + MouseButton.getDragOffsetX() >= 0 && deltaX + MouseButton.getDragOffsetX() <= ((game.map[game.currentLayerNumber].width * Tile.SIZE) - Game.width) * Game.SCALE) {
                 game.xScroll = deltaX + MouseButton.getDragOffsetX();
             }
-            if (deltaY + MouseButton.getDragOffsetY() >= 0 && deltaY + MouseButton.getDragOffsetY() <= ((game.map[game.currentLayerNumber].height * Tile.SIZE) - game.height)*game.SCALE) {
+            if (deltaY + MouseButton.getDragOffsetY() >= 0 && deltaY + MouseButton.getDragOffsetY() <= ((game.map[game.currentLayerNumber].height * Tile.SIZE) - Game.height) * Game.SCALE) {
                 game.yScroll = deltaY + MouseButton.getDragOffsetY();
             }
 

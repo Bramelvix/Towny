@@ -87,6 +87,7 @@ public class MenuItem {
 
 	// getter
 	public boolean clicked() {
+        //return hover && MouseButton.
 		return hover && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT);
 	}
 

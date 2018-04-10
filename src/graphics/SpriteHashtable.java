@@ -10,11 +10,6 @@ public class SpriteHashtable {
     private static final Hashtable<Integer, Sprite> table = new Hashtable<>();
     private static final Random rand = new Random(); // random object used for random distributionof sprites
 
-    public static Sprite[] STONEWALLSPRITES;
-    public static Sprite[] WOODWALLSPRITES;
-    public static Sprite[] WOODDOORSPRITES;
-    public static Sprite[] STONEDOORSPRITES;
-
 
     // return random grass sprite
     public static Sprite getGrass() {

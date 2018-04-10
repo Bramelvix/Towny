@@ -3,14 +3,13 @@ package graphics;
 import main.Game;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL12;
-
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
-
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.stb.STBEasyFont.*;
 
 public abstract class OpenglUtils {
     public static int loadTexture(int[] pixels, int width, int height) {
@@ -114,6 +113,7 @@ public abstract class OpenglUtils {
         glColor3f(1.0f,1.0f,1.0f);
     }
     public static void menuItemDraw(int x, int y, String text, boolean selected) {
+        drawText(text, x, y, selected ? Color.red : Color.black);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
         if (selected) {
@@ -122,10 +122,10 @@ public abstract class OpenglUtils {
             glColor3f(1.0f, 1.0f, 1.0f);
         }
         glBegin(GL_QUADS);
-
         glEnd();
         glPopMatrix();
         glColor3f(1.0f,1.0f,1.0f);
+
     }
     public static void buildOutlineDraw(int x, int y, int size, Color color) {
         drawFilledSquare(x,y,size,size,color.getRed()/255f,color.getGreen()/255f,color.getBlue()/255f,color.getAlpha()/255f);
@@ -140,6 +140,20 @@ public abstract class OpenglUtils {
         BufferedImage after = new BufferedImage( (int)(w*xScale), (int)(h*yScale), BufferedImage.TYPE_INT_ARGB);
         after = scaleOp.filter(before, after);
         return after;
+    }
+
+    public static void drawText(String text, int x, int y, Color color) { //TODO fix this. This shit is really inefficient but it works and this is all I feel like doing
+        ByteBuffer charBuffer = BufferUtils.createByteBuffer(text.length() * 270);
+        int quads = stb_easy_font_print(0, 0, text, null, charBuffer);
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(2, GL_FLOAT, 16, charBuffer);
+        glColor3f(color.getRed() / 255f, color.getGreen() / 255f, color.getBlue() / 255f); // Text color
+        glPushMatrix();
+        glTranslatef(x, y, 0);
+        glScalef(1.7f, 1.7f, 1f);
+        glDrawArrays(GL_QUADS, 0, quads * 4);
+        glPopMatrix();
+        glDisableClientState(GL_VERTEX_ARRAY);
     }
 
 

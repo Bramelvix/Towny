@@ -21,7 +21,7 @@ public class Ui {
         UiIcons.render();
         menu.render();
         top.render();
-        //map.render(g);
+        map.render();
         outline.render();
        //selection.render(g);
 

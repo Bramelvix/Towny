@@ -10,6 +10,7 @@ import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 
 import entity.Entity;
+import graphics.OpenglUtils;
 import map.Level;
 
 public class Minimap {
@@ -17,10 +18,9 @@ public class Minimap {
     private int width, height; // width and height of the minimap
     private int x, y; // x and y of the top left corner
     private int z;
-    private int[] pixels; // pixels array
-    private Image img; // image being rendered
     private static final Color COL = new Color(91, 94, 99, 110); // colour of the small rectangle on the minimap showing where the screen is
     private int xoff, yoff; // offset
+    private int textureId;
 
     // constructor
     Minimap(int x, int y, Level map) {
@@ -29,24 +29,24 @@ public class Minimap {
         this.z = 0;
         width = 200;
         height = 200;
-        pixels = new int[(width) * (height)];
         init(map);
 
     }
 
     // intialise the image
     private void init(Level map) {
+        int[] pixels = new int[width * height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                pixels[y + x * width] = map.getTile(y / 2, x / 2).sprite.pixels[0];
+                pixels[x + y * width] = map.getTile(y / 2, x / 2).sprite.pixels[0];
                 Entity e = map.getEntityOn((y * 16) / 2, (x * 16) / 2);
-                if (e != null) {
-                    pixels[y + x * width] = e.sprite.pixels[10];
+                if (e != null && e.sprite.pixels != null) { //TODO fix this with underground walls
+                    pixels[x + y * width] = e.sprite.pixels[5];
                 }
 
             }
         }
-        img = getImageFromArray(pixels, width, height);
+        textureId = OpenglUtils.loadTexture(pixels, width, height);
 
     }
 
@@ -58,12 +58,11 @@ public class Minimap {
     }
 
     // render the minimap
-    public void render(Graphics g) {
-        g.drawImage(img, x, y, null);
-        g.setColor(COL);
+    public void render() {
         float xloc = (x + (xoff * 0.125f));
         float yloc = (y + (yoff * 0.125f));
-        g.fillRect((int) xloc + 1, (int) yloc + 1, (int) (31.25 * 2), (int) (17.578125 * 2));
+        OpenglUtils.drawTexturedQuad(x, y, width, height, textureId);
+        OpenglUtils.drawFilledSquare((int) xloc, (int) yloc, (int) (31.25 * 2), (int) (17.578125 * 2), COL.getRed() / 255f, COL.getGreen() / 255f, COL.getBlue() / 255f, COL.getAlpha() / 255f);
 
     }
 
@@ -71,15 +70,6 @@ public class Minimap {
     public void setOffset(int x, int y) {
         xoff = x;
         yoff = y;
-    }
-
-    // gets an image from an array of pixels
-    private static Image getImageFromArray(int[] pixels, int width, int height) {
-        DataBufferInt buffer = new DataBufferInt(pixels, pixels.length);
-        int[] bandMasks = {0xFF0000, 0xFF00, 0xFF, 0xFF000000};
-        WritableRaster raster = Raster.createPackedRaster(buffer, width, height, width, bandMasks, null);
-        ColorModel cm = ColorModel.getRGBdefault();
-        return new BufferedImage(cm, raster, cm.isAlphaPremultiplied(), null);
     }
 
 }

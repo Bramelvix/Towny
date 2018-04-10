@@ -4,12 +4,9 @@ import java.awt.Color;
 
 import entity.dynamic.mob.work.BuildingRecipe;
 import graphics.OpenglUtils;
-import input.MouseButton;
 import input.MousePosition;
 import main.Game;
 import map.Level;
-
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 //the green or red outline used to select where to build things
 public class BuildOutline {
@@ -56,7 +53,6 @@ public class BuildOutline {
                                 ? notbuildable
                                 : buildable);
                     }
-                    return;
                 } else { // START ONDER EIND == SLEEP NAAR BOVEN
                     for (int i = 0; i < squareheight; i++) {
 
@@ -64,7 +60,6 @@ public class BuildOutline {
                                 ((((buildSquareYS) - (WIDTH * (squareheight - 1))) / Game.SCALE) /16) + i, z)) ? notbuildable
                                 : buildable);
                     }
-                    return;
                 }
 
             }
@@ -185,7 +180,6 @@ public class BuildOutline {
 
     // hide the outline
     public void remove() {
-        if (visible)
-            visible = false;
+        visible = false;
     }
 }
