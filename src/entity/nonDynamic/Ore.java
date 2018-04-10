@@ -9,6 +9,7 @@ import map.Level;
 import map.Tile;
 import sound.Sound;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class Ore extends Resource {
 
     private void setOre(String name, Sprite oreSprite, Item item) {
         setName(name);
-        this.sprites.add(oreSprite);
+        this.sprite = oreSprite;
         this.minedItem = item;
     }
 
@@ -86,7 +87,8 @@ public class Ore extends Resource {
     }
 
     private void decideSprite(boolean leftHasWall, boolean rightHasWall, boolean topHasWall, boolean bottomHasWall, boolean topRightHasWall, boolean bottomRightHasWall, boolean bottomLeftHasWall, boolean topLeftHasWall) {
-
+        List<Sprite> sprites = new ArrayList<Sprite>();
+        sprites.add(sprite);
         //check if places are empty
         if (!topHasWall) sprites.add(SpriteHashtable.get(164)); //3
         if (!rightHasWall) sprites.add(SpriteHashtable.get(163)); //2
@@ -119,7 +121,7 @@ public class Ore extends Resource {
 
 
         if(dynamicSpriteList.containsKey(sprites)) { //if a dynamic sprite exists, use it
-            dynamicSprite = dynamicSpriteList.get(sprites);
+            sprite = dynamicSpriteList.get(sprites);
         } else { //otherwise make it
             final int SIZE = Tile.SIZE;
             int[] pixels = new int[SIZE*SIZE];
@@ -127,11 +129,13 @@ public class Ore extends Resource {
                 for (int y = 0; y < SIZE; y++) {
                     for (int x = 0; x < SIZE; x++) {
                         int pixel = sprite.pixels[x+y*SIZE];
-                        if (!(pixel == 0xffff00ff)) pixels[x+y*SIZE] = pixel;
+                        if (!(pixel == 0x00FFFFFF)) {
+                            pixels[x + y * SIZE] = pixel;
+                        }
                     }
                 }
             }
-            dynamicSprite = new Sprite(pixels);
+            sprite = new Sprite(pixels);
             dynamicSpriteList.put(sprites, new Sprite(pixels));
         }
     }

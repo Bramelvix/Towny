@@ -2,13 +2,12 @@ package map;
 
 import entity.Entity;
 import entity.dynamic.item.Item;
-import graphics.Screen;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 
 public class Tile {
 	public Sprite sprite; // tile's sprite
-	public int x, y; // x and y
+	public int x, y; // x and y TODO get rid of these, they are only used in the getNearestSpot stuff in the Level class.
 	private boolean solid; // is the tile solid
 	public static final int SIZE = 16; // fixed size
 	private Item item;
@@ -16,6 +15,7 @@ public class Tile {
 
 	// two static tiles voidtile = black, darkgrass is dark green
     public static Tile darkGrass = new Tile(SpriteHashtable.get(4), true, 0, 0);
+    public static Tile darkStone = new Tile(SpriteHashtable.get(140),true, 0, 0);
     public static Tile voidTile = new Tile(SpriteHashtable.get(3), true, 0, 0);
 
 	// constructors
@@ -27,19 +27,19 @@ public class Tile {
 	}
 
 	// render a tile
-	public void render(int x, int y, Screen screen) {
-		screen.renderSprite(x * 16, y * 16, sprite);
+	public void render(int x, int y) {
+    	sprite.draw(x,y);
 		if (entity != null && !solid) {
-			entity.render(screen);
+			entity.render();
 		}
 		if (item != null) {
-			item.render(screen);
+			item.render();
 		}
 	}
 
-	public void renderHard(Screen screen) {
+	public void renderHard() {
 		if (solid && entity != null) {
-			entity.render(screen);
+			entity.render();
 		}
 	}
 

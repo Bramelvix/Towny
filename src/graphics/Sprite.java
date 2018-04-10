@@ -4,35 +4,39 @@ import map.Tile;
 
 //sprites in the game
 public class Sprite {
-	private int x, y; // x and y on the spritesheet
-	public static final int SIZE = Tile.SIZE; // 16
-	public int[] pixels; // pixels array
-	private Spritesheet sheet; // spritesheet
+    private int id;
+    public static final int SIZE = Tile.SIZE; // 16
+    public int[] pixels;
 
-	protected Sprite(int x, int y, Spritesheet sheet) {
-		this.x = x * SIZE + (x * sheet.getMargin());
-		this.y = y * SIZE + (y * sheet.getMargin());
-		this.sheet = sheet;
-		pixels = new int[SIZE * SIZE];
-		load();
-	}
+    protected Sprite(int x, int y, Spritesheet sheet) {
+        pixels = load(x * SIZE + (x * sheet.getMargin()),
+                y * SIZE + (y * sheet.getMargin()), SIZE, sheet);
+        id = OpenglUtils.loadTexture(pixels, SIZE,SIZE);
+    }
 
-	protected Sprite() {
-		pixels = new int[SIZE * SIZE];
-	}
+    public Sprite(int[] pixels) {
+        id = OpenglUtils.loadTexture(pixels, SIZE,SIZE);
+    }
+    public Sprite() {
+        id = 0;
+    }
 
-	public Sprite(int[] pixels){
-		this.pixels = pixels;
-	}
+    // load a sprites pixels into the pixel array
+    private int[] load(int xa, int ya, int size, Spritesheet sheet) {
+        int[] pixels = new int[16 * 16];
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                pixels[x + y * size] = sheet.getPixels()[(x + xa) + (y + ya) * sheet.getWidth()];
+            }
+        }
+        return pixels;
+    }
 
-	// load a sprites pixels into the pixel array
-	private void load() {
-		for (int y = 0; y < SIZE; y++) {
-			for (int x = 0; x < SIZE; x++) {
-				pixels[x + y * SIZE] = sheet.getPixels()[(x + this.x) + (y + this.y) * sheet.getWidth()];
-			}
-		}
-	}
+
+
+    public void draw(int x, int y) {
+        OpenglUtils.draw(id,x,y,SIZE);
+    }
 
 
 }

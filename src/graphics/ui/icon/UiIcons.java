@@ -1,7 +1,9 @@
 package graphics.ui.icon;
 
-import java.awt.Graphics;
-import input.Mouse;
+import input.MouseButton;
+import input.MousePosition;
+
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class UiIcons {
     private static Icon[] icons; // array of the 4 icons
@@ -9,19 +11,19 @@ public class UiIcons {
 	// initialising the icons
 	public static void init() {
         icons = new Icon[6];
-		icons[0] = new Icon(5, 220, "/res/icons/tools/wood-axe.png", 30, 30);
-		icons[1] = new Icon(40, 220, "/res/icons/tools/mining.png", 30, 30);
-		icons[2] = new Icon(75, 220, "/res/icons/tools/sickle.png", 30, 30);
-		icons[3] = new Icon(110, 220, "/res/icons/tools/saw.png", 30, 30);
-		icons[4] = new Icon(145, 220, "/res/icons/tools/swords.png", 30, 30);
-        icons[5] = new Icon(180, 220, "/res/icons/tools/spade.png", 30, 30);
+		icons[0] = new Icon(15, 660, "/res/icons/tools/wood-axe.png");
+		icons[1] = new Icon(120, 660, "/res/icons/tools/mining.png");
+		icons[2] = new Icon(225, 660, "/res/icons/tools/sickle.png");
+		icons[3] = new Icon(330, 660, "/res/icons/tools/saw.png");
+		icons[4] = new Icon(435, 660, "/res/icons/tools/swords.png");
+        icons[5] = new Icon(540, 660, "/res/icons/tools/spade.png");
 
 	}
 
 	// rendering the icons on the screen
-	public static void render(Graphics g) {
+	public static void render() {
 		for (Icon i : icons) {
-			i.render(g);
+			i.render();
 		}
 
 	}
@@ -85,13 +87,13 @@ public class UiIcons {
 	}
 
 	// update the icons
-    public static void update(Mouse mouse) {
+    public static void update() {
 		for (Icon i : icons) {
-			i.setHoverOn((((mouse.getTrueXPixels()) >= i.getX())
-					&& ((mouse.getTrueXPixels()) <= i.getX() + (i.getWidth())) && ((mouse.getTrueYPixels()) >= i.getY())
-					&& ((mouse.getTrueYPixels()) <= i.getY() + (i.getHeight()))));
+			i.setHoverOn((((MousePosition.getTrueXPixels()) >= i.getX())
+					&& ((MousePosition.getTrueXPixels()) <= i.getX() + (i.getSize())) && ((MousePosition.getTrueYPixels()) >= i.getY())
+					&& ((MousePosition.getTrueYPixels()) <= i.getY() + (i.getSize()))));
 		}
-		setSelected(mouse);
+		setSelected();
 
 	}
 
@@ -109,9 +111,9 @@ public class UiIcons {
 	}
 
 	// selecting an icon
-    private static void setSelected(Mouse mouse) {
+    private static void setSelected() {
 		for (int i = 0; i < icons.length; i++) {
-			if (mouse.getClickedLeft() && icons[i].hoverOn() && allOtherIconsNotSelected(i)) {
+			if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT) && icons[i].hoverOn() && allOtherIconsNotSelected(i)) {
 				icons[i].setSelect(true);
 			}
 		}

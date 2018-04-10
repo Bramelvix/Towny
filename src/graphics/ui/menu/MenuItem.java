@@ -1,13 +1,16 @@
 package graphics.ui.menu;
 
-import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
+
 import entity.Entity;
 import entity.dynamic.mob.work.BuildingRecipe;
 import entity.dynamic.mob.work.ItemRecipe;
 import entity.dynamic.mob.work.Recipe;
-import input.Mouse;
+import graphics.OpenglUtils;
+import input.MouseButton;
+import input.MousePosition;
+
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class MenuItem {
 	private String text; // text on the menuitem
@@ -72,21 +75,20 @@ public class MenuItem {
 	}
 
 	// rendering the menuitem's text
-	public void render(Graphics g) {
-		g.setColor(hover ? Color.red : Color.black);
-		g.setFont(font);
-		g.drawString(text, x, y + 15);
+	public void render() {
+		OpenglUtils.menuItemDraw(x,y,text,hover);
 	}
 
 	// updating the mouse hover
-	public void update(Mouse mouse) {
-		hover = ((((mouse.getTrueXPixels()) >= x) && ((mouse.getTrueXPixels()) <= x + width)
-				&& ((mouse.getTrueYPixels()) >= y) && ((mouse.getTrueYPixels()) <= y + 10)));
+	public void update() {
+		hover = ((((MousePosition.getTrueXPixels()) >= x) && ((MousePosition.getTrueXPixels()) <= x + width)
+				&& ((MousePosition.getTrueYPixels()) >= y) && ((MousePosition.getTrueYPixels()) <= y + 10)));
 	}
 
 	// getter
-	public boolean clicked(Mouse mouse) {
-		return hover && mouse.getClickedLeft();
+	public boolean clicked() {
+        //return hover && MouseButton.
+		return hover && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT);
 	}
 
 	public String getText() {

@@ -1,7 +1,6 @@
 package entity.dynamic.mob;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import entity.dynamic.mob.work.BuildJob;
 import entity.dynamic.mob.work.GatherJob;
@@ -16,9 +15,10 @@ import entity.dynamic.item.weapon.Weapon;
 import entity.dynamic.mob.work.Job;
 import entity.pathfinding.Path;
 import graphics.HairSprite;
-import graphics.Screen;
+import graphics.OpenglUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
+import main.Game;
 import map.Level;
 
 public class Villager extends Humanoid {
@@ -31,7 +31,7 @@ public class Villager extends Humanoid {
     // basic constructors
     public Villager(int x, int y, int z, Level[] levels) {
         this(levels, x, y, z);
-        this.sprites.add(SpriteHashtable.getPerson());
+        sprite = SpriteHashtable.getPerson();
         inventory = new VillagerInventory(this);
         jobs = new ArrayList<>();
         male = Entity.RANDOM.nextBoolean();
@@ -236,15 +236,15 @@ public class Villager extends Humanoid {
 
     // render onto the screen
     @Override
-    public void render(Screen screen) {
-        super.render(screen);
-        screen.renderSprite(x, y, hair); // renders the hair
-        inventory.render(screen);
+    public void render() {
+        super.render();
+        hair.draw(x,y);
+        inventory.render();
         if (getHolding() != null) {
-            screen.renderSprite(x, y, getHolding().sprites.get(0)); // renders the item the villager is holding
+            getHolding().sprite.draw(x,y);// renders the item the villager is holding
         }
         if (this.isSelected()) {
-            screen.renderSelection(this); // render the red square around selected villagers
+            OpenglUtils.drawSelection(x* Game.SCALE,y*Game.SCALE,Sprite.SIZE* Game.SCALE);// render the red square around selected villagers
         }
 
     }

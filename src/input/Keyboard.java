@@ -1,31 +1,18 @@
 package input;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import org.lwjgl.glfw.GLFWKeyCallbackI;
 
-public class Keyboard implements KeyListener {
+import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
-	//the keyboard class is used to register keys
-	private static boolean[] keys = new boolean[120];
+public class Keyboard implements GLFWKeyCallbackI {
 
-	public void keyPressed(KeyEvent arg0) {
-		keys[arg0.getKeyCode()] = true;
+    private static boolean[] keys = new boolean[65536];
 
-	}
-	public static boolean getKeyPressed(int e) {
-		return keys[e];
-	}
-	public static boolean getKeyReleased(int e) {
-		return !getKeyPressed(e);
-	}
-
-	public void keyReleased(KeyEvent arg0) {
-		keys[arg0.getKeyCode()] = false;
-
-	}
-
-	public void keyTyped(KeyEvent arg0) {
-
-	}
-
+    @Override
+    public void invoke(long window, int keycode, int i1, int i2, int i3) {
+        keys[keycode] = i2 != GLFW_RELEASE;
+    }
+    public static boolean isKeyDown(int keycode) {
+        return keys[keycode];
+    }
 }

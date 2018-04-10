@@ -11,9 +11,9 @@ public class Stairs extends BuildAbleObject {
         super();
         this.top = top;
         if (top) {
-            sprites.add(SpriteHashtable.get(40));
+            sprite =SpriteHashtable.get(40);
         } else {
-            sprites.add(SpriteHashtable.get(41));
+            sprite = SpriteHashtable.get(41);
         }
         setName("stairs");
 

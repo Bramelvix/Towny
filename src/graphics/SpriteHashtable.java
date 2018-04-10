@@ -10,11 +10,6 @@ public class SpriteHashtable {
     private static final Hashtable<Integer, Sprite> table = new Hashtable<>();
     private static final Random rand = new Random(); // random object used for random distributionof sprites
 
-    public static Sprite[] STONEWALLSPRITES;
-    public static Sprite[] WOODWALLSPRITES;
-    public static Sprite[] WOODDOORSPRITES;
-    public static Sprite[] STONEDOORSPRITES;
-
 
     // return random grass sprite
     public static Sprite getGrass() {
@@ -226,8 +221,8 @@ public class SpriteHashtable {
         registerSprite(39, new Sprite(38, 10, SpritesheetHashtable.get(1)));//chest
         registerSprite(40, new Sprite(36, 18, SpritesheetHashtable.get(1))); //stairs Top
         registerSprite(41, new Sprite(34, 18, SpritesheetHashtable.get(1))); //stairs bottom
-        //GAP
-
+        registerSprite(42,new Sprite(3,6,SpritesheetHashtable.get(2))); //turquoise trousers long
+        registerSprite(43,new Sprite(13,0,SpritesheetHashtable.get(2))); //blacksmith apron turquoise
         registerSprite(44, new Sprite(32, 1, SpritesheetHashtable.get(1))); //woodenDoorHorizontal
         registerSprite(45, new Sprite(37, 1, SpritesheetHashtable.get(1))); //woodenDoorVertical
         registerSprite(46, new Sprite(32, 2, SpritesheetHashtable.get(1)));//stoneDoorHorizontal
@@ -324,6 +319,7 @@ public class SpriteHashtable {
         registerSprite(137, new Sprite(39, 6, SpritesheetHashtable.get(2)));//crystalheater
         registerSprite(138, new Sprite(35, 0, SpritesheetHashtable.get(2)));//woodheater
         registerSprite(139, new Sprite(44, 1, SpritesheetHashtable.get(2)));//copperspear
+        registerSprite(140, new Sprite(1, 5, SpritesheetHashtable.get(1))); //darkStone
         //GAP
 
         registerSprite(161, new Sprite(9, 0, SpritesheetHashtable.get(1))); //HardStoneNoSides

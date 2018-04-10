@@ -1,7 +1,5 @@
 package entity.nonDynamic.building;
 
-import entity.Entity;
-import entity.dynamic.item.Item;
 import entity.nonDynamic.StaticEntity;
 import map.Level;
 import sound.Sound;

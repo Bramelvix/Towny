@@ -1,21 +1,16 @@
 package entity;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
-import graphics.Screen;
 import graphics.Sprite;
-import input.Mouse;
-import map.Level;
+import input.MousePosition;
 
 public abstract class Entity {
     protected int x, y, z; // x and y of the entity
     public static final Random RANDOM = new Random(); // random needed for
     // various chance
     // calculations
-    public Sprite dynamicSprite;
-    public List<Sprite> sprites; // the entity's sprites
+    public Sprite sprite; // the entity's sprite
     private boolean visible; // is the entity visible or not
     private boolean selected = false;
     private String displayName;
@@ -44,7 +39,6 @@ public abstract class Entity {
     }
 
     public Entity() {
-        sprites = new ArrayList<>();
     }
 
     // getters
@@ -75,8 +69,8 @@ public abstract class Entity {
     }
 
     // does the mouse hover over the entity
-    public boolean hoverOn(Mouse mouse, int z) {
-        return hoverOn(mouse.getX(), mouse.getY(), z);
+    public boolean hoverOn(int z) {
+        return hoverOn(MousePosition.getX(), MousePosition.getY(), z);
     }
 
     // does the mouse hover over the entity
@@ -85,10 +79,8 @@ public abstract class Entity {
     }
 
     // render method
-    public void render(Screen screen) {
-        if (dynamicSprite != null) screen.renderSprite(x,y,dynamicSprite);
-        else if (sprites.size() > 1) screen.renderMultiSprite(x, y, sprites);
-        else screen.renderSprite(x, y, sprites.get(0)); //isn't this redundant?
+    public void render() {
+        sprite.draw(x,y);
 
     }
 }

@@ -1,12 +1,10 @@
 package graphics.ui;
 
-import java.awt.Graphics;
-
 import entity.dynamic.mob.work.BuildingRecipe;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.Menu;
 import graphics.ui.menu.MenuItem;
-import input.Mouse;
+import input.MousePosition;
 import map.Level;
 
 //main class used to manage the ui
@@ -19,13 +17,13 @@ public class Ui {
     private SelectionSquare selection;
 
     // rendering the ui
-    public void render(Graphics g) {
-        UiIcons.render(g);
-        menu.render(g);
-        top.render(g);
-        map.render(g);
-        outline.render(g);
-        selection.render(g);
+    public void render() {
+        UiIcons.render();
+        menu.render();
+        top.render();
+        map.render();
+        outline.render();
+       //selection.render(g);
 
     }
 
@@ -38,7 +36,7 @@ public class Ui {
         menu = new Menu();
         selection = new SelectionSquare();
         map = new Minimap(1290, 8,levels[0]);
-        top = new TopBar(250, 5);
+        top = new TopBar();
         outline = new BuildOutline(levels);
     }
 
@@ -62,11 +60,11 @@ public class Ui {
         UiIcons.deSelect();
     }
 
-    public void showMenuOn(Mouse mouse, MenuItem... items) {
+    public void showMenu(MenuItem... items) {
         if (!outline.isVisible()) {
-            showMenuOn(mouse.getTrueXPixels(), mouse.getTrueYPixels());
+            showMenu(MousePosition.getTrueXPixels(), MousePosition.getTrueYPixels());
             menu.addItems(items);
-            menu.show(mouse);
+            menu.show();
         }
     }
 
@@ -82,7 +80,7 @@ public class Ui {
         return menu.getIngameX();
     }
 
-    private void showMenuOn(int x, int y) {
+    private void showMenu(int x, int y) {
         if (!outline.isVisible()) {
             menu = new Menu();
             menu.setX(x);
@@ -98,8 +96,8 @@ public class Ui {
         map.setOffset(x, y);
     }
 
-    public void showSelectionSquare(Mouse mouse) {
-        selection.show(mouse);
+    public void showSelectionSquare() {
+        selection.show();
     }
 
     public void resetSelection() {
@@ -122,20 +120,20 @@ public class Ui {
         return selection.getHeight();
     }
 
-    public void showBuildSquare(Mouse mouse, int xoff, int yoff, boolean lockedSize, BuildingRecipe build, int z) {
-        outline.show(mouse, xoff, yoff, z, lockedSize, build);
+    public void showBuildSquare(int xoff, int yoff, boolean lockedSize, BuildingRecipe build, int z) {
+        outline.show(xoff, yoff, z, lockedSize, build);
     }
 
     public void removeBuildSquare() {
         outline.remove();
     }
 
-    public void update(Mouse mouse, int xOff, int yOff, int z) {
-        menu.update(mouse, outline.isVisible());
-        UiIcons.update(mouse);
-        outline.update(mouse, xOff, yOff, z);
-        selection.update(mouse);
-        top.update(mouse);
+    public void update(int xOff, int yOff, int z) {
+        menu.update(outline.isVisible());
+        UiIcons.update();
+        outline.update(xOff, yOff, z);
+        selection.update();
+        top.update();
 
     }
 

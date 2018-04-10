@@ -19,7 +19,7 @@ public class Clothing extends Item {
     }
 
     public Clothing copy() {
-        return new Clothing(getName(), getX(), getY(), getZ(), sprites.get(0), getToolTip(), type);
+        return new Clothing(getName(), getX(), getY(), getZ(), sprite, getToolTip(), type);
     }
 
     public ClothingType getType() {

@@ -1,27 +1,28 @@
 package entity.nonDynamic.building.workstations;
 
 import entity.nonDynamic.building.BuildAbleObject;
-import graphics.Screen;
+import graphics.Sprite;
 import graphics.SpriteHashtable;
 
 public class Furnace extends Workstation {
+	Sprite sprite1, sprite2,sprite3;
 	public Furnace() {
 		super();
-        sprites.add(SpriteHashtable.get(82));
-        sprites.add(SpriteHashtable.get(83));
-        sprites.add(SpriteHashtable.get(84));
+		sprite1 = SpriteHashtable.get(82);
+        sprite2 =SpriteHashtable.get(83);
+        sprite3 = SpriteHashtable.get(84);
 		setName("furnace");
 	}
 
-	public void render(Screen s) {
+	public void render() {
 		if (!isRunning()) {
-            s.renderSprite(x, y, sprites.get(0));
+			sprite1.draw(x,y);
 		} else {
 			if (animationcounter > 29) {
-                s.renderSprite(x, y, sprites.get(1));
+				sprite2.draw(x,y);
 				anmiationCounterTick();
 			} else {
-                s.renderSprite(x, y, sprites.get(2));
+				sprite3.draw(x,y);
 				anmiationCounterTick();
 			}
 		}

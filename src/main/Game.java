@@ -1,19 +1,17 @@
 package main;
 
-import java.awt.Canvas;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferStrategy;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.*;
 
 import com.sun.xml.internal.ws.util.StringUtils;
+import com.sun.xml.internal.ws.util.StringUtils;
 import entity.Entity;
+import entity.dynamic.item.weapon.WeaponType;
 import entity.dynamic.mob.work.*;
 import entity.nonDynamic.Ore;
 import entity.nonDynamic.Tree;
@@ -30,29 +28,39 @@ import entity.dynamic.mob.Zombie;
 import entity.nonDynamic.building.workstations.Anvil;
 import entity.nonDynamic.building.workstations.Furnace;
 import entity.pathfinding.PathFinder;
-import graphics.Screen;
+import graphics.OpenglUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import graphics.SpritesheetHashtable;
 import graphics.ui.Ui;
+import graphics.ui.icon.Icon;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.MenuItem;
 import input.Keyboard;
-import input.Mouse;
+import input.MouseButton;
+import input.MousePosition;
 import map.Level;
 import map.Tile;
+import org.lwjgl.glfw.GLFWImage;
+import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL;
 import sound.Sound;
 
-public class Game implements Runnable {
+import javax.imageio.ImageIO;
+
+import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
+import static org.lwjgl.glfw.GLFW.glfwShowWindow;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+
+public class Game {
 
     public static final int width = 500;
     public static final int height = width / 16 * 9;
-    private Thread thread;
     public static final int SCALE = 3;
     public Level[] map;
-    private JFrame frame;
-    private boolean running = false;
-    private Mouse mouse;
     private ArrayList<Villager> vills;
     private ArrayList<Villager> sols;
     private ArrayList<Mob> mobs;
@@ -63,10 +71,8 @@ public class Game implements Runnable {
     private Villager selectedvill;
     public int xScroll = 0;
     public int yScroll = 0;
-    private Screen screen;
-    private BufferedImage image;
-    private Canvas canvas;
     public int currentLayerNumber = 0;
+    private long window;
 
     public static void main(String[] args) {
         try {
@@ -78,25 +84,41 @@ public class Game implements Runnable {
     }
 
     private Game() throws Exception {
+        init();
+        loop();
+    }
+
+    private void init() throws Exception {
+        if (!glfwInit()) {
+            System.err.println("GLFW failed to initialize");
+        }
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+        window = glfwCreateWindow(width * SCALE, height * SCALE, "Towny", 0, 0);
+        if (window == 0) {
+            System.err.println("Window failed to be created");
+        }
+        GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        glfwSetWindowPos(window, (vidmode.width() - (width * SCALE)) / 2, (vidmode.height() - (height * SCALE)) / 2);
+        glfwMakeContextCurrent(window);
+        glfwShowWindow(window);
+        GL.createCapabilities();
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glMatrixMode(GL_PROJECTION);
+        glfwSwapInterval(0); //0 = VSYNC OFF, 1= VSYNC ON
+        setIcon();
+        glLoadIdentity();
+        glOrtho(0, width * SCALE, height * SCALE, 0.0f, 0.0f, 1.0f);
+        glMatrixMode(GL_MODELVIEW);
+        glEnable(GL_TEXTURE_2D);
+        glEnable(GL_BLEND);
+        glfwSetKeyCallback(window, new Keyboard());
+        glfwSetMouseButtonCallback(window, new MouseButton());
+        glfwSetCursorPosCallback(window, new MousePosition(this));
+        glfwSetScrollCallback(window, this::scroll);
         SpritesheetHashtable.registerSpritesheets();
         SpriteHashtable.registerSprites();
         ItemHashtable.registerItems();
-        canvas = new Canvas();
-        Dimension size = new Dimension(width * SCALE, height * SCALE);
-        canvas.setPreferredSize(size);
-        image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
-        screen = new Screen(width, height, pixels);
-        frame = new JFrame();
-        frame.setResizable(false);
-        frame.setTitle("Towny");
-        frame.add(canvas);
-        frame.pack();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
         Sound.initSound();
-        mouse = new Mouse(this);
         generateLevel();
         mobs = new ArrayList<>();
         vills = new ArrayList<>();
@@ -105,11 +127,26 @@ public class Game implements Runnable {
         PathFinder.init(100, 100);
         spawnvills();
         spawnZombies();
-        canvas.addKeyListener(new Keyboard());
-        canvas.addMouseListener(mouse);
-        canvas.addMouseMotionListener(mouse);
-        canvas.addMouseWheelListener(mouse);
-        start();
+    }
+
+    private void setIcon() {
+        try {
+            BufferedImage img = ImageIO.read(Icon.class.getResource("/res/icons/soldier.png"));
+            int width = img.getWidth();
+            int height = img.getHeight();
+            int[] pixels = new int[width * height];
+            img.getRGB(0, 0, width, height, pixels, 0, width);
+            ByteBuffer buffer = OpenglUtils.getByteBuffer(pixels, width, height);
+            GLFWImage image = GLFWImage.malloc();
+            image.set(width, height, buffer);
+            GLFWImage.Buffer images = GLFWImage.malloc(1);
+            images.put(0, image);
+            glfwSetWindowIcon(window, images);
+            images.free();
+            image.free();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void generateLevel() {
@@ -121,7 +158,7 @@ public class Game implements Runnable {
 
     private void spawnvills() {
         Villager vil1 = new Villager(144, 144, 0, map);
-        vil1.addClothing(new Clothing("Brown Shirt", vil1, SpriteHashtable.get(70), "A brown tshirt", ClothingType.SHIRT));
+        vil1.addClothing(new Clothing("Brown Shirt", vil1, SpriteHashtable.get(43), "A brown tshirt", ClothingType.SHIRT));
         addVillager(vil1);
         Villager vil2 = new Villager(144, 160, 0, map);
         vil2.addClothing(new Clothing("Green Shirt", vil2, SpriteHashtable.get(74), "A green tshirt", ClothingType.SHIRT));
@@ -136,6 +173,7 @@ public class Game implements Runnable {
         int teller = Entity.RANDOM.nextInt(5) + 1;
         for (int i = 0; i < teller; i++) {
             Zombie zomb = new Zombie(map, Entity.RANDOM.nextInt(256) + 16, Entity.RANDOM.nextInt(256) + 16, 0);
+            zomb.setHolding(Weapon.getWeapon(WeaponType.BUCKLER, WeaponMaterial.CRYSTAL));
             mobs.add(zomb);
         }
     }
@@ -156,72 +194,61 @@ public class Game implements Runnable {
         }
     }
 
-    private synchronized void start() {
-        running = true;
-        thread = new Thread(this);
-        thread.start();
-    }
 
-    public void run() {
+    private void loop() {
         long lastTime = System.nanoTime();
         long timer = System.currentTimeMillis();
         double delta = 0;
-        int updates = 0;
         long now;
-        int frames = 0;
-        while (running) {
+        GL.createCapabilities();
+        while (!glfwWindowShouldClose(window)) {
             now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
             while (delta >= 1) {
+                glfwPollEvents();
                 updateUI();
                 if (!paused) {
                     update();
-                    updates++;
                 }
                 delta--;
-                mouse.reset();
             }
-            render();
-            frames++;
 
             if (System.currentTimeMillis() - timer > 1000) {
                 timer = System.currentTimeMillis();
-                frame.setTitle("Towny - fps: " + frames + " , updates: " + updates);
-                updates = 0;
-                frames = 0;
             }
+
+            draw();
+
+
         }
+        glfwFreeCallbacks(window);
+        glfwDestroyWindow(window);
+        glfwTerminate();
 
     }
 
-    private synchronized void stop() {
-        running = false;
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    private void draw() {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        map[currentLayerNumber].render(xScroll, yScroll);
+        renderMobs();
+        map[currentLayerNumber].renderHardEntities(xScroll, yScroll);
+        ui.render();
+        glfwSwapBuffers(window);
     }
+
 
     private void update() {
         updateMobs();
         updateMouse();
+        MouseButton.resetLeftAndRight();
 
     }
 
     private void updateUI() {
-        ui.update(mouse, xScroll, yScroll, currentLayerNumber);
-        getKeyPositions();
-        if (mouse.getMouseWheelMoved() != 0) {
-            currentLayerNumber += mouse.getMouseWheelMoved();
-            if (currentLayerNumber < 0) {
-                currentLayerNumber = 0;
-            } else if (currentLayerNumber > map.length - 1) {
-                currentLayerNumber = map.length - 1;
-            }
-            ui.updateMinimap(map, currentLayerNumber);
-        }
+        ui.update(xScroll, yScroll, currentLayerNumber);
+        moveCamera();
         if (paused != ui.isPaused()) {
             paused = ui.isPaused();
         }
@@ -232,35 +259,43 @@ public class Game implements Runnable {
 
     }
 
+    private void scroll(long window, double v, double v1) {
+        if ((currentLayerNumber <= map.length-1 && v1 > 0) || (currentLayerNumber >= 0 && v1 < 0)) {
+            currentLayerNumber -= v1;
+            if (currentLayerNumber < 0) {
+                currentLayerNumber = 0;
+            } else if (currentLayerNumber > map.length - 1) {
+                currentLayerNumber = map.length - 1;
+            }
+            ui.updateMinimap(map, currentLayerNumber);
+        }
+
+    }
+
     private Villager getIdlestVil() {
         Villager lowest = vills.get(0);
         for (Villager i : vills) {
             if (i.getJobSize() < lowest.getJobSize())
-                return i;
+                lowest = i;
         }
         return lowest;
     }
 
     private Villager anyVillHoverOn(int x, int y) {
         for (Villager i : vills) {
-            if (i.hoverOn(x, y, currentLayerNumber))
+            if (i.hoverOn(x, y, currentLayerNumber)) {
                 return i;
+            }
         }
         return null;
     }
 
-    private Villager anyVillHoverOn(Mouse mouse) {
-        return anyVillHoverOn(mouse.getX(), mouse.getY());
-    }
-
-    private Mob anyMobHoverOn(Mouse mouse) {
-        return anyMobHoverOn(mouse.getX(), mouse.getY());
-    }
 
     private Mob anyMobHoverOn(int x, int y) {
         for (Mob i : mobs) {
-            if (i.hoverOn(x, y, currentLayerNumber))
+            if (i.hoverOn(x, y, currentLayerNumber)) {
                 return i;
+            }
         }
         return null;
     }
@@ -277,8 +312,8 @@ public class Game implements Runnable {
 
     private void updateMouse() {
         if ((UiIcons.isWoodSelected()) && UiIcons.hoverOnNoIcons()) {
-            if (mouse.getMouseB() == 1) {
-                ui.showSelectionSquare(mouse);
+            if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
+                ui.showSelectionSquare();
                 int x = ui.getSelectionX();
                 int y = ui.getSelectionY();
                 int width = ui.getSelectionWidth();
@@ -293,7 +328,7 @@ public class Game implements Runnable {
                 }
                 return;
             }
-            if (mouse.getReleasedLeft()) {
+            if (MouseButton.wasReleased(GLFW_MOUSE_BUTTON_LEFT)) {
                 int x = ui.getSelectionX();
                 int y = ui.getSelectionY();
                 int width = ui.getSelectionWidth();
@@ -313,63 +348,63 @@ public class Game implements Runnable {
 
             }
             return;
-        } else if (((UiIcons.isMiningSelected()) && UiIcons.hoverOnNoIcons() && mouse.getClickedLeft())
-                && (map[currentLayerNumber].selectOre(mouse.getX(), mouse.getY()) != null)) {
+        } else if (((UiIcons.isMiningSelected()) && UiIcons.hoverOnNoIcons() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT))
+                && (map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY()) != null)) {
             Villager idle = getIdlestVil();
             idle.setPath(null);
             deselectAllVills();
-            idle.addJob(map[currentLayerNumber].selectOre(mouse.getX(), mouse.getY()));
+            idle.addJob(map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY()));
             ui.deSelectIcons();
             return;
 
-        } else if (UiIcons.isShovelHover() && !ui.menuVisible() && mouse.getClickedLeft()) {
+        } else if (UiIcons.isShovelHover() && !ui.menuVisible() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
             deselectAllVills();
-            ui.showBuildSquare(mouse, xScroll, yScroll, false, BuildingRecipe.STAIRSDOWN,currentLayerNumber);
+            ui.showBuildSquare(xScroll, yScroll, true, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
             ui.deSelectIcons();
             return;
 
-        } else if (((UiIcons.isSwordsSelected()) && UiIcons.hoverOnNoIcons() && mouse.getClickedLeft())
-                && (anyMobHoverOn(mouse) != null)) {
+        } else if (((UiIcons.isSwordsSelected()) && UiIcons.hoverOnNoIcons() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT))
+                && (anyMobHoverOn(MousePosition.getX(), MousePosition.getY()) != null)) {
             Villager idle = getIdlestVil();
             idle.setPath(null);
             deselectAllVills();
-            idle.addJob(new FightJob(idle, anyMobHoverOn(mouse)));
+            idle.addJob(new FightJob(idle, anyMobHoverOn(MousePosition.getX(), MousePosition.getY())));
             ui.deSelectIcons();
             return;
 
-        } else if (mouse.getClickedLeft() && anyVillHoverOn(mouse) != null && !ui.outlineIsVisible()) {
+        } else if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT) && anyVillHoverOn(MousePosition.getX(), MousePosition.getY()) != null && !ui.outlineIsVisible()) {
             deselectAllVills();
-            selectedvill = anyVillHoverOn(mouse);
+            selectedvill = anyVillHoverOn(MousePosition.getX(), MousePosition.getY());
             selectedvill.setSelected(true);
             ui.deSelectIcons();
             return;
-        } else if (UiIcons.isSawHover() && !ui.menuVisible() && mouse.getClickedLeft()) {
+        } else if (UiIcons.isSawHover() && !ui.menuVisible() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
             deselectAllVills();
             MenuItem[] items = new MenuItem[BuildingRecipe.RECIPES.length + 1];
             for (int i = 0; i < BuildingRecipe.RECIPES.length; i++) {
                 items[i] = new MenuItem(BuildingRecipe.RECIPES[i]);
             }
             items[items.length - 1] = new MenuItem(MenuItem.CANCEL);
-            ui.showMenuOn(mouse, items);
+            ui.showMenu(items);
             return;
-        } else if (mouse.getClickedRight()) {
+        } else if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_RIGHT)) {
             if (selectedvill != null) {
                 List<MenuItem> options = new ArrayList<>();
                 if (selectedvill.getHolding() != null)
                     options.add(new MenuItem((MenuItem.DROP + " " + selectedvill.getHolding().getName())));
-                Tree boom = map[currentLayerNumber].selectTree(mouse.getX(), mouse.getY());
+                Tree boom = map[currentLayerNumber].selectTree(MousePosition.getX(), MousePosition.getY());
                 if (boom != null) {
                     options.add(new MenuItem((MenuItem.CHOP), boom));
                 }
-                Ore ore = map[currentLayerNumber].selectOre(mouse.getX(), mouse.getY());
+                Ore ore = map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY());
                 if (ore != null) {
                     options.add(new MenuItem((MenuItem.MINE), ore));
                 }
-                Mob mob = anyMobHoverOn(mouse);
+                Mob mob = anyMobHoverOn(MousePosition.getX(), MousePosition.getY());
                 if (mob != null) {
                     options.add(new MenuItem((MenuItem.FIGHT), mob));
                 }
-                Item item = map[currentLayerNumber].getItemOn(mouse.getX(), mouse.getY());
+                Item item = map[currentLayerNumber].getItemOn(MousePosition.getX(), MousePosition.getY());
                 if (item != null) {
                     if (item instanceof Weapon) {
                         options.add(new MenuItem((MenuItem.EQUIP), item));
@@ -380,8 +415,8 @@ public class Game implements Runnable {
                     }
 
                 }
-                if (map[currentLayerNumber].getEntityOn(mouse.getX(), mouse.getY()) instanceof Chest) {
-                    Chest chest = (Chest) map[currentLayerNumber].getEntityOn(mouse.getX(), mouse.getY());
+                if (map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY()) instanceof Chest) {
+                    Chest chest =  map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY());
                     for (Item i : chest.getItems()) {
                         options.add(new MenuItem((MenuItem.PICKUP), i));
                     }
@@ -389,19 +424,19 @@ public class Game implements Runnable {
                     options.add(new MenuItem(MenuItem.MOVE));
                 }
                 options.add(new MenuItem(MenuItem.CANCEL));
-                ui.showMenuOn(mouse, options.toArray(new MenuItem[0]));
+                ui.showMenu(options.toArray(new MenuItem[0]));
             } else {
-                if (map[currentLayerNumber].getEntityOn(mouse.getX(), mouse.getY()) instanceof Furnace) {
-                    ui.showMenuOn(mouse, new MenuItem(MenuItem.SMELT), new MenuItem(MenuItem.CANCEL));
-                } else if (map[currentLayerNumber].getEntityOn(mouse.getX(), mouse.getY()) instanceof Anvil) {
-                    ui.showMenuOn(mouse, new MenuItem(MenuItem.SMITH), new MenuItem(MenuItem.CANCEL));
+                if (map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY()) instanceof Furnace) {
+                    ui.showMenu(new MenuItem(MenuItem.SMELT), new MenuItem(MenuItem.CANCEL));
+                } else if (map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY()) instanceof Anvil) {
+                    ui.showMenu(new MenuItem(MenuItem.SMITH), new MenuItem(MenuItem.CANCEL));
                 } else {
-                    ui.showMenuOn(mouse, new MenuItem(MenuItem.CANCEL));
+                    ui.showMenu(new MenuItem(MenuItem.CANCEL));
                 }
 
             }
         }
-        if (ui.outlineIsVisible() && !ui.menuVisible() && mouse.getReleasedLeft() && UiIcons.hoverOnNoIcons()) {
+        if (ui.outlineIsVisible() && !ui.menuVisible() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT) && UiIcons.hoverOnNoIcons()) {
             int[][] coords = ui.getOutlineCoords();
             for (int[] blok : coords) {
                 if (map[currentLayerNumber].tileIsEmpty(blok[0] / 16, blok[1] / 16)) {
@@ -417,7 +452,7 @@ public class Game implements Runnable {
             return;
         }
         if (ui.menuVisible()) {
-            MenuItem item = ui.getMenu().clickedItem(mouse);
+            MenuItem item = ui.getMenu().clickedItem();
             if (item != null) {
                 if (item.getText().contains(MenuItem.CANCEL)) {
                     ui.getMenu().hide();
@@ -427,8 +462,7 @@ public class Game implements Runnable {
                     }
                 } else if (item.getText().contains(MenuItem.MOVE)) {
                     selectedvill.resetAll();
-                    selectedvill.addJob(new MoveJob(mouse.getX(), mouse.getY(), currentLayerNumber, selectedvill));
-                    //selectedvill.setPath(selectedvill.getPath(mouse.getTileX(), mouse.getTileY()));
+                    selectedvill.addJob(new MoveJob(MousePosition.getX(), MousePosition.getY(), currentLayerNumber, selectedvill));
                     deselect(selectedvill);
                     ui.deSelectIcons();
                     ui.getMenu().hide();
@@ -451,7 +485,7 @@ public class Game implements Runnable {
                     ui.deSelectIcons();
                     ui.getMenu().hide();
                 } else if (item.getText().contains(MenuItem.BUILD) && !ui.outlineIsVisible()) {
-                    ui.showBuildSquare(mouse, xScroll, yScroll, false, item.getRecipe(),currentLayerNumber);
+                    ui.showBuildSquare(xScroll, yScroll, false, item.getRecipe(), currentLayerNumber);
                     ui.deSelectIcons();
                     ui.getMenu().hide();
                 } else if ((item.getText().contains(MenuItem.PICKUP) || item.getText().contains(MenuItem.EQUIP)
@@ -474,10 +508,10 @@ public class Game implements Runnable {
                         craftingOptions[i] = new MenuItem(ItemRecipe.FURNACE_RECIPES[i]);
                     }
                     craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
-                    ui.showMenuOn(mouse, craftingOptions);
+                    ui.showMenu(craftingOptions);
                 } else if (item.getText().contains(MenuItem.CRAFT)) {
                     Villager idle = getIdlestVil();
-                    ItemRecipe recipe = ui.getMenu().recipeFromMenuOption(mouse, MenuItem.CRAFT);
+                    ItemRecipe recipe = ui.getMenu().recipeFromMenuOption(MenuItem.CRAFT);
                     if (recipe != null) {
                         idle.setPath(null);
                         Item[] res = new Item[recipe.getResources().length];
@@ -496,7 +530,7 @@ public class Game implements Runnable {
                                 StringUtils.capitalize(WeaponMaterial.values()[i].toString().toLowerCase()));
                     }
                     craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
-                    ui.showMenuOn(mouse, craftingOptions);
+                    ui.showMenu(craftingOptions);
                 } else if (MenuItem.isEqualToAnyMaterial(item.getText())) {
                     ItemRecipe[] recipes = ItemRecipe
                             .smithingRecipesFromWeaponMaterial(WeaponMaterial.valueOf(item.getText().toUpperCase()));
@@ -505,7 +539,7 @@ public class Game implements Runnable {
                         craftingOptions[i] = new MenuItem(recipes[i]);
                     }
                     craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
-                    ui.showMenuOn(mouse, craftingOptions);
+                    ui.showMenu(craftingOptions);
                 }
             }
         }
@@ -514,22 +548,23 @@ public class Game implements Runnable {
     private void moveCamera(int xScroll, int yScroll) {
         this.xScroll += xScroll;
         this.yScroll += yScroll;
+        ui.setOffset(this.xScroll, this.yScroll);
     }
 
-    private void getKeyPositions() {
+    private void moveCamera() {
         int _yScroll = 0;
         int _xScroll = 0;
-        if (Keyboard.getKeyPressed(KeyEvent.VK_UP) && yScroll > 1) {
-            _yScroll -= 2;
+        if (Keyboard.isKeyDown(GLFW_KEY_UP) && yScroll > 1) {
+            _yScroll -= 6;
         }
-        if (Keyboard.getKeyPressed(KeyEvent.VK_DOWN) && yScroll < (map[currentLayerNumber].height * Tile.SIZE) - 1 - height) {
-            _yScroll += 2;
+        if (Keyboard.isKeyDown(GLFW_KEY_DOWN) && yScroll < ((map[currentLayerNumber].height * Tile.SIZE) - 1 - height) * SCALE) {
+            _yScroll += 6;
         }
-        if (Keyboard.getKeyPressed(KeyEvent.VK_LEFT) && xScroll > 1) {
-            _xScroll -= 2;
+        if (Keyboard.isKeyDown(GLFW_KEY_LEFT) && xScroll > 1) {
+            _xScroll -= 6;
         }
-        if (Keyboard.getKeyPressed(KeyEvent.VK_RIGHT) && xScroll < (map[currentLayerNumber].width * Tile.SIZE) - width - 1) {
-            _xScroll += 2;
+        if (Keyboard.isKeyDown(GLFW_KEY_RIGHT) && xScroll < ((map[currentLayerNumber].width * Tile.SIZE) - width - 1) * SCALE) {
+            _xScroll += 6;
         }
         moveCamera(_xScroll, _yScroll);
     }
@@ -561,43 +596,26 @@ public class Game implements Runnable {
     }
 
     private void renderMobs() {
-        int x1 = (xScroll + screen.width + Sprite.SIZE);
-        int y1 = (yScroll + screen.height + Sprite.SIZE);
+        int x1 = (xScroll / 3 + width + Sprite.SIZE);
+        int y1 = (yScroll / 3 + height + Sprite.SIZE);
+        glTranslatef(-xScroll, -yScroll, 0);
         for (Mob i : mobs) {
-            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
-                i.render(screen);
+            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll / 3 && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll / 3 && i.getY() - 16 <= y1) {
+                i.render();
             }
         }
         for (Villager i : vills) {
-            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
-                i.render(screen);
+            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll / 3 && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll / 3 && i.getY() - 16 <= y1) {
+                i.render();
             }
         }
         for (Villager i : sols) {
-            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll && i.getY() - 16 <= y1) {
-                i.render(screen);
+            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll / 3 && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll / 3 && i.getY() - 16 <= y1) {
+                i.render();
             }
         }
+        glTranslatef(xScroll, yScroll, 0);
     }
 
-    private void render() {
-        BufferStrategy bs = canvas.getBufferStrategy();
-        if (bs == null) {
-            canvas.createBufferStrategy(3);
-            return;
-        }
-        screen.clear();
-        map[currentLayerNumber].render(xScroll, yScroll, screen);
-        renderMobs();
-        map[currentLayerNumber].renderHardEntities(xScroll, yScroll, screen);
-        Graphics g = bs.getDrawGraphics();
-        g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        g.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
-        ui.setOffset(xScroll, yScroll);
-        ui.render(g);
-        g.dispose();
-        bs.show();
-
-    }
 
 }

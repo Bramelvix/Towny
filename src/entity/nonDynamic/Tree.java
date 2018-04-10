@@ -2,27 +2,29 @@ package entity.nonDynamic;
 
 import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.mob.Villager;
-import entity.nonDynamic.Resource;
-import graphics.Screen;
+import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;
 import sound.Sound;
 
 public class Tree extends Resource {
     private byte chopped = 100;
+    private Sprite topsprite;
 
     // basic constructor
     public Tree(int x, int y, int z, Level level) {
         super(x, y, z, level);
-        sprites.add(SpriteHashtable.get(12));
-        sprites.add(SpriteHashtable.get(13));
+        sprite = SpriteHashtable.get(12);
+        topsprite = SpriteHashtable.get(13);
         setVisible(true);
         setName("tree");
     }
 
     // render method to render onto the screen
-    public void render(Screen screen) {
-        screen.renderTree(x, y, this);
+    public void render() {
+        super.render();
+        topsprite.draw(x,y-Sprite.SIZE);
+
     }
 
     // work method (same as in the Ore class)

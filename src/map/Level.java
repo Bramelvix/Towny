@@ -1,7 +1,6 @@
 package map;
 
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
 import java.util.function.BiPredicate;
 
 import entity.*;
@@ -12,9 +11,11 @@ import entity.nonDynamic.building.workstations.Workstation;
 import entity.nonDynamic.Ore;
 import entity.nonDynamic.OreType;
 import entity.nonDynamic.Tree;
-import graphics.Screen;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
+import main.Game;
+
+import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class Level {
     private Tile[][] tiles; // array of tiles on the map
@@ -180,11 +181,11 @@ public class Level {
     }
 
     // generate the green border around the map
-    private void generateBorder() {
+    private void generateBorder(int depth) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 if (x == 0 || y == 0 || x == width - 1 || y == height - 1) {
-                    tiles[x][y] = Tile.darkGrass;
+                    tiles[x][y] = depth == 0 ? Tile.darkGrass : Tile.darkStone;
                 }
             }
         }
@@ -192,7 +193,7 @@ public class Level {
 
     // generates a (slighty less) shitty random level
     private void generateLevel(int elevation) {
-        generateBorder();
+        generateBorder(elevation);
         float[] noise = Generator.generateSimplexNoise(width, height, 11, Entity.RANDOM.nextInt(1000),
                 Entity.RANDOM.nextBoolean());
         for (int y = 1; y < height - 1; y++) {
@@ -200,16 +201,16 @@ public class Level {
                 if (noise[x + y * width] > 0.5) {
                     tiles[x][y] = new Tile(SpriteHashtable.getDirt(), false, x, y);
                     if (elevation > 0) {
-                        tiles[x][y] = new Tile(SpriteHashtable.getStone(), false, x, y);
+                        tiles[x][y] = new Tile(SpriteHashtable.getStone(), false,x,y);
                     }
                 } else {
                     if (elevation > 0) {
-                        tiles[x][y] = new Tile(SpriteHashtable.getStone(), false, x, y);
+                        tiles[x][y] = new Tile(SpriteHashtable.getStone(), false,x,y);
                         if (!randOre(x, y)) {
                             spawnRock(x, y);
                         }
                     } else {
-                        tiles[x][y] = new Tile(SpriteHashtable.getGrass(), false, x, y);
+                        tiles[x][y] = new Tile(SpriteHashtable.getGrass(), false,x,y);
                         randForest(x, y);
                     }
                 }
@@ -315,35 +316,36 @@ public class Level {
     }
 
     // render the tiles
-    public void render(int xScroll, int yScroll, Screen screen) {
-        screen.setOffset(xScroll, yScroll);
-        int x0 = xScroll / 16;
-        int x1 = (xScroll + screen.width + Sprite.SIZE) / 16;
-        int y0 = yScroll / 16;
-        int y1 = (yScroll + screen.height + Sprite.SIZE) / 16;
-
+    public void render(int xScroll, int yScroll) {
+        glTranslatef(-xScroll, -yScroll, 0);
+        int x0 = xScroll / 3 / 16;
+        int x1 = (xScroll / 3 + Game.width + Sprite.SIZE) / 16;
+        int y0 = yScroll / 3 / 16;
+        int y1 = (yScroll / 3 + Game.height + Sprite.SIZE) / 16;
         for (int y = y0; y < y1; y++) {
             for (int x = x0; x < x1; x++) {
-                getTile(x, y).render(x, y, screen);
+                getTile(x, y).render(x * Sprite.SIZE, y * Sprite.SIZE);
 
             }
         }
+        glTranslatef(xScroll, yScroll, 0);
 
     }
 
-    public void renderHardEntities(int xScroll, int yScroll, Screen screen) {
-        screen.setOffset(xScroll, yScroll);
-        int x0 = xScroll / 16;
-        int x1 = (xScroll + screen.width + Sprite.SIZE) / 16;
-        int y0 = yScroll / 16;
-        int y1 = (yScroll + screen.height + Sprite.SIZE) / 16;
+    public void renderHardEntities(int xScroll, int yScroll) {
+        glTranslatef(-xScroll, -yScroll, 0);
+        int x0 = xScroll / 3 / 16;
+        int x1 = (xScroll / 3 + Game.width + Sprite.SIZE*2) / 16;
+        int y0 = yScroll / 3 / 16;
+        int y1 = (yScroll / 3 + Game.height + Sprite.SIZE*2) / 16;
 
         for (int y = y0; y < y1; y++) {
             for (int x = x0; x < x1; x++) {
-                getTile(x, y).renderHard(screen);
+                getTile(x, y).renderHard();
 
             }
         }
+        glTranslatef(xScroll, yScroll, 0);
     }
 
     // return the tile on x and y

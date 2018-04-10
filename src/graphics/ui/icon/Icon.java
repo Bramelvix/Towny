@@ -1,86 +1,78 @@
 package graphics.ui.icon;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-import main.Game;
+import graphics.OpenglUtils;
 
 //icon on the bottom left of the screen (pickaxe, axe,...)
 public class Icon {
-	private int x, y; // x and y of the top left corner
-	private boolean hover; // is the mouse hovering over the icon
-	private String path; // path to the image
-	private final int WIDTH; // width
-	private final int HEIGHT; // height
-	private boolean selected; // is the icon selected
-	private Image image; // image
+    private int x, y; // x and y of the top left corner
+    private boolean hover; // is the mouse hovering over the icon
+    private int size; // width and length equal
+    private boolean selected; // is the icon selected
+    private int[] pixels; // pixels
+    private int id;
+    private static final float scaleValue = 0.176056338028169f;
 
-	// constructor
-    Icon(int x, int y, String path, int width, int height) {
-		this.path = path;
-		this.x = x*Game.SCALE;
-		WIDTH = width*Game.SCALE;
-		HEIGHT = height*Game.SCALE;
-		this.y = y*Game.SCALE;
-		load();
-	}
+    // constructor
+    Icon(int x, int y, String path) {
+        this.x = x;
+        this.y = y;
+        load(path);
+        id = OpenglUtils.loadTexture(pixels, size,size);
+    }
 
-	// getters
-	public boolean isSelected() {
-		return selected;
-	}
+    // getters
+    public boolean isSelected() {
+        return selected;
+    }
 
-	public int getX() {
-		return x;
-	}
+    public int getX() {
+        return x;
+    }
 
-	public int getY() {
-		return y;
-	}
+    public int getY() {
+        return y;
+    }
 
-	public boolean hoverOn() {
-		return hover;
-	}
+    public boolean hoverOn() {
+        return hover;
+    }
 
-	public int getHeight() {
-		return HEIGHT;
-	}
+    public int getSize() {
+        return size;
+    }
 
-	public int getWidth() {
-		return WIDTH;
-	}
+    // setters
+    public void setSelect(boolean select) {
+        this.selected = select;
+    }
 
-	// setters
-	public void setSelect(boolean select) {
-		this.selected = select;
-	}
+    public void setHoverOn(boolean hover) {
+        this.hover = hover;
 
-	public void setHoverOn(boolean hover) {
-		this.hover = hover;
+    }
 
-	}
+    //render the icon on the screen
+    public void render() {
+		OpenglUtils.iconDraw(id,x,y,size,selected||hover);
+    }
 
-	//render the icon on the screen
-	public void render(Graphics g) {
-		g.drawImage(image, x, y, null);
-		if (selected || hover) {
-			g.setColor(Color.red);
-			g.drawRect(x, y, WIDTH, HEIGHT);
-			g.drawRect(x + 1, y + 1, WIDTH - 2, HEIGHT - 2); //rendering the red square around the icon
-			g.drawRect(x + 2, y + 2, WIDTH - 4, HEIGHT - 4);
-		}
-	}
-
-	//load the image
-	private void load() {
-		try {
-			image = ImageIO.read(Icon.class.getResource(path)).getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    //load the image
+    private void load(String path) {
+        try {
+            BufferedImage before = ImageIO.read(Icon.class.getResource(path));
+            BufferedImage after = OpenglUtils.getScaledBufferedImage(before,scaleValue,scaleValue);
+            size = after.getWidth();
+            pixels = new int[size * size];
+            after.getRGB(0, 0, size, size, pixels, 0, size);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

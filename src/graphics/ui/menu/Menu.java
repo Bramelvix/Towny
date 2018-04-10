@@ -1,12 +1,11 @@
 package graphics.ui.menu;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
 import entity.dynamic.mob.work.Recipe;
-import input.Mouse;
+import graphics.OpenglUtils;
+import input.MousePosition;
 
 public class Menu { // the menu is the little options menu that shows up when
 					// you right click
@@ -16,24 +15,20 @@ public class Menu { // the menu is the little options menu that shows up when
 	private int height = 20;
     private List<MenuItem> items; // spritesheets of items on the menu
 	private boolean visible; // is the item visible
-	private Color colour = new Color(91, 94, 99, 210); // the grey-blue colour
-														// of the background of
-														// the menu
 
 	// render method
-	public void render(Graphics g) {
+	public void render() {
 		if (visible) {
-			g.setColor(colour);
-			g.fillRect(x, y, width, height);
-			items.forEach((MenuItem i) -> i.render(g));
+			OpenglUtils.menuDraw(x,y,width,height);
+			items.forEach((MenuItem i) -> i.render());
 		}
 	}
 
 	// showing the menu
-	public void show(Mouse mouse) {
+	public void show() {
 		visible = true;
-		ingameX = mouse.getX();
-		ingameY = mouse.getY();
+		ingameX = MousePosition.getX();
+		ingameY = MousePosition.getY();
 	}
 
 	// getter
@@ -63,15 +58,15 @@ public class Menu { // the menu is the little options menu that shows up when
 	}
 
 	// updating the menu
-	public void update(Mouse mouse, boolean forceinvisible) {
+	public void update(boolean forceinvisible) {
 		if (forceinvisible) {
 			hide();
 		} else {
-			items.forEach((MenuItem i) -> i.update(mouse));
-			setVisible((((mouse.getTrueXPixels()) >= getX() - 10)
-					&& ((mouse.getTrueXPixels()) <= getX() + (getWidth() + 10))
-					&& ((mouse.getTrueYPixels()) >= getY() - 10)
-					&& ((mouse.getTrueYPixels()) <= getY() + (getHeight() + 10))));
+			items.forEach((MenuItem i) -> i.update());
+			setVisible((((MousePosition.getTrueXPixels()) >= getX() - 10)
+					&& ((MousePosition.getTrueXPixels()) <= getX() + (getWidth() + 10))
+					&& ((MousePosition.getTrueYPixels()) >= getY() - 10)
+					&& ((MousePosition.getTrueYPixels()) <= getY() + (getHeight() + 10))));
 		}
 	}
 
@@ -112,22 +107,22 @@ public class Menu { // the menu is the little options menu that shows up when
 		return y;
 	}
 
-    private MenuItem clickedItem(String type, Mouse mouse) {
-		return clickedItem(mouse) != null && clickedItem(mouse).getText().contains(type) ? clickedItem(mouse) : null;
+    private MenuItem clickedItem(String type) {
+		return clickedItem() != null && clickedItem().getText().contains(type) ? clickedItem() : null;
 
 	}
 
-	public MenuItem clickedItem(Mouse mouse) {
+	public MenuItem clickedItem() {
 		for (MenuItem i : items) {
-			if (i.clicked(mouse)) {
+			if (i.clicked()) {
 				return i;
 			}
 		}
 		return null;
 	}
 
-	public <T extends Recipe> T recipeFromMenuOption(Mouse mouse, String menuItem) {
-		MenuItem clickedItem = clickedItem(menuItem, mouse);
+	public <T extends Recipe> T recipeFromMenuOption(String menuItem) {
+		MenuItem clickedItem = clickedItem(menuItem);
 		if (clickedItem != null) {
 			return clickedItem.getRecipe();
 		}

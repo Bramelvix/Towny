@@ -5,7 +5,7 @@ import entity.pathfinding.Direction;
 import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
 import entity.pathfinding.Point;
-import graphics.Screen;
+import graphics.Sprite;
 import map.Level;
 import map.Tile;
 
@@ -198,7 +198,7 @@ public abstract class Mob extends Entity {
     }
 
     // method to render onto the screen
-    public void render(Screen screen) {
-        screen.renderMultiSprite(x, y, this.sprites); // renders the body
+    public void render() {
+        sprite.draw(x,y); // renders the body
     }
 }

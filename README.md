@@ -17,10 +17,8 @@ Feel free to contribute to the game by fixing my terrible code, or adding new fe
  - Selectionsquare for mining orders
  - Better building and crafting UI
  - Villager management UI
- - Reworking item instance system
  - General performance improvement
  - Improving the minimap
- - Rendering rework
  - World generator rework
  
  **Planned features**

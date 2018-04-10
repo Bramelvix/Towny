@@ -16,7 +16,7 @@ public class MoveJob extends Job {
         this(xloc, yloc, zloc, worker, true);
     }
 
-    public MoveJob(int xloc, int yloc, int zloc, Villager worker, boolean exactLocation) { //movejob to move to a tile or around this tile
+    MoveJob(int xloc, int yloc, int zloc, Villager worker, boolean exactLocation) { //movejob to move to a tile or around this tile
         super(xloc, yloc, zloc, worker);
         this.exactLocation = exactLocation;
     }

@@ -2,13 +2,19 @@ package entity.nonDynamic.building.wall;
 
 import entity.nonDynamic.building.BuildAbleObject;
 import entity.dynamic.item.Item;
+import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;
 import map.Tile;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class Wall extends BuildAbleObject {
     private boolean door;
     private WallType type;
+    private static HashMap<List<Sprite>, Sprite> dynamicSpriteList = new HashMap<>();
 
     // basic constructor
     public Wall(WallType type) {
@@ -87,47 +93,67 @@ public class Wall extends BuildAbleObject {
     // decide the sprite for the wall, depending on the other 4 sides next to
     // the wall
     private void decideSprite(boolean leftHasWall, boolean rightHasWall, boolean topHasWall, boolean bottomHasWall, boolean topRightHasWall, boolean bottomRightHasWall, boolean topLeftHasWall, boolean bottomLeftHasWall) {
+        List<Sprite> sprites = new ArrayList<Sprite>();
+
         if (door) {
             if (topHasWall || bottomHasWall) {
-                this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 47 : 45));
+                sprites.add(SpriteHashtable.get(type == WallType.STONE ? 47 : 45));
             } else {
-                this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 46 : 44));
+                sprites.add(SpriteHashtable.get(type == WallType.STONE ? 46 : 44));
             }
         }
-        this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 14 : 186));
+        sprites.add(SpriteHashtable.get(type == WallType.STONE ? 14 : 186));
 
         //check if places are empty
-        if (!topHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 17 : 189));
-        if (!rightHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 16 : 188));
-        if (!bottomHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 18 : 190));
-        if (!leftHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 15 : 187));
+        if (!topHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 17 : 189));
+        if (!rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 16 : 188));
+        if (!bottomHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 18 : 190));
+        if (!leftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 15 : 187));
 
         // top right corner
-        if (!topHasWall && !rightHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 20 : 192));
-        else if (!rightHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 25 : 197));
-        else if (!topHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 27 : 199));
-        else if (!topRightHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 36 : 208));
+        if (!topHasWall && !rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 20 : 192));
+        else if (!rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 25 : 197));
+        else if (!topHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 27 : 199));
+        else if (!topRightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 36 : 208));
 
         // bottom right corner
 
-        if (!bottomHasWall && !rightHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 22 : 194));
-        else if (!rightHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 26 : 198));
-        else if (!bottomHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 34 : 206));
-        else if (!bottomRightHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 38 : 210));
+        if (!bottomHasWall && !rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 22 : 194));
+        else if (!rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 26 : 198));
+        else if (!bottomHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 34 : 206));
+        else if (!bottomRightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 38 : 210));
 
 
         // bottom left corner
-        if (!bottomHasWall && !leftHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 21 : 193));
-        else if (!leftHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 23 : 195));
-        else if (!bottomHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 33 : 205));
-        else if (!bottomLeftHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 37 : 209));
+        if (!bottomHasWall && !leftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 21 : 193));
+        else if (!leftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 23 : 195));
+        else if (!bottomHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 33 : 205));
+        else if (!bottomLeftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 37 : 209));
 
         // top left corner
-        if (!topHasWall && !leftHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 19 : 191));
-        else if (!leftHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 24 : 196));
-        else if (!topHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 28 : 200));
-        else if (!topLeftHasWall) this.sprites.add(SpriteHashtable.get(type == WallType.STONE ? 35 : 207));
+        if (!topHasWall && !leftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 19 : 191));
+        else if (!leftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 24 : 196));
+        else if (!topHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 28 : 200));
+        else if (!topLeftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 35 : 207));
 
+        if (dynamicSpriteList.containsKey(sprites)) { //if a dynamic sprite exists, use it
+            sprite = dynamicSpriteList.get(sprites);
+        } else { //otherwise make it
+            final int SIZE = Tile.SIZE;
+            int[] pixels = new int[SIZE * SIZE];
+            for (Sprite sprite : sprites) {
+                for (int y = 0; y < SIZE; y++) {
+                    for (int x = 0; x < SIZE; x++) {
+                        int pixel = sprite.pixels[x + y * SIZE];
+                        if (!(pixel == 0x00FFFFFF)) {
+                            pixels[x + y * SIZE] = pixel;
+                        }
+                    }
+                }
+            }
+            sprite = new Sprite(pixels);
+            dynamicSpriteList.put(sprites, new Sprite(pixels));
+        }
     }
 
     @Override
