@@ -19,7 +19,7 @@ public class BuildingRecipe extends Recipe {
     private static final BuildingRecipe ANVIL = new BuildingRecipe(new Anvil(), ItemHashtable.get(2));
     private static final BuildingRecipe CHEST = new BuildingRecipe(new Chest(), ItemHashtable.get(1));
     public static final BuildingRecipe STAIRSDOWN = new BuildingRecipe(new Stairs(true));
-    public static final BuildingRecipe STAIRSUP = new BuildingRecipe(new Stairs(false), ItemHashtable.get(1));
+    private static final BuildingRecipe STAIRSUP = new BuildingRecipe(new Stairs(false), ItemHashtable.get(1));
 
     public static final BuildingRecipe[] RECIPES = {WOOD_WALL, STONE_WALL, WOOD_DOOR, STONE_DOOR, FURNACE, ANVIL, CHEST, STAIRSUP};
 

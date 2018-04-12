@@ -17,17 +17,20 @@ public class Weapon extends Item {
     private WeaponType type;
     private WeaponMaterial mat;
 
-    private Weapon(String name, int x, int y, int z, Sprite sprite, String tooltip, WeaponType type, WeaponMaterial mat) {
-        super(name, x, y, z, sprite, tooltip, true, 90); //TODO put all item options in itemhashtable
+    public Weapon(String name, Sprite sprite, String tooltip, WeaponType type, WeaponMaterial mat, int id) {
+        super(name, sprite, tooltip, id);
         this.mat = mat;
         this.type = type;
         mat_strong = calcMatStrong(mat);
         calcDam(type);
-
     }
 
     public float getDamage(Villager user) {
         return mat_strong * cut * 10;
+    }
+
+    public float getSpeed() {
+        return speed;
     }
 
     private void calcDam(WeaponType type) {
@@ -50,9 +53,6 @@ public class Weapon extends Item {
             case HEATER:
                 setStats(1f, 0f, 0f, 5f, -1.5f, 1);
                 break;
-            case PICK:
-                setStats(2f, 2.5f, 0f, 0f, 2f, 3);
-                break;
             case SCIMITAR:
                 setStats(0f, 1f, 5f, 0.5f, 4f, 3);
                 break;
@@ -61,9 +61,6 @@ public class Weapon extends Item {
                 break;
             case SWORD:
                 setStats(0.5f, 4f, 4f, 2.5f, 3f, 4);
-                break;
-            case WARHAMMER:
-                setStats(5f, 1f, 2f, 0f, 1.5f, 3);
                 break;
         }
     }
@@ -77,19 +74,6 @@ public class Weapon extends Item {
         this.range = range;
     }
 
-    public static Weapon getRandomWeapon(int x, int y, int z) {
-        Weapon weapon = getRandomWeapon();
-        weapon.setLocation(x, y, z);
-        return weapon;
-    }
-
-    public static Weapon getRandomWeapon() {
-        return getWeapon(WeaponType.getWeaponRandType(), WeaponMaterial.getWeaponRandMat());
-    }
-
-    public static Weapon getRandomWeapon(Mob a) {
-        return getRandomWeapon(a.getX(), a.getY(), a.getZ());
-    }
 
     private float calcMatStrong(WeaponMaterial mat) {
         float strong = 0;
@@ -113,40 +97,18 @@ public class Weapon extends Item {
         return strong;
     }
 
-    public static Weapon getWeapon(WeaponType type, WeaponMaterial mat) {
-        String name = "";
-        switch (mat) {
-            case WOOD:
-                name = name.concat("Wooden ");
-                break;
-            case GOLD:
-                name = name.concat("Golden ");
-                break;
-            case IRON:
-                name = name.concat("Iron ");
-                break;
-            case COPPER:
-                name = name.concat("Copper ");
-                break;
-            case CRYSTAL:
-                name = name.concat("Crystal ");
-                break;
-        }
-        if (type == WeaponType.BOW && mat == WeaponMaterial.COPPER)
-            return getRandomWeapon();
-        name = name.concat(type.toString().toLowerCase());
-        String tooltip = "a " + name.toLowerCase();
-        if (mat == WeaponMaterial.IRON)
-            tooltip = "an " + name.toLowerCase();
-        return new Weapon(name, 0, 0, 0, SpriteHashtable.getWeaponSprite(type, mat), tooltip, type, mat);
-    }
-
     public boolean isShield() {
         return type == WeaponType.BUCKLER || type == WeaponType.HEATER;
     }
 
     public Weapon copy() {
-        return new Weapon(this.getName(), this.x, this.y, this.z, this.sprite, this.tooltip, this.type, this.mat);
+        return new Weapon(this.getName(), this.sprite, this.tooltip, this.type, this.mat, this.getId());
+    }
+
+    public Weapon copy(int x, int y, int z) {
+        Weapon copy = this.copy();
+        copy.setLocation(x, y, z);
+        return copy;
     }
 
 }

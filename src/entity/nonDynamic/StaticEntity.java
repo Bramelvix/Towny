@@ -6,12 +6,12 @@ import map.Level;
 public abstract class StaticEntity extends Entity {
     public Level level;
 
-    public StaticEntity(int x, int y, int z, Level level) {
+    StaticEntity(int x, int y, int z, Level level) {
         super(x, y, z);
         this.level = level;
     }
 
-    public StaticEntity() {
+    protected StaticEntity() {
         super();
     }
 }

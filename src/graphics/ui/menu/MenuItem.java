@@ -1,7 +1,5 @@
 package graphics.ui.menu;
 
-import java.awt.Font;
-
 import entity.Entity;
 import entity.dynamic.mob.work.BuildingRecipe;
 import entity.dynamic.mob.work.ItemRecipe;
@@ -17,8 +15,8 @@ public class MenuItem {
 	public int x, y; // x and y of top left corner
 	private int width; // width of the menuitem
 	private boolean hover; // is the mouse hovering over the item
-    private static final Font font = new Font("Dialog", Font.PLAIN, 15); // font
-	// some static strings to use as menuitem texts
+
+    // some static strings to use as menuitem texts
 	// TODO theres probably a better way to do this
 	public static final String CANCEL = "Cancel";
 	public static final String MOVE = "Move";
@@ -38,7 +36,6 @@ public class MenuItem {
 	public static final String GOLD = "Gold";
 	public static final String CRYSTAL = "Crystal";
 	public static final String WOOD = "Wood";
-
 	private Recipe recipe;
 	private Entity entity;
 

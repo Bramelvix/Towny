@@ -31,17 +31,11 @@ public class MouseButton implements GLFWMouseButtonCallbackI {
     }
 
     public static boolean wasPressed(int button) {
-        if (button > 3 || button < 0) {
-            return false;
-        }
-        return pressed[button];
+        return button <= 3 && button >= 0 && pressed[button];
     }
 
     public static boolean wasReleased(int button) {
-        if (button > 3 || button < 0) {
-            return false;
-        }
-        return released[button];
+        return button <= 3 && button >= 0 && released[button];
     }
 
     public static void resetLeftAndRight() {

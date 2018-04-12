@@ -116,7 +116,7 @@ public class PathFinder {
         return xp > 0 && xp < level.width && yp > 0 && yp < level.height && level.isWalkAbleTile(xp, yp);
     }
 
-    public static float getCost(int x, int y, int tx, int ty) {
+    private static float getCost(int x, int y, int tx, int ty) {
         float dx = tx - x;
         float dy = ty - y;
         return (float) (Math.sqrt((dx * dx) + (dy * dy)));

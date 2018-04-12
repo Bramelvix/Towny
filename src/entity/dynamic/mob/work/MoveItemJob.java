@@ -43,7 +43,7 @@ public class MoveItemJob extends Job {
             return;
         }
         if (worker.levels[worker.getZ()].getEntityOn(xloc, yloc) instanceof Chest) {
-            chest = (Chest) worker.levels[worker.getZ()].getEntityOn(xloc, yloc);
+            chest = worker.levels[worker.getZ()].getEntityOn(xloc, yloc);
             worker.setPath(worker.getPath(worker.levels[worker.getZ()].getNearestEmptySpot(xloc, yloc)));
         } else {
             worker.setPath(worker.getPath(xloc / 16, yloc / 16));

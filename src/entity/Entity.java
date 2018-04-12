@@ -42,7 +42,7 @@ public abstract class Entity {
     }
 
     // getters
-    public boolean isVisible() {
+    protected boolean isVisible() {
         return visible;
     }
 
@@ -58,7 +58,7 @@ public abstract class Entity {
         return z;
     }
 
-    public boolean isSelected() {
+    protected boolean isSelected() {
         return selected;
     }
 
@@ -70,12 +70,7 @@ public abstract class Entity {
 
     // does the mouse hover over the entity
     public boolean hoverOn(int z) {
-        return hoverOn(MousePosition.getX(), MousePosition.getY(), z);
-    }
-
-    // does the mouse hover over the entity
-    public boolean hoverOn(int x, int y, int z) {
-        return (z == this.z && x >= this.x && x <= this.x + Sprite.SIZE && y >= this.y && y <= this.y + Sprite.SIZE);
+        return (z == this.z && MousePosition.getX() >= this.x && MousePosition.getX() <= this.x + Sprite.SIZE && MousePosition.getY() >= this.y && MousePosition.getY() <= this.y + Sprite.SIZE);
     }
 
     // render method

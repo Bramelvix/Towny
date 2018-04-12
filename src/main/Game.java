@@ -1,14 +1,11 @@
 package main;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import com.sun.xml.internal.ws.util.StringUtils;
 import com.sun.xml.internal.ws.util.StringUtils;
 import entity.Entity;
 import entity.dynamic.item.weapon.WeaponType;
@@ -173,7 +170,6 @@ public class Game {
         int teller = Entity.RANDOM.nextInt(5) + 1;
         for (int i = 0; i < teller; i++) {
             Zombie zomb = new Zombie(map, Entity.RANDOM.nextInt(256) + 16, Entity.RANDOM.nextInt(256) + 16, 0);
-            zomb.setHolding(Weapon.getWeapon(WeaponType.BUCKLER, WeaponMaterial.CRYSTAL));
             mobs.add(zomb);
         }
     }
@@ -281,9 +277,9 @@ public class Game {
         return lowest;
     }
 
-    private Villager anyVillHoverOn(int x, int y) {
+    private Villager anyVillHoverOn() {
         for (Villager i : vills) {
-            if (i.hoverOn(x, y, currentLayerNumber)) {
+            if (i.hoverOn(currentLayerNumber)) {
                 return i;
             }
         }
@@ -291,9 +287,9 @@ public class Game {
     }
 
 
-    private Mob anyMobHoverOn(int x, int y) {
+    private Mob anyMobHoverOn() {
         for (Mob i : mobs) {
-            if (i.hoverOn(x, y, currentLayerNumber)) {
+            if (i.hoverOn(currentLayerNumber)) {
                 return i;
             }
         }
@@ -364,17 +360,17 @@ public class Game {
             return;
 
         } else if (((UiIcons.isSwordsSelected()) && UiIcons.hoverOnNoIcons() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT))
-                && (anyMobHoverOn(MousePosition.getX(), MousePosition.getY()) != null)) {
+                && (anyMobHoverOn() != null)) {
             Villager idle = getIdlestVil();
             idle.setPath(null);
             deselectAllVills();
-            idle.addJob(new FightJob(idle, anyMobHoverOn(MousePosition.getX(), MousePosition.getY())));
+            idle.addJob(new FightJob(idle, anyMobHoverOn()));
             ui.deSelectIcons();
             return;
 
-        } else if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT) && anyVillHoverOn(MousePosition.getX(), MousePosition.getY()) != null && !ui.outlineIsVisible()) {
+        } else if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT) && anyVillHoverOn() != null && !ui.outlineIsVisible()) {
             deselectAllVills();
-            selectedvill = anyVillHoverOn(MousePosition.getX(), MousePosition.getY());
+            selectedvill = anyVillHoverOn();
             selectedvill.setSelected(true);
             ui.deSelectIcons();
             return;
@@ -400,7 +396,7 @@ public class Game {
                 if (ore != null) {
                     options.add(new MenuItem((MenuItem.MINE), ore));
                 }
-                Mob mob = anyMobHoverOn(MousePosition.getX(), MousePosition.getY());
+                Mob mob = anyMobHoverOn();
                 if (mob != null) {
                     options.add(new MenuItem((MenuItem.FIGHT), mob));
                 }

@@ -5,7 +5,7 @@ import graphics.Sprite;
 import graphics.SpriteHashtable;
 
 public class Furnace extends Workstation {
-	Sprite sprite1, sprite2,sprite3;
+    private Sprite sprite1, sprite2, sprite3;
 	public Furnace() {
 		super();
 		sprite1 = SpriteHashtable.get(82);

@@ -1,12 +1,9 @@
 package graphics.ui;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
 import graphics.OpenglUtils;
 import graphics.ui.icon.Icon;
 import input.MouseButton;
@@ -25,14 +22,13 @@ public class TopBar {
     private int pauseWidth, pauseHeight;
     private int playWidth, playHeight;
     private static final Color COL = new Color(91, 94, 99, 110); // the colour of the background
-    private static final Font font = new Font("Dialog", Font.BOLD, 15);
     private boolean paused; // is the game paused
     private byte speed = 6;
 
     // constructor
     TopBar() {
         width = 270;
-        height = 82;
+        height = 85;
         this.x = (Game.width*Game.SCALE-width)/2;
         this.y = 5;
         init();
@@ -63,7 +59,8 @@ public class TopBar {
             e.printStackTrace();
         }
     }
-    private int loadImage(BufferedImage image) throws IOException{
+
+    private int loadImage(BufferedImage image) {
         int[] pixels = new int[image.getWidth() * image.getHeight()];
         image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
         return OpenglUtils.loadTexture(pixels,image.getWidth(),image.getHeight());
@@ -114,15 +111,11 @@ public class TopBar {
         } else {
             OpenglUtils.drawTexturedQuad(x+125,y+25,playWidth,playHeight,playId);
         }
-        /*g.setColor(COL);
-        g.setFont(font);
-        g.setColor(Color.black);
-        g.drawString("Villagers", x * Game.SCALE + 10, y * Game.SCALE + 12);
-        g.drawString(vilcount + "", x * Game.SCALE + 30, y * Game.SCALE + 82);
-        g.drawString("Speed: " + (speed - 2), x * Game.SCALE + 105, y * Game.SCALE + 25);
-        g.drawString("Soldiers", x * Game.SCALE + (width >> 1) + 70, y * Game.SCALE + 12);
-        g.drawString(solcount + "", x * Game.SCALE + (width >> 1) + 90, y * Game.SCALE + 82);
-*/
+        OpenglUtils.drawText("Villagers", x + 10, y + 5);
+        OpenglUtils.drawText(vilcount + "", x + 30, y + 70);
+        OpenglUtils.drawText("Speed: " + (speed - 2), x + 95, y + 65);
+        OpenglUtils.drawText("Soldiers", x + 200, y + 5);
+        OpenglUtils.drawText(solcount + "", x + 230, y + 70);
     }
 
     // has the user clicked on the pause button
