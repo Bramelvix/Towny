@@ -9,7 +9,7 @@ public class HairSprite extends Sprite {
 	}
 
     //spritesheets of all the hair sprites in the game. Static so they are loaded only once and reused
-    private static final Sprite brownHair1 = new Sprite(19, 0, SpritesheetHashtable.get(2));
+    private static final Sprite brownHair1 = new Sprite(19, 0, SpritesheetHashtable.get(2)); //TODO put these in the hashtable
     private static final Sprite brownHair2 = new Sprite(20, 0, SpritesheetHashtable.get(2));
     private static final Sprite brownHairBeard1 = new Sprite(21, 0, SpritesheetHashtable.get(2));
     private static final Sprite brownHairBeard2 = new Sprite(22, 0, SpritesheetHashtable.get(2));

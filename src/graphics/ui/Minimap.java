@@ -1,14 +1,6 @@
 package graphics.ui;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.DataBufferInt;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
-
 import entity.Entity;
 import graphics.OpenglUtils;
 import map.Level;
@@ -41,7 +33,7 @@ public class Minimap {
                 pixels[x + y * width] = map.getTile(y / 2, x / 2).sprite.pixels[0];
                 Entity e = map.getEntityOn((y * 16) / 2, (x * 16) / 2);
                 if (e != null && e.sprite.pixels != null) { //TODO fix this with underground walls
-                    pixels[x + y * width] = e.sprite.pixels[5];
+                    pixels[x + y * width] = e.sprite.pixels[10];
                 }
 
             }
@@ -59,10 +51,10 @@ public class Minimap {
 
     // render the minimap
     public void render() {
-        float xloc = (x + (xoff * 0.125f));
-        float yloc = (y + (yoff * 0.125f));
+        float xloc = (x + (xoff * 0.04225f)); //TODO fix this. Pulled these numbers out of my arse
+        float yloc = (y + (yoff * 0.04225f));
         OpenglUtils.drawTexturedQuad(x, y, width, height, textureId);
-        OpenglUtils.drawFilledSquare((int) xloc, (int) yloc, (int) (31.25 * 2), (int) (17.578125 * 2), COL.getRed() / 255f, COL.getGreen() / 255f, COL.getBlue() / 255f, COL.getAlpha() / 255f);
+        OpenglUtils.drawFilledSquare((int) xloc, (int) yloc, (int) (62.5), (int) (35.15625), COL.getRed() / 255f, COL.getGreen() / 255f, COL.getBlue() / 255f, COL.getAlpha() / 255f);
 
     }
 

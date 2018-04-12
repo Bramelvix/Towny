@@ -87,7 +87,7 @@ public class Ore extends Resource {
     }
 
     private void decideSprite(boolean leftHasWall, boolean rightHasWall, boolean topHasWall, boolean bottomHasWall, boolean topRightHasWall, boolean bottomRightHasWall, boolean bottomLeftHasWall, boolean topLeftHasWall) {
-        List<Sprite> sprites = new ArrayList<Sprite>();
+        List<Sprite> sprites = new ArrayList<>();
         sprites.add(sprite);
         //check if places are empty
         if (!topHasWall) sprites.add(SpriteHashtable.get(164)); //3

@@ -20,7 +20,7 @@ import static org.lwjgl.opengl.GL11.glTranslatef;
 public class Level {
     private Tile[][] tiles; // array of tiles on the map
     public int width, height; // map with and height
-    public int depth;
+    private int depth;
 
     // basic constructor
     public Level(int height, int width, int elevation) {
@@ -81,7 +81,7 @@ public class Level {
         return getNearestSpotThatHasX(xloc, yloc, this::isClearTile);
     }
 
-    public Tile getNearestSpotThatHasX(int xloc, int yloc, BiPredicate<Integer, Integer> p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
+    private Tile getNearestSpotThatHasX(int xloc, int yloc, BiPredicate<Integer, Integer> p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
         int x0 = xloc / 16;
         int y0 = yloc / 16;
         if (p.test(x0, y0)) {

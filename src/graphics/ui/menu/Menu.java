@@ -20,7 +20,7 @@ public class Menu { // the menu is the little options menu that shows up when
 	public void render() {
 		if (visible) {
 			OpenglUtils.menuDraw(x,y,width,height);
-			items.forEach((MenuItem i) -> i.render());
+            items.forEach(MenuItem::render);
 		}
 	}
 
@@ -62,7 +62,7 @@ public class Menu { // the menu is the little options menu that shows up when
 		if (forceinvisible) {
 			hide();
 		} else {
-			items.forEach((MenuItem i) -> i.update());
+            items.forEach(MenuItem::update);
 			setVisible((((MousePosition.getTrueXPixels()) >= getX() - 10)
 					&& ((MousePosition.getTrueXPixels()) <= getX() + (getWidth() + 10))
 					&& ((MousePosition.getTrueYPixels()) >= getY() - 10)

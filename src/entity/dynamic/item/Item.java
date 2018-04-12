@@ -40,10 +40,10 @@ public class Item extends Entity {
         return new Item(this.getName(), this.x, this.y, this.z, this.sprite, this.getToolTip(), this.isVisible(), this.getId());
     }
 
-    public Item copy(int x, int y, int z) {
+    public <T extends Item> T copy(int x, int y, int z) {
         Item copy = this.copy();
         copy.setLocation(x, y, z);
-        return copy;
+        return (T) copy;
     }
 
     // getters and setters

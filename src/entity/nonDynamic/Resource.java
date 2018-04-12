@@ -1,6 +1,5 @@
 package entity.nonDynamic;
 
-import entity.Entity;
 import entity.dynamic.mob.Villager;
 import map.Level;
 

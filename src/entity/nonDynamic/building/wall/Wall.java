@@ -93,7 +93,7 @@ public class Wall extends BuildAbleObject {
     // decide the sprite for the wall, depending on the other 4 sides next to
     // the wall
     private void decideSprite(boolean leftHasWall, boolean rightHasWall, boolean topHasWall, boolean bottomHasWall, boolean topRightHasWall, boolean bottomRightHasWall, boolean topLeftHasWall, boolean bottomLeftHasWall) {
-        List<Sprite> sprites = new ArrayList<Sprite>();
+        List<Sprite> sprites = new ArrayList<>();
 
         if (door) {
             if (topHasWall || bottomHasWall) {

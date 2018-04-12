@@ -153,7 +153,12 @@ public abstract class OpenglUtils {
         glScalef(1.7f, 1.7f, 1f);
         glDrawArrays(GL_QUADS, 0, quads * 4);
         glPopMatrix();
+        glColor3f(1.0f, 1.0f, 1.0f);
         glDisableClientState(GL_VERTEX_ARRAY);
+    }
+
+    public static void drawText(String text, int x, int y) {
+        drawText(text, x, y, Color.BLACK);
     }
 
 

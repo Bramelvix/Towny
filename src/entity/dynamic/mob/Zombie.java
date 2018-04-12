@@ -1,6 +1,6 @@
 package entity.dynamic.mob;
 
-import entity.dynamic.item.weapon.Weapon;
+import entity.dynamic.item.ItemHashtable;
 import graphics.SpriteHashtable;
 import map.Level;
 
@@ -11,7 +11,7 @@ public class Zombie extends Humanoid {
         super(levels, x, y, z);
         sprite = SpriteHashtable.get(51);
         setName("zombie");
-        setHolding(Weapon.getRandomWeapon(this));
+        setHolding(ItemHashtable.getRandomWeapon());
 
     }
 

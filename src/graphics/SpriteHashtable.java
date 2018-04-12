@@ -37,141 +37,6 @@ public class SpriteHashtable {
         return rand.nextBoolean() ? get(10) : get(11);
     }
 
-    public static Sprite getWeaponSprite(WeaponType type, WeaponMaterial mat) {
-        switch (mat) {
-            case COPPER: {
-                switch (type) {
-                    case AXE:
-                        return get(87);
-                    case BUCKLER:
-                        return get(134);
-                    case DAGGER:
-                        return get(120);
-                    case HALBERT:
-                        return get(90);
-                    case HEATER:
-                        return get(135);
-                    case PICK:
-                        return get(89);
-                    case SCIMITAR:
-                        return get(125);
-                    case SPEAR:
-                        return get(139);
-                    case SWORD:
-                        return get(115);
-                    case WARHAMMER:
-                        return get(88);
-                    default:
-                        return null;
-                }
-            }
-            case CRYSTAL: {
-                switch (type) {
-                    case AXE:
-                        return get(110);
-                    case BUCKLER:
-                        return get(136);
-                    case DAGGER:
-                        return get(123);
-                    case HALBERT:
-                        return get(113);
-                    case HEATER:
-                        return get(137);
-                    case PICK:
-                        return get(112);
-                    case SCIMITAR:
-                        return get(128);
-                    case SPEAR:
-                        return get(109);
-                    case SWORD:
-                        return get(118);
-                    case WARHAMMER:
-                        return get(111);
-                    case BOW:
-                        return get(100);
-                }
-            }
-            case GOLD: {
-                switch (type) {
-                    case AXE:
-                        return get(105);
-                    case BUCKLER:
-                        return get(132);
-                    case DAGGER:
-                        return get(122);
-                    case HALBERT:
-                        return get(108);
-                    case HEATER:
-                        return get(133);
-                    case PICK:
-                        return get(107);
-                    case SCIMITAR:
-                        return get(127);
-                    case SPEAR:
-                        return get(104);
-                    case SWORD:
-                        return get(117);
-                    case WARHAMMER:
-                        return get(106);
-                    case BOW:
-                        return get(99);
-                }
-            }
-            case IRON: {
-                switch (type) {
-                    case AXE:
-                        return get(97);
-                    case BUCKLER:
-                        return get(130);
-                    case DAGGER:
-                        return get(121);
-                    case HALBERT:
-                        return get(103);
-                    case HEATER:
-                        return get(131);
-                    case PICK:
-                        return get(102);
-                    case SCIMITAR:
-                        return get(126);
-                    case SPEAR:
-                        return get(96);
-                    case SWORD:
-                        return get(116);
-                    case WARHAMMER:
-                        return get(101);
-                    case BOW:
-                        return get(98);
-                }
-            }
-            case WOOD: {
-                switch (type) {
-                    case AXE:
-                        return get(91);
-                    case BOW:
-                        return get(95);
-                    case BUCKLER:
-                        return get(129);
-                    case DAGGER:
-                        return get(119);
-                    case HALBERT:
-                        return get(94);
-                    case HEATER:
-                        return get(138);
-                    case PICK:
-                        return get(93);
-                    case SCIMITAR:
-                        return get(124);
-                    case SPEAR:
-                        return get(86);
-                    case SWORD:
-                        return get(114);
-                    case WARHAMMER:
-                        return get(92);
-                }
-            }
-        }
-        return null;
-    }
 
     public static void registerSprite(int key, Sprite sprite) throws Exception {
         if (table.put(key, sprite) != null) {
@@ -186,7 +51,6 @@ public class SpriteHashtable {
     public static void registerSprites() throws Exception { //registers all sprites by id
         registerSprite(1, new Sprite(0, 0, SpritesheetHashtable.get(1))); //water
         registerSprite(2, new Sprite(5, 0, SpritesheetHashtable.get(1))); //grass
-        registerSprite(3, new Sprite()); //void
         registerSprite(4, new Sprite(0, 5, SpritesheetHashtable.get(1))); //darkGrass
         registerSprite(5, new Sprite(5, 1, SpritesheetHashtable.get(1))); //grass2 
         registerSprite(6, new Sprite(6, 0, SpritesheetHashtable.get(1))); //dirt
@@ -267,12 +131,10 @@ public class SpriteHashtable {
         registerSprite(85, new Sprite(15, 0, SpritesheetHashtable.get(1)));//anvil
         registerSprite(86, new Sprite(44, 4, SpritesheetHashtable.get(2)));//woodspear
         registerSprite(87, new Sprite(42, 0, SpritesheetHashtable.get(2)));//copperaxe
-        registerSprite(88, new Sprite(43, 0, SpritesheetHashtable.get(2)));//copperwarhammer
-        registerSprite(89, new Sprite(45, 0, SpritesheetHashtable.get(2)));//copperpick
+        //GAP
         registerSprite(90, new Sprite(46, 0, SpritesheetHashtable.get(2)));//copperhalbert
         registerSprite(91, new Sprite(42, 5, SpritesheetHashtable.get(2)));//woodaxe
-        registerSprite(92, new Sprite(43, 5, SpritesheetHashtable.get(2)));//woodwarhammer
-        registerSprite(93, new Sprite(45, 5, SpritesheetHashtable.get(2)));//woodpick
+        //GAP
         registerSprite(94, new Sprite(46, 5, SpritesheetHashtable.get(2)));//woodhalbert
         registerSprite(95, new Sprite(52, 0, SpritesheetHashtable.get(2)));//woodbow
         registerSprite(96, new Sprite(49, 4, SpritesheetHashtable.get(2)));//ironspear
@@ -280,18 +142,15 @@ public class SpriteHashtable {
         registerSprite(98, new Sprite(53, 1, SpritesheetHashtable.get(2)));//ironbow
         registerSprite(99, new Sprite(52, 2, SpritesheetHashtable.get(2)));//goldbow
         registerSprite(100, new Sprite(52, 4, SpritesheetHashtable.get(2)));//crystalbow
-        registerSprite(101, new Sprite(48, 5, SpritesheetHashtable.get(2)));//ironwarhammer
-        registerSprite(102, new Sprite(50, 5, SpritesheetHashtable.get(2)));//ironpick
+        //GAP
         registerSprite(103, new Sprite(51, 5, SpritesheetHashtable.get(2)));//ironhalbert
         registerSprite(104, new Sprite(49, 6, SpritesheetHashtable.get(2)));//goldspear
         registerSprite(105, new Sprite(47, 7, SpritesheetHashtable.get(2)));//goldaxe
-        registerSprite(106, new Sprite(48, 7, SpritesheetHashtable.get(2)));//goldwarhammer
-        registerSprite(107, new Sprite(50, 7, SpritesheetHashtable.get(2)));//goldpick
+        //GAP
         registerSprite(108, new Sprite(51, 7, SpritesheetHashtable.get(2)));//goldhalbert
         registerSprite(109, new Sprite(49, 8, SpritesheetHashtable.get(2)));//crystalspear
         registerSprite(110, new Sprite(47, 9, SpritesheetHashtable.get(2)));//crystalaxe
-        registerSprite(111, new Sprite(48, 9, SpritesheetHashtable.get(2)));//crystalwarhammer
-        registerSprite(112, new Sprite(50, 9, SpritesheetHashtable.get(2)));//crystalpick
+        //GAP
         registerSprite(113, new Sprite(51, 9, SpritesheetHashtable.get(2)));//crystalhalbert
         registerSprite(114, new Sprite(42, 6, SpritesheetHashtable.get(2)));//woodsword
         registerSprite(115, new Sprite(43, 6, SpritesheetHashtable.get(2)));//coppersword

@@ -35,7 +35,7 @@ public class Path {
 		}
 	}
 
-    public Path(int x, int y) {
+    Path(int x, int y) {
 		xdest = x;
 		ydest = y;
 	}
@@ -45,19 +45,9 @@ public class Path {
 	}
 
 
-    // adds a step to the end of the list
-	public void appendStep(int x, int y) {
-		steps.add(new Point(x, y));
-	}
-
     // adds a step to the front of the list
 	public void prependStep(int x, int y) {
 		steps.add(0, new Point(x, y));
-	}
-
-    //does the list already contain a step
-	public boolean contains(int x, int y) {
-		return steps.contains(new Point(x, y));
 	}
 
 }
