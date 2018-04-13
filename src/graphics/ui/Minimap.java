@@ -32,7 +32,7 @@ public class Minimap {
             for (int y = 0; y < height; y++) {
                 pixels[x + y * width] = map.getTile(y / 2, x / 2).sprite.pixels[0];
                 Entity e = map.getEntityOn((y * 16) / 2, (x * 16) / 2);
-                if (e != null && e.sprite.pixels != null) { //TODO fix this with underground walls
+                if (e != null) {
                     pixels[x + y * width] = e.sprite.pixels[10];
                 }
 

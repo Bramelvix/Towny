@@ -15,7 +15,8 @@ public class Sprite {
     }
 
     public Sprite(int[] pixels) {
-        id = OpenglUtils.loadTexture(pixels, SIZE,SIZE);
+        this.pixels = pixels;
+        id = OpenglUtils.loadTexture(this.pixels, SIZE, SIZE);
     }
     public Sprite() {
         id = 0;

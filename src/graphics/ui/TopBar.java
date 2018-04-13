@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+
 import graphics.OpenglUtils;
 import graphics.ui.icon.Icon;
 import input.MouseButton;
@@ -16,20 +17,19 @@ public class TopBar {
     private int x, y; // x and y of the top left corner
     private int width, height; // width and height
     private int vilcount, solcount; // amount of villagers and soldiers
-    private int solId,vilId,pauseId,playId,fastId,slowId;
+    private int solId, vilId, pauseId, playId, fastId, slowId;
     private int vilSize;
     private int slowWidth, slowHeight;
     private int pauseWidth, pauseHeight;
     private int playWidth, playHeight;
     private static final Color COL = new Color(91, 94, 99, 110); // the colour of the background
-    private boolean paused; // is the game paused
     private byte speed = 6;
 
     // constructor
     TopBar() {
         width = 270;
         height = 85;
-        this.x = (Game.width*Game.SCALE-width)/2;
+        this.x = (Game.width * Game.SCALE - width) / 2;
         this.y = 5;
         init();
     }
@@ -63,7 +63,7 @@ public class TopBar {
     private int loadImage(BufferedImage image) {
         int[] pixels = new int[image.getWidth() * image.getHeight()];
         image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
-        return OpenglUtils.loadTexture(pixels,image.getWidth(),image.getHeight());
+        return OpenglUtils.loadTexture(pixels, image.getWidth(), image.getHeight());
 
     }
 
@@ -84,32 +84,35 @@ public class TopBar {
     }
 
     public byte getSpeed() {
-        if (speed == 0)
+        if (speed == 0) {
             return 6;
+        }
         return speed;
     }
 
     private void upSpeed() {
-        if (speed < 9)
+        if (speed < 9) {
             speed++;
+        }
     }
 
     private void downSpeed() {
-        if (speed > 3)
+        if (speed > 3) {
             speed--;
+        }
     }
 
     // render the topbar on the screen
     public void render() {
-        OpenglUtils.drawFilledSquare(x,y,width,height,COL.getRed()/255f,COL.getGreen()/255f,COL.getBlue()/255f,COL.getAlpha()/255f);
-        OpenglUtils.drawTexturedQuad(x+10,y+17, vilSize,vilSize,vilId);
-        OpenglUtils.drawTexturedQuad(x+210,y+17, vilSize,vilSize,solId);
-        OpenglUtils.drawTexturedQuad(x+75,y+30,slowWidth,slowHeight,slowId);
-        OpenglUtils.drawTexturedQuad(x+160,y+30,slowWidth,slowHeight,fastId);
-        if (!paused) {
-            OpenglUtils.drawTexturedQuad(x+125,y+25,pauseWidth,pauseHeight,pauseId);
+        OpenglUtils.drawFilledSquare(x, y, width, height, COL.getRed() / 255f, COL.getGreen() / 255f, COL.getBlue() / 255f, COL.getAlpha() / 255f);
+        OpenglUtils.drawTexturedQuad(x + 10, y + 17, vilSize, vilSize, vilId);
+        OpenglUtils.drawTexturedQuad(x + 210, y + 17, vilSize, vilSize, solId);
+        OpenglUtils.drawTexturedQuad(x + 75, y + 30, slowWidth, slowHeight, slowId);
+        OpenglUtils.drawTexturedQuad(x + 160, y + 30, slowWidth, slowHeight, fastId);
+        if (!Game.paused) {
+            OpenglUtils.drawTexturedQuad(x + 125, y + 25, pauseWidth, pauseHeight, pauseId);
         } else {
-            OpenglUtils.drawTexturedQuad(x+125,y+25,playWidth,playHeight,playId);
+            OpenglUtils.drawTexturedQuad(x + 125, y + 25, playWidth, playHeight, playId);
         }
         OpenglUtils.drawText("Villagers", x + 10, y + 5);
         OpenglUtils.drawText(vilcount + "", x + 30, y + 70);
@@ -120,40 +123,35 @@ public class TopBar {
 
     // has the user clicked on the pause button
     private boolean clickedOnPause() {
-        return (MousePosition.getTrueXPixels() >= x * Game.SCALE + (width / 3) + 35
-                && MousePosition.getTrueXPixels() <= x * Game.SCALE + (width / 3) + 35 + pauseWidth
-                && MousePosition.getTrueYPixels() >= (y * Game.SCALE + 30) && MousePosition.getTrueYPixels() <= (y * Game.SCALE + 30) + 10//pauseimg.getHeight(null)
+        return (MousePosition.getTrueXPixels() >= x + 125
+                && MousePosition.getTrueXPixels() <= x + 125 + pauseWidth
+                && MousePosition.getTrueYPixels() >= y + 25 && MousePosition.getTrueYPixels() <= y + 25 + pauseHeight
                 && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT));
     }
 
     private boolean clickedOnFast() {
-        return (MousePosition.getTrueXPixels() >= x * Game.SCALE + (width >> 1) + 20
-                && MousePosition.getTrueXPixels() <= x * Game.SCALE + (width >> 1) + 20 + slowWidth
-                && MousePosition.getTrueYPixels() >= (y * Game.SCALE + 35) && MousePosition.getTrueYPixels() <= (y * Game.SCALE + 35) + 10//fastimg.getHeight(null)
+        return (MousePosition.getTrueXPixels() >= x + 160
+                && MousePosition.getTrueXPixels() <= x + 160 + slowWidth
+                && MousePosition.getTrueYPixels() >= y + 30 && MousePosition.getTrueYPixels() <= y + 30 + slowHeight
                 && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT));
     }
 
     private boolean clickedOnSlow() {
-        return (MousePosition.getTrueXPixels() >= x * Game.SCALE + (width >> 2) + 10
-                && MousePosition.getTrueXPixels() <= x * Game.SCALE + (width >> 2) + 10 + slowWidth
-                && MousePosition.getTrueYPixels() >= (y * Game.SCALE + 35) && MousePosition.getTrueYPixels() <= (y * Game.SCALE + 35) +10// slowimg.getHeight(null)
+        return (MousePosition.getTrueXPixels() >= x + 75
+                && MousePosition.getTrueXPixels() <= x + 75 + slowWidth
+                && MousePosition.getTrueYPixels() >= y + 30 && MousePosition.getTrueYPixels() <= y + 30 + slowHeight
                 && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT));
     }
 
     // toggle pausing
     private void togglePause() {
-        if (paused) {
-            paused = false;
+        if (Game.paused) {
+            Game.paused = false;
             speed = 6;
         } else {
-            paused = true;
-            speed = 0;
+            Game.paused = true;
+            speed = 2;
         }
-    }
-
-    // getter
-    public boolean isPaused() {
-        return paused;
     }
 
 }

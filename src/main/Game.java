@@ -62,7 +62,7 @@ public class Game {
     private ArrayList<Villager> sols;
     private ArrayList<Mob> mobs;
     private Ui ui;
-    private boolean paused = false;
+    public static boolean paused = false;
     private byte speed = 60;
     private double ns = 1000000000.0 / speed;
     private Villager selectedvill;
@@ -205,7 +205,7 @@ public class Game {
                 glfwPollEvents();
                 updateUI();
                 if (!paused) {
-                    update();
+                    updateMobs();
                 }
                 delta--;
             }
@@ -235,23 +235,17 @@ public class Game {
     }
 
 
-    private void update() {
-        updateMobs();
-        updateMouse();
-        MouseButton.resetLeftAndRight();
 
-    }
 
     private void updateUI() {
         ui.update(xScroll, yScroll, currentLayerNumber);
+        updateMouse();
         moveCamera();
-        if (paused != ui.isPaused()) {
-            paused = ui.isPaused();
-        }
         if (speed != ui.getSpeed()) {
             speed = ui.getSpeed();
             ns = 100000000.0 / speed;
         }
+        MouseButton.resetLeftAndRight();
 
     }
 

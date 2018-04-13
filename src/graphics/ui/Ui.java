@@ -137,10 +137,6 @@ public class Ui {
 
     }
 
-    public boolean isPaused() {
-        return top.isPaused();
-    }
-
     public void updateCounts(int solcount, int vilcount) {
         top.updateCounts(solcount, vilcount);
     }
