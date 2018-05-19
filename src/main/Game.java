@@ -6,9 +6,8 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import com.sun.xml.internal.ws.util.StringUtils;
+
 import entity.Entity;
-import entity.dynamic.item.weapon.WeaponType;
 import entity.dynamic.mob.work.*;
 import entity.nonDynamic.Ore;
 import entity.nonDynamic.Tree;
@@ -25,10 +24,7 @@ import entity.dynamic.mob.Zombie;
 import entity.nonDynamic.building.workstations.Anvil;
 import entity.nonDynamic.building.workstations.Furnace;
 import entity.pathfinding.PathFinder;
-import graphics.OpenglUtils;
-import graphics.Sprite;
-import graphics.SpriteHashtable;
-import graphics.SpritesheetHashtable;
+import graphics.*;
 import graphics.ui.Ui;
 import graphics.ui.icon.Icon;
 import graphics.ui.icon.UiIcons;
@@ -88,13 +84,19 @@ public class Game {
     private void init() throws Exception {
         if (!glfwInit()) {
             System.err.println("GLFW failed to initialize");
+            return;
         }
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
         window = glfwCreateWindow(width * SCALE, height * SCALE, "Towny", 0, 0);
         if (window == 0) {
             System.err.println("Window failed to be created");
+            return;
         }
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        if (vidmode == null) {
+            System.err.println("Vidmode is null");
+            return;
+        }
         glfwSetWindowPos(window, (vidmode.width() - (width * SCALE)) / 2, (vidmode.height() - (height * SCALE)) / 2);
         glfwMakeContextCurrent(window);
         glfwShowWindow(window);
@@ -201,6 +203,7 @@ public class Game {
             now = System.nanoTime();
             delta += (now - lastTime) / ns;
             lastTime = now;
+
             while (delta >= 1) {
                 glfwPollEvents();
                 updateUI();
@@ -235,8 +238,6 @@ public class Game {
     }
 
 
-
-
     private void updateUI() {
         ui.update(xScroll, yScroll, currentLayerNumber);
         updateMouse();
@@ -250,7 +251,7 @@ public class Game {
     }
 
     private void scroll(long window, double v, double v1) {
-        if ((currentLayerNumber <= map.length-1 && v1 > 0) || (currentLayerNumber >= 0 && v1 < 0)) {
+        if ((currentLayerNumber <= map.length - 1 && v1 > 0) || (currentLayerNumber >= 0 && v1 < 0)) {
             currentLayerNumber -= v1;
             if (currentLayerNumber < 0) {
                 currentLayerNumber = 0;
@@ -338,45 +339,63 @@ public class Game {
 
             }
             return;
-        } else if (((UiIcons.isMiningSelected()) && UiIcons.hoverOnNoIcons() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT))
-                && (map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY()) != null)) {
-            Villager idle = getIdlestVil();
-            idle.setPath(null);
-            deselectAllVills();
-            idle.addJob(map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY()));
-            ui.deSelectIcons();
-            return;
+        }
+        if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
+            if (((UiIcons.isMiningSelected()) && UiIcons.hoverOnNoIcons())
+                    && (map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY()) != null)) {
+                Villager idle = getIdlestVil();
+                idle.setPath(null);
+                deselectAllVills();
+                idle.addJob(map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY()));
+                ui.deSelectIcons();
+                return;
 
-        } else if (UiIcons.isShovelHover() && !ui.menuVisible() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
-            deselectAllVills();
-            ui.showBuildSquare(xScroll, yScroll, true, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
-            ui.deSelectIcons();
-            return;
+            } else if (UiIcons.isShovelHover() && !ui.menuVisible()) {
+                deselectAllVills();
+                ui.showBuildSquare(xScroll, yScroll, true, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
+                ui.deSelectIcons();
+                return;
 
-        } else if (((UiIcons.isSwordsSelected()) && UiIcons.hoverOnNoIcons() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT))
-                && (anyMobHoverOn() != null)) {
-            Villager idle = getIdlestVil();
-            idle.setPath(null);
-            deselectAllVills();
-            idle.addJob(new FightJob(idle, anyMobHoverOn()));
-            ui.deSelectIcons();
-            return;
+            } else if (((UiIcons.isSwordsSelected()) && UiIcons.hoverOnNoIcons())
+                    && (anyMobHoverOn() != null)) {
+                Villager idle = getIdlestVil();
+                idle.setPath(null);
+                deselectAllVills();
+                idle.addJob(new FightJob(idle, anyMobHoverOn()));
+                ui.deSelectIcons();
+                return;
 
-        } else if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT) && anyVillHoverOn() != null && !ui.outlineIsVisible()) {
-            deselectAllVills();
-            selectedvill = anyVillHoverOn();
-            selectedvill.setSelected(true);
-            ui.deSelectIcons();
-            return;
-        } else if (UiIcons.isSawHover() && !ui.menuVisible() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
-            deselectAllVills();
-            MenuItem[] items = new MenuItem[BuildingRecipe.RECIPES.length + 1];
-            for (int i = 0; i < BuildingRecipe.RECIPES.length; i++) {
-                items[i] = new MenuItem(BuildingRecipe.RECIPES[i]);
+            } else if (anyVillHoverOn() != null && !ui.outlineIsVisible()) {
+                deselectAllVills();
+                selectedvill = anyVillHoverOn();
+                selectedvill.setSelected(true);
+                ui.deSelectIcons();
+                return;
+            } else if (UiIcons.isSawHover() && !ui.menuVisible()) {
+                deselectAllVills();
+                MenuItem[] items = new MenuItem[BuildingRecipe.RECIPES.length + 1];
+                for (int i = 0; i < BuildingRecipe.RECIPES.length; i++) {
+                    items[i] = new MenuItem(BuildingRecipe.RECIPES[i]);
+                }
+                items[items.length - 1] = new MenuItem(MenuItem.CANCEL);
+                ui.showMenu(items);
+                return;
             }
-            items[items.length - 1] = new MenuItem(MenuItem.CANCEL);
-            ui.showMenu(items);
-            return;
+            if (ui.outlineIsVisible() && !ui.menuVisible() && UiIcons.hoverOnNoIcons()) {
+                int[][] coords = ui.getOutlineCoords();
+                for (int[] blok : coords) {
+                    if (map[currentLayerNumber].tileIsEmpty(blok[0] / 16, blok[1] / 16)) {
+                        Villager idle = getIdlestVil();
+                        idle.setPath(null);
+                        idle.addBuildJob(blok[0], blok[1], currentLayerNumber, ui.getBuildRecipeOutline().getProduct(),
+                                ui.getBuildRecipeOutline().getResources()[0]);
+                    }
+                }
+                ui.removeBuildSquare();
+                deselectAllVills();
+                ui.deSelectIcons();
+                return;
+            }
         } else if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_RIGHT)) {
             if (selectedvill != null) {
                 List<MenuItem> options = new ArrayList<>();
@@ -406,7 +425,7 @@ public class Game {
 
                 }
                 if (map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY()) instanceof Chest) {
-                    Chest chest =  map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY());
+                    Chest chest = map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY());
                     for (Item i : chest.getItems()) {
                         options.add(new MenuItem((MenuItem.PICKUP), i));
                     }
@@ -425,21 +444,6 @@ public class Game {
                 }
 
             }
-        }
-        if (ui.outlineIsVisible() && !ui.menuVisible() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT) && UiIcons.hoverOnNoIcons()) {
-            int[][] coords = ui.getOutlineCoords();
-            for (int[] blok : coords) {
-                if (map[currentLayerNumber].tileIsEmpty(blok[0] / 16, blok[1] / 16)) {
-                    Villager idle = getIdlestVil();
-                    idle.setPath(null);
-                    idle.addBuildJob(blok[0], blok[1], currentLayerNumber, ui.getBuildRecipeOutline().getProduct(),
-                            ui.getBuildRecipeOutline().getResources()[0]);
-                }
-            }
-            ui.removeBuildSquare();
-            deselectAllVills();
-            ui.deSelectIcons();
-            return;
         }
         if (ui.menuVisible()) {
             MenuItem item = ui.getMenu().clickedItem();
@@ -516,8 +520,7 @@ public class Game {
                 } else if (item.getText().contains(MenuItem.SMITH)) {
                     MenuItem[] craftingOptions = new MenuItem[WeaponMaterial.values().length + 1];
                     for (int i = 0; i < WeaponMaterial.values().length; i++) {
-                        craftingOptions[i] = new MenuItem(
-                                StringUtils.capitalize(WeaponMaterial.values()[i].toString().toLowerCase()));
+                        craftingOptions[i] = new MenuItem(capitalize(WeaponMaterial.values()[i].toString().toLowerCase()));
                     }
                     craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
                     ui.showMenu(craftingOptions);
@@ -532,6 +535,7 @@ public class Game {
                     ui.showMenu(craftingOptions);
                 }
             }
+
         }
     }
 
@@ -605,6 +609,16 @@ public class Game {
             }
         }
         glTranslatef(xScroll, yScroll, 0);
+    }
+
+    public static String capitalize(String name) {
+        if (name != null && name.length() != 0) {
+            char[] chars = name.toCharArray();
+            chars[0] = Character.toUpperCase(chars[0]);
+            return new String(chars);
+        } else {
+            return name;
+        }
     }
 
 

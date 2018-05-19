@@ -27,6 +27,9 @@ public abstract class OpenglUtils {
         //Return the texture ID so we can bind it later again
         return textureID;
     }
+    public static void deleteTexture(int textId) {
+        glDeleteTextures(textId);
+    }
     public static ByteBuffer getByteBuffer(int[] pixels, int width, int height) {
         ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4); //4 for RGBA, 3 for RGB
         for (int y = 0; y < height; y++) {
@@ -135,7 +138,7 @@ public abstract class OpenglUtils {
         int w = before.getWidth();
         int h = before.getHeight();
         AffineTransform at = new AffineTransform();
-        at.scale(xScale, yScale); //this is to scale the images from 512px to 90 px
+        at.scale(xScale, yScale);
         AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
         BufferedImage after = new BufferedImage( (int)(w*xScale), (int)(h*yScale), BufferedImage.TYPE_INT_ARGB);
         after = scaleOp.filter(before, after);
@@ -143,6 +146,7 @@ public abstract class OpenglUtils {
     }
 
     public static void drawText(String text, int x, int y, Color color) { //TODO fix this. This shit is really inefficient but it works and this is all I feel like doing
+
         ByteBuffer charBuffer = BufferUtils.createByteBuffer(text.length() * 270);
         int quads = stb_easy_font_print(0, 0, text, null, charBuffer);
         glEnableClientState(GL_VERTEX_ARRAY);

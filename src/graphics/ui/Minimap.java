@@ -38,6 +38,7 @@ public class Minimap {
 
             }
         }
+        OpenglUtils.deleteTexture(textureId);
         textureId = OpenglUtils.loadTexture(pixels, width, height);
 
     }
