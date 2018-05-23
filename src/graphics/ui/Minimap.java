@@ -54,7 +54,7 @@ public class Minimap {
     public void render() {
         float xloc = (x + (xoff * 0.04225f)); //TODO fix this. Pulled these numbers out of my arse
         float yloc = (y + (yoff * 0.04225f));
-        OpenglUtils.drawTexturedQuad(x, y, width, height, textureId);
+        OpenglUtils.drawTexturedQuadScaled(x, y, width, height, textureId);
         OpenglUtils.drawFilledSquare((int) xloc, (int) yloc, (int) (62.5), (int) (35.15625), COL.getRed() / 255f, COL.getGreen() / 255f, COL.getBlue() / 255f, COL.getAlpha() / 255f);
 
     }

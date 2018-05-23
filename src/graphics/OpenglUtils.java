@@ -45,11 +45,11 @@ public abstract class OpenglUtils {
         return buffer;
     }
 
-    public static void draw(int id, int x, int y, int size) { //draw ingame shit which needs to be scaled up
-        drawTexturedQuad(x*Game.SCALE,y*Game.SCALE,size*Game.SCALE,size*Game.SCALE,id);
+    public static void drawTexturedQuadScaled(int id, int x, int y, int size) { //drawTexturedQuadScaled ingame shit which needs to be scaled up
+        drawTexturedQuadScaled(x*Game.SCALE,y*Game.SCALE,size*Game.SCALE,size*Game.SCALE,id);
 
     }
-    public static void drawTexturedQuad(int x, int y, int width, int height, int texture) {
+    public static void drawTexturedQuadScaled(int x, int y, int width, int height, int texture) {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, texture);
@@ -90,8 +90,8 @@ public abstract class OpenglUtils {
 
     }
 
-    public static void iconDraw(int id, int x, int y, int size, boolean drawSelectionSquare) { //draw ui which does not need to be scaled up
-        drawTexturedQuad(x,y,size,size,id);
+    public static void iconDraw(int id, int x, int y, int size, boolean drawSelectionSquare) { //drawTexturedQuadScaled ui which does not need to be scaled up
+        drawTexturedQuadScaled(x,y,size,size,id);
         if (drawSelectionSquare) {
             drawSelection(x,y,size);
         }
@@ -139,7 +139,7 @@ public abstract class OpenglUtils {
         int h = before.getHeight();
         AffineTransform at = new AffineTransform();
         at.scale(xScale, yScale);
-        AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
         BufferedImage after = new BufferedImage( (int)(w*xScale), (int)(h*yScale), BufferedImage.TYPE_INT_ARGB);
         after = scaleOp.filter(before, after);
         return after;

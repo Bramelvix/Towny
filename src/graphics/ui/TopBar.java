@@ -105,14 +105,14 @@ public class TopBar {
     // render the topbar on the screen
     public void render() {
         OpenglUtils.drawFilledSquare(x, y, width, height, COL.getRed() / 255f, COL.getGreen() / 255f, COL.getBlue() / 255f, COL.getAlpha() / 255f);
-        OpenglUtils.drawTexturedQuad(x + 10, y + 17, vilSize, vilSize, vilId);
-        OpenglUtils.drawTexturedQuad(x + 210, y + 17, vilSize, vilSize, solId);
-        OpenglUtils.drawTexturedQuad(x + 75, y + 30, slowWidth, slowHeight, slowId);
-        OpenglUtils.drawTexturedQuad(x + 160, y + 30, slowWidth, slowHeight, fastId);
+        OpenglUtils.drawTexturedQuadScaled(x + 10, y + 17, vilSize, vilSize, vilId);
+        OpenglUtils.drawTexturedQuadScaled(x + 210, y + 17, vilSize, vilSize, solId);
+        OpenglUtils.drawTexturedQuadScaled(x + 75, y + 30, slowWidth, slowHeight, slowId);
+        OpenglUtils.drawTexturedQuadScaled(x + 160, y + 30, slowWidth, slowHeight, fastId);
         if (!Game.paused) {
-            OpenglUtils.drawTexturedQuad(x + 125, y + 25, pauseWidth, pauseHeight, pauseId);
+            OpenglUtils.drawTexturedQuadScaled(x + 125, y + 25, pauseWidth, pauseHeight, pauseId);
         } else {
-            OpenglUtils.drawTexturedQuad(x + 125, y + 25, playWidth, playHeight, playId);
+            OpenglUtils.drawTexturedQuadScaled(x + 125, y + 25, playWidth, playHeight, playId);
         }
         OpenglUtils.drawText("Villagers", x + 10, y + 5);
         OpenglUtils.drawText(vilcount + "", x + 30, y + 70);

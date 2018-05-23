@@ -36,7 +36,7 @@ public class Sprite {
 
 
     public void draw(int x, int y) {
-        OpenglUtils.draw(id,x,y,SIZE);
+        OpenglUtils.drawTexturedQuadScaled(id,x,y,SIZE);
     }
 
 
