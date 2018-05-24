@@ -33,13 +33,8 @@ public class Zombie extends Humanoid {
     @Override
     public void hit(float damage) {
         super.hit(damage);
-        sprite = SpriteHashtable.get(51);
+        sprite = SpriteHashtable.get(52);
         animationtimer = 30;
-        move(0, -1);
-        move(0, -1);
-        move(0, -1);
-        move(0, -1);
-        move(0, -1);
 
     }
 

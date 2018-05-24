@@ -10,13 +10,14 @@ public class UiIcons {
 
 	// initialising the icons
 	public static void init() {
+		float scale = 0.176056338028169f;
         icons = new Icon[6];
-		icons[0] = new Icon(15, 660, "/res/icons/tools/wood-axe.png");
-		icons[1] = new Icon(120, 660, "/res/icons/tools/mining.png");
-		icons[2] = new Icon(225, 660, "/res/icons/tools/sickle.png");
-		icons[3] = new Icon(330, 660, "/res/icons/tools/saw.png");
-		icons[4] = new Icon(435, 660, "/res/icons/tools/swords.png");
-        icons[5] = new Icon(540, 660, "/res/icons/tools/spade.png");
+		icons[0] = new Icon(15, 660, "/res/icons/tools/wood-axe.png",scale);
+		icons[1] = new Icon(120, 660, "/res/icons/tools/mining.png",scale);
+		icons[2] = new Icon(225, 660, "/res/icons/tools/sickle.png",scale);
+		icons[3] = new Icon(330, 660, "/res/icons/tools/saw.png",scale);
+		icons[4] = new Icon(435, 660, "/res/icons/tools/swords.png",scale);
+        icons[5] = new Icon(540, 660, "/res/icons/tools/spade.png",scale);
 
 	}
 
@@ -89,10 +90,8 @@ public class UiIcons {
 	// update the icons
     public static void update() {
 		for (Icon i : icons) {
-			i.setHoverOn((((MousePosition.getTrueXPixels()) >= i.getX())
-					&& ((MousePosition.getTrueXPixels()) <= i.getX() + (i.getSize())) && ((MousePosition.getTrueYPixels()) >= i.getY())
-					&& ((MousePosition.getTrueYPixels()) <= i.getY() + (i.getSize()))));
-		}
+			i.update();
+	}
 		setSelected();
 
 	}

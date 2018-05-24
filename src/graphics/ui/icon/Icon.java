@@ -3,25 +3,23 @@ package graphics.ui.icon;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-
 import graphics.OpenglUtils;
+import input.MousePosition;
 
 //icon on the bottom left of the screen (pickaxe, axe,...)
 public class Icon {
     private int x, y; // x and y of the top left corner
     private boolean hover; // is the mouse hovering over the icon
-    private int size; // width and length equal
+    private int width,height; // width and length
     private boolean selected; // is the icon selected
-    private int[] pixels; // pixels
     private int id;
-    private static final float scaleValue = 0.176056338028169f;
 
     // constructor
-    Icon(int x, int y, String path) {
+    public Icon(int x, int y, String path, float scale) {
         this.x = x;
         this.y = y;
-        load(path);
-        id = OpenglUtils.loadTexture(pixels, size,size);
+        int[] pixels = load(path, scale);
+        id = OpenglUtils.loadTexture(pixels, width,height);
     }
 
     // getters
@@ -41,8 +39,11 @@ public class Icon {
         return hover;
     }
 
-    public int getSize() {
-        return size;
+    public int getWidth() {
+        return width;
+    }
+    public int getHeight () {
+        return height;
     }
 
     // setters
@@ -50,27 +51,36 @@ public class Icon {
         this.selected = select;
     }
 
-    public void setHoverOn(boolean hover) {
+    public void setHover(boolean hover) {
         this.hover = hover;
 
     }
 
     //render the icon on the screen
     public void render() {
-		OpenglUtils.iconDraw(id,x,y,size,selected||hover);
+        OpenglUtils.iconDraw(id, x, y, width,height, selected || hover);
     }
 
     //load the image
-    private void load(String path) {
+    private int[] load(String path, float scaleValue) {
         try {
             BufferedImage before = ImageIO.read(Icon.class.getResource(path));
-            BufferedImage after = OpenglUtils.getScaledBufferedImage(before,scaleValue,scaleValue);
-            size = after.getWidth();
-            pixels = new int[size * size];
-            after.getRGB(0, 0, size, size, pixels, 0, size);
+            BufferedImage after = OpenglUtils.getScaledBufferedImage(before, scaleValue, scaleValue);
+            width = after.getWidth();
+            height = after.getHeight();
+            int[] pixels = new int[width * height];
+            after.getRGB(0, 0, width, height, pixels, 0, width);
+            return pixels;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
+    }
+
+    public void update() {
+        setHover((((MousePosition.getTrueXPixels()) >= getX())
+                && ((MousePosition.getTrueXPixels()) <= getX() + (getWidth())) && ((MousePosition.getTrueYPixels()) >= getY())
+                && ((MousePosition.getTrueYPixels()) <= getY() + (getHeight()))));
     }
 
 }

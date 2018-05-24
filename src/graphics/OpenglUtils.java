@@ -72,7 +72,7 @@ public abstract class OpenglUtils {
         glPopMatrix();
         glBindTexture(GL_TEXTURE_2D, 0);
     }
-    public static void drawSelection(int x, int y, int size) {
+    public static void drawSelection(int x, int y, int width, int height) {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
         glColor3f(1.0f,0.0f,0.0f);
@@ -80,9 +80,9 @@ public abstract class OpenglUtils {
         glBegin(GL_LINE_LOOP);
         {
             glVertex2f(x, y);
-            glVertex2f(x, y + size);
-            glVertex2f(x + size, y + size);
-            glVertex2f(x + size, y );
+            glVertex2f(x, y + height);
+            glVertex2f(x + width, y + height);
+            glVertex2f(x + width, y );
         }
         glEnd();
         glColor3f(1.0f, 1.0f, 1.0f);
@@ -90,10 +90,10 @@ public abstract class OpenglUtils {
 
     }
 
-    public static void iconDraw(int id, int x, int y, int size, boolean drawSelectionSquare) { //drawTexturedQuadScaled ui which does not need to be scaled up
-        drawTexturedQuadScaled(x,y,size,size,id);
+    public static void iconDraw(int id, int x, int y, int width,int height, boolean drawSelectionSquare) { //drawTexturedQuadScaled ui which does not need to be scaled up
+        drawTexturedQuadScaled(x,y,width,height,id);
         if (drawSelectionSquare) {
-            drawSelection(x,y,size);
+            drawSelection(x,y,width,height);
         }
 
     }

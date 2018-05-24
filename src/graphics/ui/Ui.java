@@ -6,6 +6,7 @@ import graphics.ui.menu.Menu;
 import graphics.ui.menu.MenuItem;
 import input.MousePosition;
 import map.Level;
+import sun.plugin.javascript.navig4.Layer;
 
 //main class used to manage the ui
 public class Ui {
@@ -15,6 +16,7 @@ public class Ui {
     private Minimap map;
     private BuildOutline outline;
     private SelectionSquare selection;
+    private LayerLevelChanger layerLevelChanger;
 
     // rendering the ui
     public void render() {
@@ -23,7 +25,8 @@ public class Ui {
         top.render();
         map.render();
         outline.render();
-       //selection.render(g);
+        layerLevelChanger.render();
+        //selection.render(g);
 
     }
 
@@ -35,9 +38,10 @@ public class Ui {
         UiIcons.init();
         menu = new Menu();
         selection = new SelectionSquare();
-        map = new Minimap(1290, 8,levels[0]);
+        map = new Minimap(1290, 8, levels[0]);
         top = new TopBar();
         outline = new BuildOutline(levels);
+        layerLevelChanger = new LayerLevelChanger(1320, 210,levels.length);
     }
 
     public Ui(Level[] levels) {
@@ -134,6 +138,7 @@ public class Ui {
         outline.update(xOff, yOff, z);
         selection.update();
         top.update();
+        layerLevelChanger.update(z);
 
     }
 
@@ -143,6 +148,10 @@ public class Ui {
 
     public void updateMinimap(Level[] level, int z) {
         map.update(level, z);
+    }
+
+    public int getZFromLevelChanger() {
+        return layerLevelChanger.getZ();
     }
 
 }

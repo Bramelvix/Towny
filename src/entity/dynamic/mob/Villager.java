@@ -244,7 +244,7 @@ public class Villager extends Humanoid {
             getHolding().sprite.draw(x,y);// renders the item the villager is holding
         }
         if (this.isSelected()) {
-            OpenglUtils.drawSelection(x* Game.SCALE,y*Game.SCALE,Sprite.SIZE* Game.SCALE);// render the red square around selected villagers
+            OpenglUtils.drawSelection(x* Game.SCALE,y*Game.SCALE,Sprite.SIZE* Game.SCALE,Sprite.SIZE*Game.SCALE);// render the red square around selected villagers
         }
 
     }

@@ -246,6 +246,10 @@ public class Game {
             speed = ui.getSpeed();
             ns = 100000000.0 / speed;
         }
+        if (currentLayerNumber != ui.getZFromLevelChanger()) {
+            currentLayerNumber = ui.getZFromLevelChanger();
+            ui.updateMinimap(map, currentLayerNumber);
+        }
         MouseButton.resetLeftAndRight();
 
     }
