@@ -6,7 +6,6 @@ import graphics.ui.menu.Menu;
 import graphics.ui.menu.MenuItem;
 import input.MousePosition;
 import map.Level;
-import sun.plugin.javascript.navig4.Layer;
 
 //main class used to manage the ui
 public class Ui {

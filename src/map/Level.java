@@ -2,7 +2,6 @@ package map;
 
 import java.util.ArrayList;
 import java.util.function.BiPredicate;
-
 import entity.*;
 import entity.nonDynamic.building.Stairs;
 import entity.nonDynamic.building.wall.Wall;
@@ -14,6 +13,7 @@ import entity.nonDynamic.Tree;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import main.Game;
+import util.Vector2I;
 
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
@@ -77,15 +77,15 @@ public class Level {
         return tiles[x / 16][y / 16].getEntity();
     }
 
-    public Tile getNearestEmptySpot(int xloc, int yloc) {
+    public Vector2I getNearestEmptySpot(int xloc, int yloc) {
         return getNearestSpotThatHasX(xloc, yloc, this::isClearTile);
     }
 
-    private Tile getNearestSpotThatHasX(int xloc, int yloc, BiPredicate<Integer, Integer> p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
+    private Vector2I getNearestSpotThatHasX(int xloc, int yloc, BiPredicate<Integer, Integer> p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
         int x0 = xloc / 16;
         int y0 = yloc / 16;
         if (p.test(x0, y0)) {
-            return tiles[x0][y0];
+            return new Vector2I(x0, y0);
         } else {
             for (int layer = 1; layer < 100; layer++) {
                 int x = layer - 1;
@@ -95,28 +95,28 @@ public class Level {
                 int err = dx - (layer << 1);
                 while (x >= y) {
                     if (p.test(x0 + x, y0 + y)) {
-                        return tiles[x0 + x][y0 + y];
+                        return new Vector2I(x0 + x, y0 + y);
                     }
                     if (p.test(x0 + y, y0 + x)) {
-                        return tiles[x0 + y][y0 + x];
+                        return new Vector2I(x0 + y, y0 + x);
                     }
                     if (p.test(x0 - y, y0 + x)) {
-                        return tiles[x0 - y][y0 + x];
+                        return new Vector2I(x0 - y, y0 + x);
                     }
                     if (p.test(x0 - x, y0 + y)) {
-                        return tiles[x0 - x][y0 + y];
+                        return new Vector2I(x0 - x, y0 + y);
                     }
                     if (p.test(x0 - x, y0 - y)) {
-                        return tiles[x0 - x][y0 - y];
+                        return new Vector2I(x0 - x, y0 - y);
                     }
                     if (p.test(x0 - y, y0 - x)) {
-                        return tiles[x0 - y][y0 - x];
+                        return new Vector2I(x0 - y, y0 - x);
                     }
                     if (p.test(x0 + y, y0 - x)) {
-                        return tiles[x0 + y][y0 - x];
+                        return new Vector2I(x0 + y, y0 - x);
                     }
                     if (p.test(x0 + x, y0 - y)) {
-                        return tiles[x0 + x][y0 - y];
+                        return new Vector2I(x0 + x, y0 - y);
                     }
 
                     if (err <= 0) {
@@ -131,8 +131,8 @@ public class Level {
                     }
                 }
             }
-            return null;
         }
+        return null;
     }
 
     public Wall getWallOn(int x, int y) {
@@ -140,8 +140,9 @@ public class Level {
     }
 
     public <T extends Workstation> T getNearestWorkstation(Class<T> workstation, int x, int y) {
-        if (getNearestSpotThatHasX(x, y, this::hasWorkStation) != null) {
-            return workstation.cast(getNearestSpotThatHasX(x, y, this::hasWorkStation).getEntity());
+        Vector2I point = getNearestSpotThatHasX(x, y, this::hasWorkStation);
+        if (point != null) {
+            return workstation.cast(tiles[point.getX()][point.getY()].getEntity());
         } else {
             return null;
         }
@@ -149,14 +150,16 @@ public class Level {
 
     public Stairs getNearestStairs(int x, int y, boolean top) { //gets the nearest stairs object on the map
         if (top) {
-            if (getNearestSpotThatHasX(x, y, this::hasTopStairs) != null) {
-                return (Stairs) getNearestSpotThatHasX(x, y, this::hasTopStairs).getEntity();
+            Vector2I point = getNearestSpotThatHasX(x, y, this::hasTopStairs);
+            if (point != null) {
+                return (Stairs) tiles[point.getX()][point.getY()].getEntity();
             } else {
                 return null;
             }
         } else {
-            if (getNearestSpotThatHasX(x, y, this::hasBottomStairs) != null) {
-                return (Stairs) getNearestSpotThatHasX(x, y, this::hasBottomStairs).getEntity();
+            Vector2I point = getNearestSpotThatHasX(x, y, this::hasBottomStairs);
+            if (point != null) {
+                return (Stairs) tiles[point.getX()][point.getY()].getEntity();
             } else {
                 return null;
             }
@@ -199,18 +202,18 @@ public class Level {
         for (int y = 1; y < height - 1; y++) {
             for (int x = 1; x < width - 1; x++) {
                 if (noise[x + y * width] > 0.5) {
-                    tiles[x][y] = new Tile(SpriteHashtable.getDirt(), false, x, y);
+                    tiles[x][y] = new Tile(SpriteHashtable.getDirt(), false);
                     if (elevation > 0) {
-                        tiles[x][y] = new Tile(SpriteHashtable.getStone(), false,x,y);
+                        tiles[x][y] = new Tile(SpriteHashtable.getStone(), false);
                     }
                 } else {
                     if (elevation > 0) {
-                        tiles[x][y] = new Tile(SpriteHashtable.getStone(), false,x,y);
+                        tiles[x][y] = new Tile(SpriteHashtable.getStone(), false);
                         if (!randOre(x, y)) {
                             spawnRock(x, y);
                         }
                     } else {
-                        tiles[x][y] = new Tile(SpriteHashtable.getGrass(), false,x,y);
+                        tiles[x][y] = new Tile(SpriteHashtable.getGrass(), false);
                         randForest(x, y);
                     }
                 }
@@ -335,9 +338,9 @@ public class Level {
     public void renderHardEntities(int xScroll, int yScroll) {
         glTranslatef(-xScroll, -yScroll, 0);
         int x0 = xScroll / 3 / 16;
-        int x1 = (xScroll / 3 + Game.width + Sprite.SIZE*2) / 16;
+        int x1 = (xScroll / 3 + Game.width + Sprite.SIZE * 2) / 16;
         int y0 = yScroll / 3 / 16;
-        int y1 = (yScroll / 3 + Game.height + Sprite.SIZE*2) / 16;
+        int y1 = (yScroll / 3 + Game.height + Sprite.SIZE * 2) / 16;
 
         for (int y = y0; y < y1; y++) {
             for (int x = x0; x < x1; x++) {

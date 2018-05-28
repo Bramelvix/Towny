@@ -51,7 +51,7 @@ public class Icon {
         this.selected = select;
     }
 
-    public void setHover(boolean hover) {
+    private void setHover(boolean hover) {
         this.hover = hover;
 
     }

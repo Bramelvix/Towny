@@ -19,6 +19,7 @@ public class MoveItemJob extends Job {
             this.material.setReserved(this.worker);
             xloc = material.getX();
             yloc = material.getY();
+            zloc = material.getZ();
         }
     }
 
@@ -26,11 +27,12 @@ public class MoveItemJob extends Job {
         super(worker);
     }
 
-    public MoveItemJob(int xloc, int yloc, Villager worker) {
+    public MoveItemJob(int xloc, int yloc, int zloc, Villager worker) {
         this(worker);
         pickUpJob = false;
         this.xloc = xloc;
         this.yloc = yloc;
+        this.zloc = zloc;
 
     }
 

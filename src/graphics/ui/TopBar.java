@@ -89,11 +89,11 @@ public class TopBar {
         } else {
             play.render();
         }
-        OpenglUtils.drawText("Villagers", x + 10, y + 5);
-        OpenglUtils.drawText(vilcount + "", x + 30, y + 70);
-        OpenglUtils.drawText("Speed: " + (speed - 2), x + 95, y + 65);
-        OpenglUtils.drawText("Soldiers", x + 200, y + 5);
-        OpenglUtils.drawText(solcount + "", x + 230, y + 70);
+        OpenglUtils.drawText("Villagers", x +5, y -5);
+        OpenglUtils.drawText(vilcount + "", x + 25, y + 65);
+        OpenglUtils.drawText("Speed: " + (speed - 2), x + 95, y + 60);
+        OpenglUtils.drawText("Soldiers", x + 200, y-5);
+        OpenglUtils.drawText(solcount + "", x + 225, y + 65);
     }
 
     // has the user clicked on the pause button

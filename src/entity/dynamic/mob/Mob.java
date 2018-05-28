@@ -6,7 +6,7 @@ import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
 import entity.pathfinding.Point;
 import map.Level;
-import map.Tile;
+import util.Vector2I;
 
 //abstract mob class for villagers and monsters/animals to extend
 public abstract class Mob extends Entity {
@@ -128,8 +128,8 @@ public abstract class Mob extends Entity {
     }
 
     // pathfinder method
-    public Path getPath(Tile tile) {
-        return getPath(tile.x, tile.y);
+    public Path getPath(Vector2I tile) {
+        return getPath(tile.getX(), tile.getY());
     }
 
     public Path getPathAround(int x, int y) {

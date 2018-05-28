@@ -7,21 +7,18 @@ import graphics.SpriteHashtable;
 
 public class Tile {
 	public Sprite sprite; // tile's sprite
-	public int x, y; // x and y TODO get rid of these, they are only used in the getNearestSpot stuff in the Level class.
 	private boolean solid; // is the tile solid
 	public static final int SIZE = 16; // fixed size
 	private Item item;
 	private Entity entity;
 
 	// two static tiles voidtile = black, darkgrass is dark green
-    public static Tile darkGrass = new Tile(SpriteHashtable.get(4), true, 0, 0);
-    public static Tile darkStone = new Tile(SpriteHashtable.get(140),true, 0, 0);
-    public static Tile voidTile = new Tile(SpriteHashtable.get(3), true, 0, 0);
+    public static Tile darkGrass = new Tile(SpriteHashtable.get(4), true);
+    public static Tile darkStone = new Tile(SpriteHashtable.get(140),true);
+    public static Tile voidTile = new Tile(SpriteHashtable.get(3), true);
 
 	// constructors
-    Tile(Sprite sprite, boolean solid, int x, int y) {
-		this.x = x;
-		this.y = y;
+    Tile(Sprite sprite, boolean solid) {
 		this.solid = solid;
 		this.sprite = sprite;
 	}
