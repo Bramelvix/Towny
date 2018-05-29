@@ -237,16 +237,19 @@ public class Villager extends Humanoid {
     // render onto the screen
     @Override
     public void render() {
-        super.render();
+        drawVillager(x,y);
+        if (this.isSelected()) {
+            OpenglUtils.drawSelection(x* Game.SCALE,y*Game.SCALE,Sprite.SIZE* Game.SCALE,Sprite.SIZE*Game.SCALE);// render the red square around selected villagers
+        }
+
+    }
+    private void drawVillager(int x, int y) {
+        sprite.draw(x,y);
         hair.draw(x,y);
         inventory.render();
         if (getHolding() != null) {
             getHolding().sprite.draw(x,y);// renders the item the villager is holding
         }
-        if (this.isSelected()) {
-            OpenglUtils.drawSelection(x* Game.SCALE,y*Game.SCALE,Sprite.SIZE* Game.SCALE,Sprite.SIZE*Game.SCALE);// render the red square around selected villagers
-        }
-
     }
 
     @Override

@@ -120,17 +120,6 @@ public abstract class OpenglUtils {
         } else {
             drawText(text,x,y-5);
         }
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glPushMatrix();
-        if (selected) {
-            glColor3f(1.0f, 0.0f, 0.0f);
-        } else {
-            glColor3f(1.0f, 1.0f, 1.0f);
-        }
-        glBegin(GL_QUADS);
-        glEnd();
-        glPopMatrix();
-        glColor3f(1.0f,1.0f,1.0f);
 
     }
     public static void buildOutlineDraw(int x, int y, int size, Color color) {

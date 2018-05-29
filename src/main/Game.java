@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import entity.Entity;
 import entity.dynamic.mob.work.*;
 import entity.nonDynamic.Ore;
@@ -271,8 +272,9 @@ public class Game {
     private Villager getIdlestVil() {
         Villager lowest = vills.get(0);
         for (Villager i : vills) {
-            if (i.getJobSize() < lowest.getJobSize())
+            if (i.getJobSize() < lowest.getJobSize()) {
                 lowest = i;
+            }
         }
         return lowest;
     }
@@ -297,8 +299,7 @@ public class Game {
     }
 
     private void deselectAllVills() {
-        vills.forEach((Villager i) -> i.setSelected(false));
-        selectedvill = null;
+        vills.forEach((Villager i) -> deselect(i));
     }
 
     private void deselect(Villager vill) {
@@ -497,7 +498,7 @@ public class Game {
                     ui.getMenu().hide();
                 } else if (item.getText().contains(MenuItem.DROP) && !ui.outlineIsVisible()) {
                     selectedvill.setPath(null);
-                    selectedvill.addJob(new MoveItemJob(ui.getMenuIngameX(), ui.getMenuIngameY(),currentLayerNumber, selectedvill));
+                    selectedvill.addJob(new MoveItemJob(ui.getMenuIngameX(), ui.getMenuIngameY(), currentLayerNumber, selectedvill));
                     ui.deSelectIcons();
                     deselect(selectedvill);
                     ui.getMenu().hide();

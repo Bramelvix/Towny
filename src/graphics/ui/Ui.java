@@ -21,9 +21,9 @@ public class Ui {
     public void render() {
         UiIcons.render();
         menu.render();
-        top.render();
         map.render();
         outline.render();
+        top.render();
         layerLevelChanger.render();
         //selection.render(g);
 
