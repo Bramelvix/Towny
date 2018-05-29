@@ -40,15 +40,15 @@ public class MoveItemJob extends Job {
     @Override
     protected void start() {
         started = true;
-        if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[worker.getZ()].isClearTile(xloc / 16, yloc / 16) && !(worker.levels[worker.getZ()].getEntityOn(xloc, yloc) instanceof Chest)))) {
+        if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[zloc].isClearTile(xloc / 16, yloc / 16) && !(worker.levels[zloc].getEntityOn(xloc, yloc) instanceof Chest)))) {
             completed = true;
             return;
         }
-        if (worker.levels[worker.getZ()].getEntityOn(xloc, yloc) instanceof Chest) {
-            chest = worker.levels[worker.getZ()].getEntityOn(xloc, yloc);
-            worker.setPath(worker.getPath(worker.levels[worker.getZ()].getNearestEmptySpot(xloc, yloc)));
+        if (worker.levels[zloc].getEntityOn(xloc, yloc) instanceof Chest) {
+            chest = worker.levels[zloc].getEntityOn(xloc, yloc);
+            worker.addJob(new MoveJob(xloc, yloc, zloc, worker, false), 0);
         } else {
-            worker.setPath(worker.getPath(xloc / 16, yloc / 16));
+            worker.addJob(new MoveJob(xloc, yloc, zloc, worker), 0);
         }
 
     }

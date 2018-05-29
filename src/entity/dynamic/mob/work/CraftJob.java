@@ -12,7 +12,7 @@ public class CraftJob extends Job {
     private byte craftTimer = 100;
     private boolean itemsUpdated = false;
 
-    public <T extends Item> CraftJob(Villager worker, Item[] resources, T product, Workstation station) {
+    public <T extends Item> CraftJob(Villager worker, T[] resources, T product, Workstation station) {
         super(worker);
         this.product = product;
         this.station = station;
