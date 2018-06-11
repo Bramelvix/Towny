@@ -29,6 +29,7 @@ public abstract class OpenglUtils {
     public static void deleteTexture(int textId) {
         glDeleteTextures(textId);
     }
+
     public static ByteBuffer getByteBuffer(int[] pixels, int width, int height) {
         ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4); //4 for RGBA, 3 for RGB
         for (int y = 0; y < height; y++) {
@@ -36,7 +37,7 @@ public abstract class OpenglUtils {
                 int pixel = pixels[y * width + x];
                 buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
                 buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
-                buffer.put((byte) (pixel & 0xFF));               // Blue component
+                buffer.put((byte) (pixel & 0xFF));              // Blue component
                 buffer.put((byte) ((pixel >> 24) & 0xFF));    // Alpha component. Only for RGBA
             }
         }
@@ -49,7 +50,6 @@ public abstract class OpenglUtils {
 
     }
     public static void drawTexturedQuadScaled(int x, int y, int width, int height, int texture) {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
         glBindTexture(GL_TEXTURE_2D, texture);
         glBegin(GL_QUADS);
@@ -72,7 +72,6 @@ public abstract class OpenglUtils {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
     public static void drawSelection(int x, int y, int width, int height) {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
         glColor3f(1.0f,0.0f,0.0f);
         glLineWidth(3);
@@ -100,7 +99,6 @@ public abstract class OpenglUtils {
         drawFilledSquare(x,y,width,height,0.3568f,0.3686f,0.8235f,0.5f);
     }
     public static void drawFilledSquare(int x, int y, int width, int height, float r, float g, float b, float a) {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glPushMatrix();
         glColor4f(r,g,b,a);
         glBegin(GL_QUADS);
@@ -110,9 +108,10 @@ public abstract class OpenglUtils {
             glVertex2f(x + width, y + height);
             glVertex2f(x + width, y );
         }
+        glColor3f(1.0f,1.0f,1.0f);
         glEnd();
         glPopMatrix();
-        glColor3f(1.0f,1.0f,1.0f);
+
     }
     public static void menuItemDraw(int x, int y, String text, boolean selected) {
         if (selected) {
@@ -127,12 +126,10 @@ public abstract class OpenglUtils {
     }
 
     public static BufferedImage getScaledBufferedImage(BufferedImage before, float xScale, float yScale) {
-        int w = before.getWidth();
-        int h = before.getHeight();
         AffineTransform at = new AffineTransform();
         at.scale(xScale, yScale);
         AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-        BufferedImage after = new BufferedImage( (int)(w*xScale), (int)(h*yScale), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage after = new BufferedImage( (int)(before.getWidth()*xScale), (int)(before.getHeight()*yScale), BufferedImage.TYPE_INT_ARGB);
         after = scaleOp.filter(before, after);
         return after;
     }

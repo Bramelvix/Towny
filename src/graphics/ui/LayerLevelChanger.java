@@ -15,9 +15,9 @@ public class LayerLevelChanger {
     private int z;
     private int mapHeight;
 
-    LayerLevelChanger(int x, int y, int mapHeight) {
-        width = 140;
-        height = 40;
+    LayerLevelChanger(int x, int y,int width, int height, int mapHeight) {
+        this.width = width;
+        this.height = height;
         this.x = x;
         this.y = y;
         this.mapHeight = mapHeight;

@@ -18,11 +18,11 @@ public class TopBar {
     private byte speed = 6;
 
     // constructor
-    TopBar() {
-        width = 270;
-        height = 85;
-        this.x = (Game.width * Game.SCALE - width) / 2;
-        this.y = 5;
+    TopBar(int x, int y, int width, int height) {
+        this.width = width;
+        this.height = height;
+        this.x = x;
+        this.y = y;
         init();
     }
 
