@@ -10,8 +10,7 @@ public class VillagerInventory {
 
     public VillagerInventory(Villager wearer) {
         this.wearer = wearer;
-        clothes = new Clothing[4]; // 0 = hat, 1 = shirt, 2 = trousers, 3 =
-        // shoes
+        clothes = new Clothing[4]; // 0 = hat, 1 = shirt, 2 = trousers, 3 = shoes
         weapons = new Weapon[2]; // 0 = weaponhand, 1 = shieldhand
     }
 

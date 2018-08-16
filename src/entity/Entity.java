@@ -67,6 +67,11 @@ public abstract class Entity {
         this();
         setLocation(x, y, z);
     }
+    public Entity(String name, Sprite sprite){
+        this();
+        setName(name);
+        this.sprite = sprite;
+    }
 
     // does the mouse hover over the entity
     public boolean hoverOn(int z) {

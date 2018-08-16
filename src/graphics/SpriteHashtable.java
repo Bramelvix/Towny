@@ -112,7 +112,7 @@ public class SpriteHashtable {
         registerSprite(66, new Sprite(48, 10, SpritesheetHashtable.get(1)));//copperChunk
         registerSprite(67, new Sprite(41, 24, SpritesheetHashtable.get(1)));//crystalChunkUncut
         registerSprite(68, new Sprite(41, 23, SpritesheetHashtable.get(1)));//crystalChunkCut
-        registerSprite(69, new Sprite(4, 0, SpritesheetHashtable.get(2)));//blacktrousers
+        registerSprite(69, new Sprite(3, 0, SpritesheetHashtable.get(2)));//blacktrousers
         registerSprite(70, new Sprite(6, 0, SpritesheetHashtable.get(2)));//brownShirt1
         registerSprite(71, new Sprite(7, 0, SpritesheetHashtable.get(2)));//brownShirt2
         registerSprite(72, new Sprite(8, 0, SpritesheetHashtable.get(2)));//brownShirt3
@@ -131,7 +131,8 @@ public class SpriteHashtable {
         registerSprite(85, new Sprite(15, 0, SpritesheetHashtable.get(1)));//anvil
         registerSprite(86, new Sprite(44, 4, SpritesheetHashtable.get(2)));//woodspear
         registerSprite(87, new Sprite(42, 0, SpritesheetHashtable.get(2)));//copperaxe
-        //GAP
+        registerSprite(88, new Sprite(3, 1, SpritesheetHashtable.get(2)));//browntrousers
+        registerSprite(89, new Sprite(3, 5, SpritesheetHashtable.get(2)));//orangetrousers
         registerSprite(90, new Sprite(46, 0, SpritesheetHashtable.get(2)));//copperhalbert
         registerSprite(91, new Sprite(42, 5, SpritesheetHashtable.get(2)));//woodaxe
         //GAP

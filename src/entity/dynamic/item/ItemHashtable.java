@@ -91,6 +91,21 @@ public abstract class ItemHashtable {
         registerItem(new Weapon("crystal spear", SpriteHashtable.get(109), "a crystal spear", WeaponType.SPEAR, WeaponMaterial.CRYSTAL, 59));
         registerItem(new Weapon("crystal sword", SpriteHashtable.get(118), "a crystal sword", WeaponType.SWORD, WeaponMaterial.CRYSTAL, 60));
 
+        registerItem(new Clothing("Orange shirt",SpriteHashtable.get(70),"a brown shirt",ClothingType.SHIRT,0.1f,61));
+        registerItem(new Clothing("Orange shirt",SpriteHashtable.get(71),"a brown shirt",ClothingType.SHIRT,0.1f,62));
+        registerItem(new Clothing("Orange shirt",SpriteHashtable.get(72),"a brown shirt",ClothingType.SHIRT,0.1f,63));
+        registerItem(new Clothing("Orange shirt",SpriteHashtable.get(73),"a brown shirt",ClothingType.SHIRT,0.1f,64));
+        registerItem(new Clothing("Green shirt",SpriteHashtable.get(74),"a green shirt",ClothingType.SHIRT,0.1f,65));
+        registerItem(new Clothing("Green shirt",SpriteHashtable.get(75),"a green shirt",ClothingType.SHIRT,0.1f,66));
+        registerItem(new Clothing("Green shirt",SpriteHashtable.get(76),"a green shirt",ClothingType.SHIRT,0.1f,67));
+        registerItem(new Clothing("Green shirt",SpriteHashtable.get(77),"a green shirt",ClothingType.SHIRT,0.1f,68));
+        registerItem(new Clothing("Grey shirt",SpriteHashtable.get(78),"a grey shirt",ClothingType.SHIRT,0.1f,69));
+        registerItem(new Clothing("Grey shirt",SpriteHashtable.get(79),"a grey shirt",ClothingType.SHIRT,0.1f,70));
+        registerItem(new Clothing("Grey shirt",SpriteHashtable.get(80),"a grey shirt",ClothingType.SHIRT,0.1f,71));
+        registerItem(new Clothing("Grey shirt",SpriteHashtable.get(81),"a grey shirt",ClothingType.SHIRT,0.1f,72));
+        registerItem(new Clothing("Black trousers",SpriteHashtable.get(69),"a pair of black trousers",ClothingType.TROUSERS,0.1f,73));
+        registerItem(new Clothing("Brown trousers",SpriteHashtable.get(88),"a pair of brown trousers",ClothingType.TROUSERS,0.1f,74));
+        registerItem(new Clothing("Orange trousers",SpriteHashtable.get(89),"a pair of orange trousers",ClothingType.TROUSERS,0.1f,75));
 
     }
 }

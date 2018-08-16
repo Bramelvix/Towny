@@ -158,14 +158,17 @@ public class Game {
     }
 
     private void spawnvills() {
-        Villager vil1 = new Villager(144, 144, 0, map);
-        vil1.addClothing(new Clothing("Brown Shirt", vil1, SpriteHashtable.get(43), "A brown tshirt", ClothingType.SHIRT));
-        addVillager(vil1);
+        Villager vill = new Villager(144, 144, 0, map);
+        vill.addClothing(ItemHashtable.get(61));
+        vill.addClothing(ItemHashtable.get(75));
+        addVillager(vill);
         Villager vil2 = new Villager(144, 160, 0, map);
-        vil2.addClothing(new Clothing("Green Shirt", vil2, SpriteHashtable.get(74), "A green tshirt", ClothingType.SHIRT));
+        vil2.addClothing(ItemHashtable.get(65));
+        vil2.addClothing(ItemHashtable.get(74));
         addVillager(vil2);
         Villager vil3 = new Villager(160, 160, 0, map);
-        vil3.addClothing(new Clothing("Green Shirt", vil3, SpriteHashtable.get(75), "A green tshirt", ClothingType.SHIRT));
+        vil3.addClothing(ItemHashtable.get(70));
+        vil3.addClothing(ItemHashtable.get(73));
         addVillager(vil3);
 
     }

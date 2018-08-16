@@ -6,44 +6,33 @@ import graphics.Sprite;
 
 public class Item extends Entity {
 
-    private final int id;
+    private final int id; //item id
     protected String tooltip; // the item's tooltip
     private Villager reservedVil; // the villager that plans to pick the item up, or is already holding it
 
-    // basic constructors
-    protected Item(String name, int x, int y, int z, Sprite sprite, String tooltip, boolean visible, int id) {
-        super(x, y, z);
-        this.sprite = sprite;
-        setVisible(visible);
-        super.setName(name);
-        this.tooltip = tooltip;
-        this.id = id;
-    }
-
-    public boolean isSameType(Item item) {
-        return item.getId() == getId();
-    }
-
-    protected Item(String name, int x, int y, int z, Sprite sprite, boolean visible, int id) {
-        this(name, x, y, z, sprite, "", visible, id);
-    }
-
+    // basic constructor
     protected Item(String name, Sprite sprite, String tooltip, int id) {
-        super.setName(name);
-        this.sprite = sprite;
+        super(name,sprite);
         this.tooltip = tooltip;
         setVisible(true);
         this.id = id;
     }
 
     public Item copy() {
-        return new Item(this.getName(), this.x, this.y, this.z, this.sprite, this.getToolTip(), this.isVisible(), this.getId());
+        Item copy = new Item(this.getName(),this.sprite,this.getToolTip(),this.getId());
+        copy.setLocation(this.x,this.y,this.z);
+        return copy;
     }
+
 
     public <T extends Item> T copy(int x, int y, int z) {
         Item copy = this.copy();
-        copy.setLocation(x, y, z);
+        copy.setLocation(this.x,this.y,this.z);
         return (T) copy;
+    }
+
+    public boolean isSameType(Item item) {
+        return item.getId() == getId();
     }
 
     // getters and setters
@@ -64,7 +53,7 @@ public class Item extends Entity {
     }
 
     public void removeReserved() {
-        reservedVil = null;
+        setReserved(null);
     }
 
 
