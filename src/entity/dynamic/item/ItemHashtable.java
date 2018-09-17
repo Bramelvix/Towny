@@ -29,7 +29,7 @@ public abstract class ItemHashtable {
     }
 
     public static <T extends Item> T get(int key, int x, int y, int z) {
-        return get(key).copy(x, y, z);
+        return (T) table.get(key).copy(x, y, z);
     }
 
     public static void registerItems() throws Exception {

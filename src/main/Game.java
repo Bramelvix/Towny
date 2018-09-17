@@ -13,7 +13,6 @@ import entity.nonDynamic.Ore;
 import entity.nonDynamic.Tree;
 import entity.nonDynamic.building.container.Chest;
 import entity.dynamic.item.Clothing;
-import entity.dynamic.item.ClothingType;
 import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.item.weapon.Weapon;

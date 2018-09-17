@@ -72,8 +72,7 @@ public class Villager extends Humanoid {
             hairnr = male ? Entity.RANDOM.nextInt(HairSprite.maleHair.length)
                     : Entity.RANDOM.nextInt(HairSprite.femaleHair.length);
         }
-        hair = male ? HairSprite.maleHair[hairnr] : HairSprite.femaleHair[hairnr];
-
+            hair = male ? HairSprite.maleHair[hairnr] : HairSprite.femaleHair[hairnr];
     }
 
     // gets the item nearest to the villager(of the same kind and unreserved)
@@ -84,7 +83,7 @@ public class Villager extends Humanoid {
         Item closest = null;
         Path path = null;
         for (Item level_item : levels[z].getItems()) {
-            if (level_item != null && level_item.isSameType(item) && level_item.isReserved(this)) {
+            if (item.isSameType(level_item) && level_item.isReserved(this)) {
                 if (closest == null || path == null
                         || (getPath(level_item.getX() >> 4, level_item.getY() >> 4) != null
                         && path.getStepsSize() > getPath(level_item.getX() >> 4, level_item.getY() >> 4)
@@ -166,12 +165,6 @@ public class Villager extends Humanoid {
 
         }
         return false;
-    }
-
-    public <T extends Item> void dropItem(T item) {
-        if (item != null) {
-            levels[z].addItem(item);
-        }
     }
 
     // add a job to the jobs spritesheets for the villager to do
@@ -256,7 +249,6 @@ public class Villager extends Humanoid {
     public void die() {
         super.die();
         inventory.dropAll();
-
     }
 
 }

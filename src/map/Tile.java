@@ -12,7 +12,7 @@ public class Tile {
 	private Item item;
 	private Entity entity;
 
-	// two static tiles voidtile = black, darkgrass is dark green
+	// three static tiles voidtile = black, darkgrass is dark green, darkStone has the same function as darkGrass, but is for underground
     public static Tile darkGrass = new Tile(SpriteHashtable.get(4), true);
     public static Tile darkStone = new Tile(SpriteHashtable.get(140),true);
     public static Tile voidTile = new Tile(SpriteHashtable.get(3), true);

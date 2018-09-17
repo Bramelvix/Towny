@@ -27,12 +27,12 @@ public class Item extends Entity {
 
     public <T extends Item> T copy(int x, int y, int z) {
         Item copy = this.copy();
-        copy.setLocation(this.x,this.y,this.z);
+        copy.setLocation(x,y,z);
         return (T) copy;
     }
 
     public boolean isSameType(Item item) {
-        return item.getId() == getId();
+        return item!=null && item.getId() == getId();
     }
 
     // getters and setters

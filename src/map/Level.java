@@ -174,7 +174,6 @@ public class Level {
         return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 && tiles[x][y].getEntity() instanceof Stairs && ((Stairs) (tiles[x][y].getEntity())).isTop();
     }
 
-
     private boolean hasWorkStation(int x, int y) {
         return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 && tiles[x][y].getEntity() instanceof Workstation;
     }
@@ -234,28 +233,18 @@ public class Level {
     // if there is a tree on X and Y, return it
     public Tree selectTree(int x, int y) {
         return selectTree(x, y, true);
-
     }
 
     public Tree selectTree(int x, int y, boolean seperate) {
-        for (Tile[] row : tiles) {
-            for (Tile e : row) {
-                if (e.getEntity() instanceof Tree) {
-                    if (e.getEntity().getX() / 16 == x / 16) {
-                        if (e.getEntity().getY() / 16 == y / 16) {
-                            return (Tree) e.getEntity();
-                        }
-                        if (seperate) {
-                            if ((e.getEntity().getY() - 1) / 16 == y / 16) {
-                                return (Tree) e.getEntity();
-                            }
-                        }
-
-                    }
-                }
-            }
+        if (x <= 0 || x > (width - 1) * 16 || y <= 0 || y > (height - 1) * 16) {
+            return null;
         }
-        return null;
+        if (tiles[x/16][y/16].getEntity() instanceof Tree) {
+            return (Tree) tiles[x/16][y/16].getEntity();
+        } else {
+            Entity entity = tiles[x/16][y/16+1].getEntity();
+            return seperate && entity instanceof Tree ? (Tree) entity : null;
+        }
 
     }
 
@@ -286,7 +275,7 @@ public class Level {
         if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
             return false;
         }
-        int rand = Entity.RANDOM.nextInt(32);
+        int rand = Entity.RANDOM.nextInt(50);
         if (rand <= 4) {
             switch (rand) {
                 case 0:

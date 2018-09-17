@@ -15,8 +15,7 @@ import java.util.List;
 
 public class Ore extends Resource {
     private static HashMap<List<Sprite>, Sprite> dynamicSpriteList = new HashMap<>();
-    private byte mined = 100; // mined percentage (100 = unfinished / 0 =
-    // finished)
+    private byte mined = 100; // mined percentage (100 = unfinished / 0 = finished)
     private Item minedItem; // Item dropped when the ore is mined
 
 
@@ -29,26 +28,10 @@ public class Ore extends Resource {
 
     // decide the sprite for the ore
     private void decideSprite(OreType type) {
-        switch (type) {
-            case IRON:
-                setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(54), ItemHashtable.get(5, this.x, this.y, this.z));
-                break;
-            case GOLD:
-                setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(56), ItemHashtable.get(7, this.x, this.y, this.z));
-                break;
-            case COAL:
-                setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(53), ItemHashtable.get(8, this.x, this.y, this.z));
-                break;
-            case CRYSTAL:
-                setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(57), ItemHashtable.get(9, this.x, this.y, this.z));
-                break;
-            case COPPER:
-                setOre(type.toString().toLowerCase() + " ore", SpriteHashtable.get(55), ItemHashtable.get(6, this.x, this.y, this.z));
-                break;
-            case STONE:
-                setOre(type.toString().toLowerCase(), SpriteHashtable.get(161), ItemHashtable.get(10, this.x, this.y, this.z));
-                break;
-        }
+        String name = type == OreType.STONE ? type.toString().toLowerCase() : type.toString().toLowerCase() + " ore";
+        setOre(name, SpriteHashtable.get(type.getSpriteId()), ItemHashtable.get(type.getItemSpriteId(), this.x, this.y, this.z));
+
+
     }
 
     private void setOre(String name, Sprite oreSprite, Item item) {
