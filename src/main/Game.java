@@ -301,7 +301,7 @@ public class Game {
     }
 
     private void deselectAllVills() {
-        vills.forEach((Villager i) -> deselect(i));
+        vills.forEach(this::deselect);
     }
 
     private void deselect(Villager vill) {

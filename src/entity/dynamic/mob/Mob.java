@@ -6,7 +6,6 @@ import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
 import entity.pathfinding.Point;
 import map.Level;
-import util.Vector2I;
 
 //abstract mob class for villagers and monsters/animals to extend
 public abstract class Mob extends Entity {
@@ -117,19 +116,13 @@ public abstract class Mob extends Entity {
 
     // is the mob around a tile (x and y in pixels)
     public boolean aroundTile(int x, int y, int z) {
-        return (this.z == z && (this.x <= ((x + 16))) && (this.x >= ((x - 16)))
-                && ((this.y >= ((y - 16))) && (this.y <= ((y + 16)))));
+        return this.z == z && ((this.x/16) <= ((x/16) + 1)) && ((this.x/16) >= ((x/16) - 1)) && ((this.y/16 >= ((y/16) - 1)) && (this.y/16 <= ((y/16) + 1)));
 
     }
 
 
     public boolean onSpot(int x, int y, int z) {
         return (this.z == z && this.x / 16 == x / 16 && this.y / 16 == y / 16);
-    }
-
-    // pathfinder method
-    public Path getPath(Vector2I tile) {
-        return getPath(tile.getX(), tile.getY());
     }
 
     public Path getPathAround(int x, int y) {

@@ -13,9 +13,9 @@ public class Tile {
 	private Entity entity;
 
 	// three static tiles voidtile = black, darkgrass is dark green, darkStone has the same function as darkGrass, but is for underground
-    public static Tile darkGrass = new Tile(SpriteHashtable.get(4), true);
-    public static Tile darkStone = new Tile(SpriteHashtable.get(140),true);
-    public static Tile voidTile = new Tile(SpriteHashtable.get(3), true);
+	static Tile darkGrass = new Tile(SpriteHashtable.get(4), true);
+	static Tile darkStone = new Tile(SpriteHashtable.get(140),true);
+	static Tile voidTile = new Tile(SpriteHashtable.get(3), true);
 
 	// constructors
     Tile(Sprite sprite, boolean solid) {
@@ -24,7 +24,7 @@ public class Tile {
 	}
 
 	// render a tile
-	public void render(int x, int y) {
+	 void render(int x, int y) {
     	sprite.draw(x,y);
 		if (entity != null && !solid) {
 			entity.render();
@@ -34,7 +34,7 @@ public class Tile {
 		}
 	}
 
-	public void renderHard() {
+	void renderHard() {
 		if (solid && entity != null) {
 			entity.render();
 		}
@@ -58,16 +58,16 @@ public class Tile {
 		this.item = item;
 	}
 
-	public <T extends Entity> void setEntity(T entity, boolean solid) {
+	<T extends Entity> void setEntity(T entity, boolean solid) {
 		this.entity = entity;
 		this.solid = solid;
 	}
 
-	public <T extends Entity> T getEntity() {
+	<T extends Entity> T getEntity() {
 		return (T) entity;
 	}
 
-	public void removeEntity() {
+	void removeEntity() {
 		this.entity = null;
 		this.solid = false;
 	}

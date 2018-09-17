@@ -30,9 +30,9 @@ public class MoveItemJob extends Job {
     public MoveItemJob(int xloc, int yloc, int zloc, Villager worker) {
         this(worker);
         pickUpJob = false;
-        this.xloc = (xloc/16)*16; //locations are in pixels and have to be divisible by 16
-        this.yloc = (yloc/16)*16;
-        this.zloc = (zloc/16)*16;
+        this.xloc = xloc; //locations are in pixels and have to be divisible by 16
+        this.yloc = yloc;
+        this.zloc = zloc;
 
     }
 
