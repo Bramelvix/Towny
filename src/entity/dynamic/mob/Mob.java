@@ -169,13 +169,13 @@ public abstract class Mob extends Entity {
     private boolean collision(Direction dir) {
         return ((dir == Direction.OMLAAG || dir == Direction.LINKS_OMLAAG || dir == Direction.RECHTS_OMLAAG)
                 ||
-                levels[z].getTile((x / 16), ((y + 1) / 16)).solid())
+                levels[z].getTile((x / 16), ((y + 1) / 16)).isSolid())
                 && ((dir == Direction.OMHOOG || dir == Direction.LINKS_OMHOOG || dir == Direction.RECHTS_OMHOOG)
-                || levels[z].getTile((x / 16), ((y - 1) / 16)).solid())
+                || levels[z].getTile((x / 16), ((y - 1) / 16)).isSolid())
                 && ((dir == Direction.LINKS || dir == Direction.LINKS_OMHOOG || dir == Direction.LINKS_OMLAAG)
-                || levels[z].getTile(((x - 1) / 16), (y / 16)).solid())
+                || levels[z].getTile(((x - 1) / 16), (y / 16)).isSolid())
                 && ((dir == Direction.RECHTS || dir == Direction.RECHTS_OMHOOG || dir == Direction.RECHTS_OMLAAG)
-                || levels[z].getTile(((x + 1) / 16), (y / 16)).solid()) && (levels[z].getTile((x / 16), (y / 16)).solid() || levels[z].getTile(((x + 1) / 16), ((y + 1) / 16)).solid());
+                || levels[z].getTile(((x + 1) / 16), (y / 16)).isSolid()) && (levels[z].getTile((x / 16), (y / 16)).isSolid() || levels[z].getTile(((x + 1) / 16), ((y + 1) / 16)).isSolid());
 
     }
 

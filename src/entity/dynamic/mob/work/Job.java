@@ -27,8 +27,6 @@ public abstract class Job implements Workable {
 
 
     protected void start() {
-        //worker.setPath(worker.findPathAround(xloc / 16, yloc / 16));
-        //completed = worker.isMovementNull();
         worker.addJob(new MoveJob(xloc,yloc,zloc,worker,false),0);
         started = true;
     }

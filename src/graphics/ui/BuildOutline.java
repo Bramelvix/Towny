@@ -68,7 +68,7 @@ public class BuildOutline {
 
     // is the tile empty
     private boolean notBuildable(int x, int y, int z) {
-        return (levels[z].getTile(x, y).solid());
+        return (levels[z].getTile(x, y).isSolid());
 
     }
 

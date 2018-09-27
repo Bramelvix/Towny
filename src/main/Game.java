@@ -6,11 +6,11 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import entity.Entity;
 import entity.dynamic.mob.work.*;
-import entity.nonDynamic.Ore;
-import entity.nonDynamic.Tree;
+import entity.nonDynamic.resources.Ore;
+import entity.nonDynamic.resources.TilledSoil;
+import entity.nonDynamic.resources.Tree;
 import entity.nonDynamic.building.container.Chest;
 import entity.dynamic.item.Clothing;
 import entity.dynamic.item.Item;
@@ -86,7 +86,7 @@ public class Game {
             return;
         }
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-        window = glfwCreateWindow(width * SCALE, height * SCALE, "Towny", 0, 0);
+        window = glfwCreateWindow(width * SCALE, height * SCALE, "Towny by Bramelvix", 0, 0);
         if (window == 0) {
             System.err.println("Window failed to be created");
             return;
@@ -352,7 +352,6 @@ public class Game {
             if (((UiIcons.isMiningSelected()) && UiIcons.hoverOnNoIcons())
                     && (map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY()) != null)) {
                 Villager idle = getIdlestVil();
-                idle.setPath(null);
                 deselectAllVills();
                 idle.addJob(map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY()));
                 ui.deSelectIcons();
@@ -363,11 +362,15 @@ public class Game {
                 ui.showBuildSquare(xScroll, yScroll, true, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
                 ui.deSelectIcons();
                 return;
-
+            }else if (UiIcons.isPlowSelected() && UiIcons.hoverOnNoIcons()){
+                Villager idle = getIdlestVil();
+                deselectAllVills();
+                idle.addJob(new TilledSoil((MousePosition.getX()/16)*16, (MousePosition.getY()/16)*16,currentLayerNumber,map[currentLayerNumber]));
+                ui.deSelectIcons();
+                return;
             } else if (((UiIcons.isSwordsSelected()) && UiIcons.hoverOnNoIcons())
                     && (anyMobHoverOn() != null)) {
                 Villager idle = getIdlestVil();
-                idle.setPath(null);
                 deselectAllVills();
                 idle.addJob(new FightJob(idle, anyMobHoverOn()));
                 ui.deSelectIcons();
@@ -394,7 +397,6 @@ public class Game {
                 for (int[] blok : coords) {
                     if (map[currentLayerNumber].tileIsEmpty(blok[0] / 16, blok[1] / 16)) {
                         Villager idle = getIdlestVil();
-                        idle.setPath(null);
                         idle.addBuildJob(blok[0], blok[1], currentLayerNumber, ui.getBuildRecipeOutline().getProduct(),
                                 ui.getBuildRecipeOutline().getResources()[0]);
                     }

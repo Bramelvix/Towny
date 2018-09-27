@@ -1,4 +1,4 @@
-package entity.nonDynamic;
+package entity.nonDynamic.resources;
 
 import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.mob.Villager;

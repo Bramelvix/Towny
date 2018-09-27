@@ -23,7 +23,7 @@ public abstract class OpenglUtils {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         //Send texel data to OpenGL
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-        //Return the texture ID so we can bind it later again
+        //Return the texture ID so we can bind it again later
         return textureID;
     }
     public static void deleteTexture(int textId) {

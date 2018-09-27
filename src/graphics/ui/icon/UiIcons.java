@@ -1,7 +1,6 @@
 package graphics.ui.icon;
 
 import input.MouseButton;
-import input.MousePosition;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
@@ -11,14 +10,14 @@ public class UiIcons {
 	// initialising the icons
 	public static void init() {
 		float scale = 0.176056338028169f;
-        icons = new Icon[6];
+        icons = new Icon[7];
 		icons[0] = new Icon(15, 660, "/res/icons/tools/wood-axe.png",scale);
 		icons[1] = new Icon(120, 660, "/res/icons/tools/mining.png",scale);
 		icons[2] = new Icon(225, 660, "/res/icons/tools/sickle.png",scale);
 		icons[3] = new Icon(330, 660, "/res/icons/tools/saw.png",scale);
 		icons[4] = new Icon(435, 660, "/res/icons/tools/swords.png",scale);
         icons[5] = new Icon(540, 660, "/res/icons/tools/spade.png",scale);
-
+		icons[6] = new Icon(645, 660, "/res/icons/tools/plow.png",scale);
 	}
 
 	// rendering the icons on the screen
@@ -86,6 +85,10 @@ public class UiIcons {
 	public static boolean isShovelSelected() {
 		return icons[5].isSelected();
 	}
+
+	public static boolean isPlowSelected() { return icons[6].isSelected();}
+
+	public static boolean isPlowHover() {return icons[6].hoverOn();}
 
 	// update the icons
     public static void update() {

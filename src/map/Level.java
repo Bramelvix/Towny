@@ -7,9 +7,9 @@ import entity.nonDynamic.building.Stairs;
 import entity.nonDynamic.building.wall.Wall;
 import entity.dynamic.item.Item;
 import entity.nonDynamic.building.workstations.Workstation;
-import entity.nonDynamic.Ore;
-import entity.nonDynamic.OreType;
-import entity.nonDynamic.Tree;
+import entity.nonDynamic.resources.Ore;
+import entity.nonDynamic.resources.OreType;
+import entity.nonDynamic.resources.Tree;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import main.Game;
@@ -66,7 +66,7 @@ public class Level {
 
     // is the tile on X and Y walkable (items can still be there)
     public boolean isWalkAbleTile(int x, int y) {
-        return !tiles[x][y].solid();
+        return !tiles[x][y].isSolid();
     }
 
     public boolean tileIsEmpty(int x, int y) {//no mobs, no items, no buildings,...

@@ -7,7 +7,7 @@ import graphics.SpriteHashtable;
 
 public class Tile {
 	public Sprite sprite; // tile's sprite
-	private boolean solid; // is the tile solid
+	private boolean solid; // is the tile isSolid
 	public static final int SIZE = 16; // fixed size
 	private Item item;
 	private Entity entity;
@@ -40,18 +40,9 @@ public class Tile {
 		}
 	}
 
-	// steters
+	// setters
 	public void setSolid(boolean solid) {
 		this.solid = solid;
-	}
-
-
-	public boolean solid() {
-		return solid;
-	}
-
-	public Item getItem() {
-		return item;
 	}
 
 	public <T extends Item> void setItem(T item) {
@@ -63,10 +54,21 @@ public class Tile {
 		this.solid = solid;
 	}
 
+
+	//getters
+	public boolean isSolid() {
+		return solid;
+	}
+
+	public Item getItem() {
+		return item;
+	}
+
 	<T extends Entity> T getEntity() {
 		return (T) entity;
 	}
 
+	//removes the entity from the tile
 	void removeEntity() {
 		this.entity = null;
 		this.solid = false;

@@ -6,7 +6,7 @@ import entity.dynamic.mob.work.BuildJob;
 import entity.dynamic.mob.work.GatherJob;
 import entity.nonDynamic.building.BuildAbleObject;
 import entity.Entity;
-import entity.nonDynamic.Resource;
+import entity.nonDynamic.resources.Resource;
 import entity.nonDynamic.building.container.Chest;
 import entity.dynamic.item.Clothing;
 import entity.dynamic.item.Item;
