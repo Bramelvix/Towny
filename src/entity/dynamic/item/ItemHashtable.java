@@ -34,9 +34,9 @@ public abstract class ItemHashtable {
 
     public static void registerItems() throws Exception {
         registerItem(new Item("logs", SpriteHashtable.get(58), "Wooden logs", 1)); //logs
-        registerItem(new Item("iron bar", SpriteHashtable.get(59), "a bar of isSolid iron", 2));//iron bar
-        registerItem(new Item("gold bar", SpriteHashtable.get(60), "a bar of isSolid gold", 3));//gold bar
-        registerItem(new Item("copper bar", SpriteHashtable.get(61), "a bar of isSolid copper", 4));//copper bar
+        registerItem(new Item("iron bar", SpriteHashtable.get(59), "a bar of solid iron", 2));//iron bar
+        registerItem(new Item("gold bar", SpriteHashtable.get(60), "a bar of solid gold", 3));//gold bar
+        registerItem(new Item("copper bar", SpriteHashtable.get(61), "a bar of solid copper", 4));//copper bar
         registerItem(new Item("iron ore", SpriteHashtable.get(62), "iron ore", 5));// iron ore
         registerItem(new Item("copper ore", SpriteHashtable.get(66), "copper ore", 6)); // copper ore
         registerItem(new Item("gold ore", SpriteHashtable.get(63), "gold ore", 7)); // gold ore
