@@ -1,7 +1,6 @@
 package entity.nonDynamic.building.wall;
 
 import entity.nonDynamic.building.BuildAbleObject;
-import entity.dynamic.item.Item;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;

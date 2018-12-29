@@ -21,13 +21,13 @@ public class Ui {
     // rendering the ui
     public void render() {
         UiIcons.render();
+        selection.render();
         menu.render();
         map.render();
         outline.render();
         layerLevelChanger.render();
         top.render();
 
-        //selection.render(g);
 
     }
 
@@ -102,7 +102,7 @@ public class Ui {
     }
 
     public void showSelectionSquare() {
-        selection.show();
+        selection.init();
     }
 
     public void resetSelection() {

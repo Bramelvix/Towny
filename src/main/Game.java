@@ -9,7 +9,7 @@ import java.util.List;
 import entity.Entity;
 import entity.dynamic.mob.work.*;
 import entity.nonDynamic.resources.Ore;
-import entity.nonDynamic.resources.TilledSoil;
+import entity.nonDynamic.building.farming.TilledSoil;
 import entity.nonDynamic.resources.Tree;
 import entity.nonDynamic.building.container.Chest;
 import entity.dynamic.item.Clothing;
@@ -362,10 +362,8 @@ public class Game {
                 ui.showBuildSquare(xScroll, yScroll, true, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
                 ui.deSelectIcons();
                 return;
-            }else if (UiIcons.isPlowSelected() && UiIcons.hoverOnNoIcons()){
-                Villager idle = getIdlestVil();
-                deselectAllVills();
-                idle.addJob(new TilledSoil((MousePosition.getX()/16)*16, (MousePosition.getY()/16)*16,currentLayerNumber,map[currentLayerNumber]));
+            }else if (UiIcons.isPlowHover() && !ui.menuVisible()){
+                ui.showBuildSquare(xScroll, yScroll, false, BuildingRecipe.TILLED_SOIL, currentLayerNumber);
                 ui.deSelectIcons();
                 return;
             } else if (((UiIcons.isSwordsSelected()) && UiIcons.hoverOnNoIcons())

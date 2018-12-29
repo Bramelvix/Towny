@@ -12,7 +12,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class MenuItem {
     private String text; // text on the menuitem
-    public int x, y; // x and y of top left corner
+    private int x, y; // x and y of top left corner
     private int width; // width of the menuitem
     private boolean hover; // is the mouse hovering over the item
     // some static strings to use as menuitem texts
@@ -83,7 +83,6 @@ public class MenuItem {
 
     // getter
     public boolean clicked() {
-        //return hover && MouseButton.
         return hover && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT);
     }
 

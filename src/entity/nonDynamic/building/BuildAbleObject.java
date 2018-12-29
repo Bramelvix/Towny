@@ -15,23 +15,15 @@ public abstract class BuildAbleObject extends StaticEntity {
 
     protected void setOpened(boolean open) { //the open value has to be changeable for certain objects like doors
         this.open = open;
-        if (open) {
-            level.removeEntity(this);
-            level.addEntity(this, false);
-        } else {
-            level.removeEntity(this);
-            level.addEntity(this, true);
+        if(initialised) {
+            level.getTile(x * 16, y * 16).setSolid(!this.open);
         }
-    }
-
-    private boolean isOpen() {
-        return open;
     }
 
     public void initialise(int x, int y, Level[] levels, int depth) {
         this.level = levels[depth];
         setLocation(x * 16, y * 16, depth);
-        if (isOpen()) {
+        if (this.open) {
             level.addEntity(this, false);
         } else {
             level.addEntity(this, true);
@@ -52,7 +44,9 @@ public abstract class BuildAbleObject extends StaticEntity {
                 return false;
             } else {
                 this.setVisible(true);
-                level.getTile(x * 16, y * 16).setSolid(true);
+                if (!this.open) {
+                    level.getTile(x * 16, y * 16).setSolid(true);
+                }
                 return true;
             }
 

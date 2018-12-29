@@ -7,10 +7,7 @@ Feel free to contribute to the game by fixing my terrible code, or adding new fe
 ## TODO
 
   **Bugs**
- - Selectionsquare for chopping trees is bugged
- - Job assignment system sometimes malfunctions when assigning multiple jobs
  - Combat system is very buggy
- - Assigning more than one building job at once is bugged
  
  **Planned improvements**
 

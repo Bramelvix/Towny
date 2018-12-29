@@ -6,6 +6,7 @@ import static org.lwjgl.glfw.GLFW.*;
 public class MouseButton implements GLFWMouseButtonCallbackI {
     private static boolean[] released = new boolean[3];
     private static boolean[] pressed = new boolean[3];
+    private static int heldDownButton = -1;
     private static int dragOffsetX, dragOffsetY;
 
     public MouseButton() {
@@ -19,9 +20,11 @@ public class MouseButton implements GLFWMouseButtonCallbackI {
         if (action == GLFW_RELEASE) {
             released[button] = true;
             pressed[button] = false;
+            heldDownButton = -1;
         } else if (action == GLFW_PRESS) {
             pressed[button] = true;
             released[button] = false;
+            heldDownButton = button;
             if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
                 dragOffsetX = MousePosition.getMouseX();
                 dragOffsetY = MousePosition.getMouseY();
@@ -47,7 +50,7 @@ public class MouseButton implements GLFWMouseButtonCallbackI {
     }
 
     public static boolean heldDown(int button) {
-        return wasPressed(button) && !wasReleased(button);
+        return heldDownButton==button;
     }
 
     public static int getDragOffsetX() {

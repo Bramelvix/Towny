@@ -36,18 +36,11 @@ public class Menu { // the menu is the little options menu that shows up when
 		return visible;
 	}
 
-	// setter
-    private void setVisible(boolean vis) {
-		if (visible) {
-			visible = vis;
-		}
-	}
-
 	// hiding the menu
 	public void hide() {
-		setVisible(false);
-		this.width = 0;
+		this.visible = false;
 		this.height = 0;
+		items = new ArrayList<>();
 	}
 
 	// adding items to the menu
@@ -63,10 +56,12 @@ public class Menu { // the menu is the little options menu that shows up when
 			hide();
 		} else {
             items.forEach(MenuItem::update);
-			setVisible((((MousePosition.getTrueXPixels()) >= getX() - 10)
+			if (!(((MousePosition.getTrueXPixels()) >= getX() - 10)
 					&& ((MousePosition.getTrueXPixels()) <= getX() + (getWidth() + 10))
 					&& ((MousePosition.getTrueYPixels()) >= getY() - 10)
-					&& ((MousePosition.getTrueYPixels()) <= getY() + (getHeight() + 10))));
+					&& ((MousePosition.getTrueYPixels()) <= getY() + (getHeight() + 10)))){
+				hide();
+			}
 		}
 	}
 
@@ -75,7 +70,7 @@ public class Menu { // the menu is the little options menu that shows up when
 		x = 0;
 		y = 0;
         items = new ArrayList<>();
-		setVisible(false);
+		hide();
 	}
 
 	// getters
@@ -108,7 +103,8 @@ public class Menu { // the menu is the little options menu that shows up when
 	}
 
     private MenuItem clickedItem(String type) {
-		return clickedItem() != null && clickedItem().getText().contains(type) ? clickedItem() : null;
+		MenuItem clickedItem = clickedItem();
+		return clickedItem != null && clickedItem.getText().contains(type) ? clickedItem : null;
 
 	}
 

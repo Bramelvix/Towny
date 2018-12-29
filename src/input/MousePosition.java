@@ -7,14 +7,16 @@ import org.lwjgl.glfw.GLFWCursorPosCallbackI;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_MIDDLE;
 
 public class MousePosition implements GLFWCursorPosCallbackI {
-    private static int mouseX = -1; // x and y coord on the screen, in ingame pixels (/3), WITH OFFSET
+    private static int mouseX = -1; // x and y coord on the screen, in ingame pixels (1/3), WITH OFFSET
     private static int mouseY = -1;
     private static int mouseTileX = -1; // the x and y of the tiles in the game that the mouse is on
     private static int mouseTileY = -1;
-    private static int trueX = -1; // x and y coord on the screen, in ingame pixels (/3), WITHOUT OFFSET
+    private static int trueX = -1; // x and y coord on the screen, in ingame pixels (1/3), WITHOUT OFFSET
     private static int trueY = -1;
     private static int trueXpixels = -1; // x and y coord on the screen, in acutal pixels, WITHOUT OFFSET
     private static int trueYpixels = -1;
+    private static int xPixels = -1;
+    private static int yPixels = -1;
 
     private static Game game;
 
@@ -26,6 +28,8 @@ public class MousePosition implements GLFWCursorPosCallbackI {
     public void invoke(long window, double x, double y) {
         trueXpixels = (int) x;
         trueYpixels = (int) y;
+        xPixels = trueXpixels + game.xScroll;
+        yPixels = trueYpixels + game.yScroll;
         trueX = trueXpixels / Game.SCALE;
         trueY = trueYpixels / Game.SCALE;
         mouseX = trueX + (game.xScroll/3);
@@ -64,6 +68,13 @@ public class MousePosition implements GLFWCursorPosCallbackI {
     public static int getTrueX() {
         return trueX;
     }
+    public static int getXPixels() {
+        return xPixels;
+    }
+    public static int getYPixels() {
+        return yPixels;
+    }
+
 
     public static int getTrueY() {
         return trueY;
