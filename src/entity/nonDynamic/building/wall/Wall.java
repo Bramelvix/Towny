@@ -100,41 +100,41 @@ public class Wall extends BuildAbleObject {
             } else {
                 sprites.add(SpriteHashtable.get(type == WallType.STONE ? 46 : 44));
             }
+        } else {
+            sprites.add(SpriteHashtable.get(type == WallType.STONE ? 14 : 186));
+
+            //check if places are empty
+            if (!topHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 17 : 189));
+            if (!rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 16 : 188));
+            if (!bottomHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 18 : 190));
+            if (!leftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 15 : 187));
+
+            // top right corner
+            if (!topHasWall && !rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 20 : 192));
+            else if (!rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 25 : 197));
+            else if (!topHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 27 : 199));
+            else if (!topRightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 36 : 208));
+
+            // bottom right corner
+
+            if (!bottomHasWall && !rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 22 : 194));
+            else if (!rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 26 : 198));
+            else if (!bottomHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 34 : 206));
+            else if (!bottomRightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 38 : 210));
+
+
+            // bottom left corner
+            if (!bottomHasWall && !leftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 21 : 193));
+            else if (!leftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 23 : 195));
+            else if (!bottomHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 33 : 205));
+            else if (!bottomLeftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 37 : 209));
+
+            // top left corner
+            if (!topHasWall && !leftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 19 : 191));
+            else if (!leftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 24 : 196));
+            else if (!topHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 28 : 200));
+            else if (!topLeftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 35 : 207));
         }
-        sprites.add(SpriteHashtable.get(type == WallType.STONE ? 14 : 186));
-
-        //check if places are empty
-        if (!topHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 17 : 189));
-        if (!rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 16 : 188));
-        if (!bottomHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 18 : 190));
-        if (!leftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 15 : 187));
-
-        // top right corner
-        if (!topHasWall && !rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 20 : 192));
-        else if (!rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 25 : 197));
-        else if (!topHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 27 : 199));
-        else if (!topRightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 36 : 208));
-
-        // bottom right corner
-
-        if (!bottomHasWall && !rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 22 : 194));
-        else if (!rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 26 : 198));
-        else if (!bottomHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 34 : 206));
-        else if (!bottomRightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 38 : 210));
-
-
-        // bottom left corner
-        if (!bottomHasWall && !leftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 21 : 193));
-        else if (!leftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 23 : 195));
-        else if (!bottomHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 33 : 205));
-        else if (!bottomLeftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 37 : 209));
-
-        // top left corner
-        if (!topHasWall && !leftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 19 : 191));
-        else if (!leftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 24 : 196));
-        else if (!topHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 28 : 200));
-        else if (!topLeftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 35 : 207));
-
         if (dynamicSpriteList.containsKey(sprites)) { //if a dynamic sprite exists, use it
             sprite = dynamicSpriteList.get(sprites);
         } else { //otherwise make it

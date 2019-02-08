@@ -29,12 +29,12 @@ public class Stairs extends BuildAbleObject {
             if (top && depth != levels.length - 1) {
                 levels[depth + 1].removeEntity(x, y);
                 Stairs otherPart = new Stairs(false);
-                otherPart.initialise(x, y, levels, depth+1, false);
+                otherPart.initialise(x, y, levels, depth + 1, false);
                 levels[depth + 1].addEntity(otherPart, false);
             } else if (depth != 0) {
                 levels[depth - 1].removeEntity(x, y);
                 Stairs otherPart = new Stairs(true);
-                otherPart.initialise(x, y, levels, depth-1, false);
+                otherPart.initialise(x, y, levels, depth - 1, false);
                 levels[depth - 1].addEntity(otherPart, false);
             }
         }
