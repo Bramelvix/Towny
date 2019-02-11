@@ -13,8 +13,6 @@ public class MousePosition implements GLFWCursorPosCallbackI {
     private static int mouseTileY = -1;
     private static int trueX = -1; // x and y coord on the screen, in ingame pixels (1/3), WITHOUT OFFSET
     private static int trueY = -1;
-    private static int trueXpixels = -1; // x and y coord on the screen, in acutal pixels, WITHOUT OFFSET
-    private static int trueYpixels = -1;
     private static int xPixels = -1;
     private static int yPixels = -1;
 
@@ -26,23 +24,19 @@ public class MousePosition implements GLFWCursorPosCallbackI {
 
     @Override
     public void invoke(long window, double x, double y) {
-        trueXpixels = (int) x;
-        trueYpixels = (int) y;
-        xPixels = trueXpixels + game.xScroll;
-        yPixels = trueYpixels + game.yScroll;
-        trueX = trueXpixels / Game.SCALE;
-        trueY = trueYpixels / Game.SCALE;
-        mouseX = trueX + (game.xScroll/3);
-        mouseY = trueY + (game.yScroll/3);
+        trueX = (int) x;
+        trueY = (int) y;
+        mouseX = trueX + game.xScroll;
+        mouseY = trueY + game.yScroll;
         mouseTileX = mouseX / Tile.SIZE;
         mouseTileY = mouseY / Tile.SIZE;
         if (MouseButton.heldDown(GLFW_MOUSE_BUTTON_MIDDLE)) {
-            int deltaX = -trueXpixels;
-            int deltaY = -trueYpixels;
-            if (deltaX + MouseButton.getDragOffsetX() >= 0 && deltaX + MouseButton.getDragOffsetX() <= ((game.map[game.currentLayerNumber].width * Tile.SIZE) - Game.width) * Game.SCALE) {
+            int deltaX = -trueX;
+            int deltaY = -trueY;
+            if (deltaX + MouseButton.getDragOffsetX() >= 0 && deltaX + MouseButton.getDragOffsetX() <= ((game.map[game.currentLayerNumber].width * Tile.SIZE) - Game.width)) {
                 game.xScroll = deltaX + MouseButton.getDragOffsetX();
             }
-            if (deltaY + MouseButton.getDragOffsetY() >= 0 && deltaY + MouseButton.getDragOffsetY() <= ((game.map[game.currentLayerNumber].height * Tile.SIZE) - Game.height) * Game.SCALE) {
+            if (deltaY + MouseButton.getDragOffsetY() >= 0 && deltaY + MouseButton.getDragOffsetY() <= ((game.map[game.currentLayerNumber].height * Tile.SIZE) - Game.height)) {
                 game.yScroll = deltaY + MouseButton.getDragOffsetY();
             }
 
@@ -50,11 +44,11 @@ public class MousePosition implements GLFWCursorPosCallbackI {
     }
 
     public static int getMouseX() {
-        return trueXpixels+game.xScroll;
+        return mouseX;
     }
 
     public static int getMouseY() {
-        return trueYpixels+game.yScroll;
+        return mouseY;
     }
 
     public static int getTileX() {
@@ -80,13 +74,6 @@ public class MousePosition implements GLFWCursorPosCallbackI {
         return trueY;
     }
 
-    public static int getTrueXPixels() {
-        return trueXpixels;
-    }
-
-    public static int getTrueYPixels() {
-        return trueYpixels;
-    }
     public static int getX() {
         return mouseX;
     }

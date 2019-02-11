@@ -47,14 +47,14 @@ public class Level {
     // adding an item to the spritesheets
     public <T extends Item> void addItem(T e) {
         if (e != null) {
-            tiles[e.getX() / 16][e.getY() / 16].setItem(e);
+            tiles[e.getX() / 48][e.getY() / 48].setItem(e);
         }
     }
 
     // removing an item from the spritesheets
     public <T extends Item> void removeItem(T e) {
         if (e != null) {
-            tiles[e.getX() / 16][e.getY() / 16].setItem(null);
+            tiles[e.getX() / 48][e.getY() / 48].setItem(null);
         }
     }
 
@@ -74,7 +74,7 @@ public class Level {
     }
 
     public <T extends Entity> T getEntityOn(int x, int y) {
-        return tiles[x / 16][y / 16].getEntity();
+        return tiles[x / 48][y / 48].getEntity();
     }
 
     public Vector2I getNearestEmptySpot(int xloc, int yloc) {
@@ -82,8 +82,8 @@ public class Level {
     }
 
     private Vector2I getNearestSpotThatHasX(int xloc, int yloc, BiPredicate<Integer, Integer> p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
-        int x0 = xloc / 16;
-        int y0 = yloc / 16;
+        int x0 = xloc / 48;
+        int y0 = yloc / 48;
         if (p.test(x0, y0)) {
             return new Vector2I(x0, y0);
         } else {
@@ -179,7 +179,7 @@ public class Level {
     }
 
     public Item getItemOn(int x, int y) {
-        return tiles[x / 16][y / 16].getItem();
+        return tiles[x / 48][y / 48].getItem();
     }
 
     // generate the green border around the map
@@ -236,13 +236,13 @@ public class Level {
     }
 
     public Tree selectTree(int x, int y, boolean seperate) {
-        if (x <= 0 || x > (width - 1) * 16 || y <= 0 || y > (height - 1) * 16) {
+        if (x <= 0 || x > (width - 1) * Tile.SIZE || y <= 0 || y > (height - 1) * Tile.SIZE) {
             return null;
         }
-        if (tiles[x/16][y/16].getEntity() instanceof Tree) {
-            return (Tree) tiles[x/16][y/16].getEntity();
+        if (tiles[x/Tile.SIZE][y/Tile.SIZE].getEntity() instanceof Tree) {
+            return (Tree) tiles[x/Tile.SIZE][y/Tile.SIZE].getEntity();
         } else {
-            Entity entity = tiles[x/16][y/16+1].getEntity();
+            Entity entity = tiles[x/Tile.SIZE][y/Tile.SIZE+1].getEntity();
             return seperate && entity instanceof Tree ? (Tree) entity : null;
         }
 
@@ -250,10 +250,10 @@ public class Level {
 
     // if there is ore on X and Y, return it
     public Ore selectOre(int x, int y) {
-        if (x <= 0 || x > (width - 1) * 16 || y <= 0 || y > (height - 1) * 16) {
+        if (x <= 0 || x > (width - 1) * Tile.SIZE || y <= 0 || y > (height - 1) * Tile.SIZE) {
             return null;
         }
-        Entity entity = tiles[x / 16][y / 16].getEntity();
+        Entity entity = tiles[x / Tile.SIZE][y / Tile.SIZE].getEntity();
         return entity instanceof Ore ? (Ore) entity : null;
 
     }
@@ -265,7 +265,7 @@ public class Level {
         }
         int rand = Entity.RANDOM.nextInt(10);
         if (rand == 1) {
-            addEntity(new Tree(x * 16, y * 16, depth, this), true);
+            addEntity(new Tree(x * Tile.SIZE, y * Tile.SIZE, depth, this), true);
         }
 
     }
@@ -279,19 +279,19 @@ public class Level {
         if (rand <= 4) {
             switch (rand) {
                 case 0:
-                    addEntity(new Ore(x * 16, y * 16, depth, this, OreType.GOLD), true);
+                    addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.GOLD), true);
                     break;
                 case 1:
-                    addEntity(new Ore(x * 16, y * 16, depth, this, OreType.IRON), true);
+                    addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.IRON), true);
                     break;
                 case 2:
-                    addEntity(new Ore(x * 16, y * 16, depth, this, OreType.COAL), true);
+                    addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.COAL), true);
                     break;
                 case 3:
-                    addEntity(new Ore(x * 16, y * 16, depth, this, OreType.COPPER), true);
+                    addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.COPPER), true);
                     break;
                 case 4:
-                    addEntity(new Ore(x * 16, y * 16, depth, this, OreType.CRYSTAL), true);
+                    addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.CRYSTAL), true);
                     break;
             }
             return true;
@@ -303,17 +303,17 @@ public class Level {
         if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
             return;
         }
-        addEntity(new Ore(x * 16, y * 16, depth, this, OreType.STONE), true);
+        addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.STONE), true);
 
     }
 
     // render the tiles
     public void render(int xScroll, int yScroll) {
         glTranslatef(-xScroll, -yScroll, 0);
-        int x0 = xScroll / 3 / 16;
-        int x1 = (xScroll / 3 + Game.width + Sprite.SIZE) / 16;
-        int y0 = yScroll / 3 / 16;
-        int y1 = (yScroll / 3 + Game.height + Sprite.SIZE) / 16;
+        int x0 = xScroll / Tile.SIZE;
+        int x1 = (xScroll + Game.width + Sprite.SIZE) / Tile.SIZE;
+        int y0 = yScroll / Tile.SIZE;
+        int y1 = (yScroll + Game.height + Sprite.SIZE) / Tile.SIZE;
         for (int y = y0; y < y1; y++) {
             for (int x = x0; x < x1; x++) {
                 getTile(x, y).render(x * Sprite.SIZE, y * Sprite.SIZE);
@@ -326,10 +326,10 @@ public class Level {
 
     public void renderHardEntities(int xScroll, int yScroll) {
         glTranslatef(-xScroll, -yScroll, 0);
-        int x0 = xScroll / 3 / 16;
-        int x1 = (xScroll / 3 + Game.width + Sprite.SIZE * 2) / 16;
-        int y0 = yScroll / 3 / 16;
-        int y1 = (yScroll / 3 + Game.height + Sprite.SIZE * 2) / 16;
+        int x0 = xScroll / Tile.SIZE;
+        int x1 = (xScroll + Game.width + Sprite.SIZE * 2) / Tile.SIZE;
+        int y0 = yScroll/ Tile.SIZE;
+        int y1 = (yScroll + Game.height + Sprite.SIZE * 2) / Tile.SIZE;
 
         for (int y = y0; y < y1; y++) {
             for (int x = x0; x < x1; x++) {
@@ -347,7 +347,7 @@ public class Level {
 
     public <T extends Entity> void addEntity(T entity, boolean solid) {
         if (entity != null) {
-            tiles[entity.getX() / 16][entity.getY() / 16].setEntity(entity, solid);
+            tiles[entity.getX() / Tile.SIZE][entity.getY() / Tile.SIZE].setEntity(entity, solid);
         }
     }
 
@@ -356,7 +356,7 @@ public class Level {
     }
 
     public void removeEntity(Entity entity) {
-        removeEntity(entity.getX() / 16, entity.getY() / 16);
+        removeEntity(entity.getX() / Tile.SIZE, entity.getY() / Tile.SIZE);
     }
 
 }

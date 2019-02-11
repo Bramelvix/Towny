@@ -3,6 +3,7 @@ package entity.dynamic.mob.work;
 import entity.nonDynamic.building.container.Chest;
 import entity.dynamic.item.Item;
 import entity.dynamic.mob.Villager;
+import map.Tile;
 
 public class MoveItemJob extends Job {
     private boolean pickUpJob; // is the job a pickup or drop job
@@ -30,7 +31,7 @@ public class MoveItemJob extends Job {
     public MoveItemJob(int xloc, int yloc, int zloc, Villager worker) {
         this(worker);
         pickUpJob = false;
-        this.xloc = xloc; //locations are in pixels and have to be divisible by 16
+        this.xloc = xloc; //locations are in pixels and have to be divisible by Tile.SIZE (48)
         this.yloc = yloc;
         this.zloc = zloc;
 
@@ -40,7 +41,7 @@ public class MoveItemJob extends Job {
     @Override
     protected void start() {
         started = true;
-        if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[zloc].isClearTile(xloc / 16, yloc / 16) && !(worker.levels[zloc].getEntityOn(xloc, yloc) instanceof Chest)))) {
+        if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[zloc].isClearTile(xloc / Tile.SIZE, yloc / Tile.SIZE) && !(worker.levels[zloc].getEntityOn(xloc, yloc) instanceof Chest)))) {
             completed = true;
             return;
         }

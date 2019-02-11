@@ -3,6 +3,7 @@ package entity.dynamic.mob.work;
 import entity.dynamic.item.Item;
 import entity.dynamic.mob.Villager;
 import entity.nonDynamic.building.BuildAbleObject;
+import map.Tile;
 
 public class BuildJob extends Job {
     private BuildAbleObject buildJobObj; // the buildable entity the worker needs to build
@@ -55,13 +56,13 @@ public class BuildJob extends Job {
                     worker.move();
                 } else {
                     if (buildJobObj != null) {
-                        if (!worker.levels[zloc].tileIsEmpty(xloc / 16, yloc / 16) && !buildJobObj.initialised) {
+                        if (!worker.levels[zloc].tileIsEmpty(xloc / Tile.SIZE, yloc / Tile.SIZE) && !buildJobObj.initialised) {
                             // wait if the buildLocation is blocked by an item or entity
                             System.out.println("Postponing Construction of: " + buildJobObj.toString());
                             return;
                         }
                         if (!buildJobObj.initialised) {
-                            buildJobObj.initialise(xloc / 16, yloc / 16, worker.levels, zloc);
+                            buildJobObj.initialise(xloc / Tile.SIZE, yloc / Tile.SIZE, worker.levels, zloc);
                         }
                         completed = buildJobObj.build();
                         if (material != null) {

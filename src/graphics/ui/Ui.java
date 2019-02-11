@@ -40,7 +40,7 @@ public class Ui {
         menu = new Menu();
         selection = new SelectionSquare();
         map = new Minimap(1290, 8, levels[0]);
-        top = new TopBar((Game.width * Game.SCALE - 270) / 2,5,270,85);
+        top = new TopBar((Game.width - 270) / 2,5,270,85);
         outline = new BuildOutline(levels);
         layerLevelChanger = new LayerLevelChanger(1320, 210,140,40,levels.length);
     }
@@ -67,7 +67,7 @@ public class Ui {
 
     public void showMenu(MenuItem... items) {
         if (!outline.isVisible()) {
-            showMenu(MousePosition.getTrueXPixels(), MousePosition.getTrueYPixels());
+            showMenu(MousePosition.getTrueX(), MousePosition.getTrueY());
             menu.addItems(items);
             menu.show();
         }

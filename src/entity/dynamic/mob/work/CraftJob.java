@@ -3,6 +3,7 @@ package entity.dynamic.mob.work;
 import entity.dynamic.item.Item;
 import entity.dynamic.mob.Villager;
 import entity.nonDynamic.building.workstations.Workstation;
+import map.Tile;
 import util.Vector2I;
 
 public class CraftJob extends Job {
@@ -24,8 +25,8 @@ public class CraftJob extends Job {
             }
             Vector2I empty = worker.levels[worker.getZ()].getNearestEmptySpot(station.getX(), station.getY());
             if (empty != null) {
-                int stationDropPuntx = empty.getX() * 16;
-                int stationDropPunty = empty.getY() * 16;
+                int stationDropPuntx = empty.getX() * Tile.SIZE;
+                int stationDropPunty = empty.getY() * Tile.SIZE;
                 worker.addJob(new MoveItemJob(item, worker));
                 worker.addJob(new MoveItemJob(stationDropPuntx, stationDropPunty,worker.getZ(), worker));
             } else {
@@ -56,7 +57,7 @@ public class CraftJob extends Job {
                 if (craft()) {
                     worker.setHolding(product);
                     product.setVisible(true);
-                    if (worker.levels[worker.getZ()].isClearTile(worker.getX() / 16, worker.getY() / 16)) {
+                    if (worker.levels[worker.getZ()].isClearTile(worker.getX() / Tile.SIZE, worker.getY() / Tile.SIZE)) {
                         worker.drop();
                     }
                     completed = true;

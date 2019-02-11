@@ -77,8 +77,8 @@ public class MenuItem {
 
     // updating the mouse hover
     public void update() {
-        hover = ((((MousePosition.getTrueXPixels()) >= x) && ((MousePosition.getTrueXPixels()) <= x + width)
-                && ((MousePosition.getTrueYPixels()) >= y) && ((MousePosition.getTrueYPixels()) <= y + 10)));
+        hover = ((((MousePosition.getTrueX()) >= x) && ((MousePosition.getTrueX()) <= x + width)
+                && ((MousePosition.getTrueY()) >= y) && ((MousePosition.getTrueY()) <= y + 10)));
     }
 
     // getter

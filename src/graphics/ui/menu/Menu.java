@@ -56,10 +56,10 @@ public class Menu { // the menu is the little options menu that shows up when
 			hide();
 		} else {
             items.forEach(MenuItem::update);
-			if (!(((MousePosition.getTrueXPixels()) >= getX() - 10)
-					&& ((MousePosition.getTrueXPixels()) <= getX() + (getWidth() + 10))
-					&& ((MousePosition.getTrueYPixels()) >= getY() - 10)
-					&& ((MousePosition.getTrueYPixels()) <= getY() + (getHeight() + 10)))){
+			if (!(((MousePosition.getTrueX()) >= getX() - 10)
+					&& ((MousePosition.getTrueX()) <= getX() + (getWidth() + 10))
+					&& ((MousePosition.getTrueY()) >= getY() - 10)
+					&& ((MousePosition.getTrueY()) <= getY() + (getHeight() + 10)))){
 				hide();
 			}
 		}

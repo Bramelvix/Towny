@@ -46,7 +46,7 @@ public abstract class OpenglUtils {
     }
 
     public static void drawTexturedQuadScaled(int id, int x, int y, int size) { //drawTexturedQuadScaled ingame shit which needs to be scaled up
-        drawTexturedQuadScaled(x*Game.SCALE,y*Game.SCALE,size*Game.SCALE,size*Game.SCALE,id);
+        drawTexturedQuadScaled(x,y,size,size,id);
 
     }
     public static void drawTexturedQuadScaled(int x, int y, int width, int height, int texture) {

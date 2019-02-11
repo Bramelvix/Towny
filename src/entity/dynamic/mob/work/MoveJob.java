@@ -4,6 +4,7 @@ import entity.dynamic.mob.Villager;
 import entity.nonDynamic.building.Stairs;
 import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
+import map.Tile;
 
 import java.util.ArrayList;
 
@@ -30,7 +31,7 @@ public class MoveJob extends Job {
             return;
         }
         if (zloc == worker.getZ()) {
-            Path path = exactLocation ? worker.getPath(xloc / 16, yloc / 16) : worker.getPathAround(xloc / 16, yloc / 16);
+            Path path = exactLocation ? worker.getPath(xloc / Tile.SIZE, yloc / Tile.SIZE) : worker.getPathAround(xloc / Tile.SIZE, yloc / Tile.SIZE);
             if (path != null) {
                 paths.add(path);
             } else { //no path
@@ -49,7 +50,7 @@ public class MoveJob extends Job {
                     int starty = stairsY == -1 ? worker.getY() : stairsY;
                     stairsX = stairs.getX();
                     stairsY = stairs.getY();
-                    Path path = PathFinder.findPath(startx / 16, starty / 16, stairsX / 16, stairsY / 16, worker.levels[worker.getZ() + (up ? i : -i)]);
+                    Path path = PathFinder.findPath(startx / Tile.SIZE, starty / Tile.SIZE, stairsX / Tile.SIZE, stairsY / Tile.SIZE, worker.levels[worker.getZ() + (up ? i : -i)]);
                     if (path != null) {
                         paths.add(path);
                     } else { //no path
@@ -61,8 +62,8 @@ public class MoveJob extends Job {
                     return;
                 }
             }
-            Path path = exactLocation ? PathFinder.findPath(stairsX / 16, stairsY / 16, xloc / 16, yloc / 16, worker.levels[zloc]) : PathFinder.findPathAround(stairsX / 16, stairsY / 16, xloc / 16, yloc / 16, worker.levels[zloc]);
-            if ((exactLocation &&(xloc / 16) == (stairsX / 16) && (yloc / 16) == (stairsY / 16)) || (!exactLocation && (stairsX <= ((xloc + 16))) && (stairsX >= ((xloc - 16)) && ((stairsY >= ((yloc - 16))) && (stairsY <= ((yloc + 16))))))) {
+            Path path = exactLocation ? PathFinder.findPath(stairsX / Tile.SIZE, stairsY / Tile.SIZE, xloc / Tile.SIZE, yloc / Tile.SIZE, worker.levels[zloc]) : PathFinder.findPathAround(stairsX / Tile.SIZE, stairsY / Tile.SIZE, xloc / Tile.SIZE, yloc / Tile.SIZE, worker.levels[zloc]);
+            if ((exactLocation &&(xloc / Tile.SIZE) == (stairsX / Tile.SIZE) && (yloc / Tile.SIZE) == (stairsY / Tile.SIZE)) || (!exactLocation && (stairsX <= ((xloc + Tile.SIZE))) && (stairsX >= ((xloc - Tile.SIZE)) && ((stairsY >= ((yloc - Tile.SIZE))) && (stairsY <= ((yloc + Tile.SIZE))))))) {
             } else if (path == null) { //no path
                 completed = true;
                 return;
@@ -76,8 +77,7 @@ public class MoveJob extends Job {
 
     public void execute() {
         if (!completed && started) {
-            // System.out.println(worker.getX()/16 + ":" + worker.getY()/16 + ":::" + paths.get(counter).getXdest()+ ":" + paths.get(counter).getYdest());
-            if (worker.onSpot(paths.get(counter).getXdest() * 16, paths.get(counter).getYdest() * 16, worker.getZ())) {
+            if (worker.onSpot(paths.get(counter).getXdest() * Tile.SIZE, paths.get(counter).getYdest() * Tile.SIZE, worker.getZ())) {
                 if (counter == paths.size() - 1) {
                     completed = true;
                     if (zloc != worker.getZ()) {

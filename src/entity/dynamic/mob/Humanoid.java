@@ -2,14 +2,15 @@ package entity.dynamic.mob;
 
 import entity.dynamic.item.Item;
 import map.Level;
+import map.Tile;
 
 public abstract class Humanoid extends Mob {
 
     Humanoid(Level[] levels, int x, int y, int z) {
         super(levels);
-        while (!levels[z].isWalkAbleTile(x / 16, y / 16)) {
-            x += 16;
-            y += 16;
+        while (!levels[z].isWalkAbleTile(x / Tile.SIZE, y / Tile.SIZE)) {
+            x += Tile.SIZE;
+            y += Tile.SIZE;
         }
         setLocation(x, y, z);
     }
@@ -44,7 +45,7 @@ public abstract class Humanoid extends Mob {
     protected final void moveTo(int x, int y) {
         super.moveTo(x, y);
         if (!(holding == null)) {
-            holding.setLocation(x, y, z);
+            holding.setLocation(this.x, this.y, this.z);
         }
 
     }

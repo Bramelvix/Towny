@@ -6,6 +6,7 @@ import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
 import entity.pathfinding.Point;
 import map.Level;
+import map.Tile;
 
 //abstract mob class for villagers and monsters/animals to extend
 public abstract class Mob extends Entity {
@@ -47,7 +48,7 @@ public abstract class Mob extends Entity {
 
     void idle() {
         while (movement == null) {
-            movement = getPath((x / 16) + Entity.RANDOM.nextInt(4) - 2, (y / 16) + Entity.RANDOM.nextInt(4) - 2);
+            movement = getPath((x / Tile.SIZE) + Entity.RANDOM.nextInt(4) - 2, (y / Tile.SIZE) + Entity.RANDOM.nextInt(4) - 2);
         }
 
     }
@@ -103,8 +104,8 @@ public abstract class Mob extends Entity {
                         movement = getPathAround(destx, desty);
                         return;
                     }
-                    moveTo(step.x * 16, step.y * 16);
-                    if (x == step.x * 16 && y == step.y * 16) {
+                    moveTo(step.x, step.y);
+                    if (x/Tile.SIZE == step.x && y/Tile.SIZE == step.y) {
                         arrived = true;
                     }
 
@@ -116,17 +117,17 @@ public abstract class Mob extends Entity {
 
     // is the mob around a tile (x and y in pixels)
     public boolean aroundTile(int x, int y, int z) {
-        return this.z == z && ((this.x/16) <= ((x/16) + 1)) && ((this.x/16) >= ((x/16) - 1)) && ((this.y/16 >= ((y/16) - 1)) && (this.y/16 <= ((y/16) + 1)));
+        return this.z == z && ((this.x/Tile.SIZE) <= ((x/Tile.SIZE) + 1)) && ((this.x/Tile.SIZE) >= ((x/Tile.SIZE) - 1)) && ((this.y/Tile.SIZE >= ((y/Tile.SIZE) - 1)) && (this.y/Tile.SIZE <= ((y/Tile.SIZE) + 1)));
 
     }
 
 
     public boolean onSpot(int x, int y, int z) {
-        return (this.z == z && this.x / 16 == x / 16 && this.y / 16 == y / 16);
+        return (this.z == z && this.x / Tile.SIZE == x / Tile.SIZE && this.y / Tile.SIZE == y / Tile.SIZE);
     }
 
     public Path getPathAround(int x, int y) {
-        return PathFinder.findPathAround(this.x / 16, this.y / 16, x, y, levels[z]);
+        return PathFinder.findPathAround(this.x / Tile.SIZE, this.y / Tile.SIZE, x, y, levels[z]);
     }
 
     // getter
@@ -147,7 +148,7 @@ public abstract class Mob extends Entity {
 
     // pathfinder method
     public Path getPath(int tx, int ty) {
-        return PathFinder.findPath(x / 16, y / 16, tx, ty, levels[z]);
+        return PathFinder.findPath(x / Tile.SIZE, y / Tile.SIZE, tx, ty, levels[z]);
 
     }
 
@@ -169,13 +170,13 @@ public abstract class Mob extends Entity {
     private boolean collision(Direction dir) {
         return ((dir == Direction.OMLAAG || dir == Direction.LINKS_OMLAAG || dir == Direction.RECHTS_OMLAAG)
                 ||
-                levels[z].getTile((x / 16), ((y + 1) / 16)).isSolid())
+                levels[z].getTile((x / Tile.SIZE), ((y + 1) / Tile.SIZE)).isSolid())
                 && ((dir == Direction.OMHOOG || dir == Direction.LINKS_OMHOOG || dir == Direction.RECHTS_OMHOOG)
-                || levels[z].getTile((x / 16), ((y - 1) / 16)).isSolid())
+                || levels[z].getTile((x / Tile.SIZE), ((y - 1) / Tile.SIZE)).isSolid())
                 && ((dir == Direction.LINKS || dir == Direction.LINKS_OMHOOG || dir == Direction.LINKS_OMLAAG)
-                || levels[z].getTile(((x - 1) / 16), (y / 16)).isSolid())
+                || levels[z].getTile(((x - 1) / Tile.SIZE), (y / Tile.SIZE)).isSolid())
                 && ((dir == Direction.RECHTS || dir == Direction.RECHTS_OMHOOG || dir == Direction.RECHTS_OMLAAG)
-                || levels[z].getTile(((x + 1) / 16), (y / 16)).isSolid()) && (levels[z].getTile((x / 16), (y / 16)).isSolid() || levels[z].getTile(((x + 1) / 16), ((y + 1) / 16)).isSolid());
+                || levels[z].getTile(((x + 1) / Tile.SIZE), (y / Tile.SIZE)).isSolid()) && (levels[z].getTile((x / Tile.SIZE), (y / Tile.SIZE)).isSolid() || levels[z].getTile(((x + 1) / Tile.SIZE), ((y + 1) / Tile.SIZE)).isSolid());
 
     }
 
@@ -183,9 +184,9 @@ public abstract class Mob extends Entity {
     // USE!!!
     protected void moveTo(int x, int y) {
         int xmov, ymov;
-        xmov = Integer.compare(x, this.x);
-        ymov = Integer.compare(y, this.y);
-        move(xmov, ymov);
+        xmov = Integer.compare(x, this.x/Tile.SIZE);
+        ymov = Integer.compare(y, this.y/Tile.SIZE);
+        move(xmov*3, ymov*3);
 
     }
 

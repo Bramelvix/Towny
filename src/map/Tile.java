@@ -8,7 +8,7 @@ import graphics.SpriteHashtable;
 public class Tile {
 	public Sprite sprite; // tile's sprite
 	private boolean solid; // is the tile isSolid
-	public static final int SIZE = 16; // fixed size
+	public static final int SIZE = 48; // fixed size
 	private Item item;
 	private Entity entity;
 

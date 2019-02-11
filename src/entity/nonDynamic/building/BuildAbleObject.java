@@ -2,6 +2,7 @@ package entity.nonDynamic.building;
 
 import entity.nonDynamic.StaticEntity;
 import map.Level;
+import map.Tile;
 import sound.Sound;
 
 public abstract class BuildAbleObject extends StaticEntity {
@@ -16,13 +17,13 @@ public abstract class BuildAbleObject extends StaticEntity {
     protected void setOpened(boolean open) { //the open value has to be changeable for certain objects like doors
         this.open = open;
         if(initialised) {
-            level.getTile(x/16, y/16).setSolid(!this.open);
+            level.getTile(x/ Tile.SIZE, y/Tile.SIZE).setSolid(!this.open);
         }
     }
 
     public void initialise(int x, int y, Level[] levels, int depth) {
         this.level = levels[depth];
-        setLocation(x * 16, y * 16, depth);
+        setLocation(x * Tile.SIZE, y * Tile.SIZE, depth);
         if (this.open) {
             level.addEntity(this, false);
         } else {

@@ -232,7 +232,7 @@ public class Villager extends Humanoid {
     public void render() {
         drawVillager(x,y);
         if (this.isSelected()) {
-            OpenglUtils.drawSelection(x* Game.SCALE,y*Game.SCALE,Sprite.SIZE* Game.SCALE,Sprite.SIZE*Game.SCALE);// render the red square around selected villagers
+            OpenglUtils.drawSelection(x,y,Sprite.SIZE,Sprite.SIZE);// render the red square around selected villagers
         }
 
     }

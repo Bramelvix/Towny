@@ -49,9 +49,8 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 
 public class Game {
 
-    public static final int width = 500;
+    public static final int width = 1500;
     public static final int height = width / 16 * 9;
-    public static final int SCALE = 3;
     public Level[] map;
     private ArrayList<Villager> vills;
     private ArrayList<Villager> sols;
@@ -86,7 +85,7 @@ public class Game {
             return;
         }
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-        window = glfwCreateWindow(width * SCALE, height * SCALE, "Towny by Bramelvix", 0, 0);
+        window = glfwCreateWindow(width, height, "Towny by Bramelvix", 0, 0);
         if (window == 0) {
             System.err.println("Window failed to be created");
             return;
@@ -96,7 +95,7 @@ public class Game {
             System.err.println("Vidmode is null");
             return;
         }
-        glfwSetWindowPos(window, (vidmode.width() - (width * SCALE)) / 2, (vidmode.height() - (height * SCALE)) / 2);
+        glfwSetWindowPos(window, (vidmode.width() - (width)) / 2, (vidmode.height() - (height )) / 2);
         glfwMakeContextCurrent(window);
         glfwShowWindow(window);
         GL.createCapabilities();
@@ -105,7 +104,7 @@ public class Game {
         glfwSwapInterval(0); //0 = VSYNC OFF, 1= VSYNC ON
         setIcon();
         glLoadIdentity();
-        glOrtho(0, width * SCALE, height * SCALE, 0.0f, 0.0f, 1.0f);
+        glOrtho(0, width , height, 0.0f, 0.0f, 1.0f);
         glMatrixMode(GL_MODELVIEW);
         glEnable(GL_TEXTURE_2D);
         glEnable(GL_BLEND);
@@ -175,7 +174,7 @@ public class Game {
     private void spawnZombies() {
         int teller = Entity.RANDOM.nextInt(5) + 1;
         for (int i = 0; i < teller; i++) {
-            Zombie zomb = new Zombie(map, Entity.RANDOM.nextInt(256) + 16, Entity.RANDOM.nextInt(256) + 16, 0);
+            Zombie zomb = new Zombie(map, Entity.RANDOM.nextInt(256) + Tile.SIZE, Entity.RANDOM.nextInt(256) + Tile.SIZE, 0);
             mobs.add(zomb);
         }
     }
@@ -317,8 +316,8 @@ public class Game {
                 int y = ui.getSelectionY();
                 int width = ui.getSelectionWidth();
                 int height = ui.getSelectionHeight();
-                for (int xs = x; xs < (x + width); xs += 16) {
-                    for (int ys = y; ys < (y + height); ys += 16) {
+                for (int xs = x; xs < (x + width); xs += Tile.SIZE) {
+                    for (int ys = y; ys < (y + height); ys += Tile.SIZE) {
                         Tree tree = map[currentLayerNumber].selectTree(xs, ys);
                         if (tree != null) {
                             tree.setSelected(true);
@@ -332,8 +331,8 @@ public class Game {
                 int y = ui.getSelectionY();
                 int width = ui.getSelectionWidth();
                 int height = ui.getSelectionHeight();
-                for (int xs = x; xs < (x + width); xs += 16) {
-                    for (int ys = y; ys < (y + height); ys += 16) {
+                for (int xs = x; xs < (x + width); xs += Tile.SIZE) {
+                    for (int ys = y; ys < (y + height); ys += Tile.SIZE) {
                         Tree tree = map[currentLayerNumber].selectTree(xs, ys, false);
                         if (tree != null) {
                             Villager idle = getIdlestVil();
@@ -393,7 +392,7 @@ public class Game {
             if (ui.outlineIsVisible() && !ui.menuVisible() && UiIcons.hoverOnNoIcons()) {
                 int[][] coords = ui.getOutlineCoords();
                 for (int[] blok : coords) {
-                    if (map[currentLayerNumber].tileIsEmpty(blok[0] / 16, blok[1] / 16)) {
+                    if (map[currentLayerNumber].tileIsEmpty(blok[0] / Tile.SIZE, blok[1] / Tile.SIZE)) {
                         Villager idle = getIdlestVil();
                         idle.addBuildJob(blok[0], blok[1], currentLayerNumber, ui.getBuildRecipeOutline().getProduct(),
                                 ui.getBuildRecipeOutline().getResources()[0]);
@@ -559,13 +558,13 @@ public class Game {
         if (Keyboard.isKeyDown(GLFW_KEY_UP) && yScroll > 1) {
             _yScroll -= 6;
         }
-        if (Keyboard.isKeyDown(GLFW_KEY_DOWN) && yScroll < ((map[currentLayerNumber].height * Tile.SIZE) - 1 - height) * SCALE) {
+        if (Keyboard.isKeyDown(GLFW_KEY_DOWN) && yScroll < ((map[currentLayerNumber].height * Tile.SIZE) - 1 - height)) {
             _yScroll += 6;
         }
         if (Keyboard.isKeyDown(GLFW_KEY_LEFT) && xScroll > 1) {
             _xScroll -= 6;
         }
-        if (Keyboard.isKeyDown(GLFW_KEY_RIGHT) && xScroll < ((map[currentLayerNumber].width * Tile.SIZE) - width - 1) * SCALE) {
+        if (Keyboard.isKeyDown(GLFW_KEY_RIGHT) && xScroll < ((map[currentLayerNumber].width * Tile.SIZE) - width - 1)) {
             _xScroll += 6;
         }
         moveCamera(_xScroll, _yScroll);
@@ -598,21 +597,21 @@ public class Game {
     }
 
     private void renderMobs() {
-        int x1 = (xScroll / 3 + width + Sprite.SIZE);
-        int y1 = (yScroll / 3 + height + Sprite.SIZE);
+        int x1 = (xScroll + width + Sprite.SIZE);
+        int y1 = (yScroll + height + Sprite.SIZE);
         glTranslatef(-xScroll, -yScroll, 0);
         for (Mob i : mobs) {
-            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll / 3 && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll / 3 && i.getY() - 16 <= y1) {
+            if (i.getZ() == currentLayerNumber && i.getX() + 48 >= xScroll && i.getX() - 48 <= x1 && i.getY() + 48 >= yScroll && i.getY() - 48 <= y1) {
                 i.render();
             }
         }
         for (Villager i : vills) {
-            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll / 3 && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll / 3 && i.getY() - 16 <= y1) {
+            if (i.getZ() == currentLayerNumber && i.getX() + 48 >= xScroll && i.getX() - 48 <= x1 && i.getY() + 48 >= yScroll && i.getY() - 48 <= y1) {
                 i.render();
             }
         }
         for (Villager i : sols) {
-            if (i.getZ() == currentLayerNumber && i.getX() + 16 >= xScroll / 3 && i.getX() - 16 <= x1 && i.getY() + 16 >= yScroll / 3 && i.getY() - 16 <= y1) {
+            if (i.getZ() == currentLayerNumber && i.getX() + 48 >= xScroll && i.getX() - 48 <= x1 && i.getY() + 48 >= yScroll && i.getY() - 48 <= y1) {
                 i.render();
             }
         }

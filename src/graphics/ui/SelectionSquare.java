@@ -12,16 +12,14 @@ public class SelectionSquare {
 	private static final Color COL = new Color(91, 94, 99, 110); // colour of the square
 	private int x, y; // ONSCREEN
 	private int ingameX, ingameY; // INGAME
-	private int width, height, widthteken, heightteken;
+	private int width, height;
 	private boolean visible;
 
 	public void update() {
 		if (visible) {
 			if (MouseButton.heldDown(GLFW_MOUSE_BUTTON_LEFT)) {
-				widthteken = MousePosition.getXPixels() - x;
-				width = widthteken / Game.SCALE;
-				heightteken = MousePosition.getYPixels() - y;
-				height = heightteken / Game.SCALE;
+				width = MousePosition.getXPixels() - x;
+				height = MousePosition.getYPixels() - y;
 			}
 		}
 
@@ -35,14 +33,12 @@ public class SelectionSquare {
 		y = 0;
 		width = 0;
 		height = 0;
-		heightteken = 0;
-		widthteken = 0;
 	}
 
 	public void init() {
 		if (!visible) {
-			x = MousePosition.getTrueXPixels();
-			y = MousePosition.getTrueYPixels();
+			x = MousePosition.getTrueX();
+			y = MousePosition.getTrueY();
 			ingameX = MousePosition.getX();
 			ingameY =  MousePosition.getY();
 			visible = true;
@@ -51,7 +47,7 @@ public class SelectionSquare {
 
 	public void render() {
 		if (visible) {
-			OpenglUtils.drawFilledSquare(x,y,widthteken,heightteken,COL.getRed()/255f,COL.getGreen()/255f,COL.getBlue()/255f,COL.getAlpha()/255f);
+			OpenglUtils.drawFilledSquare(x,y,width,height,COL.getRed()/255f,COL.getGreen()/255f,COL.getBlue()/255f,COL.getAlpha()/255f);
 		}
 	}
 
