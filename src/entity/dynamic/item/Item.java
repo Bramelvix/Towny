@@ -19,16 +19,14 @@ public class Item extends Entity {
     }
 
     public Item copy() {
-        Item copy = new Item(this.getName(),this.sprite,this.getToolTip(),this.getId());
-        copy.setLocation(this.x,this.y,this.z);
-        return copy;
+        return this.copy(this.x,this.y,this.z);
     }
 
 
-    public <T extends Item> T copy(int x, int y, int z) {
-        Item copy = this.copy();
+    public Item copy(int x, int y, int z) {
+        Item copy = new Item(this.getName(),this.sprite,this.getToolTip(),this.getId());
         copy.setLocation(x,y,z);
-        return (T) copy;
+        return copy;
     }
 
     public boolean isSameType(Item item) {

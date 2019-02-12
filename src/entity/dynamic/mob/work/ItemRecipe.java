@@ -56,7 +56,7 @@ public class ItemRecipe extends Recipe {
     }
 
     public <T extends Item> T getProduct() {
-        return (T) ((T) product).copy();
+        return (T) ((T)product).copy(); //TODO yeahhhhh
     }
 
     public static ItemRecipe[] smithingRecipesFromWeaponMaterial(WeaponMaterial type) {

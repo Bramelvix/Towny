@@ -18,7 +18,7 @@ public class PathFinder {
         }
     }
 
-    public static Path getShortest(Path[] paths) {
+    private static Path getShortest(Path[] paths) {
         if (paths != null) {
             Path shortest = null;
             for (Path path : paths) {
@@ -45,8 +45,7 @@ public class PathFinder {
     }
 
     public static Path findPath(int sx, int sy, int tx, int ty, Level level) {
-        if (sx < 0 || sx > level.width || sy < 0 || sy > level.height || tx < 0 || tx > level.width || ty < 0
-                || ty > level.height) {
+        if (sx < 0 || sx > level.width || sy < 0 || sy > level.height || tx < 0 || tx > level.width || ty < 0 || ty > level.height) {
             return null;
         }
         if (!level.isWalkAbleTile(tx, ty)) {
@@ -80,12 +79,8 @@ public class PathFinder {
                         float nextStepCost = getCost(current.x, current.y, xp, yp);
                         Point neighbour = nodes[xp][yp];
                         if (nextStepCost < neighbour.cost) {
-                            if (open.contains(neighbour)) {
-                                open.remove(neighbour);
-                            }
-                            if (closed.contains(neighbour)) {
-                                closed.remove(neighbour);
-                            }
+                            open.remove(neighbour);
+                            closed.remove(neighbour);
                         }
                         if (!open.contains(neighbour) && !closed.contains(neighbour)) {
                             neighbour.cost = nextStepCost;

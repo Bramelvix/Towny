@@ -18,7 +18,6 @@ import graphics.HairSprite;
 import graphics.OpenglUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
-import main.Game;
 import map.Level;
 
 public class Villager extends Humanoid {
@@ -218,7 +217,7 @@ public class Villager extends Humanoid {
         inventory.addClothing(item);
     }
 
-    public void addWeapon(Weapon item) {
+    private void addWeapon(Weapon item) {
         inventory.addWeapon(item);
     }
 

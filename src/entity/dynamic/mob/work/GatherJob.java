@@ -6,12 +6,9 @@ import entity.nonDynamic.resources.Resource;
 public class GatherJob extends Job {
     private Resource jobObj; // the resource the worker needs to gather
 
-    public <T extends Resource> GatherJob(int xloc, int yloc, int zloc, Villager worker, T jobObj) {
-        super(xloc,yloc,zloc, worker);
-        this.jobObj = jobObj;
-    }
     public <T extends Resource> GatherJob(T jobObj, Villager worker) {
-        this(jobObj.getX(),jobObj.getY(), jobObj.getZ(), worker, jobObj);
+        super(jobObj.getX(),jobObj.getY(),jobObj.getZ(), worker);
+        this.jobObj = jobObj;
     }
 
     public void execute() {

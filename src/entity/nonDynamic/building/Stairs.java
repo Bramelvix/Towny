@@ -23,7 +23,7 @@ public class Stairs extends BuildAbleObject {
         initialise(x, y, levels, depth, true);
     }
 
-    public void initialise(int x, int y, Level[] levels, int depth, boolean firstTime) {
+    private void initialise(int x, int y, Level[] levels, int depth, boolean firstTime) {
         super.initialise(x, y, levels, depth);
         if (firstTime) {
             if (top && depth != levels.length - 1) {

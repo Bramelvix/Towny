@@ -63,12 +63,13 @@ public class MoveJob extends Job {
                 }
             }
             Path path = exactLocation ? PathFinder.findPath(stairsX / Tile.SIZE, stairsY / Tile.SIZE, xloc / Tile.SIZE, yloc / Tile.SIZE, worker.levels[zloc]) : PathFinder.findPathAround(stairsX / Tile.SIZE, stairsY / Tile.SIZE, xloc / Tile.SIZE, yloc / Tile.SIZE, worker.levels[zloc]);
-            if ((exactLocation &&(xloc / Tile.SIZE) == (stairsX / Tile.SIZE) && (yloc / Tile.SIZE) == (stairsY / Tile.SIZE)) || (!exactLocation && (stairsX <= ((xloc + Tile.SIZE))) && (stairsX >= ((xloc - Tile.SIZE)) && ((stairsY >= ((yloc - Tile.SIZE))) && (stairsY <= ((yloc + Tile.SIZE))))))) {
-            } else if (path == null) { //no path
-                completed = true;
-                return;
-            } else {
-                paths.add(path);
+            if (!((exactLocation &&(xloc / Tile.SIZE) == (stairsX / Tile.SIZE) && (yloc / Tile.SIZE) == (stairsY / Tile.SIZE)) || (!exactLocation && (stairsX <= ((xloc + Tile.SIZE))) && (stairsX >= ((xloc - Tile.SIZE)) && ((stairsY >= ((yloc - Tile.SIZE))) && (stairsY <= ((yloc + Tile.SIZE)))))))) {
+                if (path == null) { //no path
+                    completed = true;
+                    return;
+                } else {
+                    paths.add(path);
+                }
             }
 
         }

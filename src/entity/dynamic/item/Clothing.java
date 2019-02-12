@@ -8,7 +8,7 @@ public class Clothing extends Item {
     private ClothingType type;
 
     // basic constructor
-    public Clothing(String name, Sprite sprite, String tooltip, ClothingType type, float defence,int id) {
+    Clothing(String name, Sprite sprite, String tooltip, ClothingType type, float defence,int id) {
         super(name, sprite, tooltip, id);
         this.defence = defence;
         this.type = type;

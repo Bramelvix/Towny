@@ -2,6 +2,7 @@ package entity.dynamic.item;
 
 import entity.dynamic.item.weapon.Weapon;
 import entity.dynamic.mob.Villager;
+import java.util.Arrays;
 
 public class VillagerInventory {
     private Clothing[] clothes;
@@ -75,17 +76,9 @@ public class VillagerInventory {
         return weapons[0] != null;
     }
 
-    public void dropAll() {
-        for (int i = 0; i < clothes.length; i++) {
-            wearer.levels[wearer.getZ()].addItem(clothes[i]);
-            clothes[i].removeReserved();
-            clothes[i] = null;
-        }
-        for (int i = 0; i < weapons.length; i++) {
-            wearer.levels[wearer.getZ()].addItem(weapons[i]);
-            weapons[i].removeReserved();
-            weapons[i] = null;
-        }
+    public void dropAll() { //TODO needs to be altered so the items are scattered around the place, since no 2 items can be on the same tile
+        Arrays.stream(clothes).forEach(item -> removeClothing(item.getType()));
+        Arrays.stream(weapons).forEach(this::removeWeapon);
 
     }
 

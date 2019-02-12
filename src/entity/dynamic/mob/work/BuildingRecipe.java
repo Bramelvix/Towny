@@ -29,7 +29,7 @@ public class BuildingRecipe extends Recipe {
         super(product, resources);
     }
 
-    public <T extends BuildAbleObject> BuildingRecipe(T product) {
+    private <T extends BuildAbleObject> BuildingRecipe(T product) {
         super(product);
     }
 

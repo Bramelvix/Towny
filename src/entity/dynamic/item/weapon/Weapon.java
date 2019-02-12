@@ -1,10 +1,8 @@
 package entity.dynamic.item.weapon;
 
 import entity.dynamic.item.Item;
-import entity.dynamic.mob.Mob;
 import entity.dynamic.mob.Villager;
 import graphics.Sprite;
-import graphics.SpriteHashtable;
 
 public class Weapon extends Item {
     private float crush;
@@ -47,7 +45,7 @@ public class Weapon extends Item {
             case DAGGER:
                 setStats(0f, 2f, 1f, 0f, 5f, 1);
                 break;
-            case HALBERT:
+            case HALBERD:
                 setStats(0.5f, 1f, 5f, 0.5f, 1f, 5);
                 break;
             case HEATER:
@@ -102,11 +100,11 @@ public class Weapon extends Item {
     }
 
     public Weapon copy() {
-        return new Weapon(this.getName(), this.sprite, this.tooltip, this.type, this.mat, this.getId());
+        return this.copy(this.x,this.y,this.z);
     }
 
     public Weapon copy(int x, int y, int z) {
-        Weapon copy = this.copy();
+        Weapon copy = new Weapon(this.getName(), this.sprite, this.tooltip, this.type, this.mat, this.getId());
         copy.setLocation(x, y, z);
         return copy;
     }

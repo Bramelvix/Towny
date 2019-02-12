@@ -72,14 +72,6 @@ public abstract class Mob extends Entity {
         counter = 0;
         arrived = false;
     }
-
-    // resets the mob's path
-    public void resetMove() {
-        counter = 0;
-        arrived = false;
-        movement = null;
-    }
-
     // method to move the villager
     public void move() {
         if (movement == null) {
@@ -105,7 +97,7 @@ public abstract class Mob extends Entity {
                         return;
                     }
                     moveTo(step.x, step.y);
-                    if (x/Tile.SIZE == step.x && y/Tile.SIZE == step.y) {
+                    if (onSpot(step.x*Tile.SIZE,step.y*Tile.SIZE,this.z)) {
                         arrived = true;
                     }
 
@@ -123,7 +115,7 @@ public abstract class Mob extends Entity {
 
 
     public boolean onSpot(int x, int y, int z) {
-        return (this.z == z && this.x / Tile.SIZE == x / Tile.SIZE && this.y / Tile.SIZE == y / Tile.SIZE);
+        return (this.z == z && this.x == x && this.y == y);
     }
 
     public Path getPathAround(int x, int y) {
@@ -183,9 +175,8 @@ public abstract class Mob extends Entity {
     // DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()!! DO NOT
     // USE!!!
     protected void moveTo(int x, int y) {
-        int xmov, ymov;
-        xmov = Integer.compare(x, this.x/Tile.SIZE);
-        ymov = Integer.compare(y, this.y/Tile.SIZE);
+        int xmov = Integer.compare(x*Tile.SIZE, this.x);
+        int ymov = Integer.compare(y*Tile.SIZE, this.y);
         move(xmov*3, ymov*3);
 
     }

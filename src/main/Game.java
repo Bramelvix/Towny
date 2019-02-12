@@ -156,15 +156,15 @@ public class Game {
     }
 
     private void spawnvills() {
-        Villager vill = new Villager(144, 144, 0, map);
+        Villager vill = new Villager(432, 432, 0, map);
         vill.addClothing(ItemHashtable.get(61));
         vill.addClothing(ItemHashtable.get(75));
         addVillager(vill);
-        Villager vil2 = new Villager(144, 160, 0, map);
+        Villager vil2 = new Villager(432, 480, 0, map);
         vil2.addClothing(ItemHashtable.get(65));
         vil2.addClothing(ItemHashtable.get(74));
         addVillager(vil2);
-        Villager vil3 = new Villager(160, 160, 0, map);
+        Villager vil3 = new Villager(480, 480, 0, map);
         vil3.addClothing(ItemHashtable.get(70));
         vil3.addClothing(ItemHashtable.get(73));
         addVillager(vil3);
@@ -174,8 +174,7 @@ public class Game {
     private void spawnZombies() {
         int teller = Entity.RANDOM.nextInt(5) + 1;
         for (int i = 0; i < teller; i++) {
-            Zombie zomb = new Zombie(map, Entity.RANDOM.nextInt(256) + Tile.SIZE, Entity.RANDOM.nextInt(256) + Tile.SIZE, 0);
-            mobs.add(zomb);
+            mobs.add(new Zombie(map, Entity.RANDOM.nextInt(768/48)*48 + Tile.SIZE, Entity.RANDOM.nextInt(768/48)*48 + Tile.SIZE, 0));
         }
     }
 

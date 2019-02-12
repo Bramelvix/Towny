@@ -18,8 +18,8 @@ public class SelectionSquare {
 	public void update() {
 		if (visible) {
 			if (MouseButton.heldDown(GLFW_MOUSE_BUTTON_LEFT)) {
-				width = MousePosition.getXPixels() - x;
-				height = MousePosition.getYPixels() - y;
+				width = MousePosition.getX() - x;
+				height = MousePosition.getY() - y;
 			}
 		}
 

@@ -9,7 +9,7 @@ public abstract class Job implements Workable {
     boolean started = false;
 
     // constructors
-    protected Job(int xloc, int yloc, int zloc, Villager worker) {
+    Job(int xloc, int yloc, int zloc, Villager worker) {
         this(worker);
         completed = false;
         this.xloc = xloc;
@@ -17,7 +17,7 @@ public abstract class Job implements Workable {
         this.zloc = zloc;
     }
 
-    protected Job(Villager worker) {
+    Job(Villager worker) {
         this.worker = worker;
     }
 

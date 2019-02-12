@@ -46,7 +46,7 @@ public class Path {
 
 
     // adds a step to the front of the list
-	public void prependStep(int x, int y) {
+	void prependStep(int x, int y) {
 		steps.add(0, new Point(x, y));
 	}
 

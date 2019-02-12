@@ -3,7 +3,7 @@ package entity.pathfinding;
 public class Point {
     public int x;
     public int y;
-    public float cost;
+    float cost;
     private Point parent;
 
     // a point on the map (combination of x and y of a tile)
@@ -16,7 +16,7 @@ public class Point {
     // rewritten the equals method to return true if the X and Y are the same,
     // because points are not unique
     public boolean equals(Object o) {
-        return o != null && o instanceof Point && this.x == ((Point) o).x && this.y == ((Point) o).y;
+        return o instanceof Point && this.x == ((Point) o).x && this.y == ((Point) o).y;
     }
 
     public int hashCode() {
@@ -24,7 +24,7 @@ public class Point {
     }
 
     //getter
-    public Point getParent() {
+    Point getParent() {
         return parent;
     }
 

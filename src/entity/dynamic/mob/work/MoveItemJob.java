@@ -31,8 +31,8 @@ public class MoveItemJob extends Job {
     public MoveItemJob(int xloc, int yloc, int zloc, Villager worker) {
         this(worker);
         pickUpJob = false;
-        this.xloc = xloc; //locations are in pixels and have to be divisible by Tile.SIZE (48)
-        this.yloc = yloc;
+        this.xloc = (xloc/Tile.SIZE)*Tile.SIZE; //locations are in tile numbers
+        this.yloc = (yloc/Tile.SIZE)*Tile.SIZE;
         this.zloc = zloc;
 
     }

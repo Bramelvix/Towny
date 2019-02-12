@@ -47,14 +47,14 @@ public class Level {
     // adding an item to the spritesheets
     public <T extends Item> void addItem(T e) {
         if (e != null) {
-            tiles[e.getX() / 48][e.getY() / 48].setItem(e);
+            tiles[e.getX() / Tile.SIZE][e.getY() / Tile.SIZE].setItem(e);
         }
     }
 
     // removing an item from the spritesheets
     public <T extends Item> void removeItem(T e) {
         if (e != null) {
-            tiles[e.getX() / 48][e.getY() / 48].setItem(null);
+            tiles[e.getX() / Tile.SIZE][e.getY() / Tile.SIZE].setItem(null);
         }
     }
 
@@ -74,7 +74,7 @@ public class Level {
     }
 
     public <T extends Entity> T getEntityOn(int x, int y) {
-        return tiles[x / 48][y / 48].getEntity();
+        return tiles[x / Tile.SIZE][y / Tile.SIZE].getEntity();
     }
 
     public Vector2I getNearestEmptySpot(int xloc, int yloc) {
@@ -82,8 +82,8 @@ public class Level {
     }
 
     private Vector2I getNearestSpotThatHasX(int xloc, int yloc, BiPredicate<Integer, Integer> p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
-        int x0 = xloc / 48;
-        int y0 = yloc / 48;
+        int x0 = xloc / Tile.SIZE;
+        int y0 = yloc / Tile.SIZE;
         if (p.test(x0, y0)) {
             return new Vector2I(x0, y0);
         } else {
@@ -149,21 +149,12 @@ public class Level {
     }
 
     public Stairs getNearestStairs(int x, int y, boolean top) { //gets the nearest stairs object on the map
-        if (top) {
-            Vector2I point = getNearestSpotThatHasX(x, y, this::hasTopStairs);
+            Vector2I point = top ? getNearestSpotThatHasX(x, y, this::hasTopStairs) : getNearestSpotThatHasX(x, y, this::hasBottomStairs);
             if (point != null) {
                 return (Stairs) tiles[point.getX()][point.getY()].getEntity();
             } else {
                 return null;
             }
-        } else {
-            Vector2I point = getNearestSpotThatHasX(x, y, this::hasBottomStairs);
-            if (point != null) {
-                return (Stairs) tiles[point.getX()][point.getY()].getEntity();
-            } else {
-                return null;
-            }
-        }
     }
 
     private boolean hasBottomStairs(int x, int y) {
@@ -221,13 +212,16 @@ public class Level {
         for (int y = 1; y < height - 1; y++) {
             for (int x = 1; x < width - 1; x++) {
                 Entity e = tiles[x][y].getEntity();
-                if (e != null && e instanceof Ore) {
+                if (e instanceof Ore) {
                     ((Ore) e).checkSides(this);
                 }
             }
         }
 
 
+    }
+    private boolean outOfMapBounds(int x, int y) {
+        return (x <= 0 || x > (width - 1) * Tile.SIZE || y <= 0 || y > (height - 1) * Tile.SIZE);
     }
 
     // if there is a tree on X and Y, return it
@@ -236,7 +230,7 @@ public class Level {
     }
 
     public Tree selectTree(int x, int y, boolean seperate) {
-        if (x <= 0 || x > (width - 1) * Tile.SIZE || y <= 0 || y > (height - 1) * Tile.SIZE) {
+        if (outOfMapBounds(x,y)) {
             return null;
         }
         if (tiles[x/Tile.SIZE][y/Tile.SIZE].getEntity() instanceof Tree) {
@@ -250,7 +244,7 @@ public class Level {
 
     // if there is ore on X and Y, return it
     public Ore selectOre(int x, int y) {
-        if (x <= 0 || x > (width - 1) * Tile.SIZE || y <= 0 || y > (height - 1) * Tile.SIZE) {
+        if (outOfMapBounds(x,y)) {
             return null;
         }
         Entity entity = tiles[x / Tile.SIZE][y / Tile.SIZE].getEntity();
