@@ -2,7 +2,7 @@ package entity.dynamic.mob.work;
 
 import entity.dynamic.item.Item;
 import entity.dynamic.mob.Villager;
-import entity.nonDynamic.building.workstations.Workstation;
+import entity.nonDynamic.building.container.workstations.Workstation;
 import map.Tile;
 import util.Vector2I;
 
@@ -18,20 +18,17 @@ public class CraftJob extends Job {
         this.product = product;
         this.station = station;
         this.resources = resources;
+        if (this.station == null) {
+            completed = true;
+            return;
+        }
         for (Item item : this.resources) {
             if (item == null) {
                 completed = true;
                 return;
             }
-            Vector2I empty = worker.levels[worker.getZ()].getNearestEmptySpot(station.getX(), station.getY());
-            if (empty != null) {
-                int stationDropPuntx = empty.getX() * Tile.SIZE;
-                int stationDropPunty = empty.getY() * Tile.SIZE;
-                worker.addJob(new MoveItemJob(item, worker));
-                worker.addJob(new MoveItemJob(stationDropPuntx, stationDropPunty,worker.getZ(), worker));
-            } else {
-                completed = true;
-            }
+            worker.addJob(new MoveItemJob(item, worker));
+            worker.addJob(new MoveItemJob(station.getX(), station.getY(),worker.getZ(), worker));
 
         }
 
@@ -50,7 +47,7 @@ public class CraftJob extends Job {
                 if (!itemsUpdated) {
                     station.setRunning(true);
                     for (Item i : resources) {
-                        worker.levels[worker.getZ()].removeItem(i);
+                        station.takeItem(i);
                     }
                     itemsUpdated = true;
                 }
@@ -81,7 +78,6 @@ public class CraftJob extends Job {
     @Override
     protected void start() {
         worker.setPath(worker.getPathAround(station.getX() , station.getY() ));
-        completed = worker.isMovementNull();
         started = true;
     }
 

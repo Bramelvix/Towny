@@ -44,7 +44,7 @@ public class MoveJob extends Job {
             int stairsY = -1;
             boolean up = worker.getZ() < zloc;
             for (int i = 0; i < Math.abs(zloc - worker.getZ()); i++) {
-                Stairs stairs = worker.levels[worker.getZ() + (up ? i : -i)].getNearestStairs(worker.getX(), worker.getY(), zloc > worker.getZ());
+                Stairs stairs = worker.levels[worker.getZ() + (up ? i : -i)].getNearestStairs(worker.getX()/Tile.SIZE, worker.getY()/ Tile.SIZE, zloc > worker.getZ());
                 if (stairs != null) {
                     int startx = stairsX == -1 ? worker.getX() : stairsX;
                     int starty = stairsY == -1 ? worker.getY() : stairsY;
@@ -98,7 +98,7 @@ public class MoveJob extends Job {
     }
 
     private void goOnStairs() {
-        Stairs stairs = worker.levels[worker.getZ()].getEntityOn(worker.getX(), worker.getY());
+        Stairs stairs = worker.levels[worker.getZ()].getEntityOn(worker.getX()/Tile.SIZE, worker.getY()/Tile.SIZE);
         if (stairs != null) {
             stairs.goOnStairs(worker);
         }

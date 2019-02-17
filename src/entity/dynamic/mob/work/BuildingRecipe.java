@@ -8,8 +8,8 @@ import entity.nonDynamic.building.wall.Wall;
 import entity.nonDynamic.building.wall.WallType;
 import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
-import entity.nonDynamic.building.workstations.Anvil;
-import entity.nonDynamic.building.workstations.Furnace;
+import entity.nonDynamic.building.container.workstations.Anvil;
+import entity.nonDynamic.building.container.workstations.Furnace;
 
 public class BuildingRecipe extends Recipe {
     private static final BuildingRecipe WOOD_WALL = new BuildingRecipe(new Wall(WallType.WOOD), ItemHashtable.get(1));

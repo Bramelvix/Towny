@@ -1,4 +1,4 @@
-package entity.nonDynamic.building.workstations;
+package entity.nonDynamic.building.container.workstations;
 
 import entity.nonDynamic.building.BuildAbleObject;
 import graphics.SpriteHashtable;

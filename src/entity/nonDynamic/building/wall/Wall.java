@@ -45,14 +45,14 @@ public class Wall extends BuildAbleObject {
     // this method has a boolean that stops the walls next to this wall to retrigger checking the sides of this wall, which would create an infinite
     // loop of walls checking eachother again and again
     private void checkSides(boolean eerstekeer) {
-        Wall left = level.getWallOn((x - Tile.SIZE), y);
-        Wall right = level.getWallOn((x + Tile.SIZE), y);
-        Wall up = level.getWallOn(x, (y - Tile.SIZE));
-        Wall down = level.getWallOn(x, (y + Tile.SIZE));
-        Wall upLeft = level.getWallOn(x - Tile.SIZE, (y - Tile.SIZE));
-        Wall downLeft = level.getWallOn(x - Tile.SIZE, (y + Tile.SIZE));
-        Wall upRight = level.getWallOn((x + Tile.SIZE), y - Tile.SIZE);
-        Wall downRight = level.getWallOn((x + Tile.SIZE), y + Tile.SIZE);
+        Wall left = level.getWallOn(x/Tile.SIZE - 1, y/Tile.SIZE);
+        Wall right = level.getWallOn(x/Tile.SIZE + 1, y/Tile.SIZE);
+        Wall up = level.getWallOn(x/Tile.SIZE, (y/Tile.SIZE - 1));
+        Wall down = level.getWallOn(x/Tile.SIZE, (y/Tile.SIZE + 1));
+        Wall upLeft = level.getWallOn(x/Tile.SIZE - 1, (y/Tile.SIZE - 1));
+        Wall downLeft = level.getWallOn(x/Tile.SIZE - 1, (y/Tile.SIZE + 1));
+        Wall upRight = level.getWallOn((x/Tile.SIZE + 1), y/Tile.SIZE - 1);
+        Wall downRight = level.getWallOn((x/Tile.SIZE + 1), y/Tile.SIZE + 1);
         boolean leftHasWall = decideToCheckSides(left, eerstekeer);
         boolean rightHasWall = decideToCheckSides(right, eerstekeer);
         boolean topHasWall = decideToCheckSides(up, eerstekeer);

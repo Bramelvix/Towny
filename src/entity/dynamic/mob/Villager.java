@@ -6,8 +6,8 @@ import entity.dynamic.mob.work.BuildJob;
 import entity.dynamic.mob.work.GatherJob;
 import entity.nonDynamic.building.BuildAbleObject;
 import entity.Entity;
+import entity.nonDynamic.building.container.Container;
 import entity.nonDynamic.resources.Resource;
-import entity.nonDynamic.building.container.Chest;
 import entity.dynamic.item.Clothing;
 import entity.dynamic.item.Item;
 import entity.dynamic.item.VillagerInventory;
@@ -84,11 +84,11 @@ public class Villager extends Humanoid {
         for (Item level_item : levels[z].getItems()) {
             if (item.isSameType(level_item) && level_item.isReserved(this)) {
                 if (closest == null || path == null
-                        || (getPath(level_item.getX() >> 4, level_item.getY() >> 4) != null
-                        && path.getStepsSize() > getPath(level_item.getX() >> 4, level_item.getY() >> 4)
+                        || (getPath(level_item.getX() / 48, level_item.getY() / 48) != null
+                        && path.getStepsSize() > getPath(level_item.getX() / 48, level_item.getY() / 48)
                         .getStepsSize())) {
                     closest = level_item;
-                    path = getPath(closest.getX() >> 4, closest.getY() >> 4);
+                    path = getPath(closest.getX() / 48, closest.getY() / 48);
                 }
             }
 
@@ -146,17 +146,17 @@ public class Villager extends Humanoid {
         }
     }
 
-    public void drop(Chest chest) {
-        if (getHolding() != null && this.aroundTile(chest.getX(), chest.getY(), chest.getZ())) {
-            chest.addItemTo(getHolding());
+    public void drop(Container container) {
+        if (getHolding() != null && this.aroundTile(container.getX(), container.getY(), container.getZ())) {
+            container.addItemTo(getHolding());
             getHolding().removeReserved();
             setHolding(null);
         }
     }
 
-    public <T extends Item> boolean pickUp(T e, Chest chest) {
-        if (aroundTile(chest.getX(), chest.getY(), chest.getZ())) {
-            Item item = chest.takeItem(e);
+    public <T extends Item> boolean pickUp(T e, Container container) {
+        if (aroundTile(container.getX(), container.getY(), container.getZ())) {
+            Item item = container.takeItem(e);
             if (item != null) {
                 pickUpItem(item);
                 return true;

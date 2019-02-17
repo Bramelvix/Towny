@@ -1,13 +1,13 @@
 package entity.dynamic.mob.work;
 
-import entity.nonDynamic.building.container.Chest;
 import entity.dynamic.item.Item;
 import entity.dynamic.mob.Villager;
+import entity.nonDynamic.building.container.Container;
 import map.Tile;
 
 public class MoveItemJob extends Job {
     private boolean pickUpJob; // is the job a pickup or drop job
-    private Chest chest;
+    private Container container;
     private Item material;
 
     public MoveItemJob(Item material, Villager worker) {
@@ -41,12 +41,12 @@ public class MoveItemJob extends Job {
     @Override
     protected void start() {
         started = true;
-        if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[zloc].isClearTile(xloc / Tile.SIZE, yloc / Tile.SIZE) && !(worker.levels[zloc].getEntityOn(xloc, yloc) instanceof Chest)))) {
+        if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[zloc].isClearTile(xloc / Tile.SIZE, yloc / Tile.SIZE) && !(worker.levels[zloc].getEntityOn(xloc/Tile.SIZE, yloc/Tile.SIZE) instanceof Container)))) {
             completed = true;
             return;
         }
-        if (worker.levels[zloc].getEntityOn(xloc, yloc) instanceof Chest) {
-            chest = worker.levels[zloc].getEntityOn(xloc, yloc);
+        if (worker.levels[zloc].getEntityOn(xloc/Tile.SIZE, yloc/Tile.SIZE) instanceof Container) {
+            container = worker.levels[zloc].getEntityOn(xloc/Tile.SIZE, yloc/Tile.SIZE);
             worker.addJob(new MoveJob(xloc, yloc, zloc, worker, false), 0);
         } else {
             worker.addJob(new MoveJob(xloc, yloc, zloc, worker), 0);
@@ -60,9 +60,9 @@ public class MoveItemJob extends Job {
                 if (worker.isHolding(material)) {
                     completed = true;
                 } else {
-                    if (chest != null) {
+                    if (container != null) {
                         if (worker.aroundTile(material.getX(), material.getY(), material.getZ())) {
-                            if (worker.pickUp(material, chest)) {
+                            if (worker.pickUp(material, container)) {
                                 completed = true;
                             }
                             return;
@@ -84,9 +84,9 @@ public class MoveItemJob extends Job {
                 }
 
             } else {
-                if (chest != null) {
+                if (container != null) {
                     if (worker.aroundTile(xloc, yloc, zloc)) {
-                        worker.drop(chest);
+                        worker.drop(container);
                         completed = true;
                         return;
                     }

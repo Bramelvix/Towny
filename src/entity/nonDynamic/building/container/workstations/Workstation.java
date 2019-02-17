@@ -1,16 +1,16 @@
-package entity.nonDynamic.building.workstations;
+package entity.nonDynamic.building.container.workstations;
 
-import entity.nonDynamic.building.BuildAbleObject;
+import entity.nonDynamic.building.container.Container;
 
-public abstract class Workstation extends BuildAbleObject{
+public abstract class Workstation extends Container {
 	private boolean running = false;
-    byte animationcounter = 0;
+    protected byte animationcounter = 0;
 
     Workstation() {
-		super();
+		super(4);
 	}
 
-    void anmiationCounterTick() {
+    void animationCounterTick() {
 		animationcounter++;
 		if (animationcounter==60) {
 			animationcounter = 0;

@@ -1,4 +1,4 @@
-package entity.nonDynamic.building.workstations;
+package entity.nonDynamic.building.container.workstations;
 
 import entity.nonDynamic.building.BuildAbleObject;
 import graphics.Sprite;
@@ -20,10 +20,10 @@ public class Furnace extends Workstation {
 		} else {
 			if (animationcounter > 29) {
 				sprite2.draw(x,y);
-				anmiationCounterTick();
+				animationCounterTick();
 			} else {
 				sprite3.draw(x,y);
-				anmiationCounterTick();
+				animationCounterTick();
 			}
 		}
 	}

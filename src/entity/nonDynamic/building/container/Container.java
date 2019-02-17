@@ -9,7 +9,7 @@ public abstract class Container extends BuildAbleObject {
     private ArrayList<Item> items;
     private int containerSize;
 
-    Container(int containerSize) {
+    protected Container(int containerSize) {
         items = new ArrayList<>();
         this.containerSize = containerSize;
     }

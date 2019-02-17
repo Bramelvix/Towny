@@ -3,9 +3,9 @@ package entity.dynamic.mob.work;
 import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.item.weapon.WeaponMaterial;
-import entity.nonDynamic.building.workstations.Anvil;
-import entity.nonDynamic.building.workstations.Furnace;
-import entity.nonDynamic.building.workstations.Workstation;
+import entity.nonDynamic.building.container.workstations.Anvil;
+import entity.nonDynamic.building.container.workstations.Furnace;
+import entity.nonDynamic.building.container.workstations.Workstation;
 
 public class ItemRecipe extends Recipe {
 

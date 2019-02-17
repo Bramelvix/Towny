@@ -6,7 +6,7 @@ import entity.*;
 import entity.nonDynamic.building.Stairs;
 import entity.nonDynamic.building.wall.Wall;
 import entity.dynamic.item.Item;
-import entity.nonDynamic.building.workstations.Workstation;
+import entity.nonDynamic.building.container.workstations.Workstation;
 import entity.nonDynamic.resources.Ore;
 import entity.nonDynamic.resources.OreType;
 import entity.nonDynamic.resources.Tree;
@@ -44,7 +44,7 @@ public class Level {
         return items;
     }
 
-    // adding an item to the spritesheets
+    // adding an item to the tile
     public <T extends Item> void addItem(T e) {
         if (e != null) {
             tiles[e.getX() / Tile.SIZE][e.getY() / Tile.SIZE].setItem(e);
@@ -74,18 +74,12 @@ public class Level {
     }
 
     public <T extends Entity> T getEntityOn(int x, int y) {
-        return tiles[x / Tile.SIZE][y / Tile.SIZE].getEntity();
-    }
-
-    public Vector2I getNearestEmptySpot(int xloc, int yloc) {
-        return getNearestSpotThatHasX(xloc, yloc, this::isClearTile);
+        return tiles[x][y].getEntity();
     }
 
     private Vector2I getNearestSpotThatHasX(int xloc, int yloc, BiPredicate<Integer, Integer> p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
-        int x0 = xloc / Tile.SIZE;
-        int y0 = yloc / Tile.SIZE;
-        if (p.test(x0, y0)) {
-            return new Vector2I(x0, y0);
+        if (p.test(xloc, yloc)) {
+            return new Vector2I(xloc, yloc);
         } else {
             for (int layer = 1; layer < 100; layer++) {
                 int x = layer - 1;
@@ -94,29 +88,29 @@ public class Level {
                 int dy = 1;
                 int err = dx - (layer << 1);
                 while (x >= y) {
-                    if (p.test(x0 + x, y0 + y)) {
-                        return new Vector2I(x0 + x, y0 + y);
+                    if (p.test(xloc + x, yloc + y)) {
+                        return new Vector2I(xloc + x, yloc + y);
                     }
-                    if (p.test(x0 + y, y0 + x)) {
-                        return new Vector2I(x0 + y, y0 + x);
+                    if (p.test(xloc + y, yloc + x)) {
+                        return new Vector2I(xloc + y, yloc + x);
                     }
-                    if (p.test(x0 - y, y0 + x)) {
-                        return new Vector2I(x0 - y, y0 + x);
+                    if (p.test(xloc - y, yloc + x)) {
+                        return new Vector2I(xloc - y, yloc + x);
                     }
-                    if (p.test(x0 - x, y0 + y)) {
-                        return new Vector2I(x0 - x, y0 + y);
+                    if (p.test(xloc - x, yloc + y)) {
+                        return new Vector2I(xloc - x, yloc + y);
                     }
-                    if (p.test(x0 - x, y0 - y)) {
-                        return new Vector2I(x0 - x, y0 - y);
+                    if (p.test(xloc - x, yloc - y)) {
+                        return new Vector2I(xloc - x, yloc - y);
                     }
-                    if (p.test(x0 - y, y0 - x)) {
-                        return new Vector2I(x0 - y, y0 - x);
+                    if (p.test(xloc - y, yloc - x)) {
+                        return new Vector2I(xloc - y, yloc - x);
                     }
-                    if (p.test(x0 + y, y0 - x)) {
-                        return new Vector2I(x0 + y, y0 - x);
+                    if (p.test(xloc + y, yloc - x)) {
+                        return new Vector2I(xloc + y, yloc - x);
                     }
-                    if (p.test(x0 + x, y0 - y)) {
-                        return new Vector2I(x0 + x, y0 - y);
+                    if (p.test(xloc + x, yloc - y)) {
+                        return new Vector2I(xloc + x, yloc - y);
                     }
 
                     if (err <= 0) {

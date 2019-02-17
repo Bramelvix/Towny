@@ -8,10 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import entity.Entity;
 import entity.dynamic.mob.work.*;
-import entity.nonDynamic.resources.Ore;
-import entity.nonDynamic.building.farming.TilledSoil;
-import entity.nonDynamic.resources.Tree;
 import entity.nonDynamic.building.container.Chest;
+import entity.nonDynamic.building.container.Container;
+import entity.nonDynamic.resources.Ore;
+import entity.nonDynamic.resources.Tree;
 import entity.dynamic.item.Clothing;
 import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
@@ -20,8 +20,8 @@ import entity.dynamic.item.weapon.WeaponMaterial;
 import entity.dynamic.mob.Mob;
 import entity.dynamic.mob.Villager;
 import entity.dynamic.mob.Zombie;
-import entity.nonDynamic.building.workstations.Anvil;
-import entity.nonDynamic.building.workstations.Furnace;
+import entity.nonDynamic.building.container.workstations.Anvil;
+import entity.nonDynamic.building.container.workstations.Furnace;
 import entity.pathfinding.PathFinder;
 import graphics.*;
 import graphics.ui.Ui;
@@ -405,8 +405,9 @@ public class Game {
         } else if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_RIGHT)) {
             if (selectedvill != null) {
                 List<MenuItem> options = new ArrayList<>();
-                if (selectedvill.getHolding() != null)
+                if (selectedvill.getHolding() != null&&(map[currentLayerNumber].tileIsEmpty(MousePosition.getTileX(),MousePosition.getTileY()) || map[currentLayerNumber].getEntityOn(MousePosition.getTileX(),MousePosition.getTileY()) instanceof Chest)) {
                     options.add(new MenuItem((MenuItem.DROP + " " + selectedvill.getHolding().getName())));
+                }
                 Tree boom = map[currentLayerNumber].selectTree(MousePosition.getX(), MousePosition.getY());
                 if (boom != null) {
                     options.add(new MenuItem((MenuItem.CHOP), boom));
@@ -430,9 +431,9 @@ public class Game {
                     }
 
                 }
-                if (map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY()) instanceof Chest) {
-                    Chest chest = map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY());
-                    for (Item i : chest.getItems()) {
+                if (map[currentLayerNumber].getEntityOn(MousePosition.getTileX(), MousePosition.getTileY()) instanceof Container) {
+                    Container container = map[currentLayerNumber].getEntityOn(MousePosition.getTileX(), MousePosition.getTileY());
+                    for (Item i : container.getItems()) {
                         options.add(new MenuItem((MenuItem.PICKUP), i));
                     }
                 } else {
@@ -441,9 +442,9 @@ public class Game {
                 options.add(new MenuItem(MenuItem.CANCEL));
                 ui.showMenu(options.toArray(new MenuItem[0]));
             } else {
-                if (map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY()) instanceof Furnace) {
+                if (map[currentLayerNumber].getEntityOn(MousePosition.getTileX(), MousePosition.getTileY()) instanceof Furnace) {
                     ui.showMenu(new MenuItem(MenuItem.SMELT), new MenuItem(MenuItem.CANCEL));
-                } else if (map[currentLayerNumber].getEntityOn(MousePosition.getX(), MousePosition.getY()) instanceof Anvil) {
+                } else if (map[currentLayerNumber].getEntityOn(MousePosition.getTileX(), MousePosition.getTileY()) instanceof Anvil) {
                     ui.showMenu(new MenuItem(MenuItem.SMITH), new MenuItem(MenuItem.CANCEL));
                 } else {
                     ui.showMenu(new MenuItem(MenuItem.CANCEL));
@@ -519,7 +520,7 @@ public class Game {
                             res[i] = idle.getNearestItemOfType(recipe.getResources()[i]);
                         }
                         idle.addJob(new CraftJob(idle, res, recipe.getProduct(),
-                                map[currentLayerNumber].getNearestWorkstation(recipe.getWorkstationClass(), idle.getX(), idle.getY())));
+                                map[currentLayerNumber].getNearestWorkstation(recipe.getWorkstationClass(), idle.getX()/Tile.SIZE, idle.getY()/Tile.SIZE)));
                         ui.deSelectIcons();
                         ui.getMenu().hide();
                     }
