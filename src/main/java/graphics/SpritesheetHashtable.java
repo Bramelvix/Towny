@@ -16,9 +16,9 @@ public class SpritesheetHashtable {
     }
 
     public static void registerSpritesheets() throws Exception { //registers all spritesheets by id
-        registerSpritesheet(1, new Spritesheet("/res/tiles.png", 3));
-        registerSpritesheet(2, new Spritesheet("/res/characters.png", 3));
-        registerSpritesheet(3, new Spritesheet("/res/indoor.png", 3));
+        registerSpritesheet(1, new Spritesheet("/tiles.png", 3));
+        registerSpritesheet(2, new Spritesheet("/characters.png", 3));
+        registerSpritesheet(3, new Spritesheet("/indoor.png", 3));
     }
 
 }

@@ -130,7 +130,7 @@ public class Game {
 
     private void setIcon() {
         try {
-            BufferedImage img = ImageIO.read(Icon.class.getResource("/res/icons/soldier.png"));
+            BufferedImage img = ImageIO.read(Icon.class.getResource("/icons/soldier.png"));
             int width = img.getWidth();
             int height = img.getHeight();
             int[] pixels = new int[width * height];

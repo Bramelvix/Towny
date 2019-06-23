@@ -25,8 +25,8 @@ public class LayerLevelChanger {
     }
 
     private void init() {
-        up = new Icon(x + 10, y + 5, "/res/icons/plain-arrow-up.png", 0.065f);
-        down = new Icon(x + 100, y + 5, "/res/icons/plain-arrow-down.png", 0.065f);
+        up = new Icon(x + 10, y + 5, "/icons/plain-arrow-up.png", 0.065f);
+        down = new Icon(x + 100, y + 5, "/icons/plain-arrow-down.png", 0.065f);
     }
 
     public void update(int z) {
