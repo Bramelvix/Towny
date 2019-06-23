@@ -23,20 +23,20 @@ public abstract class Mob extends Entity {
         Direction dir;
         if (xa > 0) {
             if (ya > 0) {
-                dir = Direction.RECHTS_OMLAAG;
+                dir = Direction.DOWN_RIGHT;
             } else {
-                dir = (ya < 0) ? Direction.RECHTS_OMHOOG : Direction.RECHTS;
+                dir = (ya < 0) ? Direction.UP_RIGHT : Direction.RIGHT;
             }
         } else {
             if (xa < 0) {
                 if (ya > 0) {
-                    dir = Direction.LINKS_OMLAAG;
+                    dir = Direction.DOWN_LEFT;
                 } else {
-                    dir = (ya < 0) ? Direction.LINKS_OMHOOG : Direction.LINKS;
+                    dir = (ya < 0) ? Direction.UP_LEFT : Direction.LEFT;
                 }
 
             } else {
-                dir = (ya > 0) ? Direction.OMLAAG : Direction.OMHOOG;
+                dir = (ya > 0) ? Direction.DOWN : Direction.UP;
             }
         }
         if (!collision(dir)) {
@@ -160,20 +160,20 @@ public abstract class Mob extends Entity {
 
     // calculates collision
     private boolean collision(Direction dir) {
-        return ((dir == Direction.OMLAAG || dir == Direction.LINKS_OMLAAG || dir == Direction.RECHTS_OMLAAG)
-                ||
-                levels[z].getTile((x / Tile.SIZE), ((y + 1) / Tile.SIZE)).isSolid())
-                && ((dir == Direction.OMHOOG || dir == Direction.LINKS_OMHOOG || dir == Direction.RECHTS_OMHOOG)
+        return ((dir == Direction.DOWN || dir == Direction.DOWN_LEFT || dir == Direction.DOWN_RIGHT)
+                || levels[z].getTile((x / Tile.SIZE), ((y + 1) / Tile.SIZE)).isSolid())
+                && ((dir == Direction.UP || dir == Direction.UP_LEFT || dir == Direction.UP_RIGHT)
                 || levels[z].getTile((x / Tile.SIZE), ((y - 1) / Tile.SIZE)).isSolid())
-                && ((dir == Direction.LINKS || dir == Direction.LINKS_OMHOOG || dir == Direction.LINKS_OMLAAG)
+                && ((dir == Direction.LEFT || dir == Direction.UP_LEFT || dir == Direction.DOWN_LEFT)
                 || levels[z].getTile(((x - 1) / Tile.SIZE), (y / Tile.SIZE)).isSolid())
-                && ((dir == Direction.RECHTS || dir == Direction.RECHTS_OMHOOG || dir == Direction.RECHTS_OMLAAG)
-                || levels[z].getTile(((x + 1) / Tile.SIZE), (y / Tile.SIZE)).isSolid()) && (levels[z].getTile((x / Tile.SIZE), (y / Tile.SIZE)).isSolid() || levels[z].getTile(((x + 1) / Tile.SIZE), ((y + 1) / Tile.SIZE)).isSolid());
+                && ((dir == Direction.RIGHT || dir == Direction.UP_RIGHT || dir == Direction.DOWN_RIGHT)
+                || levels[z].getTile(((x + 1) / Tile.SIZE), (y / Tile.SIZE)).isSolid())
+                && (levels[z].getTile((x / Tile.SIZE), (y / Tile.SIZE)).isSolid()
+                || levels[z].getTile(((x + 1) / Tile.SIZE), ((y + 1) / Tile.SIZE)).isSolid());
 
     }
 
-    // DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()!! DO NOT
-    // USE!!!
+    // DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()!! DO NOT USE!!!
     protected void moveTo(int x, int y) {
         int xmov = Integer.compare(x*Tile.SIZE, this.x);
         int ymov = Integer.compare(y*Tile.SIZE, this.y);
@@ -181,8 +181,5 @@ public abstract class Mob extends Entity {
 
     }
 
-    // method to render onto the screen
-    public void render() {
-        sprite.draw(x,y); // renders the body
-    }
+
 }

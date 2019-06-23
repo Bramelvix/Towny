@@ -9,6 +9,7 @@ import map.Tile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class Wall extends BuildAbleObject {
     private boolean door;
@@ -44,35 +45,30 @@ public class Wall extends BuildAbleObject {
     // checks the 4 sides of this wall to see if there are walls next to it. The sprite is decided based on this.
     // this method has a boolean that stops the walls next to this wall to retrigger checking the sides of this wall, which would create an infinite
     // loop of walls checking eachother again and again
-    private void checkSides(boolean eerstekeer) {
-        Wall left = level.getWallOn(x/Tile.SIZE - 1, y/Tile.SIZE);
-        Wall right = level.getWallOn(x/Tile.SIZE + 1, y/Tile.SIZE);
-        Wall up = level.getWallOn(x/Tile.SIZE, (y/Tile.SIZE - 1));
-        Wall down = level.getWallOn(x/Tile.SIZE, (y/Tile.SIZE + 1));
-        Wall upLeft = level.getWallOn(x/Tile.SIZE - 1, (y/Tile.SIZE - 1));
-        Wall downLeft = level.getWallOn(x/Tile.SIZE - 1, (y/Tile.SIZE + 1));
-        Wall upRight = level.getWallOn((x/Tile.SIZE + 1), y/Tile.SIZE - 1);
-        Wall downRight = level.getWallOn((x/Tile.SIZE + 1), y/Tile.SIZE + 1);
-        boolean leftHasWall = decideToCheckSides(left, eerstekeer);
-        boolean rightHasWall = decideToCheckSides(right, eerstekeer);
-        boolean topHasWall = decideToCheckSides(up, eerstekeer);
-        boolean bottomHasWall = decideToCheckSides(down, eerstekeer);
-        boolean upRightHasWall = decideToCheckSides(upRight, eerstekeer);
-        boolean downRightHasWall = decideToCheckSides(downRight, eerstekeer);
-        boolean upLeftHasWall = decideToCheckSides(upLeft, eerstekeer);
-        boolean downLeftHasWall = decideToCheckSides(downLeft, eerstekeer);
-        decideSprite(leftHasWall, rightHasWall, topHasWall, bottomHasWall, upRightHasWall, downRightHasWall, upLeftHasWall, downLeftHasWall);
-
-    }
-
-    private boolean decideToCheckSides(Wall wall, boolean eerstekeer) {
-        if (wall != null) {
-            if (eerstekeer) {
-                wall.checkSides(false);
-            }
-            return true;
+    private void checkSides(boolean firstTime) {
+        Optional<Wall> left = level.getWallOn(x/Tile.SIZE - 1, y/Tile.SIZE);
+        Optional<Wall> right = level.getWallOn(x/Tile.SIZE + 1, y/Tile.SIZE);
+        Optional<Wall> up = level.getWallOn(x/Tile.SIZE, (y/Tile.SIZE - 1));
+        Optional<Wall> down = level.getWallOn(x/Tile.SIZE, (y/Tile.SIZE + 1));
+        Optional<Wall> upLeft = level.getWallOn(x/Tile.SIZE - 1, (y/Tile.SIZE - 1));
+        Optional<Wall> downLeft = level.getWallOn(x/Tile.SIZE - 1, (y/Tile.SIZE + 1));
+        Optional<Wall> upRight = level.getWallOn((x/Tile.SIZE + 1), y/Tile.SIZE - 1);
+        Optional<Wall> downRight = level.getWallOn((x/Tile.SIZE + 1), y/Tile.SIZE + 1);
+        if (firstTime) {
+            left.ifPresent(wall -> wall.checkSides(false));
+            right.ifPresent(wall -> wall.checkSides(false));
+            up.ifPresent(wall -> wall.checkSides(false));
+            down.ifPresent(wall -> wall.checkSides(false));
+            upRight.ifPresent(wall -> wall.checkSides(false));
+            downRight.ifPresent(wall -> wall.checkSides(false));
+            downLeft.ifPresent(wall -> wall.checkSides(false));
         }
-        return false;
+
+        decideSprite(
+                left.isPresent(), right.isPresent(), up.isPresent(), down.isPresent(), upRight.isPresent(),
+                downRight.isPresent(), upLeft.isPresent(), downLeft.isPresent()
+        );
+
     }
 
     // Checksides method for the walls around this wall

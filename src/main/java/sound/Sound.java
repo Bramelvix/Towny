@@ -14,7 +14,7 @@ public class Sound {
 
 	// plays a soundclip
 	//TODO only one sound can be played at the same time
-	public static void speelGeluid(Clip clip) {
+	public static void playSound(Clip clip) {
 		//turning sound off for now
 		//clip.setFramePosition(0);
 		//clip.loop(0);

@@ -31,7 +31,7 @@ public class Tree extends Resource {
     public boolean work(Villager worker) {
         if (chopped > 0) {
             if (chopped % 20 == 0) {
-                Sound.speelGeluid(Sound.woodChopping);
+                Sound.playSound(Sound.woodChopping);
             }
             chopped--;
             return false;

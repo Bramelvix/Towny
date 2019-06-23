@@ -35,12 +35,12 @@ public class BuildOutline {
                 return;
             }
             if (squarewidth > squareheight) {
-                if (buildSquareXSTeken < buildSquareXE) { // START LINKS VAN EIND == SLEEP NAAR RECHTS
+                if (buildSquareXSTeken < buildSquareXE) { // START LEFT VAN EIND == SLEEP NAAR RIGHT
                     for (int i = 0; i < squarewidth; i++) {
                         OpenglUtils.buildOutlineDraw(buildSquareXSTeken + (i * WIDTH),buildSquareYSTeken,WIDTH,notBuildable((buildSquareXS /48) + i, (buildSquareYS /48), z) ? notbuildable
                                 : buildable);
                     }
-                } else { // START RECHTS VAN EIND == SLEEP NAAR LINKS
+                } else { // START RIGHT VAN EIND == SLEEP NAAR LEFT
                     for (int i = 0; i < squarewidth; i++) {
                         OpenglUtils.buildOutlineDraw(buildSquareXSTeken - (WIDTH * (squarewidth - 1)) + (i * WIDTH),buildSquareYSTeken,WIDTH,(notBuildable(((buildSquareXS) - (WIDTH * (squarewidth - 1)) /48) + i,
                                 (buildSquareYS /48), z)) ? notbuildable : buildable);
@@ -81,13 +81,13 @@ public class BuildOutline {
             coords[0][1] = buildSquareYS;
         } else {
             if (squarewidth > squareheight) {
-                if (buildSquareXSTeken < buildSquareXE) { // START LINKS VAN EIND == SLEEP NAAR RECHTS
+                if (buildSquareXSTeken < buildSquareXE) { // START LEFT VAN EIND == SLEEP NAAR RIGHT
                     coords = new int[squarewidth][2];
                     for (int i = 0; i < squarewidth; i++) {
                         coords[i][0] = buildSquareXS + (i *48);
                         coords[i][1] = buildSquareYS;
                     }
-                } else { // START RECHTS VAN EIND == SLEEP NAAR LINKS
+                } else { // START RIGHT VAN EIND == SLEEP NAAR LEFT
                     coords = new int[squarewidth][2];
                     for (int i = 0; i < squarewidth; i++) {
                         coords[i][0] = (((buildSquareXS - (WIDTH * (squarewidth - 1))))) + (i *48);

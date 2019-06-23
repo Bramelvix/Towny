@@ -2,8 +2,5 @@ package entity.pathfinding;
 
 //different directions for movement
 public enum Direction {
-
-    OMHOOG, RECHTS_OMHOOG, RECHTS, RECHTS_OMLAAG, OMLAAG, LINKS_OMLAAG, LINKS, LINKS_OMHOOG
-
-
+    UP, UP_RIGHT, RIGHT, DOWN_RIGHT, DOWN, DOWN_LEFT, LEFT, UP_LEFT
 }

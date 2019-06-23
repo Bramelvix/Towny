@@ -7,6 +7,7 @@ import entity.pathfinding.PathFinder;
 import map.Tile;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class MoveJob extends Job {
     private ArrayList<Path> paths;
@@ -44,12 +45,12 @@ public class MoveJob extends Job {
             int stairsY = -1;
             boolean up = worker.getZ() < zloc;
             for (int i = 0; i < Math.abs(zloc - worker.getZ()); i++) {
-                Stairs stairs = worker.levels[worker.getZ() + (up ? i : -i)].getNearestStairs(worker.getX()/Tile.SIZE, worker.getY()/ Tile.SIZE, zloc > worker.getZ());
-                if (stairs != null) {
+                Optional<Stairs> optional = worker.levels[worker.getZ() + (up ? i : -i)].getNearestStairs(worker.getX()/Tile.SIZE, worker.getY()/ Tile.SIZE, zloc > worker.getZ());
+                if (optional.isPresent()) {
                     int startx = stairsX == -1 ? worker.getX() : stairsX;
                     int starty = stairsY == -1 ? worker.getY() : stairsY;
-                    stairsX = stairs.getX();
-                    stairsY = stairs.getY();
+                    stairsX = optional.get().getX();
+                    stairsY = optional.get().getY();
                     Path path = PathFinder.findPath(startx / Tile.SIZE, starty / Tile.SIZE, stairsX / Tile.SIZE, stairsY / Tile.SIZE, worker.levels[worker.getZ() + (up ? i : -i)]);
                     if (path != null) {
                         paths.add(path);

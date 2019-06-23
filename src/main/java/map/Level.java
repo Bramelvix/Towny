@@ -1,6 +1,7 @@
 package map;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.function.BiPredicate;
 import entity.*;
 import entity.nonDynamic.building.Stairs;
@@ -14,7 +15,6 @@ import graphics.Sprite;
 import graphics.SpriteHashtable;
 import main.Game;
 import util.Vector2I;
-
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class Level {
@@ -129,26 +129,18 @@ public class Level {
         return null;
     }
 
-    public Wall getWallOn(int x, int y) {
-        return getEntityOn(x, y) instanceof Wall ? (Wall) getEntityOn(x, y) : null;
+    public Optional<Wall> getWallOn(int x, int y) {
+        return getEntityOn(x, y) instanceof Wall ? Optional.of((Wall) getEntityOn(x, y)) : Optional.empty();
     }
 
-    public <T extends Workstation> T getNearestWorkstation(Class<T> workstation, int x, int y) {
+    public <T extends Workstation> Optional<T> getNearestWorkstation(Class<T> workstation, int x, int y) {
         Vector2I point = getNearestSpotThatHasX(x, y, this::hasWorkStation);
-        if (point != null) {
-            return workstation.cast(tiles[point.getX()][point.getY()].getEntity());
-        } else {
-            return null;
-        }
+        return point != null ?  Optional.of(workstation.cast(tiles[point.getX()][point.getY()].getEntity())) : Optional.empty();
     }
 
-    public Stairs getNearestStairs(int x, int y, boolean top) { //gets the nearest stairs object on the map
-            Vector2I point = top ? getNearestSpotThatHasX(x, y, this::hasTopStairs) : getNearestSpotThatHasX(x, y, this::hasBottomStairs);
-            if (point != null) {
-                return (Stairs) tiles[point.getX()][point.getY()].getEntity();
-            } else {
-                return null;
-            }
+    public Optional<Stairs> getNearestStairs(int x, int y, boolean top) { //gets the nearest stairs object on the map
+        Vector2I point = top ? getNearestSpotThatHasX(x, y, this::hasTopStairs) : getNearestSpotThatHasX(x, y, this::hasBottomStairs);
+        return point != null ?  Optional.of((Stairs) tiles[point.getX()][point.getY()].getEntity()): Optional.empty();
     }
 
     private boolean hasBottomStairs(int x, int y) {
@@ -163,8 +155,9 @@ public class Level {
         return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 && tiles[x][y].getEntity() instanceof Workstation;
     }
 
-    public Item getItemOn(int x, int y) {
-        return tiles[x / 48][y / 48].getItem();
+    public Optional<Item> getItemOn(int x, int y) {
+        Item item = tiles[x / 48][y / 48].getItem();
+        return item != null ? Optional.of(item) : Optional.empty();
     }
 
     // generate the green border around the map
@@ -219,30 +212,30 @@ public class Level {
     }
 
     // if there is a tree on X and Y, return it
-    public Tree selectTree(int x, int y) {
+    public Optional<Tree> selectTree(int x, int y) {
         return selectTree(x, y, true);
     }
 
-    public Tree selectTree(int x, int y, boolean seperate) {
+    public Optional<Tree> selectTree(int x, int y, boolean seperate) {
         if (outOfMapBounds(x,y)) {
-            return null;
+            return Optional.empty();
         }
         if (tiles[x/Tile.SIZE][y/Tile.SIZE].getEntity() instanceof Tree) {
-            return (Tree) tiles[x/Tile.SIZE][y/Tile.SIZE].getEntity();
+            return Optional.of(tiles[x/Tile.SIZE][y/Tile.SIZE].getEntity());
         } else {
             Entity entity = tiles[x/Tile.SIZE][y/Tile.SIZE+1].getEntity();
-            return seperate && entity instanceof Tree ? (Tree) entity : null;
+            return seperate && entity instanceof Tree ? Optional.of((Tree) entity) : Optional.empty();
         }
 
     }
 
     // if there is ore on X and Y, return it
-    public Ore selectOre(int x, int y) {
+    public Optional<Ore> selectOre(int x, int y) {
         if (outOfMapBounds(x,y)) {
-            return null;
+            return Optional.empty();
         }
         Entity entity = tiles[x / Tile.SIZE][y / Tile.SIZE].getEntity();
-        return entity instanceof Ore ? (Ore) entity : null;
+        return entity instanceof Ore ? Optional.of((Ore) entity) : Optional.empty();
 
     }
 

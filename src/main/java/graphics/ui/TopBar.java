@@ -12,9 +12,9 @@ public class TopBar {
     private int width, height; // width and height
     private int vilcount, solcount; // amount of villagers and soldiers
     private Icon pause, play;
-    private Icon fast,slow;
-    private Icon sol,vil;
-    private static final float r = 0.3568f,g =0.3686f,b =0.3882f,a = 0.43137f; //colour for background
+    private Icon fast, slow;
+    private Icon sol, vil;
+    private static final float r = 0.3568f, g = 0.3686f, b = 0.3882f, a = 0.43137f; //colour for background
     private byte speed = 6;
 
     // constructor

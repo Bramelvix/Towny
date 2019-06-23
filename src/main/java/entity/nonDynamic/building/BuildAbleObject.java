@@ -16,7 +16,7 @@ public abstract class BuildAbleObject extends StaticEntity {
 
     protected void setOpened(boolean open) { //the open value has to be changeable for certain objects like doors
         this.open = open;
-        if(initialised) {
+        if (initialised) {
             level.getTile(x/ Tile.SIZE, y/Tile.SIZE).setSolid(!this.open);
         }
     }
@@ -24,11 +24,7 @@ public abstract class BuildAbleObject extends StaticEntity {
     public void initialise(int x, int y, Level[] levels, int depth) {
         this.level = levels[depth];
         setLocation(x * Tile.SIZE, y * Tile.SIZE, depth);
-        if (this.open) {
-            level.addEntity(this, false);
-        } else {
-            level.addEntity(this, true);
-        }
+        level.addEntity(this, !this.open);
 
         initialised = true;
 
@@ -39,7 +35,7 @@ public abstract class BuildAbleObject extends StaticEntity {
         if (initialised) {
             if (condition < 100) {
                 if (condition == 1) {
-                    Sound.speelGeluid(Sound.drill);
+                    Sound.playSound(Sound.drill);
                 }
                 condition++;
                 return false;

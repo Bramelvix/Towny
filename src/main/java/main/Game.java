@@ -6,6 +6,8 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+
 import entity.Entity;
 import entity.dynamic.mob.work.*;
 import entity.nonDynamic.building.container.Chest;
@@ -37,6 +39,7 @@ import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import sound.Sound;
+import util.StringUtils;
 
 import javax.imageio.ImageIO;
 
@@ -279,23 +282,23 @@ public class Game {
         return lowest;
     }
 
-    private Villager anyVillHoverOn() {
+    private Optional<Villager> anyVillHoverOn() {
         for (Villager i : vills) {
             if (i.hoverOn(currentLayerNumber)) {
-                return i;
+                return Optional.of(i);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
 
-    private Mob anyMobHoverOn() {
+    private Optional<Mob> anyMobHoverOn() {
         for (Mob i : mobs) {
             if (i.hoverOn(currentLayerNumber)) {
-                return i;
+                return Optional.of(i);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     private void deselectAllVills() {
@@ -308,7 +311,7 @@ public class Game {
     }
 
     private void updateMouse() {
-        if ((UiIcons.isWoodSelected()) && UiIcons.hoverOnNoIcons()) {
+        if ((UiIcons.isAxeSelected()) && UiIcons.hoverOnNoIcons()) {
             if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
                 ui.showSelectionSquare();
                 int x = ui.getSelectionX();
@@ -317,10 +320,7 @@ public class Game {
                 int height = ui.getSelectionHeight();
                 for (int xs = x; xs < (x + width); xs += Tile.SIZE) {
                     for (int ys = y; ys < (y + height); ys += Tile.SIZE) {
-                        Tree tree = map[currentLayerNumber].selectTree(xs, ys);
-                        if (tree != null) {
-                            tree.setSelected(true);
-                        }
+                        map[currentLayerNumber].selectTree(xs, ys).ifPresent(tree -> tree.setSelected(true));
                     }
                 }
                 return;
@@ -332,11 +332,7 @@ public class Game {
                 int height = ui.getSelectionHeight();
                 for (int xs = x; xs < (x + width); xs += Tile.SIZE) {
                     for (int ys = y; ys < (y + height); ys += Tile.SIZE) {
-                        Tree tree = map[currentLayerNumber].selectTree(xs, ys, false);
-                        if (tree != null) {
-                            Villager idle = getIdlestVil();
-                            idle.addJob(tree);
-                        }
+                        map[currentLayerNumber].selectTree(xs, ys, false).ifPresent(tree -> getIdlestVil().addJob(tree));
                     }
                 }
                 ui.resetSelection();
@@ -347,38 +343,42 @@ public class Game {
             return;
         }
         if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
-            if (((UiIcons.isMiningSelected()) && UiIcons.hoverOnNoIcons())
-                    && (map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY()) != null)) {
-                Villager idle = getIdlestVil();
-                deselectAllVills();
-                idle.addJob(map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY()));
-                ui.deSelectIcons();
-                return;
-
-            } else if (UiIcons.isShovelHover() && !ui.menuVisible()) {
+            if (UiIcons.isMiningSelected() && UiIcons.hoverOnNoIcons()) {
+                map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY()).ifPresent(ore -> {
+                    Villager idle = getIdlestVil();
+                    deselectAllVills();
+                    idle.addJob(ore);
+                    ui.deSelectIcons();
+                });
+            }
+            if (UiIcons.isShovelHover() && !ui.menuVisible()) {
                 deselectAllVills();
                 ui.showBuildSquare(xScroll, yScroll, true, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
                 ui.deSelectIcons();
                 return;
-            }else if (UiIcons.isPlowHover() && !ui.menuVisible()){
+            }
+            if (UiIcons.isPlowHover() && !ui.menuVisible()){
                 ui.showBuildSquare(xScroll, yScroll, false, BuildingRecipe.TILLED_SOIL, currentLayerNumber);
                 ui.deSelectIcons();
                 return;
-            } else if (((UiIcons.isSwordsSelected()) && UiIcons.hoverOnNoIcons())
-                    && (anyMobHoverOn() != null)) {
+            }
+            if (((UiIcons.isSwordsSelected()) && UiIcons.hoverOnNoIcons())) {
                 Villager idle = getIdlestVil();
                 deselectAllVills();
-                idle.addJob(new FightJob(idle, anyMobHoverOn()));
+                anyMobHoverOn().ifPresent(mob -> idle.addJob(new FightJob(idle,mob)));
                 ui.deSelectIcons();
                 return;
 
-            } else if (anyVillHoverOn() != null && !ui.outlineIsVisible()) {
-                deselectAllVills();
-                selectedvill = anyVillHoverOn();
-                selectedvill.setSelected(true);
-                ui.deSelectIcons();
-                return;
-            } else if (UiIcons.isSawHover() && !ui.menuVisible()) {
+            }
+            if (!ui.outlineIsVisible()) {
+                anyVillHoverOn().ifPresent(villager -> {
+                    deselectAllVills();
+                    selectedvill = villager;
+                    selectedvill.setSelected(true);
+                    ui.deSelectIcons();
+                });
+            }
+            if (UiIcons.isSawHover() && !ui.menuVisible()) {
                 deselectAllVills();
                 MenuItem[] items = new MenuItem[BuildingRecipe.RECIPES.length + 1];
                 for (int i = 0; i < BuildingRecipe.RECIPES.length; i++) {
@@ -408,20 +408,18 @@ public class Game {
                 if (selectedvill.getHolding() != null&&(map[currentLayerNumber].tileIsEmpty(MousePosition.getTileX(),MousePosition.getTileY()) || map[currentLayerNumber].getEntityOn(MousePosition.getTileX(),MousePosition.getTileY()) instanceof Chest)) {
                     options.add(new MenuItem((MenuItem.DROP + " " + selectedvill.getHolding().getName())));
                 }
-                Tree boom = map[currentLayerNumber].selectTree(MousePosition.getX(), MousePosition.getY());
-                if (boom != null) {
-                    options.add(new MenuItem((MenuItem.CHOP), boom));
-                }
-                Ore ore = map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY());
-                if (ore != null) {
-                    options.add(new MenuItem((MenuItem.MINE), ore));
-                }
-                Mob mob = anyMobHoverOn();
-                if (mob != null) {
-                    options.add(new MenuItem((MenuItem.FIGHT), mob));
-                }
-                Item item = map[currentLayerNumber].getItemOn(MousePosition.getX(), MousePosition.getY());
-                if (item != null) {
+
+                map[currentLayerNumber].selectTree(MousePosition.getX(), MousePosition.getY()).ifPresent(
+                        tree -> options.add(new MenuItem((MenuItem.CHOP), tree))
+                );
+
+                map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY()).ifPresent(
+                        ore ->  options.add(new MenuItem((MenuItem.MINE), ore))
+                );
+
+                anyMobHoverOn().ifPresent(mob -> options.add(new MenuItem((MenuItem.FIGHT), mob)));
+
+                map[currentLayerNumber].getItemOn(MousePosition.getX(), MousePosition.getY()).ifPresent(item -> {
                     if (item instanceof Weapon) {
                         options.add(new MenuItem((MenuItem.EQUIP), item));
                     } else if (item instanceof Clothing) {
@@ -429,8 +427,8 @@ public class Game {
                     } else {
                         options.add(new MenuItem((MenuItem.PICKUP), item));
                     }
+                });
 
-                }
                 if (map[currentLayerNumber].getEntityOn(MousePosition.getTileX(), MousePosition.getTileY()) instanceof Container) {
                     Container container = map[currentLayerNumber].getEntityOn(MousePosition.getTileX(), MousePosition.getTileY());
                     for (Item i : container.getItems()) {
@@ -517,17 +515,21 @@ public class Game {
                         idle.setPath(null);
                         Item[] res = new Item[recipe.getResources().length];
                         for (int i = 0; i < res.length; i++) {
-                            res[i] = idle.getNearestItemOfType(recipe.getResources()[i]);
+                            res[i] = idle.getNearestItemOfType(recipe.getResources()[i]).orElse(null);
                         }
-                        idle.addJob(new CraftJob(idle, res, recipe.getProduct(),
-                                map[currentLayerNumber].getNearestWorkstation(recipe.getWorkstationClass(), idle.getX()/Tile.SIZE, idle.getY()/Tile.SIZE)));
+                        map[currentLayerNumber].getNearestWorkstation(
+                                recipe.getWorkstationClass(),
+                                idle.getX()/Tile.SIZE,
+                                idle.getY()/Tile.SIZE
+                        ).ifPresent(station -> idle.addJob(new CraftJob(idle, res, recipe.getProduct(), station)));
+
                         ui.deSelectIcons();
                         ui.getMenu().hide();
                     }
                 } else if (item.getText().contains(MenuItem.SMITH)) {
                     MenuItem[] craftingOptions = new MenuItem[WeaponMaterial.values().length + 1];
                     for (int i = 0; i < WeaponMaterial.values().length; i++) {
-                        craftingOptions[i] = new MenuItem(capitalize(WeaponMaterial.values()[i].toString().toLowerCase()));
+                        craftingOptions[i] = new MenuItem(StringUtils.capitalize(WeaponMaterial.values()[i].toString().toLowerCase()));
                     }
                     craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
                     ui.showMenu(craftingOptions);
@@ -600,32 +602,32 @@ public class Game {
         int x1 = (xScroll + width + Sprite.SIZE);
         int y1 = (yScroll + height + Sprite.SIZE);
         glTranslatef(-xScroll, -yScroll, 0);
-        for (Mob i : mobs) {
-            if (i.getZ() == currentLayerNumber && i.getX() + 48 >= xScroll && i.getX() - 48 <= x1 && i.getY() + 48 >= yScroll && i.getY() - 48 <= y1) {
-                i.render();
-            }
-        }
-        for (Villager i : vills) {
-            if (i.getZ() == currentLayerNumber && i.getX() + 48 >= xScroll && i.getX() - 48 <= x1 && i.getY() + 48 >= yScroll && i.getY() - 48 <= y1) {
-                i.render();
-            }
-        }
-        for (Villager i : sols) {
-            if (i.getZ() == currentLayerNumber && i.getX() + 48 >= xScroll && i.getX() - 48 <= x1 && i.getY() + 48 >= yScroll && i.getY() - 48 <= y1) {
-                i.render();
-            }
-        }
-        glTranslatef(xScroll, yScroll, 0);
-    }
+        mobs.forEach(mob -> mob.renderIf(
+                mob.getZ() == currentLayerNumber
+                        && mob.getX() + 48 >= xScroll
+                        && mob.getX() - 48 <= x1
+                        && mob.getY() + 48 >= yScroll
+                        && mob.getY() - 48 <= y1
+                )
+        );
+        vills.forEach(villager -> villager.renderIf(
+                villager.getZ() == currentLayerNumber
+                        && villager.getX() + 48 >= xScroll
+                        && villager.getX() - 48 <= x1
+                        && villager.getY() + 48 >= yScroll
+                        && villager.getY() - 48 <= y1
+                )
+        );
 
-    public static String capitalize(String name) {
-        if (name != null && name.length() != 0) {
-            char[] chars = name.toCharArray();
-            chars[0] = Character.toUpperCase(chars[0]);
-            return new String(chars);
-        } else {
-            return name;
-        }
+        sols.forEach(soldier -> soldier.renderIf(
+                soldier.getZ() == currentLayerNumber
+                        && soldier.getX() + 48 >= xScroll
+                        && soldier.getX() - 48 <= x1
+                        && soldier.getY() + 48 >= yScroll
+                        && soldier.getY() - 48 <= y1
+                )
+        );
+        glTranslatef(xScroll, yScroll, 0);
     }
 
 

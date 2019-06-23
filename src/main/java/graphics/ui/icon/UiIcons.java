@@ -62,7 +62,7 @@ public class UiIcons {
 		return icons[5].hoverOn();
 	}
 
-	public static boolean isWoodSelected() {
+	public static boolean isAxeSelected() {
 		return icons[0].isSelected();
 	}
 

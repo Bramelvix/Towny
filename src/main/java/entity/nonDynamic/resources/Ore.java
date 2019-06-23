@@ -45,7 +45,7 @@ public class Ore extends Resource {
     public boolean work(Villager worker) {
         if (mined > 0) {
             if (mined % 20 == 0)
-                Sound.speelGeluid(Sound.stoneMining);
+                Sound.playSound(Sound.stoneMining);
             mined--;
             return false;
         } else {

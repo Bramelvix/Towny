@@ -10,11 +10,7 @@ public class Stairs extends BuildAbleObject {
     public Stairs(boolean top) {
         super();
         this.top = top;
-        if (top) {
-            sprite =SpriteHashtable.get(40);
-        } else {
-            sprite = SpriteHashtable.get(41);
-        }
+        sprite = SpriteHashtable.get(top ? 40 : 41);
         setName("stairs");
 
     }

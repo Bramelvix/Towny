@@ -1,6 +1,7 @@
 package entity.dynamic.mob;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import entity.dynamic.mob.work.BuildJob;
 import entity.dynamic.mob.work.GatherJob;
@@ -75,9 +76,9 @@ public class Villager extends Humanoid {
     }
 
     // gets the item nearest to the villager(of the same kind and unreserved)
-    public Item getNearestItemOfType(Item item) {
+    public Optional<Item> getNearestItemOfType(Item item) {
         if (getHolding() != null && getHolding().isSameType(item)) {
-            return getHolding();
+            return Optional.of(getHolding());
         }
         Item closest = null;
         Path path = null;
@@ -94,9 +95,9 @@ public class Villager extends Humanoid {
 
         }
         if (closest == null || path == null) {
-            return null;
+            return Optional.empty();
         }
-        return closest;
+        return Optional.of(closest);
     }
 
     // work method for the villager to execute his jobs
@@ -192,7 +193,8 @@ public class Villager extends Humanoid {
         if (resource == null) {
             addJob(new BuildJob(x, y, z, object, this));
         } else {
-            addJob(new BuildJob(x, y, z, getNearestItemOfType(resource), object, this));
+            getNearestItemOfType(resource).ifPresent(item ->  addJob(new BuildJob(x, y, z, item, object, this)));
+
         }
 
     }

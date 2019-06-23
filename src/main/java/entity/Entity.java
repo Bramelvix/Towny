@@ -7,9 +7,7 @@ import input.MousePosition;
 
 public abstract class Entity {
     protected int x, y, z; // x and y of the entity
-    public static final Random RANDOM = new Random(); // random needed for
-    // various chance
-    // calculations
+    public static final Random RANDOM = new Random(); // random needed for various chance calculations
     public Sprite sprite; // the entity's sprite
     private boolean visible; // is the entity visible or not
     private boolean selected = false;
@@ -67,7 +65,8 @@ public abstract class Entity {
         this();
         setLocation(x, y, z);
     }
-    public Entity(String name, Sprite sprite){
+
+    public Entity(String name, Sprite sprite) {
         this();
         setName(name);
         this.sprite = sprite;
@@ -80,7 +79,12 @@ public abstract class Entity {
 
     // render method
     public void render() {
-        sprite.draw(x,y);
+        sprite.draw(x, y);
+    }
 
+    public void renderIf(boolean ifCondition) {
+        if (ifCondition) {
+            render();
+        }
     }
 }

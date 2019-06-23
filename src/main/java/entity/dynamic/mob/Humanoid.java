@@ -6,6 +6,8 @@ import map.Tile;
 
 public abstract class Humanoid extends Mob {
 
+    private Item holding; // item the mob is holding in his hands
+
     Humanoid(Level[] levels, int x, int y, int z) {
         super(levels);
         while (!levels[z].isWalkAbleTile(x / Tile.SIZE, y / Tile.SIZE)) {
@@ -14,8 +16,6 @@ public abstract class Humanoid extends Mob {
         }
         setLocation(x, y, z);
     }
-
-    private Item holding; // item the mob is holding in his hands
 
     public <T extends Item> boolean isHolding(T item) {
         return holding != null && holding.equals(item);
