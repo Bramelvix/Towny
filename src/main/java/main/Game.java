@@ -160,16 +160,16 @@ public class Game {
 
     private void spawnvills() {
         Villager vill = new Villager(432, 432, 0, map);
-        vill.addClothing(ItemHashtable.get(61));
-        vill.addClothing(ItemHashtable.get(75));
+        vill.addClothing((Clothing) ItemHashtable.get(61));
+        vill.addClothing((Clothing) ItemHashtable.get(75));
         addVillager(vill);
         Villager vil2 = new Villager(432, 480, 0, map);
-        vil2.addClothing(ItemHashtable.get(65));
-        vil2.addClothing(ItemHashtable.get(74));
+        vil2.addClothing((Clothing) ItemHashtable.get(65));
+        vil2.addClothing((Clothing) ItemHashtable.get(74));
         addVillager(vil2);
         Villager vil3 = new Villager(480, 480, 0, map);
-        vil3.addClothing(ItemHashtable.get(70));
-        vil3.addClothing(ItemHashtable.get(73));
+        vil3.addClothing((Clothing) ItemHashtable.get(70));
+        vil3.addClothing((Clothing) ItemHashtable.get(73));
         addVillager(vil3);
 
     }
@@ -603,31 +603,22 @@ public class Game {
         int y1 = (yScroll + height + Sprite.SIZE);
         glTranslatef(-xScroll, -yScroll, 0);
         mobs.forEach(mob -> mob.renderIf(
-                mob.getZ() == currentLayerNumber
-                        && mob.getX() + 48 >= xScroll
-                        && mob.getX() - 48 <= x1
-                        && mob.getY() + 48 >= yScroll
-                        && mob.getY() - 48 <= y1
-                )
-        );
-        vills.forEach(villager -> villager.renderIf(
-                villager.getZ() == currentLayerNumber
-                        && villager.getX() + 48 >= xScroll
-                        && villager.getX() - 48 <= x1
-                        && villager.getY() + 48 >= yScroll
-                        && villager.getY() - 48 <= y1
-                )
+                inBounds(mob.getX(), mob.getY(), mob.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1))
         );
 
-        sols.forEach(soldier -> soldier.renderIf(
-                soldier.getZ() == currentLayerNumber
-                        && soldier.getX() + 48 >= xScroll
-                        && soldier.getX() - 48 <= x1
-                        && soldier.getY() + 48 >= yScroll
-                        && soldier.getY() - 48 <= y1
-                )
+        vills.forEach(vil -> vil.renderIf(
+                inBounds(vil.getX(), vil.getY(), vil.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1))
         );
+
+        sols.forEach(sol -> sol.renderIf(
+                inBounds(sol.getX(), sol.getY(), sol.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1))
+        );
+
         glTranslatef(xScroll, yScroll, 0);
+    }
+
+    private boolean inBounds(int x, int y, int z, int layer, int xScroll, int x1, int yScroll, int y1) {
+        return z == layer && x + Tile.SIZE >= xScroll && x - Tile.SIZE <= x1 && y + Tile.SIZE >= yScroll && y - Tile.SIZE <= y1;
     }
 
 

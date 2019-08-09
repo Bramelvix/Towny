@@ -34,7 +34,7 @@ public class BuildingRecipe extends Recipe {
     }
 
     public BuildAbleObject getProduct() {
-        return ((BuildAbleObject) product).clone();
+        return ((BuildAbleObject) product).instance();
     }
 
 }

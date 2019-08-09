@@ -17,7 +17,7 @@ public class MousePosition implements GLFWCursorPosCallbackI {
     private static Game game;
 
     public MousePosition(Game game) {
-        this.game = game;
+        MousePosition.game = game;
     }
 
     @Override

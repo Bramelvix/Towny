@@ -6,9 +6,9 @@ import entity.nonDynamic.building.container.workstations.Workstation;
 import map.Tile;
 
 public class CraftJob extends Job {
-    private Item[] resources;
-    private Item product;
-    private Workstation station;
+    private final Item[] resources;
+    private final Item product;
+    private final Workstation station;
     private byte craftTimer = 100;
     private boolean itemsUpdated = false;
 

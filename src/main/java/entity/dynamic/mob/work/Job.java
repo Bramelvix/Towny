@@ -5,7 +5,7 @@ import entity.dynamic.mob.Villager;
 public abstract class Job implements Workable {
     boolean completed; // is the job done
     int xloc, yloc, zloc; // the x and y location of the job
-    Villager worker; // the villager doing the job
+    final Villager worker; // the villager doing the job
     boolean started = false;
 
     // constructors

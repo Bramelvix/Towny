@@ -56,15 +56,15 @@ public class Ore extends Resource {
     }
 
     public void checkSides(Level level) {
-        boolean leftHasWall = null != level.selectOre(x - Tile.SIZE, y);
-        boolean rightHasWall = null != level.selectOre(x + Tile.SIZE, y);
-        boolean topHasWall = null != level.selectOre(x, y - Tile.SIZE);
-        boolean bottomHasWall = null != level.selectOre(x, y + Tile.SIZE);
+        boolean leftHasWall = level.selectOre(x - Tile.SIZE, y).isPresent();
+        boolean rightHasWall = level.selectOre(x + Tile.SIZE, y).isPresent();
+        boolean topHasWall = level.selectOre(x, y - Tile.SIZE).isPresent();
+        boolean bottomHasWall = level.selectOre(x, y + Tile.SIZE).isPresent();
 
-        boolean topRightHasWall = null != level.selectOre(x + Tile.SIZE, y - Tile.SIZE);
-        boolean bottomRightHasWall = null != level.selectOre(x + Tile.SIZE, y + Tile.SIZE);
-        boolean bottomLeftHasWall = null != level.selectOre(x - Tile.SIZE, y + Tile.SIZE);
-        boolean topLeftHasWall = null != level.selectOre(x - Tile.SIZE, y - Tile.SIZE);
+        boolean topRightHasWall = level.selectOre(x + Tile.SIZE, y - Tile.SIZE).isPresent();
+        boolean bottomRightHasWall = level.selectOre(x + Tile.SIZE, y + Tile.SIZE).isPresent();
+        boolean bottomLeftHasWall = level.selectOre(x - Tile.SIZE, y + Tile.SIZE).isPresent();
+        boolean topLeftHasWall = level.selectOre(x - Tile.SIZE, y - Tile.SIZE).isPresent();
         decideSprite(leftHasWall, rightHasWall, topHasWall, bottomHasWall, topRightHasWall, bottomRightHasWall, bottomLeftHasWall, topLeftHasWall);
 
     }

@@ -122,3 +122,5 @@ Towny.iml
 out/
 META-INF/
 target/
+/.gradle/
+/build/

@@ -4,19 +4,16 @@ import entity.Entity;
 import entity.dynamic.item.Item;
 
 public class Recipe {
-    private Item[] resources;
-    Entity product;
+    private final Item[] resources;
+    final Entity product;
 
     <T extends Entity> Recipe(T product, Item[] res) {
-        this(product);
-        if (res != null) {
-            this.resources = res;
-        }
+        this.product = product;
+        this.resources = res;
     }
 
     <T extends Entity> Recipe(T product) {
-        this.product = product;
-        resources = new Item[1];
+        this(product, new Item[1]);
     }
 
     public String getRecipeName() {

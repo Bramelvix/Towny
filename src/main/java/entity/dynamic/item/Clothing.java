@@ -5,7 +5,7 @@ import graphics.Sprite;
 //villager clothing class
 public class Clothing extends Item {
     private float defence; // defence rating for armour
-    private ClothingType type;
+    private final ClothingType type;
 
     // basic constructor
     Clothing(String name, Sprite sprite, String tooltip, ClothingType type, float defence,int id) {

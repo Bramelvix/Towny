@@ -11,7 +11,7 @@ public class Anvil extends Workstation {
 	}
 
 	@Override
-	public BuildAbleObject clone() {
+	public BuildAbleObject instance() {
 		return new Anvil();
 	}
 

@@ -22,7 +22,7 @@ import graphics.SpriteHashtable;
 import map.Level;
 
 public class Villager extends Humanoid {
-    private VillagerInventory inventory; // clothing item list
+    private final VillagerInventory inventory; // clothing item list
     private boolean male; // is the villager male (true = male, false = female)
     private Sprite hair; // hair sprite
     private int hairnr; // hair number (needed for the hair sprite to be decided)
@@ -30,12 +30,12 @@ public class Villager extends Humanoid {
 
     // basic constructors
     public Villager(int x, int y, int z, Level[] levels) {
-        this(levels, x, y, z);
+        super(levels, x, y, z);
         sprite = SpriteHashtable.getPerson();
         inventory = new VillagerInventory(this);
         jobs = new ArrayList<>();
         male = Entity.RANDOM.nextBoolean();
-        initHair(true);
+        hair = initHair(generateHairNr());
         setName("villager");
 
     }
@@ -49,16 +49,11 @@ public class Villager extends Humanoid {
         return 10;
     }
 
-    private Villager(Level[] levels, int x, int y, int z) {
-        super(levels, x, y, z);
-    }
-
-    public Villager(int x, int y, int z, Level[] levels, int hairnr, VillagerInventory wearing, Item holding, boolean male) {
+    public Villager(int x, int y, int z, Level[] levels, int hairnr, Item holding, boolean male) {
         this(x, y, z, levels);
         this.hairnr = hairnr;
         this.male = male;
-        initHair(false);
-        this.inventory = wearing;
+        hair = initHair(hairnr);
         this.setHolding(holding);
     }
 
@@ -66,13 +61,14 @@ public class Villager extends Humanoid {
         return jobs.size();
     }
 
+   //generate a random number to use for the hairsprite
+    private int generateHairNr() {
+        return male ? Entity.RANDOM.nextInt(HairSprite.maleHair.length) : Entity.RANDOM.nextInt(HairSprite.femaleHair.length);
+    }
+
     // initialise the hairsprite
-    private void initHair(boolean generate) {
-        if (generate) {
-            hairnr = male ? Entity.RANDOM.nextInt(HairSprite.maleHair.length)
-                    : Entity.RANDOM.nextInt(HairSprite.femaleHair.length);
-        }
-            hair = male ? HairSprite.maleHair[hairnr] : HairSprite.femaleHair[hairnr];
+    private Sprite initHair(int nr) {
+       return male ? HairSprite.maleHair[nr] : HairSprite.femaleHair[nr];
     }
 
     // gets the item nearest to the villager(of the same kind and unreserved)

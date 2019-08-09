@@ -11,7 +11,7 @@ public class TilledSoil extends BuildAbleObject {
         sprite = SpriteHashtable.get(141);
     }
     @Override
-    public BuildAbleObject clone() {
+    public BuildAbleObject instance() {
         return new TilledSoil();
     }
 

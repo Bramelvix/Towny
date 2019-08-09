@@ -4,7 +4,7 @@ import entity.dynamic.mob.Mob;
 import entity.dynamic.mob.Villager;
 
 public class FightJob extends Job {
-    private Mob target;
+    private final Mob target;
     private int timer = 0;
 
     public FightJob(Villager worker, Mob target) {

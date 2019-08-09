@@ -109,7 +109,9 @@ public abstract class Mob extends Entity {
 
     // is the mob around a tile (x and y in pixels)
     public boolean aroundTile(int x, int y, int z) {
-        return this.z == z && ((this.x/Tile.SIZE) <= ((x/Tile.SIZE) + 1)) && ((this.x/Tile.SIZE) >= ((x/Tile.SIZE) - 1)) && ((this.y/Tile.SIZE >= ((y/Tile.SIZE) - 1)) && (this.y/Tile.SIZE <= ((y/Tile.SIZE) + 1)));
+        return (this.z == z
+                && ((this.x/Tile.SIZE) <= ((x/Tile.SIZE) + 1)) && ((this.x/Tile.SIZE) >= ((x/Tile.SIZE) - 1))
+                && ((this.y/Tile.SIZE >= ((y/Tile.SIZE) - 1)) && (this.y/Tile.SIZE <= ((y/Tile.SIZE) + 1))));
 
     }
 

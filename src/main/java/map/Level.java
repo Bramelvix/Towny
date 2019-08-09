@@ -77,6 +77,10 @@ public class Level {
         return tiles[x][y].getEntity();
     }
 
+    public <T extends Entity> Vector2I getNearestSpotThatHasX(int xloc, int yloc, Class<T> clazz) {
+        return getNearestSpotThatHasX(xloc, yloc, (x, y) -> has(xloc, yloc, clazz));
+    }
+
     private Vector2I getNearestSpotThatHasX(int xloc, int yloc, BiPredicate<Integer, Integer> p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
         if (p.test(xloc, yloc)) {
             return new Vector2I(xloc, yloc);
@@ -134,25 +138,29 @@ public class Level {
     }
 
     public <T extends Workstation> Optional<T> getNearestWorkstation(Class<T> workstation, int x, int y) {
-        Vector2I point = getNearestSpotThatHasX(x, y, this::hasWorkStation);
-        return point != null ?  Optional.of(workstation.cast(tiles[point.getX()][point.getY()].getEntity())) : Optional.empty();
+        Vector2I point = getNearestSpotThatHasX(x, y, workstation);
+        return point != null ?  Optional.of(workstation.cast(tiles[point.x][point.y].getEntity())) : Optional.empty();
     }
 
     public Optional<Stairs> getNearestStairs(int x, int y, boolean top) { //gets the nearest stairs object on the map
         Vector2I point = top ? getNearestSpotThatHasX(x, y, this::hasTopStairs) : getNearestSpotThatHasX(x, y, this::hasBottomStairs);
-        return point != null ?  Optional.of((Stairs) tiles[point.getX()][point.getY()].getEntity()): Optional.empty();
+        return point != null ?  Optional.of((Stairs) tiles[point.x][point.y].getEntity()): Optional.empty();
     }
 
     private boolean hasBottomStairs(int x, int y) {
-        return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 && tiles[x][y].getEntity() instanceof Stairs && !((Stairs) (tiles[x][y].getEntity())).isTop();
+        return hasStairs(x, y, false);
+    }
+
+    private boolean hasStairs(int x, int y, boolean top) {
+        return has(x, y, Stairs.class) && (!top || ((Stairs) (tiles[x][y].getEntity())).isTop());
     }
 
     private boolean hasTopStairs(int x, int y) {
-        return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 && tiles[x][y].getEntity() instanceof Stairs && ((Stairs) (tiles[x][y].getEntity())).isTop();
+        return hasStairs(x, y, true);
     }
 
-    private boolean hasWorkStation(int x, int y) {
-        return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 && tiles[x][y].getEntity() instanceof Workstation;
+    private <T extends Entity> boolean has(int x, int y, Class<T> clazz) {
+        return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 && clazz.isInstance(tiles[x][y].getEntity());
     }
 
     public Optional<Item> getItemOn(int x, int y) {

@@ -9,7 +9,7 @@ public class Furnace extends Workstation {
 	public Furnace() {
 		super();
 		sprite1 = SpriteHashtable.get(82);
-        sprite2 =SpriteHashtable.get(83);
+        sprite2 = SpriteHashtable.get(83);
         sprite3 = SpriteHashtable.get(84);
 		setName("furnace");
 	}
@@ -18,18 +18,17 @@ public class Furnace extends Workstation {
 		if (!isRunning()) {
 			sprite1.draw(x,y);
 		} else {
-			if (animationcounter > 29) {
-				sprite2.draw(x,y);
-				animationCounterTick();
-			} else {
-				sprite3.draw(x,y);
-				animationCounterTick();
-			}
+			draw(animationCounter > 29 ? sprite2 : sprite3, x, y);
+			animationCounterTick();
 		}
 	}
 
+	private void draw(Sprite sprite, int x, int y) {
+		sprite.draw(x,y);
+	}
+
 	@Override
-	public BuildAbleObject clone() {
+	public BuildAbleObject instance() {
 		return new Furnace();
 	}
 

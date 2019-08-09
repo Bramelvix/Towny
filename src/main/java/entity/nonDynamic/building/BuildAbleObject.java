@@ -25,7 +25,6 @@ public abstract class BuildAbleObject extends StaticEntity {
         this.level = levels[depth];
         setLocation(x * Tile.SIZE, y * Tile.SIZE, depth);
         level.addEntity(this, !this.open);
-
         initialised = true;
 
     }
@@ -49,6 +48,6 @@ public abstract class BuildAbleObject extends StaticEntity {
     }
 
 
-    public abstract BuildAbleObject clone();
+    public abstract BuildAbleObject instance();
 
 }

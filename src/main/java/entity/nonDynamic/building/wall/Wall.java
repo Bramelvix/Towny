@@ -152,7 +152,7 @@ public class Wall extends BuildAbleObject {
     }
 
     @Override
-    public BuildAbleObject clone() {
+    public BuildAbleObject instance() {
         return new Wall(this.type, this.door);
     }
 

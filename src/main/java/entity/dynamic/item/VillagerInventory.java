@@ -47,7 +47,10 @@ public class VillagerInventory {
     }
 
     public void removeWeapon(Weapon item) {
-        int num = item.isShield() ? 1 : 0;
+        removeWeapon(item.isShield() ? 1 : 0);
+    }
+
+    public void removeWeapon(int num ) {
         wearer.levels[wearer.getZ()].addItem(weapons[num]);
         weapons[num].removeReserved();
         weapons[num] = null;

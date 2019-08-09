@@ -9,9 +9,6 @@ public class MouseButton implements GLFWMouseButtonCallbackI {
     private static int heldDownButton = -1;
     private static int dragOffsetX, dragOffsetY;
 
-    public MouseButton() {
-    }
-
     @Override
     public void invoke(long window, int button, int action, int mods) {
         if (button > 3 || button < 0) { //stop pesky gaming mice with their fancy buttons from crashing my entire game

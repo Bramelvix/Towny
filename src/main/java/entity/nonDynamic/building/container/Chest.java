@@ -5,7 +5,7 @@ import graphics.SpriteHashtable;
 
 public class Chest extends Container {
     @Override
-    public BuildAbleObject clone() {
+    public BuildAbleObject instance() {
         return new Chest();
     }
 

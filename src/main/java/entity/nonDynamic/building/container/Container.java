@@ -6,8 +6,8 @@ import entity.dynamic.item.Item;
 import java.util.ArrayList;
 
 public abstract class Container extends BuildAbleObject {
-    private ArrayList<Item> items;
-    private int containerSize;
+    private final ArrayList<Item> items;
+    private final int containerSize;
 
     protected Container(int containerSize) {
         items = new ArrayList<>();

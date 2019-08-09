@@ -6,7 +6,7 @@ import entity.nonDynamic.building.BuildAbleObject;
 import map.Tile;
 
 public class BuildJob extends Job {
-    private BuildAbleObject buildJobObj; // the buildable entity the worker needs to build
+    private final BuildAbleObject buildJobObj; // the buildable entity the worker needs to build
     private boolean needsMaterial; // does the worker still need the materials
     private boolean goingToPickUpItem = false;
     private Item material; // what materials are needed for the job (like logs for a wall)

@@ -46,7 +46,7 @@ public class Stairs extends BuildAbleObject {
     }
 
     @Override
-    public BuildAbleObject clone() {
+    public BuildAbleObject instance() {
         return new Stairs(this.top);
     }
 

@@ -10,7 +10,7 @@ import graphics.SpriteHashtable;
 import java.util.Hashtable;
 
 public abstract class ItemHashtable {
-    private static final Hashtable<Integer, Item> table = new Hashtable<Integer, Item>();
+    private static final Hashtable<Integer, Item> table = new Hashtable<>();
 
 
     public static <T extends Item> void registerItem(T item) throws Exception {
@@ -20,16 +20,16 @@ public abstract class ItemHashtable {
     }
 
     public static Weapon getRandomWeapon() {
-        return get(Entity.RANDOM.nextInt(41) + 20);
+        return (Weapon) get(Entity.RANDOM.nextInt(41) + 20);
     }
 
 
-    public static <T extends Item> T get(int key) {
-        return (T) table.get(key).copy();
+    public static Item get(int key) {
+        return table.get(key).copy();
     }
 
-    public static <T extends Item> T get(int key, int x, int y, int z) {
-        return (T) table.get(key).copy(x, y, z);
+    public static Item get(int key, int x, int y, int z) {
+        return table.get(key).copy(x, y, z);
     }
 
     public static void registerItems() throws Exception {

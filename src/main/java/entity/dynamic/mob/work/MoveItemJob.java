@@ -6,13 +6,12 @@ import entity.nonDynamic.building.container.Container;
 import map.Tile;
 
 public class MoveItemJob extends Job {
-    private boolean pickUpJob; // is the job a pickup or drop job
+    private final boolean pickUpJob; // is the job a pickup or drop job
     private Container container;
     private Item material;
 
     public MoveItemJob(Item material, Villager worker) {
-        this(worker);
-        pickUpJob = true;
+        this(worker, true);
         this.material = material;
         if (this.worker.isHolding(this.material) || !this.material.isReserved(this.worker)) {
             completed = true;
@@ -24,13 +23,13 @@ public class MoveItemJob extends Job {
         }
     }
 
-    private MoveItemJob(Villager worker) {
+    private MoveItemJob(Villager worker, boolean pickUpJob) {
         super(worker);
+        this.pickUpJob = pickUpJob;
     }
 
     public MoveItemJob(int xloc, int yloc, int zloc, Villager worker) {
-        this(worker);
-        pickUpJob = false;
+        this(worker, false);
         this.xloc = (xloc/Tile.SIZE)*Tile.SIZE; //locations are in tile numbers
         this.yloc = (yloc/Tile.SIZE)*Tile.SIZE;
         this.zloc = zloc;
@@ -76,9 +75,7 @@ public class MoveItemJob extends Job {
 
                     if (worker.isMovementNull()) {
                         completed = true;
-                        if (pickUpJob) {
-                            material.removeReserved();
-                        }
+                        material.removeReserved();
                     }
                     worker.move();
                 }
@@ -97,9 +94,6 @@ public class MoveItemJob extends Job {
                 }
                 if (worker.isMovementNull()) {
                     completed = true;
-                    if (pickUpJob) {
-                        material.removeReserved();
-                    }
                 }
                 worker.move();
 
