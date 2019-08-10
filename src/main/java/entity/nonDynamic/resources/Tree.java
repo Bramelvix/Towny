@@ -2,6 +2,7 @@ package entity.nonDynamic.resources;
 
 import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.mob.Villager;
+import graphics.OpenglUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;
@@ -41,6 +42,13 @@ public class Tree extends Resource {
             return true;
         }
 
+    }
+
+    @Override
+    protected void drawSelection() {
+        if (this.isSelected()) {
+            OpenglUtils.drawSelection(x, y-Sprite.SIZE, Sprite.SIZE, Sprite.SIZE*2); // render the red square around selected resources
+        }
     }
 
 }
