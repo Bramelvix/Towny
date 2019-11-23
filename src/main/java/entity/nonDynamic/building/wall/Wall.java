@@ -55,13 +55,13 @@ public class Wall extends BuildAbleObject {
         Optional<Wall> upRight = level.getWallOn((x/Tile.SIZE + 1), y/Tile.SIZE - 1);
         Optional<Wall> downRight = level.getWallOn((x/Tile.SIZE + 1), y/Tile.SIZE + 1);
         if (firstTime) {
-            left.ifPresent(wall -> wall.checkSides(false));
-            right.ifPresent(wall -> wall.checkSides(false));
-            up.ifPresent(wall -> wall.checkSides(false));
-            down.ifPresent(wall -> wall.checkSides(false));
-            upRight.ifPresent(wall -> wall.checkSides(false));
-            downRight.ifPresent(wall -> wall.checkSides(false));
-            downLeft.ifPresent(wall -> wall.checkSides(false));
+            left.ifPresent(Wall::checkSides);
+            right.ifPresent(Wall::checkSides);
+            up.ifPresent(Wall::checkSides);
+            down.ifPresent(Wall::checkSides);
+            upRight.ifPresent(Wall::checkSides);
+            downRight.ifPresent(Wall::checkSides);
+            downLeft.ifPresent(Wall::checkSides);
         }
 
         decideSprite(
@@ -73,13 +73,13 @@ public class Wall extends BuildAbleObject {
 
     // Checksides method for the walls around this wall
     private void checkSides() {
-        checkSides(true);
+        checkSides(false);
     }
 
     // called by villagers when they start building the wall.
     public void initialise(int x, int y, Level[] levels, int depth) {
         super.initialise(x, y, levels, depth);
-        checkSides();
+        checkSides(true);
         if (door) {
             setOpened(true);
         }

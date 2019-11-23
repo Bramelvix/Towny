@@ -21,6 +21,7 @@ public abstract class Job implements Workable {
         this.worker = worker;
     }
 
+    @Override
     public boolean isCompleted() {
         return completed;
     }
@@ -32,6 +33,7 @@ public abstract class Job implements Workable {
     }
 
     // execute the job
+    @Override
     public abstract void execute();
 
 }

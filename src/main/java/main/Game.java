@@ -38,7 +38,6 @@ import map.Tile;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
-import sound.Sound;
 import util.StringUtils;
 
 import javax.imageio.ImageIO;
@@ -118,7 +117,7 @@ public class Game {
         SpritesheetHashtable.registerSpritesheets();
         SpriteHashtable.registerSprites();
         ItemHashtable.registerItems();
-        Sound.initSound();
+        //Sound.initSound();
         TrueTypeFont.init();
         generateLevel();
         mobs = new ArrayList<>();
@@ -283,22 +282,12 @@ public class Game {
     }
 
     private Optional<Villager> anyVillHoverOn() {
-        for (Villager i : vills) {
-            if (i.hoverOn(currentLayerNumber)) {
-                return Optional.of(i);
-            }
-        }
-        return Optional.empty();
+        return vills.stream().filter(villager -> villager.hoverOn(currentLayerNumber)).findAny();
     }
 
 
     private Optional<Mob> anyMobHoverOn() {
-        for (Mob i : mobs) {
-            if (i.hoverOn(currentLayerNumber)) {
-                return Optional.of(i);
-            }
-        }
-        return Optional.empty();
+        return mobs.stream().filter(mob -> mob.hoverOn(currentLayerNumber)).findAny();
     }
 
     private void deselectAllVills() {
@@ -451,8 +440,9 @@ public class Game {
             }
         }
         if (ui.menuVisible()) {
-            MenuItem item = ui.getMenu().clickedItem();
-            if (item != null) {
+            Optional<MenuItem> optional = ui.getMenu().clickedItem();
+            if (optional.isPresent()) {
+                MenuItem item = optional.get();
                 if (item.getText().contains(MenuItem.CANCEL)) {
                     ui.getMenu().hide();
                     ui.deSelectIcons();
@@ -583,18 +573,15 @@ public class Game {
     private void updateMobs() {
         Iterator<Mob> iMob = mobs.iterator();
         while (iMob.hasNext()) {
-            Mob i = iMob.next();
-            update(i, iMob);
+            update(iMob.next(), iMob);
         }
         Iterator<Villager> iVill = vills.iterator();
         while (iVill.hasNext()) {
-            Villager i = iVill.next();
-            update(i, iVill);
+            update(iVill.next(), iVill);
         }
         Iterator<Villager> iSoll = sols.iterator();
         while (iSoll.hasNext()) {
-            Villager i = iSoll.next();
-            update(i, iSoll);
+            update(iSoll.next(), iSoll);
         }
     }
 

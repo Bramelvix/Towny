@@ -94,9 +94,8 @@ public class UiIcons {
     public static void update() {
 		for (Icon i : icons) {
 			i.update();
-	}
+		}
 		setSelected();
-
 	}
 
 	// checks if all icons (other than the one provided in num) are unselected

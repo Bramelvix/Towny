@@ -83,8 +83,6 @@ public abstract class Entity {
     }
 
     public void renderIf(boolean ifCondition) {
-        if (ifCondition) {
-            render();
-        }
+        if (ifCondition) { render(); }
     }
 }

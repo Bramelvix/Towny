@@ -22,11 +22,12 @@ public class TrueTypeFont {
     private int textureHeight = 512;
 
     public static void init() {
-        black = new TrueTypeFont(new Font("Verdana", Font.PLAIN, 17), Color.BLACK);
-        red = new TrueTypeFont(new Font("Verdana", Font.PLAIN, 17), Color.RED); //existence is pain
+        Font font = new Font("Verdana", Font.PLAIN, 17);
+        black = new TrueTypeFont(font, Color.BLACK);
+        red = new TrueTypeFont(font, Color.RED); //existence is pain
     }
 
-    private class IntObject {
+    private static class IntObject {
         public int width;
         public int height;
         int storedX;
@@ -165,11 +166,13 @@ public class TrueTypeFont {
         drawString(x, y, whatchars, 0, whatchars.length() - 1, scaleX, scaleY, format);
     }
 
-    void drawString(float x, float y, String whatchars, int startIndex, int endIndex, float scaleX, float scaleY, int format) {
+    private void drawString(float x, float y, String whatchars, int startIndex, int endIndex, float scaleX, float scaleY, int format) {
         IntObject intObject;
         int charCurrent;
         int totalwidth = 0;
-        int i = startIndex, d, c;
+        int i = startIndex;
+        int d;
+        int c;
         float startY = 0;
 
         switch (format) {

@@ -2,13 +2,13 @@ package graphics.ui.menu;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import entity.dynamic.mob.work.Recipe;
 import graphics.OpenglUtils;
 import input.MousePosition;
 
-public class Menu { // the menu is the little options menu that shows up when
-					// you right click
+public class Menu { // the menu is the little options menu that shows up when you right click
 	private int x, y; // x and y of the top left corner
 	private int ingameX, ingameY;
 	private int width = 70; // width and height hardcoded
@@ -51,15 +51,16 @@ public class Menu { // the menu is the little options menu that shows up when
 	}
 
 	// updating the menu
-	public void update(boolean forceinvisible) {
-		if (forceinvisible) {
+	public void update(boolean forceInvisible) {
+		if (forceInvisible) {
 			hide();
 		} else {
             items.forEach(MenuItem::update);
-			if (!(((MousePosition.getTrueX()) >= getX() - 10)
-					&& ((MousePosition.getTrueX()) <= getX() + (getWidth() + 10))
-					&& ((MousePosition.getTrueY()) >= getY() - 10)
-					&& ((MousePosition.getTrueY()) <= getY() + (getHeight() + 10)))){
+			if (!((MousePosition.getTrueX() >= getX() - 10)
+					&& (MousePosition.getTrueX() <= getX() + (getWidth() + 10))
+					&& (MousePosition.getTrueY() >= getY() - 10)
+					&& (MousePosition.getTrueY() <= getY() + (getHeight() + 10)))
+			){
 				hide();
 			}
 		}
@@ -102,27 +103,19 @@ public class Menu { // the menu is the little options menu that shows up when
 		return y;
 	}
 
-    private MenuItem clickedItem(String type) {
-		MenuItem clickedItem = clickedItem();
-		return clickedItem != null && clickedItem.getText().contains(type) ? clickedItem : null;
+    private Optional<MenuItem> clickedItem(String type) {
+		Optional<MenuItem> clickedItem = clickedItem();
+		return clickedItem.isPresent() && clickedItem.get().getText().contains(type) ? clickedItem : Optional.empty();
 
 	}
 
-	public MenuItem clickedItem() {
-		for (MenuItem i : items) {
-			if (i.clicked()) {
-				return i;
-			}
-		}
-		return null;
+	public Optional<MenuItem> clickedItem() {
+		return items.stream().filter(MenuItem::clicked).findAny();
 	}
 
 	public <T extends Recipe> T recipeFromMenuOption(String menuItem) {
-		MenuItem clickedItem = clickedItem(menuItem);
-		if (clickedItem != null) {
-			return clickedItem.getRecipe();
-		}
-		return null;
+		Optional<MenuItem> clickedItem = clickedItem(menuItem);
+		return clickedItem.<T>map(MenuItem::getRecipe).orElse(null);
 	}
 
 	// adding an item to the menu

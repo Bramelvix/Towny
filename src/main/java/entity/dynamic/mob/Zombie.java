@@ -23,9 +23,7 @@ public class Zombie extends Humanoid {
                 sprite = SpriteHashtable.get(51);
             }
         }
-        if (idleTime()) {
-            idle();
-        }
+        if (idleTime()) { idle(); }
         move();
 
     }

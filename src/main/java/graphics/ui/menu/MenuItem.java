@@ -51,12 +51,12 @@ public class MenuItem {
     }
 
     public MenuItem(ItemRecipe recipe) {
-        this.text = CRAFT + " " + recipe.getRecipeName();
+        this(CRAFT + " " + recipe.getRecipeName());
         this.recipe = recipe;
     }
 
     public MenuItem(BuildingRecipe recipe) {
-        this.text = BUILD + " " + recipe.getRecipeName();
+        this(BUILD + " " + recipe.getRecipeName());
         this.recipe = recipe;
     }
 
@@ -77,8 +77,9 @@ public class MenuItem {
 
     // updating the mouse hover
     public void update() {
-        hover = ((((MousePosition.getTrueX()) >= x) && ((MousePosition.getTrueX()) <= x + width)
-                && ((MousePosition.getTrueY()) >= y) && ((MousePosition.getTrueY()) <= y + 10)));
+        hover = ((MousePosition.getTrueX() >= x) && (MousePosition.getTrueX() <= x + width)
+                && (MousePosition.getTrueY() >= y) && (MousePosition.getTrueY() <= y + 10)
+        );
     }
 
     // getter

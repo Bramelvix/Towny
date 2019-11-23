@@ -4,6 +4,7 @@ import entity.nonDynamic.building.BuildAbleObject;
 import entity.dynamic.item.Item;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public abstract class Container extends BuildAbleObject {
     private final ArrayList<Item> items;
@@ -21,14 +22,10 @@ public abstract class Container extends BuildAbleObject {
         }
     }
 
-    public <T extends Item> T takeItem(T e) {
-        for (Item i : items) {
-            if (i.getId() == e.getId()) {
-                items.remove(e);
-                return (T) i;
-            }
-        }
-        return null;
+    public <T extends Item> Optional<Item> takeItem(T e) {
+        Optional<Item> result = items.stream().filter(item -> item.isSameType(e)).findAny();
+        result.ifPresent(items::remove);
+        return result;
     }
 
     public Item[] getItems() {

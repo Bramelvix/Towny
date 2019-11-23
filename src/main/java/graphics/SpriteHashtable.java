@@ -44,6 +44,22 @@ public class SpriteHashtable {
         }
     }
 
+    public static int[] maleHairNrs = new int[] {211, 213, 214, 215, 217, 218, 219, 223, 227, 228,
+            229, 230, 231, 232, 233, 234, 235, 237, 238, 239, 241, 242, 243, 247, 251, 252, 253, 254,
+            255, 256, 257, 258, 259, 261, 262, 263, 267, 268, 269, 270
+    };
+
+    public static Sprite[] maleHair = { get(211), get(213), get(214), get(215),
+            get(217), get(218), get(219), get(223), get(227), get(228),
+            get(229), get(230), get(231), get(232), get(233), get(234),
+            get(235), get(237), get(238), get(239), get(241), get(242), get(243),
+            get(247), get(251), get(252), get(253), get(254), get(255), get(256),
+            get(257), get(258), get(259), get(261), get(262), get(263), get(267),
+            get(268), get(269), get(270)
+    };
+
+    public static int[] femaleHairNrs = new int[] { 212, 216, 220, 221, 222, 224, 225, 226, 236, 240, 244, 245, 246, 248, 249, 250, 260, 264, 265, 266 };
+
     public static Sprite get(int key) {
         return table.get(key);
     }
@@ -228,6 +244,66 @@ public class SpriteHashtable {
         registerSprite(209, new Sprite(37, 17, SpritesheetHashtable.get(1)));
         registerSprite(210, new Sprite(38, 17, SpritesheetHashtable.get(1)));
 
+        registerSprite(211, new Sprite(19, 0, SpritesheetHashtable.get(2))); // brownHair1
+        registerSprite(212, new Sprite(20, 0, SpritesheetHashtable.get(2))); // brownHair2
+        registerSprite(213, new Sprite(21, 0, SpritesheetHashtable.get(2))); // brownHairBeard1
+        registerSprite(214, new Sprite(22, 0, SpritesheetHashtable.get(2))); // brownHairBeard2
+        registerSprite(215, new Sprite(23, 0, SpritesheetHashtable.get(2))); // lightBrownHair1
+        registerSprite(216, new Sprite(24, 0, SpritesheetHashtable.get(2))); // lightBrownHair2
+        registerSprite(217, new Sprite(25, 0, SpritesheetHashtable.get(2))); // lightBrownHairBeard1
+        registerSprite(218, new Sprite(26, 0, SpritesheetHashtable.get(2))); // lightBrownHairBeard2
+        registerSprite(219, new Sprite(19, 1, SpritesheetHashtable.get(2))); // brownHair3
+        registerSprite(220, new Sprite(20, 1, SpritesheetHashtable.get(2))); // brownHair4
+        registerSprite(221, new Sprite(21, 1, SpritesheetHashtable.get(2))); // brownHair5
+        registerSprite(222, new Sprite(22, 1, SpritesheetHashtable.get(2))); // brownHair6
+        registerSprite(223, new Sprite(23, 1, SpritesheetHashtable.get(2))); // lightBrownHair3
+        registerSprite(224, new Sprite(24, 1, SpritesheetHashtable.get(2))); // lightBrownHair4
+        registerSprite(225, new Sprite(25, 1, SpritesheetHashtable.get(2))); // lightBrownHair5
+        registerSprite(226, new Sprite(26, 1, SpritesheetHashtable.get(2))); // lightBrownHair6
+        registerSprite(227, new Sprite(19, 2, SpritesheetHashtable.get(2))); // brownHairBeard3
+        registerSprite(228, new Sprite(20, 2, SpritesheetHashtable.get(2))); // brownHair7
+        registerSprite(229, new Sprite(21, 2, SpritesheetHashtable.get(2))); // brownHair8
+        registerSprite(230, new Sprite(22, 2, SpritesheetHashtable.get(2))); // brownHair9
+        registerSprite(231, new Sprite(23, 2, SpritesheetHashtable.get(2))); // lightBrownHairBeard3
+        registerSprite(232, new Sprite(24, 2, SpritesheetHashtable.get(2))); // lightBrownHair7
+        registerSprite(233, new Sprite(25, 2, SpritesheetHashtable.get(2))); // lightBrownHair8
+        registerSprite(234, new Sprite(26, 2, SpritesheetHashtable.get(2))); // lightBrownHair9
+        registerSprite(235, new Sprite(19, 4, SpritesheetHashtable.get(2))); // blondeHair1
+        registerSprite(236, new Sprite(20, 4, SpritesheetHashtable.get(2))); // blondeHair2
+        registerSprite(237, new Sprite(21, 4, SpritesheetHashtable.get(2))); // blondeHairBeard1
+        registerSprite(238, new Sprite(22, 4, SpritesheetHashtable.get(2))); // blondeHairBeard2
+        registerSprite(239, new Sprite(23, 4, SpritesheetHashtable.get(2))); // blackHair1
+        registerSprite(240, new Sprite(24, 4, SpritesheetHashtable.get(2))); // blackHair2
+        registerSprite(241, new Sprite(25, 4, SpritesheetHashtable.get(2))); // blackHairBeard1
+        registerSprite(242, new Sprite(26, 4, SpritesheetHashtable.get(2))); // blackHairBeard2
+        registerSprite(243, new Sprite(19, 5, SpritesheetHashtable.get(2))); // blondeHair3
+        registerSprite(244, new Sprite(20, 5, SpritesheetHashtable.get(2))); // blondeHair4
+        registerSprite(245, new Sprite(21, 5, SpritesheetHashtable.get(2))); // blondeHair5
+        registerSprite(246, new Sprite(22, 5, SpritesheetHashtable.get(2))); // blondeHair6
+        registerSprite(247, new Sprite(23, 5, SpritesheetHashtable.get(2))); // blackHair3
+        registerSprite(248, new Sprite(24, 5, SpritesheetHashtable.get(2))); // blackHair4
+        registerSprite(249, new Sprite(25, 5, SpritesheetHashtable.get(2))); // blackHair5
+        registerSprite(250, new Sprite(26, 5, SpritesheetHashtable.get(2))); // blackHair6
+        registerSprite(251, new Sprite(19, 6, SpritesheetHashtable.get(2))); // blondeHairBeard3
+        registerSprite(252, new Sprite(20, 6, SpritesheetHashtable.get(2))); // blondeHair7
+        registerSprite(253, new Sprite(21, 6, SpritesheetHashtable.get(2))); // blondeHair8
+        registerSprite(254, new Sprite(22, 6, SpritesheetHashtable.get(2))); // blondeHair9
+        registerSprite(255, new Sprite(13, 6, SpritesheetHashtable.get(2))); // blackHairBeard3
+        registerSprite(256, new Sprite(24, 6, SpritesheetHashtable.get(2))); // blackHair7
+        registerSprite(257, new Sprite(25, 6, SpritesheetHashtable.get(2))); // blackHair8
+        registerSprite(258, new Sprite(26, 6, SpritesheetHashtable.get(2))); // blackHair9
+        registerSprite(259, new Sprite(19, 8, SpritesheetHashtable.get(2))); // whiteHair1
+        registerSprite(260, new Sprite(20, 8, SpritesheetHashtable.get(2))); // whiteHair2
+        registerSprite(261, new Sprite(21, 8, SpritesheetHashtable.get(2))); // whiteHairBeard1
+        registerSprite(262, new Sprite(22, 8, SpritesheetHashtable.get(2))); // whiteHairBeard2
+        registerSprite(263, new Sprite(19, 9, SpritesheetHashtable.get(2))); // whiteHair3
+        registerSprite(264, new Sprite(20, 9, SpritesheetHashtable.get(2))); // whiteHair4
+        registerSprite(265, new Sprite(21, 9, SpritesheetHashtable.get(2))); // whiteHair5
+        registerSprite(266, new Sprite(22, 9, SpritesheetHashtable.get(2))); // whiteHair6
+        registerSprite(267, new Sprite(19, 10, SpritesheetHashtable.get(2))); // whiteHairBeard3
+        registerSprite(268, new Sprite(20, 10, SpritesheetHashtable.get(2))); // whiteHair7
+        registerSprite(269, new Sprite(21, 10, SpritesheetHashtable.get(2))); // whiteHair8
+        registerSprite(270, new Sprite(22, 10, SpritesheetHashtable.get(2))); // whiteHair9
 
     }
 }

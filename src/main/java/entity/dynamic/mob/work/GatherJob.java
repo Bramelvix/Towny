@@ -12,15 +12,12 @@ public class GatherJob extends Job {
         this.jobObj.setSelected(true);
     }
 
+    @Override
     public void execute() {
         if (!completed && started) {
             if (!worker.aroundTile(xloc, yloc, zloc)) {
                 worker.addJob(new MoveJob(xloc,yloc,zloc,worker,false),0);
-            } else {
-                if (jobObj.work(worker)) {
-                    completed = true;
-                }
-            }
+            } else if (jobObj.work(worker)) { completed = true; }
         } else {
             start();
         }

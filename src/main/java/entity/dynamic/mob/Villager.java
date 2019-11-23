@@ -15,7 +15,6 @@ import entity.dynamic.item.VillagerInventory;
 import entity.dynamic.item.weapon.Weapon;
 import entity.dynamic.mob.work.Job;
 import entity.pathfinding.Path;
-import graphics.HairSprite;
 import graphics.OpenglUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
@@ -35,7 +34,7 @@ public class Villager extends Humanoid {
         inventory = new VillagerInventory(this);
         jobs = new ArrayList<>();
         male = Entity.RANDOM.nextBoolean();
-        hair = initHair(generateHairNr());
+        hair = SpriteHashtable.get(generateHairNr());
         setName("villager");
 
     }
@@ -53,7 +52,7 @@ public class Villager extends Humanoid {
         this(x, y, z, levels);
         this.hairnr = hairnr;
         this.male = male;
-        hair = initHair(hairnr);
+        hair = SpriteHashtable.get(hairnr);
         this.setHolding(holding);
     }
 
@@ -63,12 +62,10 @@ public class Villager extends Humanoid {
 
    //generate a random number to use for the hairsprite
     private int generateHairNr() {
-        return male ? Entity.RANDOM.nextInt(HairSprite.maleHair.length) : Entity.RANDOM.nextInt(HairSprite.femaleHair.length);
-    }
 
-    // initialise the hairsprite
-    private Sprite initHair(int nr) {
-       return male ? HairSprite.maleHair[nr] : HairSprite.femaleHair[nr];
+        return male ?
+                SpriteHashtable.maleHairNrs[Entity.RANDOM.nextInt(SpriteHashtable.maleHairNrs.length)]
+                : SpriteHashtable.femaleHairNrs[Entity.RANDOM.nextInt(SpriteHashtable.femaleHairNrs.length)];
     }
 
     // gets the item nearest to the villager(of the same kind and unreserved)
@@ -80,10 +77,9 @@ public class Villager extends Humanoid {
         Path path = null;
         for (Item level_item : levels[z].getItems()) {
             if (item.isSameType(level_item) && level_item.isReserved(this)) {
-                if (closest == null || path == null
-                        || (getPath(level_item.getX() / 48, level_item.getY() / 48) != null
-                        && path.getStepsSize() > getPath(level_item.getX() / 48, level_item.getY() / 48)
-                        .getStepsSize())) {
+                if (closest == null || path == null || (getPath(level_item.getX() / 48, level_item.getY() / 48) != null
+                    && path.getStepsSize() > getPath(level_item.getX() / 48, level_item.getY() / 48).getStepsSize()
+                )) {
                     closest = level_item;
                     path = getPath(closest.getX() / 48, closest.getY() / 48);
                 }
@@ -110,13 +106,11 @@ public class Villager extends Humanoid {
 
     // pickup an item
     public <T extends Item> boolean pickUp(T e) {
-        if (onSpot(e.getX(), e.getY(), e.getZ())) {
-            e.setReserved(this);
-            levels[z].removeItem(e);
-            pickUpItem(e);
-            return true;
-        }
-        return false;
+        if (!onSpot(e.getX(), e.getY(), e.getZ())) { return false; }
+        e.setReserved(this);
+        levels[z].removeItem(e);
+        pickUpItem(e);
+        return true;
 
     }
 
@@ -153,34 +147,25 @@ public class Villager extends Humanoid {
 
     public <T extends Item> boolean pickUp(T e, Container container) {
         if (aroundTile(container.getX(), container.getY(), container.getZ())) {
-            Item item = container.takeItem(e);
-            if (item != null) {
-                pickUpItem(item);
-                return true;
-            }
-
+            Optional<Item> foundItem = container.takeItem(e);
+            foundItem.ifPresent(this::pickUpItem);
+            return true;
         }
         return false;
     }
 
     // add a job to the jobs spritesheets for the villager to do
     public void addJob(Resource e) {
-        if (e != null) {
-            addJob(new GatherJob(e, this));
-        }
+        if (e != null) { addJob(new GatherJob(e, this)); }
 
     }
 
     public void addJob(Job e) {
-        if (e != null) {
-            jobs.add(e);
-        }
+        if (e != null) { jobs.add(e); }
     }
 
     public void addJob(Job e, int index) {
-        if (e != null) {
-            jobs.add(index, e);
-        }
+        if (e != null) { jobs.add(index, e); }
 
     }
 
@@ -201,9 +186,7 @@ public class Villager extends Humanoid {
             work();
         } else {
             // IDLE
-            if (idleTime()) {
-                idle();
-            }
+            if (idleTime()) { idle(); }
             move();
         }
         inventory.update(x, y, z);

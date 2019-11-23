@@ -78,7 +78,7 @@ public class Level {
     }
 
     public <T extends Entity> Vector2I getNearestSpotThatHasX(int xloc, int yloc, Class<T> clazz) {
-        return getNearestSpotThatHasX(xloc, yloc, (x, y) -> has(xloc, yloc, clazz));
+        return getNearestSpotThatHasX(xloc, yloc, (x, y) -> has(x, y, clazz));
     }
 
     private Vector2I getNearestSpotThatHasX(int xloc, int yloc, BiPredicate<Integer, Integer> p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)

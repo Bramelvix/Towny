@@ -78,9 +78,11 @@ public class Icon {
     }
 
     public void update() {
-        setHover((((MousePosition.getTrueX()) >= getX())
-                && ((MousePosition.getTrueX()) <= getX() + (getWidth())) && ((MousePosition.getTrueY()) >= getY())
-                && ((MousePosition.getTrueY()) <= getY() + (getHeight()))));
+        setHover((MousePosition.getTrueX() >= getX())
+                && (MousePosition.getTrueX() <= getX() + getWidth())
+                && (MousePosition.getTrueY() >= getY())
+                && (MousePosition.getTrueY() <= getY() + getHeight())
+        );
     }
 
 }
