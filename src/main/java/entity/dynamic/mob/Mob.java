@@ -90,14 +90,14 @@ public abstract class Mob extends Entity {
             if (!arrived) {
                 Point step = movement.getStep(counter);
                 if (step != null) {
-                    if (!levels[z].isWalkAbleTile(step.x, step.y)) {
+                    if (!levels[z].isWalkAbleTile(step.position.x, step.position.y)) {
                         int destx = movement.getXdest();
                         int desty = movement.getYdest();
                         movement = getPathAround(destx, desty);
                         return;
                     }
-                    moveTo(step.x, step.y);
-                    if (onSpot(step.x*Tile.SIZE,step.y*Tile.SIZE,this.z)) {
+                    moveTo(step.position.x, step.position.y);
+                    if (onSpot(step.position.x*Tile.SIZE,step.position.y*Tile.SIZE,this.z)) {
                         arrived = true;
                     }
 

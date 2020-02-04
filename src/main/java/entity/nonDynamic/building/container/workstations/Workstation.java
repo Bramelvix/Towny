@@ -12,7 +12,7 @@ public abstract class Workstation extends Container {
 
     void animationCounterTick() {
 		animationCounter++;
-		if (animationCounter ==60) {
+		if (animationCounter == 60) {
 			animationCounter = 0;
 		}
 	}

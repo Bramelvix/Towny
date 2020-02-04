@@ -72,11 +72,11 @@ public class PathFinder {
                     if ((x != 0 && y != 0)) { // DIAGONAL
                         continue;
                     }
-                    int xp = x + current.x;
-                    int yp = y + current.y;
+                    int xp = x + current.position.x;
+                    int yp = y + current.position.y;
 
                     if (isValidLocation(xp, yp, level)) {
-                        float nextStepCost = getCost(current.x, current.y, xp, yp);
+                        float nextStepCost = getCost(current.position.x, current.position.y, xp, yp);
                         Point neighbour = nodes[xp][yp];
                         if (nextStepCost < neighbour.cost) {
                             open.remove(neighbour);
@@ -98,7 +98,7 @@ public class PathFinder {
         Path path = new Path(tx, ty);
         Point target = nodes[tx][ty];
         while (!target.equals(nodes[sx][sy])) {
-            path.prependStep(target.x, target.y);
+            path.prependStep(target.position.x, target.position.y);
             target = target.getParent();
 
         }

@@ -33,7 +33,7 @@ public abstract class Container extends BuildAbleObject {
     }
 
     private boolean isFull() {
-        return items.size() == containerSize;
+        return items.size() >= containerSize;
     }
 
 }

@@ -1,26 +1,26 @@
 package entity.pathfinding;
 
+import util.Vector2I;
+
 public class Point {
-    public int x;
-    public int y;
+    public Vector2I position;
     float cost;
     private Point parent;
 
     // a point on the map (combination of x and y of a tile)
     Point(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.position = new Vector2I(x, y);
         cost = 1;
     }
 
     // rewritten the equals method to return true if the X and Y are the same,
     // because points are not unique
     public boolean equals(Object o) {
-        return o instanceof Point && this.x == ((Point) o).x && this.y == ((Point) o).y;
+        return o instanceof Point && this.position.x == ((Point) o).position.x && this.position.y == ((Point) o).position.y;
     }
 
     public int hashCode() {
-        return x * y;
+        return position.x * position.y;
     }
 
     //getter
