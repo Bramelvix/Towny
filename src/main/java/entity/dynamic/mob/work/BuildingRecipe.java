@@ -12,29 +12,29 @@ import entity.nonDynamic.building.container.workstations.Anvil;
 import entity.nonDynamic.building.container.workstations.Furnace;
 
 public class BuildingRecipe extends Recipe {
-    private static final BuildingRecipe WOOD_WALL = new BuildingRecipe(new Wall(WallType.WOOD), ItemHashtable.get(1));
-    private static final BuildingRecipe STONE_WALL = new BuildingRecipe(new Wall(WallType.STONE), ItemHashtable.get(10));
-    private static final BuildingRecipe WOOD_DOOR = new BuildingRecipe(new Wall(WallType.WOOD, true), ItemHashtable.get(1));
-    private static final BuildingRecipe STONE_DOOR = new BuildingRecipe(new Wall(WallType.STONE, true), ItemHashtable.get(10));
-    private static final BuildingRecipe FURNACE = new BuildingRecipe(new Furnace(), ItemHashtable.get(10));
-    private static final BuildingRecipe ANVIL = new BuildingRecipe(new Anvil(), ItemHashtable.get(2));
-    private static final BuildingRecipe CHEST = new BuildingRecipe(new Chest(), ItemHashtable.get(1));
-    public static final BuildingRecipe STAIRSDOWN = new BuildingRecipe(new Stairs(true));
-    private static final BuildingRecipe STAIRSUP = new BuildingRecipe(new Stairs(false), ItemHashtable.get(1));
-    public static final BuildingRecipe TILLED_SOIL = new BuildingRecipe(new TilledSoil());
+	private static final BuildingRecipe WOOD_WALL = new BuildingRecipe(new Wall(WallType.WOOD), ItemHashtable.get(1));
+	private static final BuildingRecipe STONE_WALL = new BuildingRecipe(new Wall(WallType.STONE), ItemHashtable.get(10));
+	private static final BuildingRecipe WOOD_DOOR = new BuildingRecipe(new Wall(WallType.WOOD, true), ItemHashtable.get(1));
+	private static final BuildingRecipe STONE_DOOR = new BuildingRecipe(new Wall(WallType.STONE, true), ItemHashtable.get(10));
+	private static final BuildingRecipe FURNACE = new BuildingRecipe(new Furnace(), ItemHashtable.get(10));
+	private static final BuildingRecipe ANVIL = new BuildingRecipe(new Anvil(), ItemHashtable.get(2));
+	private static final BuildingRecipe CHEST = new BuildingRecipe(new Chest(), ItemHashtable.get(1));
+	public static final BuildingRecipe STAIRSDOWN = new BuildingRecipe(new Stairs(true));
+	private static final BuildingRecipe STAIRSUP = new BuildingRecipe(new Stairs(false), ItemHashtable.get(1));
+	public static final BuildingRecipe TILLED_SOIL = new BuildingRecipe(new TilledSoil());
 
-    public static final BuildingRecipe[] RECIPES = {WOOD_WALL, STONE_WALL, WOOD_DOOR, STONE_DOOR, FURNACE, ANVIL, CHEST, STAIRSUP};
+	public static final BuildingRecipe[] RECIPES = {WOOD_WALL, STONE_WALL, WOOD_DOOR, STONE_DOOR, FURNACE, ANVIL, CHEST, STAIRSUP};
 
-    private <T extends BuildAbleObject> BuildingRecipe(T product, Item... resources) {
-        super(product, resources);
-    }
+	private <T extends BuildAbleObject> BuildingRecipe(T product, Item... resources) {
+		super(product, resources);
+	}
 
-    private <T extends BuildAbleObject> BuildingRecipe(T product) {
-        super(product);
-    }
+	private <T extends BuildAbleObject> BuildingRecipe(T product) {
+		super(product);
+	}
 
-    public BuildAbleObject getProduct() {
-        return ((BuildAbleObject) product).instance();
-    }
+	public BuildAbleObject getProduct() {
+		return ((BuildAbleObject) product).instance();
+	}
 
 }

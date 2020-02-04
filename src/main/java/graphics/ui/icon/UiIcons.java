@@ -5,18 +5,18 @@ import input.MouseButton;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class UiIcons {
-    private static Icon[] icons; // array of the 4 icons
+	private static Icon[] icons; // array of the 4 icons
 
 	// initialising the icons
 	public static void init() {
 		float scale = 0.176056338028169f;
-        icons = new Icon[7];
+		icons = new Icon[7];
 		icons[0] = new Icon(15, 660, "/icons/tools/wood-axe.png", scale);
 		icons[1] = new Icon(120, 660, "/icons/tools/mining.png", scale);
 		icons[2] = new Icon(225, 660, "/icons/tools/sickle.png", scale);
 		icons[3] = new Icon(330, 660, "/icons/tools/saw.png", scale);
 		icons[4] = new Icon(435, 660, "/icons/tools/swords.png", scale);
-        icons[5] = new Icon(540, 660, "/icons/tools/spade.png", scale);
+		icons[5] = new Icon(540, 660, "/icons/tools/spade.png", scale);
 		icons[6] = new Icon(645, 660, "/icons/tools/plow.png", scale);
 	}
 
@@ -29,13 +29,13 @@ public class UiIcons {
 	}
 
 	// getters
-    public static boolean hoverOnNoIcons() {
+	public static boolean hoverOnNoIcons() {
 		for (Icon i : icons) {
 			if (i.hoverOn()) {
-                return false;
-            }
-        }
-        return true;
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public static boolean isWoodHover() {
@@ -91,7 +91,7 @@ public class UiIcons {
 	public static boolean isPlowHover() {return icons[6].hoverOn();}
 
 	// update the icons
-    public static void update() {
+	public static void update() {
 		for (Icon i : icons) {
 			i.update();
 		}
@@ -112,7 +112,7 @@ public class UiIcons {
 	}
 
 	// selecting an icon
-    private static void setSelected() {
+	private static void setSelected() {
 		for (int i = 0; i < icons.length; i++) {
 			if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT) && icons[i].hoverOn() && allOtherIconsNotSelected(i)) {
 				icons[i].setSelect(true);

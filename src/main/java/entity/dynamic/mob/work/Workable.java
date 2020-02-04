@@ -1,9 +1,9 @@
 package entity.dynamic.mob.work;
 
 public interface Workable {
-    void execute();
+	void execute();
 
-    boolean isCompleted();
+	boolean isCompleted();
 
 
 }

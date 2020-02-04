@@ -13,14 +13,14 @@ public class Menu { // the menu is the little options menu that shows up when yo
 	private int ingameX, ingameY;
 	private int width = 70; // width and height hardcoded
 	private int height = 20;
-    private List<MenuItem> items; // spritesheets of items on the menu
+	private List<MenuItem> items; // spritesheets of items on the menu
 	private boolean visible; // is the item visible
 
 	// render method
 	public void render() {
 		if (visible) {
 			OpenglUtils.menuDraw(x,y,width,height);
-            items.forEach(MenuItem::render);
+			items.forEach(MenuItem::render);
 		}
 	}
 
@@ -55,7 +55,7 @@ public class Menu { // the menu is the little options menu that shows up when yo
 		if (forceInvisible) {
 			hide();
 		} else {
-            items.forEach(MenuItem::update);
+			items.forEach(MenuItem::update);
 			if (!((MousePosition.getTrueX() >= getX() - 10)
 					&& (MousePosition.getTrueX() <= getX() + (getWidth() + 10))
 					&& (MousePosition.getTrueY() >= getY() - 10)
@@ -70,7 +70,7 @@ public class Menu { // the menu is the little options menu that shows up when yo
 	public Menu() {
 		x = 0;
 		y = 0;
-        items = new ArrayList<>();
+		items = new ArrayList<>();
 		hide();
 	}
 
@@ -103,7 +103,7 @@ public class Menu { // the menu is the little options menu that shows up when yo
 		return y;
 	}
 
-    private Optional<MenuItem> clickedItem(String type) {
+	private Optional<MenuItem> clickedItem(String type) {
 		Optional<MenuItem> clickedItem = clickedItem();
 		return clickedItem.isPresent() && clickedItem.get().getText().contains(type) ? clickedItem : Optional.empty();
 
@@ -119,7 +119,7 @@ public class Menu { // the menu is the little options menu that shows up when yo
 	}
 
 	// adding an item to the menu
-    private void addItem(MenuItem o) {
+	private void addItem(MenuItem o) {
 		if (o != null) {
 			if (!(items.contains(o))) {
 				o.init(this);

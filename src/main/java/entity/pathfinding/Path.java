@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 //path for the villager to take to a destination
 public class Path {
-    private ArrayList<Point> steps = new ArrayList<>(); // list of steps to the destination
+	private ArrayList<Point> steps = new ArrayList<>(); // list of steps to the destination
 	private int xdest, ydest; // x and y coord of the destination
 
 	// getters
@@ -35,7 +35,7 @@ public class Path {
 		}
 	}
 
-    Path(int x, int y) {
+	Path(int x, int y) {
 		xdest = x;
 		ydest = y;
 	}
@@ -45,7 +45,7 @@ public class Path {
 	}
 
 
-    // adds a step to the front of the list
+	// adds a step to the front of the list
 	void prependStep(int x, int y) {
 		steps.add(0, new Point(x, y));
 	}

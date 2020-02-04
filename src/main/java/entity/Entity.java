@@ -37,6 +37,7 @@ public abstract class Entity {
     }
 
     public Entity() {
+    	setVisible(true);
     }
 
     // getters
@@ -79,10 +80,14 @@ public abstract class Entity {
 
     // render method
     public void render() {
-        sprite.draw(x, y);
+       if (isVisible()) {
+		   sprite.draw(x, y);
+	   }
     }
 
     public void renderIf(boolean ifCondition) {
-        if (ifCondition) { render(); }
+        if (ifCondition) {
+        	render();
+        }
     }
 }

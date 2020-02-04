@@ -6,18 +6,18 @@ public abstract class Workstation extends Container {
 	private boolean running = false;
 	byte animationCounter = 0;
 
-    Workstation() {
+	Workstation() {
 		super(4);
 	}
 
-    void animationCounterTick() {
+	void animationCounterTick() {
 		animationCounter++;
 		if (animationCounter == 60) {
 			animationCounter = 0;
 		}
 	}
 
-    boolean isRunning() {
+	boolean isRunning() {
 		return running;
 	}
 	public void setRunning(boolean running) {

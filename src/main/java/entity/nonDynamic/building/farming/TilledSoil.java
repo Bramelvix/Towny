@@ -5,14 +5,14 @@ import graphics.SpriteHashtable;
 
 public class TilledSoil extends BuildAbleObject {
 
-    public TilledSoil() {
-        super();
-        this.setOpened(true);
-        sprite = SpriteHashtable.get(141);
-    }
-    @Override
-    public BuildAbleObject instance() {
-        return new TilledSoil();
-    }
+	public TilledSoil() {
+		super();
+		this.setOpened(true);
+		sprite = SpriteHashtable.get(141);
+	}
+	@Override
+	public BuildAbleObject instance() {
+		return new TilledSoil();
+	}
 
 }

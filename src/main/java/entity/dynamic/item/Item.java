@@ -6,53 +6,52 @@ import graphics.Sprite;
 
 public class Item extends Entity {
 
-    private final int id; //item id
-    protected String tooltip; // the item's tooltip
-    private Villager reservedVil; // the villager that plans to pick the item up, or is already holding it
+	private final int id; //item id
+	protected String tooltip; // the item's tooltip
+	private Villager reservedVil; // the villager that plans to pick the item up, or is already holding it
 
-    // basic constructor
-    protected Item(String name, Sprite sprite, String tooltip, int id) {
-        super(name,sprite);
-        this.tooltip = tooltip;
-        setVisible(true);
-        this.id = id;
-    }
+	// basic constructor
+	protected Item(String name, Sprite sprite, String tooltip, int id) {
+		super(name,sprite);
+		this.tooltip = tooltip;
+		this.id = id;
+	}
 
-    public Item copy() {
-        return this.copy(this.x,this.y,this.z);
-    }
+	public Item copy() {
+		return this.copy(this.x,this.y,this.z);
+	}
 
 
-    public Item copy(int x, int y, int z) {
-        Item copy = new Item(this.getName(),this.sprite,this.getToolTip(),this.getId());
-        copy.setLocation(x,y,z);
-        return copy;
-    }
+	public Item copy(int x, int y, int z) {
+		Item copy = new Item(this.getName(),this.sprite,this.getToolTip(),this.getId());
+		copy.setLocation(x,y,z);
+		return copy;
+	}
 
-    public boolean isSameType(Item item) {
-        return item!=null && item.getId() == getId();
-    }
+	public boolean isSameType(Item item) {
+		return item!=null && item.getId() == getId();
+	}
 
-    // getters and setters
-    public int getId() {
-        return id;
-    }
+	// getters and setters
+	public int getId() {
+		return id;
+	}
 
-    String getToolTip() {
-        return tooltip;
-    }
+	String getToolTip() {
+		return tooltip;
+	}
 
-    public boolean isReserved(Villager vil) {
-        return reservedVil == null || reservedVil.equals(vil);
-    }
+	public boolean isReserved(Villager vil) {
+		return reservedVil == null || reservedVil.equals(vil);
+	}
 
-    public void setReserved(Villager vil) {
-        reservedVil = vil;
-    }
+	public void setReserved(Villager vil) {
+		reservedVil = vil;
+	}
 
-    public void removeReserved() {
-        setReserved(null);
-    }
+	public void removeReserved() {
+		setReserved(null);
+	}
 
 
 }

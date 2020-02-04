@@ -18,14 +18,14 @@ public class Tile {
 	static Tile voidTile = new Tile(SpriteHashtable.get(3), true);
 
 	// constructors
-    Tile(Sprite sprite, boolean solid) {
+	Tile(Sprite sprite, boolean solid) {
 		this.solid = solid;
 		this.sprite = sprite;
 	}
 
 	// render a tile
 	 void render(int x, int y) {
-    	sprite.draw(x,y);
+		sprite.draw(x,y);
 		if (entity != null && !solid) {
 			entity.render();
 		}

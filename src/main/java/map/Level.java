@@ -18,334 +18,334 @@ import util.Vector2I;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class Level {
-    private Tile[][] tiles; // array of tiles on the map
-    public int width, height; // map with and height
-    private int depth;
+	private Tile[][] tiles; // array of tiles on the map
+	public int width, height; // map with and height
+	private int depth;
 
-    // basic constructor
-    public Level(int height, int width, int elevation) {
-        this.width = width;
-        this.height = height;
-        depth = elevation;
-        tiles = new Tile[width][height];
-        generateLevel(elevation);
+	// basic constructor
+	public Level(int height, int width, int elevation) {
+		this.width = width;
+		this.height = height;
+		depth = elevation;
+		tiles = new Tile[width][height];
+		generateLevel(elevation);
 
-    }
+	}
 
-    public ArrayList<Item> getItems() {
-        ArrayList<Item> items = new ArrayList<>();
-        for (Tile[] row : tiles) {
-            for (Tile tile : row) {
-                if (tile.getItem() != null) {
-                    items.add(tile.getItem());
-                }
-            }
-        }
-        return items;
-    }
+	public ArrayList<Item> getItems() {
+		ArrayList<Item> items = new ArrayList<>();
+		for (Tile[] row : tiles) {
+			for (Tile tile : row) {
+				if (tile.getItem() != null) {
+					items.add(tile.getItem());
+				}
+			}
+		}
+		return items;
+	}
 
-    // adding an item to the tile
-    public <T extends Item> void addItem(T e) {
-        if (e != null) {
-            tiles[e.getX() / Tile.SIZE][e.getY() / Tile.SIZE].setItem(e);
-        }
-    }
+	// adding an item to the tile
+	public <T extends Item> void addItem(T e) {
+		if (e != null) {
+			tiles[e.getX() / Tile.SIZE][e.getY() / Tile.SIZE].setItem(e);
+		}
+	}
 
-    // removing an item from the spritesheets
-    public <T extends Item> void removeItem(T e) {
-        if (e != null) {
-            tiles[e.getX() / Tile.SIZE][e.getY() / Tile.SIZE].setItem(null);
-        }
-    }
+	// removing an item from the spritesheets
+	public <T extends Item> void removeItem(T e) {
+		if (e != null) {
+			tiles[e.getX() / Tile.SIZE][e.getY() / Tile.SIZE].setItem(null);
+		}
+	}
 
-    // is the tile on X and Y clear (No items or entities or walls blocking it)
-    public boolean isClearTile(int x, int y) {
-        return tiles[x][y].getItem() == null && isWalkAbleTile(x, y);
+	// is the tile on X and Y clear (No items or entities or walls blocking it)
+	public boolean isClearTile(int x, int y) {
+		return tiles[x][y].getItem() == null && isWalkAbleTile(x, y);
 
-    }
+	}
 
-    // is the tile on X and Y walkable (items can still be there)
-    public boolean isWalkAbleTile(int x, int y) {
-        return !tiles[x][y].isSolid();
-    }
+	// is the tile on X and Y walkable (items can still be there)
+	public boolean isWalkAbleTile(int x, int y) {
+		return !tiles[x][y].isSolid();
+	}
 
-    public boolean tileIsEmpty(int x, int y) {//no mobs, no items, no buildings,...
-        return isWalkAbleTile(x, y) && isClearTile(x, y) && tiles[x][y].getEntity() == null;
-    }
+	public boolean tileIsEmpty(int x, int y) {//no mobs, no items, no buildings,...
+		return isWalkAbleTile(x, y) && isClearTile(x, y) && tiles[x][y].getEntity() == null;
+	}
 
-    public <T extends Entity> T getEntityOn(int x, int y) {
-        return tiles[x][y].getEntity();
-    }
+	public <T extends Entity> T getEntityOn(int x, int y) {
+		return tiles[x][y].getEntity();
+	}
 
-    public <T extends Entity> Vector2I getNearestSpotThatHasX(int xloc, int yloc, Class<T> clazz) {
-        return getNearestSpotThatHasX(xloc, yloc, (x, y) -> has(x, y, clazz));
-    }
+	public <T extends Entity> Vector2I getNearestSpotThatHasX(int xloc, int yloc, Class<T> clazz) {
+		return getNearestSpotThatHasX(xloc, yloc, (x, y) -> has(x, y, clazz));
+	}
 
-    private Vector2I getNearestSpotThatHasX(int xloc, int yloc, BiPredicate<Integer, Integer> p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
-        if (p.test(xloc, yloc)) {
-            return new Vector2I(xloc, yloc);
-        } else {
-            for (int layer = 1; layer < 100; layer++) {
-                int x = layer - 1;
-                int y = 0;
-                int dx = 1;
-                int dy = 1;
-                int err = dx - (layer << 1);
-                while (x >= y) {
-                    if (p.test(xloc + x, yloc + y)) {
-                        return new Vector2I(xloc + x, yloc + y);
-                    }
-                    if (p.test(xloc + y, yloc + x)) {
-                        return new Vector2I(xloc + y, yloc + x);
-                    }
-                    if (p.test(xloc - y, yloc + x)) {
-                        return new Vector2I(xloc - y, yloc + x);
-                    }
-                    if (p.test(xloc - x, yloc + y)) {
-                        return new Vector2I(xloc - x, yloc + y);
-                    }
-                    if (p.test(xloc - x, yloc - y)) {
-                        return new Vector2I(xloc - x, yloc - y);
-                    }
-                    if (p.test(xloc - y, yloc - x)) {
-                        return new Vector2I(xloc - y, yloc - x);
-                    }
-                    if (p.test(xloc + y, yloc - x)) {
-                        return new Vector2I(xloc + y, yloc - x);
-                    }
-                    if (p.test(xloc + x, yloc - y)) {
-                        return new Vector2I(xloc + x, yloc - y);
-                    }
+	private Vector2I getNearestSpotThatHasX(int xloc, int yloc, BiPredicate<Integer, Integer> p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
+		if (p.test(xloc, yloc)) {
+			return new Vector2I(xloc, yloc);
+		} else {
+			for (int layer = 1; layer < 100; layer++) {
+				int x = layer - 1;
+				int y = 0;
+				int dx = 1;
+				int dy = 1;
+				int err = dx - (layer << 1);
+				while (x >= y) {
+					if (p.test(xloc + x, yloc + y)) {
+						return new Vector2I(xloc + x, yloc + y);
+					}
+					if (p.test(xloc + y, yloc + x)) {
+						return new Vector2I(xloc + y, yloc + x);
+					}
+					if (p.test(xloc - y, yloc + x)) {
+						return new Vector2I(xloc - y, yloc + x);
+					}
+					if (p.test(xloc - x, yloc + y)) {
+						return new Vector2I(xloc - x, yloc + y);
+					}
+					if (p.test(xloc - x, yloc - y)) {
+						return new Vector2I(xloc - x, yloc - y);
+					}
+					if (p.test(xloc - y, yloc - x)) {
+						return new Vector2I(xloc - y, yloc - x);
+					}
+					if (p.test(xloc + y, yloc - x)) {
+						return new Vector2I(xloc + y, yloc - x);
+					}
+					if (p.test(xloc + x, yloc - y)) {
+						return new Vector2I(xloc + x, yloc - y);
+					}
 
-                    if (err <= 0) {
-                        y++;
-                        err += dy;
-                        dy += 2;
-                    }
-                    if (err > 0) {
-                        x--;
-                        dx += 2;
-                        err += dx - (layer << 1);
-                    }
-                }
-            }
-        }
-        return null;
-    }
+					if (err <= 0) {
+						y++;
+						err += dy;
+						dy += 2;
+					}
+					if (err > 0) {
+						x--;
+						dx += 2;
+						err += dx - (layer << 1);
+					}
+				}
+			}
+		}
+		return null;
+	}
 
-    public Optional<Wall> getWallOn(int x, int y) {
-        return getEntityOn(x, y) instanceof Wall ? Optional.of((Wall) getEntityOn(x, y)) : Optional.empty();
-    }
+	public Optional<Wall> getWallOn(int x, int y) {
+		return getEntityOn(x, y) instanceof Wall ? Optional.of((Wall) getEntityOn(x, y)) : Optional.empty();
+	}
 
-    public <T extends Workstation> Optional<T> getNearestWorkstation(Class<T> workstation, int x, int y) {
-        Vector2I point = getNearestSpotThatHasX(x, y, workstation);
-        return point != null ?  Optional.of(workstation.cast(tiles[point.x][point.y].getEntity())) : Optional.empty();
-    }
+	public <T extends Workstation> Optional<T> getNearestWorkstation(Class<T> workstation, int x, int y) {
+		Vector2I point = getNearestSpotThatHasX(x, y, workstation);
+		return point != null ?  Optional.of(workstation.cast(tiles[point.x][point.y].getEntity())) : Optional.empty();
+	}
 
-    public Optional<Stairs> getNearestStairs(int x, int y, boolean top) { //gets the nearest stairs object on the map
-        Vector2I point = top ? getNearestSpotThatHasX(x, y, this::hasTopStairs) : getNearestSpotThatHasX(x, y, this::hasBottomStairs);
-        return point != null ?  Optional.of((Stairs) tiles[point.x][point.y].getEntity()): Optional.empty();
-    }
+	public Optional<Stairs> getNearestStairs(int x, int y, boolean top) { //gets the nearest stairs object on the map
+		Vector2I point = top ? getNearestSpotThatHasX(x, y, this::hasTopStairs) : getNearestSpotThatHasX(x, y, this::hasBottomStairs);
+		return point != null ?  Optional.of((Stairs) tiles[point.x][point.y].getEntity()): Optional.empty();
+	}
 
-    private boolean hasBottomStairs(int x, int y) {
-        return hasStairs(x, y, false);
-    }
+	private boolean hasBottomStairs(int x, int y) {
+		return hasStairs(x, y, false);
+	}
 
-    private boolean hasStairs(int x, int y, boolean top) {
-        return has(x, y, Stairs.class) && (!top || ((Stairs) (tiles[x][y].getEntity())).isTop());
-    }
+	private boolean hasStairs(int x, int y, boolean top) {
+		return has(x, y, Stairs.class) && (!top || ((Stairs) (tiles[x][y].getEntity())).isTop());
+	}
 
-    private boolean hasTopStairs(int x, int y) {
-        return hasStairs(x, y, true);
-    }
+	private boolean hasTopStairs(int x, int y) {
+		return hasStairs(x, y, true);
+	}
 
-    private <T extends Entity> boolean has(int x, int y, Class<T> clazz) {
-        return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 && clazz.isInstance(tiles[x][y].getEntity());
-    }
+	private <T extends Entity> boolean has(int x, int y, Class<T> clazz) {
+		return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 && clazz.isInstance(tiles[x][y].getEntity());
+	}
 
-    public Optional<Item> getItemOn(int x, int y) {
-        Item item = tiles[x / 48][y / 48].getItem();
-        return item != null ? Optional.of(item) : Optional.empty();
-    }
+	public Optional<Item> getItemOn(int x, int y) {
+		Item item = tiles[x / 48][y / 48].getItem();
+		return item != null ? Optional.of(item) : Optional.empty();
+	}
 
-    // generate the green border around the map
-    private void generateBorder(int depth) {
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if (x == 0 || y == 0 || x == width - 1 || y == height - 1) {
-                    tiles[x][y] = depth == 0 ? Tile.darkGrass : Tile.darkStone;
-                }
-            }
-        }
-    }
+	// generate the green border around the map
+	private void generateBorder(int depth) {
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				if (x == 0 || y == 0 || x == width - 1 || y == height - 1) {
+					tiles[x][y] = depth == 0 ? Tile.darkGrass : Tile.darkStone;
+				}
+			}
+		}
+	}
 
-    // generates a (slighty less) shitty random level
-    private void generateLevel(int elevation) {
-        generateBorder(elevation);
-        float[] noise = Generator.generateSimplexNoise(width, height, 11, Entity.RANDOM.nextInt(1000),
-                Entity.RANDOM.nextBoolean());
-        for (int y = 1; y < height - 1; y++) {
-            for (int x = 1; x < width - 1; x++) {
-                if (noise[x + y * width] > 0.5) {
-                    tiles[x][y] = new Tile(SpriteHashtable.getDirt(), false);
-                    if (elevation > 0) {
-                        tiles[x][y] = new Tile(SpriteHashtable.getStone(), false);
-                    }
-                } else {
-                    if (elevation > 0) {
-                        tiles[x][y] = new Tile(SpriteHashtable.getStone(), false);
-                        if (!randOre(x, y)) {
-                            spawnRock(x, y);
-                        }
-                    } else {
-                        tiles[x][y] = new Tile(SpriteHashtable.getGrass(), false);
-                        randForest(x, y);
-                    }
-                }
-            }
-        }
-        for (int y = 1; y < height - 1; y++) {
-            for (int x = 1; x < width - 1; x++) {
-                Entity e = tiles[x][y].getEntity();
-                if (e instanceof Ore) {
-                    ((Ore) e).checkSides(this);
-                }
-            }
-        }
+	// generates a (slighty less) shitty random level
+	private void generateLevel(int elevation) {
+		generateBorder(elevation);
+		float[] noise = Generator.generateSimplexNoise(width, height, 11, Entity.RANDOM.nextInt(1000),
+				Entity.RANDOM.nextBoolean());
+		for (int y = 1; y < height - 1; y++) {
+			for (int x = 1; x < width - 1; x++) {
+				if (noise[x + y * width] > 0.5) {
+					tiles[x][y] = new Tile(SpriteHashtable.getDirt(), false);
+					if (elevation > 0) {
+						tiles[x][y] = new Tile(SpriteHashtable.getStone(), false);
+					}
+				} else {
+					if (elevation > 0) {
+						tiles[x][y] = new Tile(SpriteHashtable.getStone(), false);
+						if (!randOre(x, y)) {
+							spawnRock(x, y);
+						}
+					} else {
+						tiles[x][y] = new Tile(SpriteHashtable.getGrass(), false);
+						randForest(x, y);
+					}
+				}
+			}
+		}
+		for (int y = 1; y < height - 1; y++) {
+			for (int x = 1; x < width - 1; x++) {
+				Entity e = tiles[x][y].getEntity();
+				if (e instanceof Ore) {
+					((Ore) e).checkSides(this);
+				}
+			}
+		}
 
 
-    }
-    private boolean outOfMapBounds(int x, int y) {
-        return (x <= 0 || x > (width - 1) * Tile.SIZE || y <= 0 || y > (height - 1) * Tile.SIZE);
-    }
+	}
+	private boolean outOfMapBounds(int x, int y) {
+		return (x <= 0 || x > (width - 1) * Tile.SIZE || y <= 0 || y > (height - 1) * Tile.SIZE);
+	}
 
-    // if there is a tree on X and Y, return it
-    public Optional<Tree> selectTree(int x, int y) {
-        return selectTree(x, y, true);
-    }
+	// if there is a tree on X and Y, return it
+	public Optional<Tree> selectTree(int x, int y) {
+		return selectTree(x, y, true);
+	}
 
-    public Optional<Tree> selectTree(int x, int y, boolean seperate) {
-        if (outOfMapBounds(x,y)) {
-            return Optional.empty();
-        }
-        if (tiles[x/Tile.SIZE][y/Tile.SIZE].getEntity() instanceof Tree) {
-            return Optional.of(tiles[x/Tile.SIZE][y/Tile.SIZE].getEntity());
-        } else {
-            Entity entity = tiles[x/Tile.SIZE][y/Tile.SIZE+1].getEntity();
-            return seperate && entity instanceof Tree ? Optional.of((Tree) entity) : Optional.empty();
-        }
+	public Optional<Tree> selectTree(int x, int y, boolean seperate) {
+		if (outOfMapBounds(x,y)) {
+			return Optional.empty();
+		}
+		if (tiles[x/Tile.SIZE][y/Tile.SIZE].getEntity() instanceof Tree) {
+			return Optional.of(tiles[x/Tile.SIZE][y/Tile.SIZE].getEntity());
+		} else {
+			Entity entity = tiles[x/Tile.SIZE][y/Tile.SIZE+1].getEntity();
+			return seperate && entity instanceof Tree ? Optional.of((Tree) entity) : Optional.empty();
+		}
 
-    }
+	}
 
-    // if there is ore on X and Y, return it
-    public Optional<Ore> selectOre(int x, int y) {
-        if (outOfMapBounds(x,y)) {
-            return Optional.empty();
-        }
-        Entity entity = tiles[x / Tile.SIZE][y / Tile.SIZE].getEntity();
-        return entity instanceof Ore ? Optional.of((Ore) entity) : Optional.empty();
+	// if there is ore on X and Y, return it
+	public Optional<Ore> selectOre(int x, int y) {
+		if (outOfMapBounds(x,y)) {
+			return Optional.empty();
+		}
+		Entity entity = tiles[x / Tile.SIZE][y / Tile.SIZE].getEntity();
+		return entity instanceof Ore ? Optional.of((Ore) entity) : Optional.empty();
 
-    }
+	}
 
-    // 10% chance of there being a tree on each grass tile
-    private void randForest(int x, int y) {
-        if (x == 0 || x == width || y == 0 || y == height) {
-            return;
-        }
-        int rand = Entity.RANDOM.nextInt(10);
-        if (rand == 1) {
-            addEntity(new Tree(x * Tile.SIZE, y * Tile.SIZE, depth, this), true);
-        }
+	// 10% chance of there being a tree on each grass tile
+	private void randForest(int x, int y) {
+		if (x == 0 || x == width || y == 0 || y == height) {
+			return;
+		}
+		int rand = Entity.RANDOM.nextInt(10);
+		if (rand == 1) {
+			addEntity(new Tree(x * Tile.SIZE, y * Tile.SIZE, depth, this), true);
+		}
 
-    }
+	}
 
-    // 10% chance of there being ore on a dirt tile
-    private boolean randOre(int x, int y) {
-        if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
-            return false;
-        }
-        int rand = Entity.RANDOM.nextInt(50);
-        if (rand <= 4) {
-            switch (rand) {
-                case 0:
-                    addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.GOLD), true);
-                    break;
-                case 1:
-                    addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.IRON), true);
-                    break;
-                case 2:
-                    addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.COAL), true);
-                    break;
-                case 3:
-                    addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.COPPER), true);
-                    break;
-                case 4:
-                    addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.CRYSTAL), true);
-                    break;
-            }
-            return true;
-        }
-        return false;
-    }
+	// 10% chance of there being ore on a dirt tile
+	private boolean randOre(int x, int y) {
+		if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
+			return false;
+		}
+		int rand = Entity.RANDOM.nextInt(50);
+		if (rand <= 4) {
+			switch (rand) {
+				case 0:
+					addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.GOLD), true);
+					break;
+				case 1:
+					addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.IRON), true);
+					break;
+				case 2:
+					addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.COAL), true);
+					break;
+				case 3:
+					addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.COPPER), true);
+					break;
+				case 4:
+					addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.CRYSTAL), true);
+					break;
+			}
+			return true;
+		}
+		return false;
+	}
 
-    private void spawnRock(int x, int y) {
-        if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
-            return;
-        }
-        addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.STONE), true);
+	private void spawnRock(int x, int y) {
+		if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
+			return;
+		}
+		addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.STONE), true);
 
-    }
+	}
 
-    // render the tiles
-    public void render(int xScroll, int yScroll) {
-        glTranslatef(-xScroll, -yScroll, 0);
-        int x0 = xScroll / Tile.SIZE;
-        int x1 = (xScroll + Game.width + Sprite.SIZE) / Tile.SIZE;
-        int y0 = yScroll / Tile.SIZE;
-        int y1 = (yScroll + Game.height + Sprite.SIZE) / Tile.SIZE;
-        for (int y = y0; y < y1; y++) {
-            for (int x = x0; x < x1; x++) {
-                getTile(x, y).render(x * Sprite.SIZE, y * Sprite.SIZE);
+	// render the tiles
+	public void render(int xScroll, int yScroll) {
+		glTranslatef(-xScroll, -yScroll, 0);
+		int x0 = xScroll / Tile.SIZE;
+		int x1 = (xScroll + Game.width + Sprite.SIZE) / Tile.SIZE;
+		int y0 = yScroll / Tile.SIZE;
+		int y1 = (yScroll + Game.height + Sprite.SIZE) / Tile.SIZE;
+		for (int y = y0; y < y1; y++) {
+			for (int x = x0; x < x1; x++) {
+				getTile(x, y).render(x * Sprite.SIZE, y * Sprite.SIZE);
 
-            }
-        }
-        glTranslatef(xScroll, yScroll, 0);
+			}
+		}
+		glTranslatef(xScroll, yScroll, 0);
 
-    }
+	}
 
-    public void renderHardEntities(int xScroll, int yScroll) {
-        glTranslatef(-xScroll, -yScroll, 0);
-        int x0 = xScroll / Tile.SIZE;
-        int x1 = (xScroll + Game.width + Sprite.SIZE * 2) / Tile.SIZE;
-        int y0 = yScroll/ Tile.SIZE;
-        int y1 = (yScroll + Game.height + Sprite.SIZE * 2) / Tile.SIZE;
+	public void renderHardEntities(int xScroll, int yScroll) {
+		glTranslatef(-xScroll, -yScroll, 0);
+		int x0 = xScroll / Tile.SIZE;
+		int x1 = (xScroll + Game.width + Sprite.SIZE * 2) / Tile.SIZE;
+		int y0 = yScroll/ Tile.SIZE;
+		int y1 = (yScroll + Game.height + Sprite.SIZE * 2) / Tile.SIZE;
 
-        for (int y = y0; y < y1; y++) {
-            for (int x = x0; x < x1; x++) {
-                getTile(x, y).renderHard();
+		for (int y = y0; y < y1; y++) {
+			for (int x = x0; x < x1; x++) {
+				getTile(x, y).renderHard();
 
-            }
-        }
-        glTranslatef(xScroll, yScroll, 0);
-    }
+			}
+		}
+		glTranslatef(xScroll, yScroll, 0);
+	}
 
-    // return the tile on x and y
-    public Tile getTile(int x, int y) {
-        return (x < 0 || x >= width || y < 0 || y >= height) ? Tile.voidTile : tiles[x][y];
-    }
+	// return the tile on x and y
+	public Tile getTile(int x, int y) {
+		return (x < 0 || x >= width || y < 0 || y >= height) ? Tile.voidTile : tiles[x][y];
+	}
 
-    public <T extends Entity> void addEntity(T entity, boolean solid) {
-        if (entity != null) {
-            tiles[entity.getX() / Tile.SIZE][entity.getY() / Tile.SIZE].setEntity(entity, solid);
-        }
-    }
+	public <T extends Entity> void addEntity(T entity, boolean solid) {
+		if (entity != null) {
+			tiles[entity.getX() / Tile.SIZE][entity.getY() / Tile.SIZE].setEntity(entity, solid);
+		}
+	}
 
-    public void removeEntity(int x, int y) {
-        tiles[x][y].removeEntity();
-    }
+	public void removeEntity(int x, int y) {
+		tiles[x][y].removeEntity();
+	}
 
-    public void removeEntity(Entity entity) {
-        removeEntity(entity.getX() / Tile.SIZE, entity.getY() / Tile.SIZE);
-    }
+	public void removeEntity(Entity entity) {
+		removeEntity(entity.getX() / Tile.SIZE, entity.getY() / Tile.SIZE);
+	}
 
 }
