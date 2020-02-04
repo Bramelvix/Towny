@@ -34,4 +34,6 @@ dependencies {
     runtimeOnly "org.lwjgl:lwjgl-openal:$lwjglVersion:$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-opengl:$lwjglVersion:$lwjglNatives"
     runtimeOnly "org.lwjgl:lwjgl-stb:$lwjglVersion:$lwjglNatives"
+    testCompile "junit:junit:4.13"
+    testCompile "org.hamcrest:hamcrest:2.2"
 }
