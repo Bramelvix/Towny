@@ -10,7 +10,8 @@ public class Sprite {
 
 	protected Sprite(int x, int y, Spritesheet sheet) {
 		pixels = load(x * SIZE + (x * sheet.getMargin()),
-				y * SIZE + (y * sheet.getMargin()), sheet);
+			y * SIZE + (y * sheet.getMargin()), sheet
+		);
 		id = OpenglUtils.loadTexture(pixels, SIZE,SIZE);
 	}
 

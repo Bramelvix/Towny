@@ -18,9 +18,9 @@ import util.Vector2I;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class Level {
-	private Tile[][] tiles; // array of tiles on the map
+	private final Tile[][] tiles; // array of tiles on the map
 	public int width, height; // map with and height
-	private int depth;
+	private final int depth;
 
 	// basic constructor
 	public Level(int height, int width, int elevation) {
@@ -182,8 +182,11 @@ public class Level {
 	// generates a (slighty less) shitty random level
 	private void generateLevel(int elevation) {
 		generateBorder(elevation);
-		float[] noise = Generator.generateSimplexNoise(width, height, 11, Entity.RANDOM.nextInt(1000),
-				Entity.RANDOM.nextBoolean());
+		float[] noise = Generator.generateSimplexNoise(
+			width, height, 11,
+			Entity.RANDOM.nextInt(1000),
+			Entity.RANDOM.nextBoolean()
+		);
 		for (int y = 1; y < height - 1; y++) {
 			for (int x = 1; x < width - 1; x++) {
 				if (noise[x + y * width] > 0.5) {
@@ -194,9 +197,8 @@ public class Level {
 				} else {
 					if (elevation > 0) {
 						tiles[x][y] = new Tile(SpriteHashtable.getStone(), false);
-						if (!randOre(x, y)) {
-							spawnRock(x, y);
-						}
+						randOre(x, y);
+
 					} else {
 						tiles[x][y] = new Tile(SpriteHashtable.getGrass(), false);
 						randForest(x, y);
@@ -249,47 +251,41 @@ public class Level {
 
 	// 10% chance of there being a tree on each grass tile
 	private void randForest(int x, int y) {
-		if (x == 0 || x == width || y == 0 || y == height) {
+		if (x <= 0 || x >= width || y <= 0 || y >= height) {
 			return;
 		}
-		int rand = Entity.RANDOM.nextInt(10);
-		if (rand == 1) {
+		if (Entity.RANDOM.nextInt(10) == 1) {
 			addEntity(new Tree(x * Tile.SIZE, y * Tile.SIZE, depth, this), true);
 		}
 
 	}
 
 	// 10% chance of there being ore on a dirt tile
-	private boolean randOre(int x, int y) {
-		if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
-			return false;
+	private void randOre(int x, int y) {
+		if (x <= 0 || x >= width - 1 || y <= 0 || y >= height - 1) {
+			return;
 		}
 		int rand = Entity.RANDOM.nextInt(50);
 		if (rand <= 4) {
-			switch (rand) {
-				case 0:
-					addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.GOLD), true);
-					break;
-				case 1:
-					addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.IRON), true);
-					break;
-				case 2:
-					addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.COAL), true);
-					break;
-				case 3:
-					addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.COPPER), true);
-					break;
-				case 4:
-					addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.CRYSTAL), true);
-					break;
-			}
-			return true;
+			addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, decideOreType(rand)), true);
+			return;
 		}
-		return false;
+		spawnRock(x, y);
+	}
+
+	private OreType decideOreType (int nr) {
+		switch (nr) {
+			case 0: return OreType.GOLD;
+			case 1: return OreType.IRON;
+			case 2: return OreType.COAL;
+			case 3: return OreType.COPPER;
+			case 4: return OreType.CRYSTAL;
+			default: return OreType.STONE;
+		}
 	}
 
 	private void spawnRock(int x, int y) {
-		if (x == 0 || x == width - 1 || y == 0 || y == height - 1) {
+		if (x <= 0 || x >= width - 1 || y <= 0 || y >= height - 1) {
 			return;
 		}
 		addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.STONE), true);
