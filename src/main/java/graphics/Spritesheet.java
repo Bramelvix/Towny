@@ -7,11 +7,11 @@ import javax.imageio.ImageIO;
 
 //picture with all the sprites in it
 public class Spritesheet {
+
 	private int width; // width of the spritesheet
 	private int height; // height of the spritesheet
 	private int[] pixels; // pixels array
 	private int margin; // margin between sprites on the spreadsheet
-
 
 	public Spritesheet(String path, int margin) {
 		this.margin = margin;
@@ -25,7 +25,6 @@ public class Spritesheet {
 			e.printStackTrace();
 		}
 	}
-
 
 	public int[] getPixels() {
 		return pixels;

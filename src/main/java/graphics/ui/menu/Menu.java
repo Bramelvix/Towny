@@ -9,6 +9,7 @@ import graphics.OpenglUtils;
 import input.MousePosition;
 
 public class Menu { // the menu is the little options menu that shows up when you right click
+
 	private int x, y; // x and y of the top left corner
 	private int ingameX, ingameY;
 	private int width = 70; // width and height hardcoded
@@ -106,7 +107,6 @@ public class Menu { // the menu is the little options menu that shows up when yo
 	private Optional<MenuItem> clickedItem(String type) {
 		Optional<MenuItem> clickedItem = clickedItem();
 		return clickedItem.isPresent() && clickedItem.get().getText().contains(type) ? clickedItem : Optional.empty();
-
 	}
 
 	public Optional<MenuItem> clickedItem() {

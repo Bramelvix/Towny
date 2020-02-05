@@ -10,6 +10,7 @@ import map.Tile;
 
 //the green or red outline used to select where to build things
 public class BuildOutline {
+
 	private Color buildable = new Color(78, 244, 66, 210); // green
 	private Color notbuildable = new Color(244, 66, 66, 210); // red
 	private int buildSquareXS; // x coord of the start in the game world
@@ -118,7 +119,6 @@ public class BuildOutline {
 		return visible;
 	}
 
-
 	// update the outline
 	public void update(int xOff, int yOff, boolean force, int z) {
 		this.z = z;
@@ -142,7 +142,6 @@ public class BuildOutline {
 				squareheight = 1;
 				buildSquareXE = 0;
 				buildSquareYE = 0;
-
 		  //  }
 		}
 	}
@@ -182,4 +181,5 @@ public class BuildOutline {
 	void remove() {
 		visible = false;
 	}
+
 }

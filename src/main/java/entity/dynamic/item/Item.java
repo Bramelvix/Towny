@@ -21,7 +21,6 @@ public class Item extends Entity {
 		return this.copy(this.x,this.y,this.z);
 	}
 
-
 	public Item copy(int x, int y, int z) {
 		Item copy = new Item(this.getName(),this.sprite,this.getToolTip(),this.getId());
 		copy.setLocation(x,y,z);
@@ -52,6 +51,5 @@ public class Item extends Entity {
 	public void removeReserved() {
 		setReserved(null);
 	}
-
 
 }

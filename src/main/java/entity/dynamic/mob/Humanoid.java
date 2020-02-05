@@ -37,7 +37,6 @@ public abstract class Humanoid extends Mob {
 		if (holding != null) {
 			levels[z].addItem(holding);
 		}
-
 	}
 
 	// DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()!! DO NOT USE!!!
@@ -47,7 +46,6 @@ public abstract class Humanoid extends Mob {
 		if (!(holding == null)) {
 			holding.setLocation(this.x, this.y, this.z);
 		}
-
 	}
 
 }

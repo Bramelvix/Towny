@@ -8,6 +8,7 @@ import input.MousePosition;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class SelectionSquare {
+
 	private static final Color COL = new Color(91, 94, 99, 110); // colour of the square
 	private int x, y; // ONSCREEN
 	private int ingameX, ingameY; // INGAME
@@ -21,7 +22,6 @@ public class SelectionSquare {
 				height = MousePosition.getTrueY() - y;
 			}
 		}
-
 	}
 
 	void reset() {

@@ -6,6 +6,7 @@ import graphics.Sprite;
 import input.MousePosition;
 
 public abstract class Entity {
+
     protected int x, y, z; // x, y and z of the entity
     public static final Random RANDOM = new Random(); // random needed for various chance calculations
     public Sprite sprite; // the entity's sprite
@@ -95,4 +96,5 @@ public abstract class Entity {
         	render();
         }
     }
+
 }

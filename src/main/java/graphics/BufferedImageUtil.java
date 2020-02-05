@@ -75,4 +75,5 @@ class BufferedImageUtil {
 		g.dispose();
 		return imageBuffer;
 	}
+
 }

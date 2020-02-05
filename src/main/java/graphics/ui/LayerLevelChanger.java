@@ -8,6 +8,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 
 public class LayerLevelChanger {
+
 	private static final float r = 0.3568f, g = 0.3686f, b = 0.3882f, a = 0.43137f; //colour for background
 	private int x, y; // x and y of the top left corner
 	private int width, height; // width and height

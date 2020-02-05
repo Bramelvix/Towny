@@ -5,6 +5,7 @@ import input.MouseButton;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class UiIcons {
+
 	private static Icon[] icons; // array of the 4 icons
 
 	// initialising the icons
@@ -25,7 +26,6 @@ public class UiIcons {
 		for (Icon i : icons) {
 			i.render();
 		}
-
 	}
 
 	// getters
@@ -86,9 +86,13 @@ public class UiIcons {
 		return icons[5].isSelected();
 	}
 
-	public static boolean isPlowSelected() { return icons[6].isSelected();}
+	public static boolean isPlowSelected() {
+		return icons[6].isSelected();
+	}
 
-	public static boolean isPlowHover() {return icons[6].hoverOn();}
+	public static boolean isPlowHover() {
+		return icons[6].hoverOn();
+	}
 
 	// update the icons
 	public static void update() {

@@ -3,6 +3,7 @@ package graphics;
 import java.util.Hashtable;
 
 public class SpritesheetHashtable {
+
 	private static final Hashtable<Integer, Spritesheet> table = new Hashtable<>();
 
 	public static void registerSpritesheet(int key, Spritesheet sheet) throws Exception {

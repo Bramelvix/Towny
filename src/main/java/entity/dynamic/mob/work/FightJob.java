@@ -4,6 +4,7 @@ import entity.dynamic.mob.Mob;
 import entity.dynamic.mob.Villager;
 
 public class FightJob extends Job {
+
 	private final Mob target;
 	private int timer = 0;
 
@@ -11,7 +12,6 @@ public class FightJob extends Job {
 		super(worker);
 		this.target = target;
 	}
-
 
 	@Override
 	protected void start() {
@@ -57,7 +57,6 @@ public class FightJob extends Job {
 					worker.move();
 				}
 			}
-
 		} else {
 			start();
 		}

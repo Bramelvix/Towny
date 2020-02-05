@@ -7,9 +7,9 @@ import java.util.Hashtable;
 import java.util.Random;
 
 public class SpriteHashtable {
+
 	private static final Hashtable<Integer, Sprite> table = new Hashtable<>();
 	private static final Random rand = new Random(); // random object used for random distributionof sprites
-
 
 	// return random grass sprite
 	public static Sprite getGrass() {
@@ -36,7 +36,6 @@ public class SpriteHashtable {
 	public static Sprite getSand() {
 		return rand.nextBoolean() ? get(10) : get(11);
 	}
-
 
 	public static void registerSprite(int key, Sprite sprite) throws Exception {
 		if (table.put(key, sprite) != null) {
@@ -304,6 +303,6 @@ public class SpriteHashtable {
 		registerSprite(268, new Sprite(20, 10, SpritesheetHashtable.get(2))); // whiteHair7
 		registerSprite(269, new Sprite(21, 10, SpritesheetHashtable.get(2))); // whiteHair8
 		registerSprite(270, new Sprite(22, 10, SpritesheetHashtable.get(2))); // whiteHair9
-
 	}
+
 }

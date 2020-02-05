@@ -8,6 +8,7 @@ import main.Game;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class TopBar {
+
 	private int x, y; // x and y of the top left corner
 	private int width, height; // width and height
 	private int vilcount, solcount; // amount of villagers and soldiers
@@ -28,12 +29,12 @@ public class TopBar {
 
 	// intialise
 	private void init() {
-			pause = new Icon(x + 120, y + 25, "/icons/pause-button.png", 0.060f);
-			play = new Icon(x + 120, y + 25, "/icons/play-button.png", 0.060f);
-			fast = new Icon(x + 160,y + 30, "/icons/fast.png",1.0f);
-			slow = new Icon(x + 75,y + 30, "/icons/slow.png",1.0f);
-			sol = new Icon(x + 210,y + 17, "/icons/soldier.png",1.0f);
-			vil = new Icon(x + 10,y + 17, "/icons/villager.png",1.0f);
+		pause = new Icon(x + 120, y + 25, "/icons/pause-button.png", 0.060f);
+		play = new Icon(x + 120, y + 25, "/icons/play-button.png", 0.060f);
+		fast = new Icon(x + 160, y + 30, "/icons/fast.png", 1.0f);
+		slow = new Icon(x + 75, y + 30, "/icons/slow.png", 1.0f);
+		sol = new Icon(x + 210, y + 17, "/icons/soldier.png", 1.0f);
+		vil = new Icon(x + 10, y + 17, "/icons/villager.png", 1.0f);
 	}
 
 	// update the villager and soldier counts

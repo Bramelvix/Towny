@@ -3,6 +3,7 @@ package entity.nonDynamic.building.container.workstations;
 import entity.nonDynamic.building.container.Container;
 
 public abstract class Workstation extends Container {
+
 	private boolean running = false;
 	byte animationCounter = 0;
 
@@ -20,6 +21,7 @@ public abstract class Workstation extends Container {
 	boolean isRunning() {
 		return running;
 	}
+
 	public void setRunning(boolean running) {
 		this.running = running;
 	}

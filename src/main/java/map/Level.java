@@ -18,6 +18,7 @@ import util.BiPredicateInteger;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class Level {
+
 	private final Tile[][] tiles; // array of tiles on the map
 	public int width, height; // map with and height
 	private final int depth;
@@ -61,7 +62,6 @@ public class Level {
 	// is the tile on X and Y clear (No items or entities or walls blocking it)
 	public boolean isClearTile(int x, int y) {
 		return tiles[x][y].getItem() == null && isWalkAbleTile(x, y);
-
 	}
 
 	// is the tile on X and Y walkable (items can still be there)
@@ -215,9 +215,8 @@ public class Level {
 				}
 			}
 		}
-
-
 	}
+
 	private boolean outOfMapBounds(int x, int y) {
 		return (x <= 0 || x > (width - 1) * Tile.SIZE || y <= 0 || y > (height - 1) * Tile.SIZE);
 	}
@@ -237,7 +236,6 @@ public class Level {
 			Entity entity = tiles[x/Tile.SIZE][y/Tile.SIZE+1].getEntity();
 			return seperate && entity instanceof Tree ? Optional.of((Tree) entity) : Optional.empty();
 		}
-
 	}
 
 	// if there is ore on X and Y, return it
@@ -247,7 +245,6 @@ public class Level {
 		}
 		Entity entity = tiles[x / Tile.SIZE][y / Tile.SIZE].getEntity();
 		return entity instanceof Ore ? Optional.of((Ore) entity) : Optional.empty();
-
 	}
 
 	// 10% chance of there being a tree on each grass tile
@@ -258,7 +255,6 @@ public class Level {
 		if (Entity.RANDOM.nextInt(10) == 1) {
 			addEntity(new Tree(x * Tile.SIZE, y * Tile.SIZE, depth, this), true);
 		}
-
 	}
 
 	// 10% chance of there being ore on a dirt tile
@@ -290,7 +286,6 @@ public class Level {
 			return;
 		}
 		addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.STONE), true);
-
 	}
 
 	// render the tiles
@@ -306,7 +301,6 @@ public class Level {
 			}
 		}
 		glTranslatef(xScroll, yScroll, 0);
-
 	}
 
 	public void renderHardEntities(int xScroll, int yScroll) {
@@ -319,7 +313,6 @@ public class Level {
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
 				getTile(x, y).renderHard();
-
 			}
 		}
 		glTranslatef(xScroll, yScroll, 0);

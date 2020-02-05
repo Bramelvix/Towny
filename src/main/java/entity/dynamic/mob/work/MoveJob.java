@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class MoveJob extends Job {
+
 	private ArrayList<Path> paths;
 	private int counter = 0;
 	private boolean exactLocation;
@@ -39,7 +40,6 @@ public class MoveJob extends Job {
 				completed = true;
 				return;
 			}
-
 		} else {
 			int stairsX = -1;
 			int stairsY = -1;
@@ -72,7 +72,6 @@ public class MoveJob extends Job {
 					paths.add(path);
 				}
 			}
-
 		}
 		worker.setPath(paths.get(counter));
 	}
@@ -104,4 +103,5 @@ public class MoveJob extends Job {
 			stairs.goOnStairs(worker);
 		}
 	}
+
 }

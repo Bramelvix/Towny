@@ -8,6 +8,7 @@ import input.MousePosition;
 
 //icon on the bottom left of the screen (pickaxe, axe,...)
 public class Icon {
+
 	private int x, y; // x and y of the top left corner
 	private boolean hover; // is the mouse hovering over the icon
 	private int width,height; // width and length
@@ -53,7 +54,6 @@ public class Icon {
 
 	private void setHover(boolean hover) {
 		this.hover = hover;
-
 	}
 
 	//render the icon on the screen

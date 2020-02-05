@@ -10,6 +10,7 @@ import map.Level;
 
 //main class used to manage the ui
 public class Ui {
+
 	// different ui elements
 	private Menu menu;
 	private TopBar top;
@@ -27,8 +28,6 @@ public class Ui {
 		outline.render();
 		layerLevelChanger.render();
 		top.render();
-
-
 	}
 
 	public byte getSpeed() {
@@ -140,7 +139,6 @@ public class Ui {
 		selection.update();
 		top.update();
 		layerLevelChanger.update(z);
-
 	}
 
 	public void updateCounts(int solcount, int vilcount) {

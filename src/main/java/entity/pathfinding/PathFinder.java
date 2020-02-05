@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import map.Level;
 
 public class PathFinder {
+
 	private static ArrayList<Point> closed = new ArrayList<>();
 	private static ArrayList<Point> open = new ArrayList<>();
 	private static Point[][] nodes;
@@ -31,7 +32,6 @@ public class PathFinder {
 				if (p != null && shortest != null && p.getLength() < shortest.getLength()) {
 					shortest = p;
 				}
-
 			}
 			return shortest;
 		}
@@ -90,7 +90,6 @@ public class PathFinder {
 					}
 				}
 			}
-
 		}
 		if (nodes[tx][ty].getParent() == null) {
 			return null;
@@ -100,11 +99,9 @@ public class PathFinder {
 		while (!target.equals(nodes[sx][sy])) {
 			path.prependStep(target.x, target.y);
 			target = target.getParent();
-
 		}
 		path.prependStep(sx, sy);
 		return path;
-
 	}
 
 	private static boolean isValidLocation(int xp, int yp, Level level) {

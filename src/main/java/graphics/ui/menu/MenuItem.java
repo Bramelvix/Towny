@@ -11,6 +11,7 @@ import input.MousePosition;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class MenuItem {
+
 	private String text; // text on the menuitem
 	private int x, y; // x and y of top left corner
 	private int width; // width of the menuitem
@@ -41,13 +42,11 @@ public class MenuItem {
 	// constructor
 	public MenuItem(String text) {
 		this.text = text;
-
 	}
 
 	public MenuItem(String text, Entity e) {
 		this(text + " " + e.getName());
 		this.entity = e;
-
 	}
 
 	public MenuItem(ItemRecipe recipe) {

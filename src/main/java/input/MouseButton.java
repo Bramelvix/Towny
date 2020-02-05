@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFWMouseButtonCallbackI;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class MouseButton implements GLFWMouseButtonCallbackI {
+
 	private static boolean[] released = new boolean[3];
 	private static boolean[] pressed = new boolean[3];
 	private static int heldDownButton = -1;
@@ -57,4 +58,5 @@ public class MouseButton implements GLFWMouseButtonCallbackI {
 	static int getDragOffsetY() {
 		return dragOffsetY;
 	}
+
 }

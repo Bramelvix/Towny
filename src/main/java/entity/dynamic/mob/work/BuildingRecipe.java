@@ -12,6 +12,7 @@ import entity.nonDynamic.building.container.workstations.Anvil;
 import entity.nonDynamic.building.container.workstations.Furnace;
 
 public class BuildingRecipe extends Recipe {
+
 	private static final BuildingRecipe WOOD_WALL = new BuildingRecipe(new Wall(WallType.WOOD), ItemHashtable.get(1));
 	private static final BuildingRecipe STONE_WALL = new BuildingRecipe(new Wall(WallType.STONE), ItemHashtable.get(10));
 	private static final BuildingRecipe WOOD_DOOR = new BuildingRecipe(new Wall(WallType.WOOD, true), ItemHashtable.get(1));

@@ -10,6 +10,7 @@ import map.Tile;
 
 //abstract mob class for villagers and monsters/animals to extend
 public abstract class Mob extends Entity {
+
 	public Level[] levels; // level in which the entity is placed
 	private int idletimer = getIdleTimer();// timer for the mob to idle
 	private int health = 100;
@@ -34,7 +35,6 @@ public abstract class Mob extends Entity {
 				} else {
 					dir = (ya < 0) ? Direction.UP_LEFT : Direction.LEFT;
 				}
-
 			} else {
 				dir = (ya > 0) ? Direction.DOWN : Direction.UP;
 			}
@@ -43,14 +43,12 @@ public abstract class Mob extends Entity {
 			x += xa;
 			y += ya;
 		}
-
 	}
 
 	void idle() {
 		while (movement == null) {
 			movement = getPath((x / Tile.SIZE) + Entity.RANDOM.nextInt(4) - 2, (y / Tile.SIZE) + Entity.RANDOM.nextInt(4) - 2);
 		}
-
 	}
 
 	boolean idleTime() {
@@ -72,6 +70,7 @@ public abstract class Mob extends Entity {
 		counter = 0;
 		arrived = false;
 	}
+
 	// method to move the villager
 	public void move() {
 		if (movement == null) {
@@ -100,11 +99,9 @@ public abstract class Mob extends Entity {
 					if (onSpot(step.x*Tile.SIZE,step.y*Tile.SIZE,this.z)) {
 						arrived = true;
 					}
-
 				}
 			}
 		}
-
 	}
 
 	// is the mob around a tile (x and y in pixels)
@@ -114,7 +111,6 @@ public abstract class Mob extends Entity {
 				&& ((this.x/Tile.SIZE) <= ((x/Tile.SIZE) + 1)) && ((this.x/Tile.SIZE) >= ((x/Tile.SIZE) - 1))
 				&& ((this.y/Tile.SIZE >= ((y/Tile.SIZE) - 1)) && (this.y/Tile.SIZE <= ((y/Tile.SIZE) + 1))));
 	}
-
 
 	public boolean onSpot(int x, int y, int z) {
 		return (this.z == z && this.x == x && this.y == y);
@@ -143,7 +139,6 @@ public abstract class Mob extends Entity {
 	// pathfinder method
 	public Path getPath(int tx, int ty) {
 		return PathFinder.findPath(x / Tile.SIZE, y / Tile.SIZE, tx, ty, levels[z]);
-
 	}
 
 	public int getHealth() {
@@ -182,7 +177,6 @@ public abstract class Mob extends Entity {
 				|| levels[z].getTile(((x + 1) / Tile.SIZE), ((y + 1) / Tile.SIZE)).isSolid()
 			)
 		);
-
 	}
 
 	// DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()!! DO NOT USE!!!
@@ -190,8 +184,6 @@ public abstract class Mob extends Entity {
 		int xmov = Integer.compare(x*Tile.SIZE, this.x);
 		int ymov = Integer.compare(y*Tile.SIZE, this.y);
 		move(xmov*3, ymov*3);
-
 	}
-
 
 }

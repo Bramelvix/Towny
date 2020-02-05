@@ -73,7 +73,6 @@ public class Game {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private Game() throws Exception {
@@ -127,7 +126,6 @@ public class Game {
 		PathFinder.init(100, 100);
 		spawnvills();
 		spawnZombies();
-
 	}
 
 	private void setIcon() {
@@ -170,7 +168,6 @@ public class Game {
 		vil3.addClothing((Clothing) ItemHashtable.get(70));
 		vil3.addClothing((Clothing) ItemHashtable.get(73));
 		addVillager(vil3);
-
 	}
 
 	private void spawnZombies() {
@@ -196,7 +193,6 @@ public class Game {
 		}
 	}
 
-
 	private void loop() {
 		long lastTime = System.nanoTime();
 		double delta = 0;
@@ -217,13 +213,10 @@ public class Game {
 			}
 
 			draw();
-
-
 		}
 		glfwFreeCallbacks(window);
 		glfwDestroyWindow(window);
 		glfwTerminate();
-
 	}
 
 	private void draw() {
@@ -235,7 +228,6 @@ public class Game {
 		ui.render();
 		glfwSwapBuffers(window);
 	}
-
 
 	private void updateUI() {
 		ui.update(xScroll, yScroll, currentLayerNumber);
@@ -250,7 +242,6 @@ public class Game {
 			ui.updateMinimap(map, currentLayerNumber);
 		}
 		MouseButton.resetLeftAndRight();
-
 	}
 
 	private void scroll(long window, double v, double v1) {
@@ -263,7 +254,6 @@ public class Game {
 			}
 			ui.updateMinimap(map, currentLayerNumber);
 		}
-
 	}
 
 	private Villager getIdlestVil() {
@@ -279,7 +269,6 @@ public class Game {
 	private Optional<Villager> anyVillHoverOn() {
 		return vills.stream().filter(villager -> villager.hoverOn(currentLayerNumber)).findAny();
 	}
-
 
 	private Optional<Mob> anyMobHoverOn() {
 		return mobs.stream().filter(mob -> mob.hoverOn(currentLayerNumber)).findAny();
@@ -431,7 +420,6 @@ public class Game {
 				} else {
 					ui.showMenu(new MenuItem(MenuItem.CANCEL));
 				}
-
 			}
 		}
 		if (ui.menuVisible()) {
@@ -529,7 +517,6 @@ public class Game {
 					ui.showMenu(craftingOptions);
 				}
 			}
-
 		}
 	}
 
@@ -602,6 +589,5 @@ public class Game {
 	private boolean inBounds(int x, int y, int z, int layer, int xScroll, int x1, int yScroll, int y1) {
 		return z == layer && x + Tile.SIZE >= xScroll && x - Tile.SIZE <= x1 && y + Tile.SIZE >= yScroll && y - Tile.SIZE <= y1;
 	}
-
 
 }

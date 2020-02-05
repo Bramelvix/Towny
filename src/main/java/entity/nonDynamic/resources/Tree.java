@@ -9,6 +9,7 @@ import map.Level;
 import sound.Sound;
 
 public class Tree extends Resource {
+
 	private byte chopped = 100;
 	private Sprite topsprite;
 
@@ -25,7 +26,6 @@ public class Tree extends Resource {
 	public void render() {
 		super.render();
 		topsprite.draw(x,y-Sprite.SIZE);
-
 	}
 
 	// work method (same as in the Ore class)
@@ -41,7 +41,6 @@ public class Tree extends Resource {
 			level.addItem(ItemHashtable.get(1, this.x, this.y, this.z));
 			return true;
 		}
-
 	}
 
 	@Override

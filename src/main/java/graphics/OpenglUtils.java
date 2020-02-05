@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 import static org.lwjgl.opengl.GL11.*;
 
 public abstract class OpenglUtils {
+
 	public static int loadTexture(int[] pixels, int width, int height) {
 		ByteBuffer buffer = getByteBuffer(pixels,width,height);
 		int textureID = glGenTextures();
@@ -25,6 +26,7 @@ public abstract class OpenglUtils {
 		//Return the texture ID so we can bind it again later
 		return textureID;
 	}
+
 	public static void deleteTexture(int textId) {
 		glDeleteTextures(textId);
 	}
@@ -36,8 +38,8 @@ public abstract class OpenglUtils {
 				int pixel = pixels[y * width + x];
 				buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
 				buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
-				buffer.put((byte) (pixel & 0xFF));              // Blue component
-				buffer.put((byte) ((pixel >> 24) & 0xFF));    // Alpha component.
+				buffer.put((byte) (pixel & 0xFF));             // Blue component
+				buffer.put((byte) ((pixel >> 24) & 0xFF));     // Alpha component.
 			}
 		}
 		buffer.flip();
@@ -48,6 +50,7 @@ public abstract class OpenglUtils {
 		drawTexturedQuadScaled(x,y,size,size,id);
 
 	}
+
 	public static void drawTexturedQuadScaled(int x, int y, int width, int height, int texture) {
 		glPushMatrix();
 		glBindTexture(GL_TEXTURE_2D, texture);
@@ -71,6 +74,7 @@ public abstract class OpenglUtils {
 		glPopMatrix();
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
+
 	public static void drawSelection(int x, int y, int width, int height) {
 		glPushMatrix();
 		glColor3f(1.0f,0.0f,0.0f);
@@ -87,7 +91,6 @@ public abstract class OpenglUtils {
 
 		glColor3f(1.0f, 1.0f, 1.0f);
 		glPopMatrix();
-
 	}
 
 	public static void iconDraw(int id, int x, int y, int width,int height, boolean drawSelectionSquare) { //drawTexturedQuadScaled ui which does not need to be scaled up
@@ -95,11 +98,12 @@ public abstract class OpenglUtils {
 		if (drawSelectionSquare) {
 			drawSelection(x,y,width,height);
 		}
-
 	}
+
 	public static void menuDraw(int x, int y, int width, int height) {
 		drawFilledSquare(x,y,width,height,0.3568f,0.3686f,0.8235f,0.5f);
 	}
+
 	public static void drawFilledSquare(int x, int y, int width, int height, float r, float g, float b, float a) {
 		glPushMatrix();
 		glColor4f(r, g, b, a);
@@ -117,6 +121,7 @@ public abstract class OpenglUtils {
 		glPopMatrix();
 
 	}
+
 	public static void menuItemDraw(int x, int y, String text, boolean selected) {
 		if (selected) {
 			drawTextRed(text, x, y - 5);
@@ -125,6 +130,7 @@ public abstract class OpenglUtils {
 		}
 
 	}
+
 	public static void buildOutlineDraw(int x, int y, int size, Color color) {
 		drawFilledSquare(x, y, size, size,color.getRed()/255f,color.getGreen()/255f,color.getBlue()/255f,color.getAlpha()/255f);
 	}
@@ -141,9 +147,9 @@ public abstract class OpenglUtils {
 	public static void drawText(String text, int x, int y) {
 		TrueTypeFont.black.drawString(x,y,text,1,1);
 	}
+
 	public static void drawTextRed(String text, int x, int y) {
 		TrueTypeFont.red.drawString(x,y,text,1,1);
 	}
-
 
 }

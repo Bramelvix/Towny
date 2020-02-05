@@ -6,6 +6,7 @@ import entity.nonDynamic.building.container.workstations.Workstation;
 import map.Tile;
 
 public class CraftJob extends Job {
+
 	private final Item[] resources;
 	private final Item product;
 	private final Workstation station;
@@ -28,9 +29,7 @@ public class CraftJob extends Job {
 			}
 			worker.addJob(new MoveItemJob(item, worker));
 			worker.addJob(new MoveItemJob(station.getX(), station.getY(),worker.getZ(), worker));
-
 		}
-
 	}
 
 	@Override
@@ -58,7 +57,6 @@ public class CraftJob extends Job {
 					}
 					completed = true;
 				}
-
 			}
 		} else {
 			start();

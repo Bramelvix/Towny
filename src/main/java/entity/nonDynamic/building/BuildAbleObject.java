@@ -6,6 +6,7 @@ import map.Tile;
 import sound.Sound;
 
 public abstract class BuildAbleObject extends StaticEntity {
+
 	private boolean open; // can a villager walk over the object
 	public boolean initialised = false; // has the building been initialised
 	private byte condition = 0; // condition of the building (0=not built ,100= done)
@@ -26,7 +27,6 @@ public abstract class BuildAbleObject extends StaticEntity {
 		setLocation(x * Tile.SIZE, y * Tile.SIZE, depth);
 		level.addEntity(this, !this.open);
 		initialised = true;
-
 	}
 
 	// build method called by villagers when building
@@ -42,11 +42,9 @@ public abstract class BuildAbleObject extends StaticEntity {
 				this.setVisible(true);
 				return true;
 			}
-
 		}
 		return false;
 	}
-
 
 	public abstract BuildAbleObject instance();
 

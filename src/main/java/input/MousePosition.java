@@ -7,6 +7,7 @@ import org.lwjgl.glfw.GLFWCursorPosCallbackI;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_MIDDLE;
 
 public class MousePosition implements GLFWCursorPosCallbackI {
+
 	private static int trueX = -1; // x and y coord on the screen, in pixels, WITHOUT OFFSET
 	private static int trueY = -1;
 
@@ -29,7 +30,6 @@ public class MousePosition implements GLFWCursorPosCallbackI {
 			if (deltaY + MouseButton.getDragOffsetY() >= 0 && deltaY + MouseButton.getDragOffsetY() <= ((game.map[game.currentLayerNumber].height * Tile.SIZE) - Game.height)) {
 				game.yScroll = deltaY + MouseButton.getDragOffsetY();
 			}
-
 		}
 	}
 
@@ -54,8 +54,10 @@ public class MousePosition implements GLFWCursorPosCallbackI {
 	public static int getX() {
 		return trueX + game.xScroll;
 	}
+
 	public static int getY() {
 		return trueY + game.yScroll;
 	}
+
 }
 

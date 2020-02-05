@@ -6,7 +6,7 @@ import java.awt.Graphics;
 
 public class VillagerListScreen {
 	
-	private int x,y;
+	private int x, y;
 	private int width = 500;
 	private int height = 500;
 	private boolean visible;
@@ -18,6 +18,5 @@ public class VillagerListScreen {
 			g.fillRect(x, y, width, height);
 		}
 	}
-
 
 }
