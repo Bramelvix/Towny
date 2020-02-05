@@ -1,8 +1,10 @@
 # Towny
 
 Towny is a java dwarf fortress-style game, where you manage a group of villagers stranded in the wilderness.
-Major influences to the game include: Dwarf fortress, Rimworld, Minecraft and Runescape.
 Feel free to contribute to the game by fixing my terrible code, or adding new features.
+
+## Mac os
+Running the game on mac requires you to put `-XstartOnFirstThread -Djava.awt.headless=true` in the VM options in your launch config.
 
 ## TODO
 
