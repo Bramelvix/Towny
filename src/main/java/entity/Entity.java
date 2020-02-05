@@ -6,10 +6,11 @@ import graphics.Sprite;
 import input.MousePosition;
 
 public abstract class Entity {
-    protected int x, y, z; // x and y of the entity
+    protected int x, y, z; // x, y and z of the entity
     public static final Random RANDOM = new Random(); // random needed for various chance calculations
     public Sprite sprite; // the entity's sprite
     private boolean visible; // is the entity visible or not
+	private boolean transparent = true; // non transparent entities will stop the Tile sprite under them from rendering unnecessarily
     private boolean selected = false;
     private String displayName;
 
@@ -17,6 +18,8 @@ public abstract class Entity {
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
+
+    public void setTransparent(boolean transparent) { this.transparent = transparent; }
 
     public void setSelected(boolean selected) {
         this.selected = selected;
@@ -60,6 +63,8 @@ public abstract class Entity {
     protected boolean isSelected() {
         return selected;
     }
+
+    public boolean isTransparent() { return transparent; }
 
     // basic constructor
     public Entity(int x, int y, int z) {

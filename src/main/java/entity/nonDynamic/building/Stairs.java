@@ -11,6 +11,7 @@ public class Stairs extends BuildAbleObject {
 		super();
 		setVisible(true);
 		this.top = top;
+		setTransparent(!this.top);
 		sprite = SpriteHashtable.get(top ? 40 : 41);
 		setName("stairs");
 

@@ -20,11 +20,11 @@ public class Path {
 	}
 
 	public int getX(int index) {
-		return steps.get(index).position.x;
+		return steps.get(index).x;
 	}
 
 	public int getY(int index) {
-		return steps.get(index).position.y;
+		return steps.get(index).y;
 	}
 
 	public Point getStep(int index) {

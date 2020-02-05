@@ -7,7 +7,7 @@ import graphics.SpriteHashtable;
 
 public class Tile {
 	public Sprite sprite; // tile's sprite
-	private boolean solid; // is the tile isSolid
+	private boolean solid; // is the tile solid
 	public static final int SIZE = 48; // fixed size
 	private Item item;
 	private Entity entity;
@@ -25,7 +25,9 @@ public class Tile {
 
 	// render a tile
 	 void render(int x, int y) {
-		sprite.draw(x,y);
+		if (entity == null || entity.isTransparent()) {
+			sprite.draw(x,y);
+		}
 		if (entity != null && !solid) {
 			entity.render();
 		}

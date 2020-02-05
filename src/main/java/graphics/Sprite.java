@@ -12,7 +12,7 @@ public class Sprite {
 		pixels = load(x * SIZE + (x * sheet.getMargin()),
 			y * SIZE + (y * sheet.getMargin()), sheet
 		);
-		id = OpenglUtils.loadTexture(pixels, SIZE,SIZE);
+		id = OpenglUtils.loadTexture(pixels, SIZE, SIZE);
 	}
 
 	public Sprite(int[] pixels) {
@@ -34,7 +34,7 @@ public class Sprite {
 
 
 	public void draw(int x, int y) {
-		OpenglUtils.drawTexturedQuadScaled(id,x,y,SIZE);
+		OpenglUtils.drawTexturedQuadScaled(id, x, y, SIZE);
 	}
 
 

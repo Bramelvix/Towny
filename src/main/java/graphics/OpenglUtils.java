@@ -30,14 +30,14 @@ public abstract class OpenglUtils {
 	}
 
 	public static ByteBuffer getByteBuffer(int[] pixels, int width, int height) {
-		ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4); //4 for RGBA, 3 for RGB
+		ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				int pixel = pixels[y * width + x];
 				buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
 				buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
 				buffer.put((byte) (pixel & 0xFF));              // Blue component
-				buffer.put((byte) ((pixel >> 24) & 0xFF));    // Alpha component. Only for RGBA
+				buffer.put((byte) ((pixel >> 24) & 0xFF));    // Alpha component.
 			}
 		}
 		buffer.flip();
@@ -51,22 +51,23 @@ public abstract class OpenglUtils {
 	public static void drawTexturedQuadScaled(int x, int y, int width, int height, int texture) {
 		glPushMatrix();
 		glBindTexture(GL_TEXTURE_2D, texture);
+
 		glBegin(GL_QUADS);
-		{
-			glTexCoord2f(0, 0);
-			glVertex2f(x, y);
 
-			glTexCoord2f(0, 1);
-			glVertex2f(x, y + height);
+		glTexCoord2f(0, 0);
+		glVertex2f(x, y);
 
-			glTexCoord2f(1, 1);
-			glVertex2f(x + width, y + height);
+		glTexCoord2f(0, 1);
+		glVertex2f(x, y + height);
 
-			glTexCoord2f(1, 0);
-			glVertex2f(x + width, y );
+		glTexCoord2f(1, 1);
+		glVertex2f(x + width, y + height);
 
-		}
+		glTexCoord2f(1, 0);
+		glVertex2f(x + width, y);
+
 		glEnd();
+
 		glPopMatrix();
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
@@ -74,14 +75,16 @@ public abstract class OpenglUtils {
 		glPushMatrix();
 		glColor3f(1.0f,0.0f,0.0f);
 		glLineWidth(3);
+
 		glBegin(GL_LINE_LOOP);
-		{
-			glVertex2f(x, y);
-			glVertex2f(x, y + height);
-			glVertex2f(x + width, y + height);
-			glVertex2f(x + width, y );
-		}
+
+		glVertex2f(x, y);
+		glVertex2f(x, y + height);
+		glVertex2f(x + width, y + height);
+		glVertex2f(x + width, y);
+
 		glEnd();
+
 		glColor3f(1.0f, 1.0f, 1.0f);
 		glPopMatrix();
 
@@ -99,29 +102,31 @@ public abstract class OpenglUtils {
 	}
 	public static void drawFilledSquare(int x, int y, int width, int height, float r, float g, float b, float a) {
 		glPushMatrix();
-		glColor4f(r,g,b,a);
+		glColor4f(r, g, b, a);
+
 		glBegin(GL_QUADS);
-		{
-			glVertex2f(x, y);
-			glVertex2f(x, y + height);
-			glVertex2f(x + width, y + height);
-			glVertex2f(x + width, y );
-		}
-		glColor3f(1.0f,1.0f,1.0f);
+
+		glVertex2f(x, y);
+		glVertex2f(x, y + height);
+		glVertex2f(x + width, y + height);
+		glVertex2f(x + width, y);
+
 		glEnd();
+
+		glColor3f(1.0f,1.0f,1.0f);
 		glPopMatrix();
 
 	}
 	public static void menuItemDraw(int x, int y, String text, boolean selected) {
 		if (selected) {
-			drawTextRed(text, x, y-5);
+			drawTextRed(text, x, y - 5);
 		} else {
-			drawText(text,x,y-5);
+			drawText(text,x,y - 5);
 		}
 
 	}
 	public static void buildOutlineDraw(int x, int y, int size, Color color) {
-		drawFilledSquare(x,y,size,size,color.getRed()/255f,color.getGreen()/255f,color.getBlue()/255f,color.getAlpha()/255f);
+		drawFilledSquare(x, y, size, size,color.getRed()/255f,color.getGreen()/255f,color.getBlue()/255f,color.getAlpha()/255f);
 	}
 
 	public static BufferedImage getScaledBufferedImage(BufferedImage before, float xScale, float yScale) {

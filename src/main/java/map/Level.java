@@ -2,7 +2,6 @@ package map;
 
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.function.BiPredicate;
 import entity.*;
 import entity.nonDynamic.building.Stairs;
 import entity.nonDynamic.building.wall.Wall;
@@ -14,7 +13,8 @@ import entity.nonDynamic.resources.Tree;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import main.Game;
-import util.Vector2I;
+import util.BiPredicateInteger;
+
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class Level {
@@ -77,13 +77,14 @@ public class Level {
 		return tiles[x][y].getEntity();
 	}
 
-	public <T extends Entity> Vector2I getNearestSpotThatHasX(int xloc, int yloc, Class<T> clazz) {
+	public <T extends Entity> int[] getNearestSpotThatHasX(int xloc, int yloc, Class<T> clazz) {
 		return getNearestSpotThatHasX(xloc, yloc, (x, y) -> has(x, y, clazz));
 	}
 
-	private Vector2I getNearestSpotThatHasX(int xloc, int yloc, BiPredicate<Integer, Integer> p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
+	private int[] getNearestSpotThatHasX(int xloc, int yloc, BiPredicateInteger p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
+		// index 0 in array is X, index 1 is Y
 		if (p.test(xloc, yloc)) {
-			return new Vector2I(xloc, yloc);
+			return new int[] { xloc, yloc };
 		} else {
 			for (int layer = 1; layer < 100; layer++) {
 				int x = layer - 1;
@@ -93,28 +94,28 @@ public class Level {
 				int err = dx - (layer << 1);
 				while (x >= y) {
 					if (p.test(xloc + x, yloc + y)) {
-						return new Vector2I(xloc + x, yloc + y);
+						return new int[] { xloc + x, yloc + y };
 					}
 					if (p.test(xloc + y, yloc + x)) {
-						return new Vector2I(xloc + y, yloc + x);
+						return new int[] { xloc + y, yloc + x };
 					}
 					if (p.test(xloc - y, yloc + x)) {
-						return new Vector2I(xloc - y, yloc + x);
+						return new int[] { xloc - y, yloc + x};
 					}
 					if (p.test(xloc - x, yloc + y)) {
-						return new Vector2I(xloc - x, yloc + y);
+						return new int[] { xloc - x, yloc + y};
 					}
 					if (p.test(xloc - x, yloc - y)) {
-						return new Vector2I(xloc - x, yloc - y);
+						return new int[] { xloc - x, yloc - y };
 					}
 					if (p.test(xloc - y, yloc - x)) {
-						return new Vector2I(xloc - y, yloc - x);
+						return new int[] { xloc - y, yloc - x};
 					}
 					if (p.test(xloc + y, yloc - x)) {
-						return new Vector2I(xloc + y, yloc - x);
+						return new int[] { xloc + y, yloc - x };
 					}
 					if (p.test(xloc + x, yloc - y)) {
-						return new Vector2I(xloc + x, yloc - y);
+						return new int[] { xloc + x, yloc - y };
 					}
 
 					if (err <= 0) {
@@ -138,13 +139,13 @@ public class Level {
 	}
 
 	public <T extends Workstation> Optional<T> getNearestWorkstation(Class<T> workstation, int x, int y) {
-		Vector2I point = getNearestSpotThatHasX(x, y, workstation);
-		return point != null ?  Optional.of(workstation.cast(tiles[point.x][point.y].getEntity())) : Optional.empty();
+		int[] point = getNearestSpotThatHasX(x, y, workstation);
+		return point != null ?  Optional.of(workstation.cast(tiles[point[0]][point[1]].getEntity())) : Optional.empty();
 	}
 
 	public Optional<Stairs> getNearestStairs(int x, int y, boolean top) { //gets the nearest stairs object on the map
-		Vector2I point = top ? getNearestSpotThatHasX(x, y, this::hasTopStairs) : getNearestSpotThatHasX(x, y, this::hasBottomStairs);
-		return point != null ?  Optional.of((Stairs) tiles[point.x][point.y].getEntity()): Optional.empty();
+		int[] point = top ? getNearestSpotThatHasX(x, y, this::hasTopStairs) : getNearestSpotThatHasX(x, y, this::hasBottomStairs);
+		return point != null ?  Optional.of((Stairs) tiles[point[0]][point[1]].getEntity()): Optional.empty();
 	}
 
 	private boolean hasBottomStairs(int x, int y) {
@@ -302,7 +303,6 @@ public class Level {
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
 				getTile(x, y).render(x * Sprite.SIZE, y * Sprite.SIZE);
-
 			}
 		}
 		glTranslatef(xScroll, yScroll, 0);

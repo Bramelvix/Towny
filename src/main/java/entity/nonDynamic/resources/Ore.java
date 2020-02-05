@@ -23,6 +23,7 @@ public class Ore extends Resource {
 	public Ore(int x, int y, int z, Level level, OreType type) {
 		super(x, y, z, level);
 		decideSprite(type);
+		setTransparent(false);
 		setVisible(true);
 	}
 
