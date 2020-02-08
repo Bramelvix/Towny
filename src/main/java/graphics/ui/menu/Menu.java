@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import entity.dynamic.mob.work.Recipe;
 import graphics.OpenglUtils;
-import input.MousePosition;
+import input.PointerInput;
 
 public class Menu { // the menu is the little options menu that shows up when you right click
 
@@ -17,6 +17,14 @@ public class Menu { // the menu is the little options menu that shows up when yo
 	private List<MenuItem> items; // spritesheets of items on the menu
 	private boolean visible; // is the item visible
 
+	// constructor
+	public Menu() {
+		x = 0;
+		y = 0;
+		items = new ArrayList<>();
+		hide();
+	}
+
 	// render method
 	public void render() {
 		if (visible) {
@@ -26,10 +34,10 @@ public class Menu { // the menu is the little options menu that shows up when yo
 	}
 
 	// showing the menu
-	public void show() {
+	public void show(PointerInput pointer) {
 		visible = true;
-		ingameX = MousePosition.getX();
-		ingameY = MousePosition.getY();
+		ingameX = pointer.getX();
+		ingameY = pointer.getY();
 	}
 
 	// getter
@@ -52,27 +60,19 @@ public class Menu { // the menu is the little options menu that shows up when yo
 	}
 
 	// updating the menu
-	public void update(boolean forceInvisible) {
+	public void update(PointerInput pointer, boolean forceInvisible) {
 		if (forceInvisible) {
 			hide();
 		} else {
-			items.forEach(MenuItem::update);
-			if (!((MousePosition.getTrueX() >= getX() - 10)
-					&& (MousePosition.getTrueX() <= getX() + (getWidth() + 10))
-					&& (MousePosition.getTrueY() >= getY() - 10)
-					&& (MousePosition.getTrueY() <= getY() + (getHeight() + 10)))
+			items.forEach(item -> item.update (pointer));
+			if (!((pointer.getTrueX() >= getX() - 10)
+					&& (pointer.getTrueX() <= getX() + (getWidth() + 10))
+					&& (pointer.getTrueY() >= getY() - 10)
+					&& (pointer.getTrueY() <= getY() + (getHeight() + 10)))
 			){
 				hide();
 			}
 		}
-	}
-
-	// constructor
-	public Menu() {
-		x = 0;
-		y = 0;
-		items = new ArrayList<>();
-		hide();
 	}
 
 	// getters
@@ -104,17 +104,17 @@ public class Menu { // the menu is the little options menu that shows up when yo
 		return y;
 	}
 
-	private Optional<MenuItem> clickedItem(String type) {
-		Optional<MenuItem> clickedItem = clickedItem();
+	private Optional<MenuItem> clickedItem(PointerInput pointer, String type) {
+		Optional<MenuItem> clickedItem = clickedItem(pointer);
 		return clickedItem.isPresent() && clickedItem.get().getText().contains(type) ? clickedItem : Optional.empty();
 	}
 
-	public Optional<MenuItem> clickedItem() {
-		return items.stream().filter(MenuItem::clicked).findAny();
+	public Optional<MenuItem> clickedItem(PointerInput pointer) {
+		return items.stream().filter(item -> item.clicked (pointer)).findAny();
 	}
 
-	public <T extends Recipe> T recipeFromMenuOption(String menuItem) {
-		Optional<MenuItem> clickedItem = clickedItem(menuItem);
+	public <T extends Recipe> T recipeFromMenuOption(PointerInput pointer, String menuItem) {
+		Optional<MenuItem> clickedItem = clickedItem(pointer, menuItem);
 		return clickedItem.<T>map(MenuItem::getRecipe).orElse(null);
 	}
 

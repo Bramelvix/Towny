@@ -2,7 +2,7 @@ package graphics.ui;
 
 import graphics.OpenglUtils;
 import graphics.ui.icon.Icon;
-import input.MouseButton;
+import input.PointerInput;
 import main.Game;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
@@ -43,18 +43,18 @@ public class TopBar {
 		this.vilcount = vilcount;
 	}
 
-	public void update() {
-		play.update();
-		pause.update();
-		slow.update();
-		fast.update();
-		sol.update();
-		vil.update();
-		if (clickedOnPause()) {
+	public void update(PointerInput pointer) {
+		play.update(pointer);
+		pause.update(pointer);
+		slow.update(pointer);
+		fast.update(pointer);
+		sol.update(pointer);
+		vil.update(pointer);
+		if (clickedOnPause(pointer)) {
 			togglePause();
-		} else if (clickedOnFast()) {
+		} else if (clickedOnFast(pointer)) {
 			upSpeed();
-		} else if (clickedOnSlow()) {
+		} else if (clickedOnSlow(pointer)) {
 			downSpeed();
 		}
 	}
@@ -98,23 +98,20 @@ public class TopBar {
 	}
 
 	// has the user clicked on the pause button
-	private boolean clickedOnPause() {
-		if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
-			if (Game.paused) {
-				return play.hoverOn();
-			} else {
-				return pause.hoverOn();
-			}
-		}
-		return false;
+	private boolean clickedOnPause(PointerInput pointer) {
+		return (
+			! pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT) ? false :
+			Game.paused ? play.hoverOn () :
+			pause.hoverOn ()
+		);
 	}
 
-	private boolean clickedOnFast() {
-		return fast.hoverOn() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT);
+	private boolean clickedOnFast(PointerInput pointer) {
+		return fast.hoverOn() && pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT);
 	}
 
-	private boolean clickedOnSlow() {
-		return slow.hoverOn() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT);
+	private boolean clickedOnSlow(PointerInput pointer) {
+		return slow.hoverOn() && pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT);
 	}
 
 	// toggle pausing

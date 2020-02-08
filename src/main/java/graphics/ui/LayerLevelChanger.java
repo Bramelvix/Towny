@@ -2,7 +2,7 @@ package graphics.ui;
 
 import graphics.OpenglUtils;
 import graphics.ui.icon.Icon;
-import input.MouseButton;
+import input.PointerInput;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
@@ -30,13 +30,13 @@ public class LayerLevelChanger {
 		down = new Icon(x + 100, y + 5, "/icons/plain-arrow-down.png", 0.065f);
 	}
 
-	public void update(int z) {
-		up.update();
-		down.update();
+	public void update(PointerInput pointer, int z) {
+		up.update(pointer);
+		down.update(pointer);
 		if (this.z != z) {
 			this.z = z;
 		}
-		if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
+		if (pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
 			if (up.hoverOn()) {
 				if (this.z != 0) {
 					this.z--;

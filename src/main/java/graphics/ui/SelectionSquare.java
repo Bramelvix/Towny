@@ -2,8 +2,7 @@ package graphics.ui;
 
 import java.awt.Color;
 import graphics.OpenglUtils;
-import input.MouseButton;
-import input.MousePosition;
+import input.PointerInput;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
@@ -15,11 +14,11 @@ public class SelectionSquare {
 	private int width, height;
 	private boolean visible;
 
-	public void update() {
+	public void update(PointerInput pointer) {
 		if (visible) {
-			if (MouseButton.heldDown(GLFW_MOUSE_BUTTON_LEFT)) {
-				width = MousePosition.getTrueX() - x;
-				height = MousePosition.getTrueY() - y;
+			if (pointer.heldDown(GLFW_MOUSE_BUTTON_LEFT)) {
+				width = pointer.getTrueX() - x;
+				height = pointer.getTrueY() - y;
 			}
 		}
 	}
@@ -34,12 +33,12 @@ public class SelectionSquare {
 		height = 0;
 	}
 
-	public void init() {
+	public void init(PointerInput pointer) {
 		if (!visible) {
-			x = MousePosition.getTrueX();
-			y = MousePosition.getTrueY();
-			ingameX = MousePosition.getX();
-			ingameY =  MousePosition.getY();
+			x = pointer.getTrueX();
+			y = pointer.getTrueY();
+			ingameX = pointer.getX();
+			ingameY =  pointer.getY();
 			visible = true;
 		}
 	}

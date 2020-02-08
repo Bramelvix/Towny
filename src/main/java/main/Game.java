@@ -31,8 +31,7 @@ import graphics.ui.icon.Icon;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.MenuItem;
 import input.Keyboard;
-import input.MouseButton;
-import input.MousePosition;
+import input.PointerInput;
 import map.Level;
 import map.Tile;
 import org.lwjgl.glfw.GLFWImage;
@@ -66,6 +65,7 @@ public class Game {
 	public int yScroll = 0;
 	public int currentLayerNumber = 0;
 	private long window;
+	private PointerInput pointer;
 
 	public static void main(String[] args) {
 		try {
@@ -110,8 +110,12 @@ public class Game {
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glfwSetKeyCallback(window, new Keyboard());
-		glfwSetMouseButtonCallback(window, new MouseButton());
-		glfwSetCursorPosCallback(window, new MousePosition(this));
+
+		PointerInput.configure (this);
+		this.pointer = PointerInput.getInstance ();
+		glfwSetMouseButtonCallback(window, pointer.buttonsCallback ());
+		glfwSetCursorPosCallback(window, pointer.positionCallback ());
+
 		glfwSetScrollCallback(window, this::scroll);
 		SpritesheetHashtable.registerSpritesheets();
 		SpriteHashtable.registerSprites();
@@ -230,7 +234,7 @@ public class Game {
 	}
 
 	private void updateUI() {
-		ui.update(xScroll, yScroll, currentLayerNumber);
+		ui.update(pointer, xScroll, yScroll, currentLayerNumber);
 		updateMouse();
 		moveCamera();
 		if (speed != ui.getSpeed()) {
@@ -241,7 +245,7 @@ public class Game {
 			currentLayerNumber = ui.getZFromLevelChanger();
 			ui.updateMinimap(map, currentLayerNumber);
 		}
-		MouseButton.resetLeftAndRight();
+		pointer.resetLeftAndRight();
 	}
 
 	private void scroll(long window, double v, double v1) {
@@ -267,11 +271,11 @@ public class Game {
 	}
 
 	private Optional<Villager> anyVillHoverOn() {
-		return vills.stream().filter(villager -> villager.hoverOn(currentLayerNumber)).findAny();
+		return vills.stream().filter(villager -> villager.hoverOn(pointer, currentLayerNumber)).findAny();
 	}
 
 	private Optional<Mob> anyMobHoverOn() {
-		return mobs.stream().filter(mob -> mob.hoverOn(currentLayerNumber)).findAny();
+		return mobs.stream().filter(mob -> mob.hoverOn(pointer, currentLayerNumber)).findAny();
 	}
 
 	private void deselectAllVills() {
@@ -285,8 +289,8 @@ public class Game {
 
 	private void updateMouse() {
 		if ((UiIcons.isAxeSelected()) && UiIcons.hoverOnNoIcons()) {
-			if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
-				ui.showSelectionSquare();
+			if (pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
+				ui.showSelectionSquare(pointer);
 				int x = ui.getSelectionX();
 				int y = ui.getSelectionY();
 				int width = ui.getSelectionWidth();
@@ -298,7 +302,7 @@ public class Game {
 				}
 				return;
 			}
-			if (MouseButton.wasReleased(GLFW_MOUSE_BUTTON_LEFT)) {
+			if (pointer.wasReleased(GLFW_MOUSE_BUTTON_LEFT)) {
 				int x = ui.getSelectionX();
 				int y = ui.getSelectionY();
 				int width = ui.getSelectionWidth();
@@ -315,9 +319,9 @@ public class Game {
 			}
 			return;
 		}
-		if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
+		if (pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
 			if (UiIcons.isMiningSelected() && UiIcons.hoverOnNoIcons()) {
-				map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY()).ifPresent(ore -> {
+				map[currentLayerNumber].selectOre(pointer.getX(), pointer.getY()).ifPresent(ore -> {
 					Villager idle = getIdlestVil();
 					deselectAllVills();
 					idle.addJob(ore);
@@ -326,12 +330,12 @@ public class Game {
 			}
 			if (UiIcons.isShovelHover() && !ui.menuVisible()) {
 				deselectAllVills();
-				ui.showBuildSquare(xScroll, yScroll, true, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
+				ui.showBuildSquare(pointer, xScroll, yScroll, true, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
 				ui.deSelectIcons();
 				return;
 			}
 			if (UiIcons.isPlowHover() && !ui.menuVisible()){
-				ui.showBuildSquare(xScroll, yScroll, false, BuildingRecipe.TILLED_SOIL, currentLayerNumber);
+				ui.showBuildSquare(pointer, xScroll, yScroll, false, BuildingRecipe.TILLED_SOIL, currentLayerNumber);
 				ui.deSelectIcons();
 				return;
 			}
@@ -358,7 +362,7 @@ public class Game {
 					items[i] = new MenuItem(BuildingRecipe.RECIPES[i]);
 				}
 				items[items.length - 1] = new MenuItem(MenuItem.CANCEL);
-				ui.showMenu(items);
+				ui.showMenu(pointer, items);
 				return;
 			}
 			if (ui.outlineIsVisible() && !ui.menuVisible() && UiIcons.hoverOnNoIcons()) {
@@ -375,24 +379,24 @@ public class Game {
 				ui.deSelectIcons();
 				return;
 			}
-		} else if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_RIGHT)) {
+		} else if (pointer.wasPressed(GLFW_MOUSE_BUTTON_RIGHT)) {
 			if (selectedvill != null) {
 				List<MenuItem> options = new ArrayList<>();
-				if (selectedvill.getHolding() != null&&(map[currentLayerNumber].tileIsEmpty(MousePosition.getTileX(),MousePosition.getTileY()) || map[currentLayerNumber].getEntityOn(MousePosition.getTileX(),MousePosition.getTileY()) instanceof Chest)) {
+				if (selectedvill.getHolding() != null&&(map[currentLayerNumber].tileIsEmpty(pointer.getTileX(),pointer.getTileY()) || map[currentLayerNumber].getEntityOn(pointer.getTileX(),pointer.getTileY()) instanceof Chest)) {
 					options.add(new MenuItem((MenuItem.DROP + " " + selectedvill.getHolding().getName())));
 				}
 
-				map[currentLayerNumber].selectTree(MousePosition.getX(), MousePosition.getY()).ifPresent(
+				map[currentLayerNumber].selectTree(pointer.getX(), pointer.getY()).ifPresent(
 						tree -> options.add(new MenuItem((MenuItem.CHOP), tree))
 				);
 
-				map[currentLayerNumber].selectOre(MousePosition.getX(), MousePosition.getY()).ifPresent(
+				map[currentLayerNumber].selectOre(pointer.getX(), pointer.getY()).ifPresent(
 						ore ->  options.add(new MenuItem((MenuItem.MINE), ore))
 				);
 
 				anyMobHoverOn().ifPresent(mob -> options.add(new MenuItem((MenuItem.FIGHT), mob)));
 
-				map[currentLayerNumber].getItemOn(MousePosition.getX(), MousePosition.getY()).ifPresent(item -> {
+				map[currentLayerNumber].getItemOn(pointer.getX(), pointer.getY()).ifPresent(item -> {
 					if (item instanceof Weapon) {
 						options.add(new MenuItem((MenuItem.EQUIP), item));
 					} else if (item instanceof Clothing) {
@@ -402,8 +406,8 @@ public class Game {
 					}
 				});
 
-				if (map[currentLayerNumber].getEntityOn(MousePosition.getTileX(), MousePosition.getTileY()) instanceof Container) {
-					Container container = map[currentLayerNumber].getEntityOn(MousePosition.getTileX(), MousePosition.getTileY());
+				if (map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY()) instanceof Container) {
+					Container container = map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY());
 					for (Item i : container.getItems()) {
 						options.add(new MenuItem((MenuItem.PICKUP), i));
 					}
@@ -411,19 +415,19 @@ public class Game {
 					options.add(new MenuItem(MenuItem.MOVE));
 				}
 				options.add(new MenuItem(MenuItem.CANCEL));
-				ui.showMenu(options.toArray(new MenuItem[0]));
+				ui.showMenu(pointer, options.toArray(new MenuItem[0]));
 			} else {
-				if (map[currentLayerNumber].getEntityOn(MousePosition.getTileX(), MousePosition.getTileY()) instanceof Furnace) {
-					ui.showMenu(new MenuItem(MenuItem.SMELT), new MenuItem(MenuItem.CANCEL));
-				} else if (map[currentLayerNumber].getEntityOn(MousePosition.getTileX(), MousePosition.getTileY()) instanceof Anvil) {
-					ui.showMenu(new MenuItem(MenuItem.SMITH), new MenuItem(MenuItem.CANCEL));
+				if (map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY()) instanceof Furnace) {
+					ui.showMenu(pointer, new MenuItem(MenuItem.SMELT), new MenuItem(MenuItem.CANCEL));
+				} else if (map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY()) instanceof Anvil) {
+					ui.showMenu(pointer, new MenuItem(MenuItem.SMITH), new MenuItem(MenuItem.CANCEL));
 				} else {
-					ui.showMenu(new MenuItem(MenuItem.CANCEL));
+					ui.showMenu(pointer, new MenuItem(MenuItem.CANCEL));
 				}
 			}
 		}
 		if (ui.menuVisible()) {
-			Optional<MenuItem> optional = ui.getMenu().clickedItem();
+			Optional<MenuItem> optional = ui.getMenu().clickedItem(pointer);
 			if (optional.isPresent()) {
 				MenuItem item = optional.get();
 				if (item.getText().contains(MenuItem.CANCEL)) {
@@ -434,7 +438,7 @@ public class Game {
 					}
 				} else if (item.getText().contains(MenuItem.MOVE)) {
 					selectedvill.resetAll();
-					selectedvill.addJob(new MoveJob(MousePosition.getX(), MousePosition.getY(), currentLayerNumber, selectedvill));
+					selectedvill.addJob(new MoveJob(pointer.getX(), pointer.getY(), currentLayerNumber, selectedvill));
 					deselect(selectedvill);
 					ui.deSelectIcons();
 					ui.getMenu().hide();
@@ -457,7 +461,7 @@ public class Game {
 					ui.deSelectIcons();
 					ui.getMenu().hide();
 				} else if (item.getText().contains(MenuItem.BUILD) && !ui.outlineIsVisible()) {
-					ui.showBuildSquare(xScroll, yScroll, false, item.getRecipe(), currentLayerNumber);
+					ui.showBuildSquare(pointer, xScroll, yScroll, false, item.getRecipe(), currentLayerNumber);
 					ui.deSelectIcons();
 					ui.getMenu().hide();
 				} else if ((item.getText().contains(MenuItem.PICKUP) || item.getText().contains(MenuItem.EQUIP)
@@ -480,10 +484,10 @@ public class Game {
 						craftingOptions[i] = new MenuItem(ItemRecipe.FURNACE_RECIPES[i]);
 					}
 					craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
-					ui.showMenu(craftingOptions);
+					ui.showMenu(pointer, craftingOptions);
 				} else if (item.getText().contains(MenuItem.CRAFT)) {
 					Villager idle = getIdlestVil();
-					ItemRecipe recipe = ui.getMenu().recipeFromMenuOption(MenuItem.CRAFT);
+					ItemRecipe recipe = ui.getMenu().recipeFromMenuOption(pointer, MenuItem.CRAFT);
 					if (recipe != null) {
 						idle.setPath(null);
 						Item[] res = new Item[recipe.getResources().length];
@@ -505,7 +509,7 @@ public class Game {
 						craftingOptions[i] = new MenuItem(StringUtils.capitalize(WeaponMaterial.values()[i].toString().toLowerCase()));
 					}
 					craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
-					ui.showMenu(craftingOptions);
+					ui.showMenu(pointer, craftingOptions);
 				} else if (MenuItem.isEqualToAnyMaterial(item.getText())) {
 					ItemRecipe[] recipes = ItemRecipe
 							.smithingRecipesFromWeaponMaterial(WeaponMaterial.valueOf(item.getText().toUpperCase()));
@@ -514,7 +518,7 @@ public class Game {
 						craftingOptions[i] = new MenuItem(recipes[i]);
 					}
 					craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
-					ui.showMenu(craftingOptions);
+					ui.showMenu(pointer, craftingOptions);
 				}
 			}
 		}
