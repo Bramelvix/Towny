@@ -199,7 +199,6 @@ public class Game {
 
 	private void loop() {
 		long lastTime = System.nanoTime();
-		long timer = System.currentTimeMillis();
 		double delta = 0;
 		long now;
 		GL.createCapabilities();
@@ -215,10 +214,6 @@ public class Game {
 					updateMobs();
 				}
 				delta--;
-			}
-
-			if (System.currentTimeMillis() - timer > 1000) {
-				timer = System.currentTimeMillis();
 			}
 
 			draw();
