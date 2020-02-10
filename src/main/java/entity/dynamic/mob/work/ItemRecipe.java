@@ -84,4 +84,5 @@ public class ItemRecipe extends Recipe {
 	public Class<? extends Workstation> getWorkstationClass() {
 		return workstation;
 	}
+
 }

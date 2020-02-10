@@ -10,6 +10,7 @@ public class TilledSoil extends BuildAbleObject {
 		this.setOpened(true);
 		sprite = SpriteHashtable.get(141);
 	}
+
 	@Override
 	public BuildAbleObject instance() {
 		return new TilledSoil();

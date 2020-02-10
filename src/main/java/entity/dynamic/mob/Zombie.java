@@ -5,6 +5,7 @@ import graphics.SpriteHashtable;
 import map.Level;
 
 public class Zombie extends Humanoid {
+
 	private byte animationtimer = 0;
 
 	public Zombie(Level[] levels, int x, int y, int z) {
@@ -12,7 +13,6 @@ public class Zombie extends Humanoid {
 		sprite = SpriteHashtable.get(51);
 		setName("zombie");
 		setHolding(ItemHashtable.getRandomWeapon());
-
 	}
 
 	@Override
@@ -25,7 +25,6 @@ public class Zombie extends Humanoid {
 		}
 		if (idleTime()) { idle(); }
 		move();
-
 	}
 
 	@Override
@@ -33,7 +32,6 @@ public class Zombie extends Humanoid {
 		super.hit(damage);
 		sprite = SpriteHashtable.get(52);
 		animationtimer = 30;
-
 	}
 
 	@Override

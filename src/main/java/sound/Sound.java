@@ -7,6 +7,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 public class Sound {
+
 	// 3 sound clips
 	public static Clip woodChopping;
 	public static Clip stoneMining;
@@ -35,12 +36,9 @@ public class Sound {
 			URL drillurl = Sound.class.getResource("/sound/drill.wav");
 			inputStream = AudioSystem.getAudioInputStream(drillurl);
 			drill.open(inputStream);
-
 		} catch (Exception e) {
 			e.printStackTrace();
-
 		}
-
 	}
 
 }

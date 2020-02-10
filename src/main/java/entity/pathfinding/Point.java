@@ -1,6 +1,7 @@
 package entity.pathfinding;
 
 public class Point {
+
 	public int x, y;
 	float cost;
 	private Point parent;

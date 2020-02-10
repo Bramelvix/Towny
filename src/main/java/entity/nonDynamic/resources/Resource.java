@@ -12,7 +12,9 @@ public abstract class Resource extends StaticEntity {
 	Resource(int x, int y, int z, Level level) {
 		super(x, y, z, level);
 	}
+
 	public abstract boolean work(Villager worker);
+
 	public void render() {
 		super.render();
 		drawSelection();
@@ -23,6 +25,5 @@ public abstract class Resource extends StaticEntity {
 			OpenglUtils.drawSelection(x,y, Sprite.SIZE, Sprite.SIZE); // render the red square around selected resources
 		}
 	}
-
 
 }

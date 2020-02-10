@@ -4,12 +4,13 @@ import java.awt.Color;
 
 import entity.dynamic.mob.work.BuildingRecipe;
 import graphics.OpenglUtils;
-import input.MousePosition;
+import input.PointerInput;
 import map.Level;
 import map.Tile;
 
 //the green or red outline used to select where to build things
 public class BuildOutline {
+
 	private Color buildable = new Color(78, 244, 66, 210); // green
 	private Color notbuildable = new Color(244, 66, 66, 210); // red
 	private int buildSquareXS; // x coord of the start in the game world
@@ -118,37 +119,23 @@ public class BuildOutline {
 		return visible;
 	}
 
-
 	// update the outline
-	public void update(int xOff, int yOff, boolean force, int z) {
+	public void update(PointerInput pointer, int xOff, int yOff, boolean force, int z) {
 		this.z = z;
-		if (visible || force) { //TODO fix this aids
-			/*if (MouseButton.heldDown(GLFW_MOUSE_BUTTON_LEFT) && !lockedSize) {
-				buildSquareXE = ((MousePosition.getTileX() * 16) * Game.SCALE);
-				buildSquareYE = ((MousePosition.getTileY() * 16) * Game.SCALE);
-				squarewidth = Math.abs(((buildSquareXE / 16) / Game.SCALE) - ((buildSquareXS / 16) / Game.SCALE)) + 1;
-				squareheight = Math.abs(((buildSquareYE / 16) / Game.SCALE) - ((buildSquareYS / 16) / Game.SCALE)) + 1;
-				if (squareheight > squarewidth) {
-					squarewidth = 1;
-				} else {
-					squareheight = 1;
-				}
-			} else {*/
-				buildSquareXS = (MousePosition.getTileX() * 48);
-				buildSquareXSTeken = (MousePosition.getTileX() * 48)-xOff;
-				buildSquareYS = (MousePosition.getTileY() * 48);
-				buildSquareYSTeken = (MousePosition.getTileY() * 48)-yOff;
-				squarewidth = 1;
-				squareheight = 1;
-				buildSquareXE = 0;
-				buildSquareYE = 0;
-
-		  //  }
+		if (visible || force) { // TODO fix this aids
+			buildSquareXS = (pointer.getTileX() * 48);
+			buildSquareXSTeken = (pointer.getTileX() * 48)-xOff;
+			buildSquareYS = (pointer.getTileY() * 48);
+			buildSquareYSTeken = (pointer.getTileY() * 48)-yOff;
+			squarewidth = 1;
+			squareheight = 1;
+			buildSquareXE = 0;
+			buildSquareYE = 0;
 		}
 	}
 
-	public void update(int xOff, int yOff,int z) {
-		update(xOff, yOff, false,z);
+	public void update(PointerInput pointer, int xOff, int yOff,int z) {
+		update(pointer, xOff, yOff, false,z);
 	}
 
 	BuildingRecipe getBuildRecipe() {
@@ -165,12 +152,12 @@ public class BuildOutline {
 	}
 
 	// show the outline
-	void show(int xoff, int yoff, int z,boolean lockedSize, BuildingRecipe build) {
+	void show(PointerInput pointer, int xoff, int yoff, int z ,boolean lockedSize, BuildingRecipe build) {
 		if (!visible) {
-			update(xoff, yoff, true,z);
+			update(pointer, xoff, yoff, true,z);
 			visible = true;
-			buildSquareXS = MousePosition.getTileX() *48;
-			buildSquareYS = MousePosition.getTileY() *48;
+			buildSquareXS = pointer.getTileX() *48;
+			buildSquareYS = pointer.getTileY() *48;
 			squarewidth = 1;
 			squareheight = 1;
 			this.build = build;
@@ -182,4 +169,5 @@ public class BuildOutline {
 	void remove() {
 		visible = false;
 	}
+
 }

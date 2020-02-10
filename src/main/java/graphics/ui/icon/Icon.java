@@ -4,10 +4,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import graphics.OpenglUtils;
-import input.MousePosition;
+import input.PointerInput;
 
 //icon on the bottom left of the screen (pickaxe, axe,...)
 public class Icon {
+
 	private int x, y; // x and y of the top left corner
 	private boolean hover; // is the mouse hovering over the icon
 	private int width,height; // width and length
@@ -53,7 +54,6 @@ public class Icon {
 
 	private void setHover(boolean hover) {
 		this.hover = hover;
-
 	}
 
 	//render the icon on the screen
@@ -77,11 +77,11 @@ public class Icon {
 		return null;
 	}
 
-	public void update() {
-		setHover((MousePosition.getTrueX() >= getX())
-				&& (MousePosition.getTrueX() <= getX() + getWidth())
-				&& (MousePosition.getTrueY() >= getY())
-				&& (MousePosition.getTrueY() <= getY() + getHeight())
+	public void update(PointerInput pointer) {
+		setHover((pointer.getTrueX() >= getX())
+				&& (pointer.getTrueX() <= getX() + getWidth())
+				&& (pointer.getTrueY() >= getY())
+				&& (pointer.getTrueY() <= getY() + getHeight())
 		);
 	}
 

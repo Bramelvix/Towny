@@ -1,10 +1,11 @@
 package graphics.ui.icon;
 
-import input.MouseButton;
+import input.PointerInput;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class UiIcons {
+
 	private static Icon[] icons; // array of the 4 icons
 
 	// initialising the icons
@@ -25,7 +26,6 @@ public class UiIcons {
 		for (Icon i : icons) {
 			i.render();
 		}
-
 	}
 
 	// getters
@@ -86,16 +86,20 @@ public class UiIcons {
 		return icons[5].isSelected();
 	}
 
-	public static boolean isPlowSelected() { return icons[6].isSelected();}
+	public static boolean isPlowSelected() {
+		return icons[6].isSelected();
+	}
 
-	public static boolean isPlowHover() {return icons[6].hoverOn();}
+	public static boolean isPlowHover() {
+		return icons[6].hoverOn();
+	}
 
 	// update the icons
-	public static void update() {
+	public static void update(PointerInput pointer) {
 		for (Icon i : icons) {
-			i.update();
+			i.update(pointer);
 		}
-		setSelected();
+		setSelected(pointer);
 	}
 
 	// checks if all icons (other than the one provided in num) are unselected
@@ -112,9 +116,9 @@ public class UiIcons {
 	}
 
 	// selecting an icon
-	private static void setSelected() {
+	private static void setSelected(PointerInput pointer) {
 		for (int i = 0; i < icons.length; i++) {
-			if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT) && icons[i].hoverOn() && allOtherIconsNotSelected(i)) {
+			if (pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT) && icons[i].hoverOn() && allOtherIconsNotSelected(i)) {
 				icons[i].setSelect(true);
 			}
 		}

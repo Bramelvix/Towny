@@ -6,6 +6,7 @@ import entity.nonDynamic.building.BuildAbleObject;
 import map.Tile;
 
 public class BuildJob extends Job {
+
 	private final BuildAbleObject buildJobObj; // the buildable entity the worker needs to build
 	private boolean needsMaterial; // does the worker still need the materials
 	private boolean goingToPickUpItem = false;
@@ -18,7 +19,6 @@ public class BuildJob extends Job {
 		if (material == null) {
 			completed = true;
 		}
-
 	}
 
 	public BuildJob(int xloc, int yloc, int zloc, BuildAbleObject object, Villager worker) { //construction job that requires no building materials
@@ -75,4 +75,5 @@ public class BuildJob extends Job {
 			}
 		}
 	}
+
 }

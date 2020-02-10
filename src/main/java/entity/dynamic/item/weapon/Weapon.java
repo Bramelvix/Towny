@@ -5,6 +5,7 @@ import entity.dynamic.mob.Villager;
 import graphics.Sprite;
 
 public class Weapon extends Item {
+
 	private float crush;
 	private float pierce;
 	private float cut;
@@ -71,7 +72,6 @@ public class Weapon extends Item {
 		this.speed = speed;
 		this.range = range;
 	}
-
 
 	private float calcMatStrong(WeaponMaterial mat) {
 		float strong = 0;

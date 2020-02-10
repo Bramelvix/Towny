@@ -4,6 +4,7 @@ import entity.Entity;
 import entity.dynamic.item.Item;
 
 public class Recipe {
+
 	private final Item[] resources;
 	final Entity product;
 

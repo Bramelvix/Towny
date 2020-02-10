@@ -4,6 +4,7 @@ import map.Tile;
 
 //sprites in the game
 public class Sprite {
+
 	private final int id;
 	public static final int SIZE = Tile.SIZE; // 48
 	public final int[] pixels;
@@ -31,11 +32,8 @@ public class Sprite {
 		return pixels;
 	}
 
-
-
 	public void draw(int x, int y) {
 		OpenglUtils.drawTexturedQuadScaled(id, x, y, SIZE);
 	}
-
 
 }

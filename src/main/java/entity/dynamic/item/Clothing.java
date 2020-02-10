@@ -4,6 +4,7 @@ import graphics.Sprite;
 
 //villager clothing class
 public class Clothing extends Item {
+
 	private float defence; // defence rating for armour
 	private final ClothingType type;
 
@@ -13,7 +14,6 @@ public class Clothing extends Item {
 		this.defence = defence;
 		this.type = type;
 	}
-
 
 	public Clothing copy() {
 		Clothing copy = new Clothing(getName(), sprite, getToolTip(), type, getDefence(), getId());

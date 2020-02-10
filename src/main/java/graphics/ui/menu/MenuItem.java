@@ -5,12 +5,12 @@ import entity.dynamic.mob.work.BuildingRecipe;
 import entity.dynamic.mob.work.ItemRecipe;
 import entity.dynamic.mob.work.Recipe;
 import graphics.OpenglUtils;
-import input.MouseButton;
-import input.MousePosition;
+import input.PointerInput;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class MenuItem {
+
 	private String text; // text on the menuitem
 	private int x, y; // x and y of top left corner
 	private int width; // width of the menuitem
@@ -41,13 +41,11 @@ public class MenuItem {
 	// constructor
 	public MenuItem(String text) {
 		this.text = text;
-
 	}
 
 	public MenuItem(String text, Entity e) {
 		this(text + " " + e.getName());
 		this.entity = e;
-
 	}
 
 	public MenuItem(ItemRecipe recipe) {
@@ -76,15 +74,15 @@ public class MenuItem {
 	}
 
 	// updating the mouse hover
-	public void update() {
-		hover = ((MousePosition.getTrueX() >= x) && (MousePosition.getTrueX() <= x + width)
-				&& (MousePosition.getTrueY() >= y) && (MousePosition.getTrueY() <= y + 10)
+	public void update(PointerInput pointer) {
+		hover = ((pointer.getTrueX() >= x) && (pointer.getTrueX() <= x + width)
+				&& (pointer.getTrueY() >= y) && (pointer.getTrueY() <= y + 10)
 		);
 	}
 
 	// getter
-	public boolean clicked() {
-		return hover && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT);
+	public boolean clicked(PointerInput pointer) {
+		return hover && pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT);
 	}
 
 	public String getText() {

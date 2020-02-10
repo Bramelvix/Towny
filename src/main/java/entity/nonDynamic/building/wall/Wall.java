@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class Wall extends BuildAbleObject {
+
 	private boolean door;
 	private WallType type;
 	private static HashMap<List<Sprite>, Sprite> dynamicSpriteList = new HashMap<>();
@@ -69,7 +70,6 @@ public class Wall extends BuildAbleObject {
 				left.isPresent(), right.isPresent(), up.isPresent(), down.isPresent(), upRight.isPresent(),
 				downRight.isPresent(), upLeft.isPresent(), downLeft.isPresent()
 		);
-
 	}
 
 	// Checksides method for the walls around this wall
@@ -113,12 +113,10 @@ public class Wall extends BuildAbleObject {
 			else if (!topRightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 36 : 208));
 
 			// bottom right corner
-
 			if (!bottomHasWall && !rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 22 : 194));
 			else if (!rightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 26 : 198));
 			else if (!bottomHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 34 : 206));
 			else if (!bottomRightHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 38 : 210));
-
 
 			// bottom left corner
 			if (!bottomHasWall && !leftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 21 : 193));
@@ -156,6 +154,5 @@ public class Wall extends BuildAbleObject {
 	public BuildAbleObject instance() {
 		return new Wall(this.type, this.door);
 	}
-
 
 }

@@ -4,12 +4,13 @@ import entity.dynamic.mob.work.BuildingRecipe;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.Menu;
 import graphics.ui.menu.MenuItem;
-import input.MousePosition;
+import input.PointerInput;
 import main.Game;
 import map.Level;
 
 //main class used to manage the ui
 public class Ui {
+
 	// different ui elements
 	private Menu menu;
 	private TopBar top;
@@ -27,8 +28,6 @@ public class Ui {
 		outline.render();
 		layerLevelChanger.render();
 		top.render();
-
-
 	}
 
 	public byte getSpeed() {
@@ -65,11 +64,11 @@ public class Ui {
 		UiIcons.deSelect();
 	}
 
-	public void showMenu(MenuItem... items) {
+	public void showMenu(PointerInput pointer, MenuItem... items) {
 		if (!outline.isVisible()) {
-			showMenu(MousePosition.getTrueX(), MousePosition.getTrueY());
+			showMenu(pointer.getTrueX(), pointer.getTrueY());
 			menu.addItems(items);
-			menu.show();
+			menu.show(pointer);
 		}
 	}
 
@@ -101,8 +100,8 @@ public class Ui {
 		map.setOffset(x, y);
 	}
 
-	public void showSelectionSquare() {
-		selection.init();
+	public void showSelectionSquare(PointerInput pointer) {
+		selection.init(pointer);
 	}
 
 	public void resetSelection() {
@@ -125,22 +124,21 @@ public class Ui {
 		return selection.getHeight();
 	}
 
-	public void showBuildSquare(int xoff, int yoff, boolean lockedSize, BuildingRecipe build, int z) {
-		outline.show(xoff, yoff, z, lockedSize, build);
+	public void showBuildSquare(PointerInput pointer, int xoff, int yoff, boolean lockedSize, BuildingRecipe build, int z) {
+		outline.show(pointer, xoff, yoff, z, lockedSize, build);
 	}
 
 	public void removeBuildSquare() {
 		outline.remove();
 	}
 
-	public void update(int xOff, int yOff, int z) {
-		menu.update(outline.isVisible());
-		UiIcons.update();
-		outline.update(xOff, yOff, z);
-		selection.update();
-		top.update();
-		layerLevelChanger.update(z);
-
+	public void update(PointerInput pointer, int xOff, int yOff, int z) {
+		menu.update(pointer, outline.isVisible());
+		UiIcons.update(pointer);
+		outline.update(pointer, xOff, yOff, z);
+		selection.update(pointer);
+		top.update(pointer);
+		layerLevelChanger.update(pointer, z);
 	}
 
 	public void updateCounts(int solcount, int vilcount) {

@@ -4,6 +4,7 @@ import entity.dynamic.mob.Villager;
 import entity.nonDynamic.resources.Resource;
 
 public class GatherJob extends Job {
+
 	private final Resource jobObj; // the resource the worker needs to gather
 
 	public <T extends Resource> GatherJob(T jobObj, Villager worker) {
@@ -22,4 +23,5 @@ public class GatherJob extends Job {
 			start();
 		}
 	}
+
 }

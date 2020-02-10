@@ -21,6 +21,7 @@ import graphics.SpriteHashtable;
 import map.Level;
 
 public class Villager extends Humanoid {
+
 	private final VillagerInventory inventory; // clothing item list
 	private boolean male; // is the villager male (true = male, false = female)
 	private Sprite hair; // hair sprite
@@ -36,7 +37,6 @@ public class Villager extends Humanoid {
 		male = Entity.RANDOM.nextBoolean();
 		hair = SpriteHashtable.get(generateHairNr());
 		setName("villager");
-
 	}
 
 	@Override
@@ -62,7 +62,6 @@ public class Villager extends Humanoid {
 
    //generate a random number to use for the hairsprite
 	private int generateHairNr() {
-
 		return male ?
 				SpriteHashtable.maleHairNrs[Entity.RANDOM.nextInt(SpriteHashtable.maleHairNrs.length)]
 				: SpriteHashtable.femaleHairNrs[Entity.RANDOM.nextInt(SpriteHashtable.femaleHairNrs.length)];
@@ -84,7 +83,6 @@ public class Villager extends Humanoid {
 					path = getPath(closest.getX() / 48, closest.getY() / 48);
 				}
 			}
-
 		}
 		if (closest == null || path == null) {
 			return Optional.empty();
@@ -101,7 +99,6 @@ public class Villager extends Humanoid {
 				jobs.remove(0);
 			}
 		}
-
 	}
 
 	// pickup an item
@@ -111,7 +108,6 @@ public class Villager extends Humanoid {
 		levels[z].removeItem(e);
 		pickUpItem(e);
 		return true;
-
 	}
 
 	private <T extends Item> void pickUpItem(T e) {
@@ -157,7 +153,6 @@ public class Villager extends Humanoid {
 	// add a job to the jobs spritesheets for the villager to do
 	public void addJob(Resource e) {
 		if (e != null) { addJob(new GatherJob(e, this)); }
-
 	}
 
 	public void addJob(Job e) {
@@ -166,7 +161,6 @@ public class Villager extends Humanoid {
 
 	public void addJob(Job e, int index) {
 		if (e != null) { jobs.add(index, e); }
-
 	}
 
 	// add a buildjob
@@ -175,9 +169,7 @@ public class Villager extends Humanoid {
 			addJob(new BuildJob(x, y, z, object, this));
 		} else {
 			getNearestItemOfType(resource).ifPresent(item ->  addJob(new BuildJob(x, y, z, item, object, this)));
-
 		}
-
 	}
 
 	// updates the villager in the game logic
@@ -190,7 +182,6 @@ public class Villager extends Humanoid {
 			move();
 		}
 		inventory.update(x, y, z);
-
 	}
 
 	// add clothing to the villager
@@ -214,8 +205,8 @@ public class Villager extends Humanoid {
 		if (this.isSelected()) {
 			OpenglUtils.drawSelection(x,y,Sprite.SIZE,Sprite.SIZE);// render the red square around selected villagers
 		}
-
 	}
+
 	private void drawVillager(int x, int y) {
 		if (isVisible()) {
 			sprite.draw(x,y);

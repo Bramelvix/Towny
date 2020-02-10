@@ -3,9 +3,10 @@ package entity;
 import java.util.Random;
 
 import graphics.Sprite;
-import input.MousePosition;
+import input.PointerInput;
 
 public abstract class Entity {
+
     protected int x, y, z; // x, y and z of the entity
     public static final Random RANDOM = new Random(); // random needed for various chance calculations
     public Sprite sprite; // the entity's sprite
@@ -79,8 +80,8 @@ public abstract class Entity {
     }
 
     // does the mouse hover over the entity
-    public boolean hoverOn(int z) {
-        return (z == this.z && MousePosition.getX() >= this.x && MousePosition.getX() <= this.x + Sprite.SIZE && MousePosition.getY() >= this.y && MousePosition.getY() <= this.y + Sprite.SIZE);
+    public boolean hoverOn(PointerInput pointer, int z) {
+        return (z == this.z && pointer.getX() >= this.x && pointer.getX() <= this.x + Sprite.SIZE && pointer.getY() >= this.y && pointer.getY() <= this.y + Sprite.SIZE);
     }
 
     // render method
@@ -95,4 +96,5 @@ public abstract class Entity {
         	render();
         }
     }
+
 }

@@ -14,10 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Ore extends Resource {
+
 	private static HashMap<List<Sprite>, Sprite> dynamicSpriteList = new HashMap<>();
 	private byte mined = 100; // mined percentage (100 = unfinished / 0 = finished)
 	private Item minedItem; // Item dropped when the ore is mined
-
 
 	// basic constructor
 	public Ore(int x, int y, int z, Level level, OreType type) {
@@ -31,8 +31,6 @@ public class Ore extends Resource {
 	private void decideSprite(OreType type) {
 		String name = type == OreType.STONE ? type.toString().toLowerCase() : type.toString().toLowerCase() + " ore";
 		setOre(name, SpriteHashtable.get(type.getSpriteId()), ItemHashtable.get(type.getItemSpriteId(), this.x, this.y, this.z));
-
-
 	}
 
 	private void setOre(String name, Sprite oreSprite, Item item) {
@@ -40,7 +38,6 @@ public class Ore extends Resource {
 		this.sprite = oreSprite;
 		this.minedItem = item;
 	}
-
 
 	// work method executed by the villager when mining
 	public boolean work(Villager worker) {
@@ -67,12 +64,12 @@ public class Ore extends Resource {
 		boolean bottomLeftHasWall = level.selectOre(x - Tile.SIZE, y + Tile.SIZE).isPresent();
 		boolean topLeftHasWall = level.selectOre(x - Tile.SIZE, y - Tile.SIZE).isPresent();
 		decideSprite(leftHasWall, rightHasWall, topHasWall, bottomHasWall, topRightHasWall, bottomRightHasWall, bottomLeftHasWall, topLeftHasWall);
-
 	}
 
 	private void decideSprite(boolean leftHasWall, boolean rightHasWall, boolean topHasWall, boolean bottomHasWall, boolean topRightHasWall, boolean bottomRightHasWall, boolean bottomLeftHasWall, boolean topLeftHasWall) {
 		List<Sprite> sprites = new ArrayList<>();
 		sprites.add(sprite);
+
 		//check if places are empty
 		if (!topHasWall) sprites.add(SpriteHashtable.get(164)); //3
 		if (!rightHasWall) sprites.add(SpriteHashtable.get(163)); //2
@@ -103,7 +100,6 @@ public class Ore extends Resource {
 		else if (!topHasWall) sprites.add(SpriteHashtable.get(175)); //14
 		else if (!topLeftHasWall) sprites.add(SpriteHashtable.get(180)); //19
 
-
 		if(dynamicSpriteList.containsKey(sprites)) { //if a dynamic sprite exists, use it
 			sprite = dynamicSpriteList.get(sprites);
 		} else { //otherwise make it
@@ -123,4 +119,5 @@ public class Ore extends Resource {
 			dynamicSpriteList.put(sprites, new Sprite(pixels));
 		}
 	}
+
 }

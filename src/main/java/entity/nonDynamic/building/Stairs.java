@@ -5,6 +5,7 @@ import graphics.SpriteHashtable;
 import map.Level;
 
 public class Stairs extends BuildAbleObject {
+
 	private boolean top;
 
 	public Stairs(boolean top) {
@@ -14,7 +15,6 @@ public class Stairs extends BuildAbleObject {
 		setTransparent(!this.top);
 		sprite = SpriteHashtable.get(top ? 40 : 41);
 		setName("stairs");
-
 	}
 
 	public void initialise(int x, int y, Level[] levels, int depth) {
@@ -55,4 +55,5 @@ public class Stairs extends BuildAbleObject {
 	public boolean isTop() {
 		return top;
 	}
+
 }

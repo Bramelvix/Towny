@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public abstract class Container extends BuildAbleObject {
+
 	private final ArrayList<Item> items;
 	private final int containerSize;
 

@@ -11,6 +11,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
 public class TrueTypeFont {
+
 	static TrueTypeFont black, red;
 
 	private final static int ALIGN_LEFT = 0, ALIGN_RIGHT = 1, ALIGN_CENTER = 2;
@@ -246,4 +247,5 @@ public class TrueTypeFont {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		GL11.glDeleteTextures(scratch);
 	}
+
 }

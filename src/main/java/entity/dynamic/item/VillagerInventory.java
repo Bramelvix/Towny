@@ -5,6 +5,7 @@ import entity.dynamic.mob.Villager;
 import java.util.Arrays;
 
 public class VillagerInventory {
+
 	private Clothing[] clothes;
 	private Weapon[] weapons;
 	private Villager wearer;
@@ -36,7 +37,7 @@ public class VillagerInventory {
 		if (alreadyWearing(item)) {
 			removeClothing(item.getType());
 		}
-			clothes[item.getType().getNumVal()] = item;
+		clothes[item.getType().getNumVal()] = item;
 	}
 
 	public void addWeapon(Weapon item) {
@@ -68,7 +69,6 @@ public class VillagerInventory {
 		wearer.levels[wearer.getZ()].addItem(clothes[type.getNumVal()]);
 		clothes[type.getNumVal()].removeReserved();
 		clothes[type.getNumVal()] = null;
-
 	}
 
 	public boolean isHoldingShield() {
@@ -82,7 +82,6 @@ public class VillagerInventory {
 	public void dropAll() { //TODO needs to be altered so the items are scattered around the place, since no 2 items can be on the same tile
 		Arrays.stream(clothes).forEach(item -> removeClothing(item.getType()));
 		Arrays.stream(weapons).forEach(this::removeWeapon);
-
 	}
 
 	public void update(int x, int y, int z) {

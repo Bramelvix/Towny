@@ -6,6 +6,7 @@ import graphics.Sprite;
 import graphics.SpriteHashtable;
 
 public class Tile {
+
 	public Sprite sprite; // tile's sprite
 	private boolean solid; // is the tile solid
 	public static final int SIZE = 48; // fixed size
@@ -55,7 +56,6 @@ public class Tile {
 		this.entity = entity;
 		this.solid = solid;
 	}
-
 
 	//getters
 	public boolean isSolid() {

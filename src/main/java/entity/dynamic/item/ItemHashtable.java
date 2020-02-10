@@ -10,8 +10,8 @@ import graphics.SpriteHashtable;
 import java.util.Hashtable;
 
 public abstract class ItemHashtable {
-	private static final Hashtable<Integer, Item> table = new Hashtable<>();
 
+	private static final Hashtable<Integer, Item> table = new Hashtable<>();
 
 	public static <T extends Item> void registerItem(T item) throws Exception {
 		if (table.put(item.getId(), item) != null) {
@@ -22,7 +22,6 @@ public abstract class ItemHashtable {
 	public static Weapon getRandomWeapon() {
 		return (Weapon) get(Entity.RANDOM.nextInt(41) + 20);
 	}
-
 
 	public static Item get(int key) {
 		return table.get(key).copy();
@@ -106,8 +105,6 @@ public abstract class ItemHashtable {
 		registerItem(new Clothing("Black trousers",SpriteHashtable.get(69),"a pair of black trousers",ClothingType.TROUSERS,0.1f,73));
 		registerItem(new Clothing("Brown trousers",SpriteHashtable.get(88),"a pair of brown trousers",ClothingType.TROUSERS,0.1f,74));
 		registerItem(new Clothing("Orange trousers",SpriteHashtable.get(89),"a pair of orange trousers",ClothingType.TROUSERS,0.1f,75));
-
 	}
+
 }
-
-

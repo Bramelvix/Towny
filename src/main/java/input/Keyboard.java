@@ -12,7 +12,9 @@ public class Keyboard implements GLFWKeyCallbackI {
 	public void invoke(long window, int keycode, int i1, int i2, int i3) {
 		keys[keycode] = i2 != GLFW_RELEASE;
 	}
+
 	public static boolean isKeyDown(int keycode) {
 		return keys[keycode];
 	}
+
 }

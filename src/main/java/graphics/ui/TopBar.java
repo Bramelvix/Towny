@@ -2,12 +2,13 @@ package graphics.ui;
 
 import graphics.OpenglUtils;
 import graphics.ui.icon.Icon;
-import input.MouseButton;
+import input.PointerInput;
 import main.Game;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class TopBar {
+
 	private int x, y; // x and y of the top left corner
 	private int width, height; // width and height
 	private int vilcount, solcount; // amount of villagers and soldiers
@@ -28,12 +29,12 @@ public class TopBar {
 
 	// intialise
 	private void init() {
-			pause = new Icon(x + 120, y + 25, "/icons/pause-button.png", 0.060f);
-			play = new Icon(x + 120, y + 25, "/icons/play-button.png", 0.060f);
-			fast = new Icon(x + 160,y + 30, "/icons/fast.png",1.0f);
-			slow = new Icon(x + 75,y + 30, "/icons/slow.png",1.0f);
-			sol = new Icon(x + 210,y + 17, "/icons/soldier.png",1.0f);
-			vil = new Icon(x + 10,y + 17, "/icons/villager.png",1.0f);
+		pause = new Icon(x + 120, y + 25, "/icons/pause-button.png", 0.060f);
+		play = new Icon(x + 120, y + 25, "/icons/play-button.png", 0.060f);
+		fast = new Icon(x + 160, y + 30, "/icons/fast.png", 1.0f);
+		slow = new Icon(x + 75, y + 30, "/icons/slow.png", 1.0f);
+		sol = new Icon(x + 210, y + 17, "/icons/soldier.png", 1.0f);
+		vil = new Icon(x + 10, y + 17, "/icons/villager.png", 1.0f);
 	}
 
 	// update the villager and soldier counts
@@ -42,18 +43,18 @@ public class TopBar {
 		this.vilcount = vilcount;
 	}
 
-	public void update() {
-		play.update();
-		pause.update();
-		slow.update();
-		fast.update();
-		sol.update();
-		vil.update();
-		if (clickedOnPause()) {
+	public void update(PointerInput pointer) {
+		play.update(pointer);
+		pause.update(pointer);
+		slow.update(pointer);
+		fast.update(pointer);
+		sol.update(pointer);
+		vil.update(pointer);
+		if (clickedOnPause(pointer)) {
 			togglePause();
-		} else if (clickedOnFast()) {
+		} else if (clickedOnFast(pointer)) {
 			upSpeed();
-		} else if (clickedOnSlow()) {
+		} else if (clickedOnSlow(pointer)) {
 			downSpeed();
 		}
 	}
@@ -97,23 +98,20 @@ public class TopBar {
 	}
 
 	// has the user clicked on the pause button
-	private boolean clickedOnPause() {
-		if (MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
-			if (Game.paused) {
-				return play.hoverOn();
-			} else {
-				return pause.hoverOn();
-			}
-		}
-		return false;
+	private boolean clickedOnPause(PointerInput pointer) {
+		return (
+			! pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT) ? false :
+			Game.paused ? play.hoverOn () :
+			pause.hoverOn ()
+		);
 	}
 
-	private boolean clickedOnFast() {
-		return fast.hoverOn() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT);
+	private boolean clickedOnFast(PointerInput pointer) {
+		return fast.hoverOn() && pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT);
 	}
 
-	private boolean clickedOnSlow() {
-		return slow.hoverOn() && MouseButton.wasPressed(GLFW_MOUSE_BUTTON_LEFT);
+	private boolean clickedOnSlow(PointerInput pointer) {
+		return slow.hoverOn() && pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT);
 	}
 
 	// toggle pausing

@@ -13,15 +13,11 @@ import static org.lwjgl.opengl.GL11.*;
 class BufferedImageUtil {
 
 	static int getTexture(BufferedImage resourceimage) {
-		int srcPixelFormat;
 		int textureID = glGenTextures();
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, textureID);
-		if (resourceimage.getColorModel().hasAlpha()) {
-			srcPixelFormat = GL_RGBA;
-		} else {
-			srcPixelFormat = GL_RGB;
-		}
+		int srcPixelFormat = resourceimage.getColorModel ().hasAlpha () ? GL_RGBA : GL_RGB;
+
 		ByteBuffer textureBuffer = imageToByteBuffer(resourceimage);
 		int textHeight = resourceimage.getHeight();
 		int textWidth = resourceimage.getWidth();
@@ -75,4 +71,5 @@ class BufferedImageUtil {
 		g.dispose();
 		return imageBuffer;
 	}
+
 }

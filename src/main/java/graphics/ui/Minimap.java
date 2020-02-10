@@ -22,7 +22,6 @@ class Minimap {
 		width = 200;
 		height = 200;
 		init(map);
-
 	}
 
 	// intialise the image
@@ -36,7 +35,6 @@ class Minimap {
 		}
 		OpenglUtils.deleteTexture(textureId);
 		textureId = OpenglUtils.loadTexture(pixels, width, height);
-
 	}
 
 	public void update(Level[] map, int z) {
@@ -52,7 +50,6 @@ class Minimap {
 		float yloc = (y + (yoff * 0.04225f));
 		OpenglUtils.drawTexturedQuadScaled(x, y, width, height, textureId);
 		OpenglUtils.drawFilledSquare((int) xloc, (int) yloc, (int) (62.5), (int) (35.15625), COL.getRed() / 255f, COL.getGreen() / 255f, COL.getBlue() / 255f, COL.getAlpha() / 255f);
-
 	}
 
 	// setter
