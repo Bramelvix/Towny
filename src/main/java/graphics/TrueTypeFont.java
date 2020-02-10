@@ -1,9 +1,6 @@
 package graphics;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.nio.IntBuffer;
 
@@ -61,6 +58,7 @@ public class TrueTypeFont {
 
 		BufferedImage fontImage = new BufferedImage(charwidth, charheight, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D gt = (Graphics2D) fontImage.getGraphics();
+		gt.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		gt.setFont(font);
 		gt.setColor(colour);
 		int charx = 3;
