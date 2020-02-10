@@ -37,3 +37,12 @@ dependencies {
     testCompile "junit:junit:4.13"
     testCompile "org.hamcrest:hamcrest:2.2"
 }
+
+jar {
+    manifest {
+        attributes('Main-Class': 'main.Game')
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
