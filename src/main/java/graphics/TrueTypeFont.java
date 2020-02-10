@@ -12,12 +12,12 @@ public class TrueTypeFont {
 	static TrueTypeFont black, red;
 
 	private final static int ALIGN_LEFT = 0, ALIGN_RIGHT = 1, ALIGN_CENTER = 2;
-	private IntObject[] charArray = new IntObject[256];
-	private int fontSize;
+	private final IntObject[] charArray = new IntObject[256];
+	private final int fontSize;
 	private int fontHeight;
 	private int fontTextureID;
-	private int textureWidth = 512;
-	private int textureHeight = 512;
+	private final int textureWidth = 512;
+	private final int textureHeight = 512;
 
 	public static void init() {
 		Font font = new Font("Verdana", Font.PLAIN, 17);
@@ -41,8 +41,7 @@ public class TrueTypeFont {
 	}
 
 	private BufferedImage getFontImage(Font font, char ch, Color colour) {
-		BufferedImage tempfontImage = new BufferedImage(1, 1,
-				BufferedImage.TYPE_INT_ARGB);
+		BufferedImage tempfontImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = (Graphics2D) tempfontImage.getGraphics();
 		g.setFont(font);
 		FontMetrics fontMetrics = g.getFontMetrics();
@@ -63,7 +62,7 @@ public class TrueTypeFont {
 		gt.setColor(colour);
 		int charx = 3;
 		int chary = 1;
-		gt.drawString(String.valueOf(ch), (charx), (chary) + fontMetrics.getAscent());
+		gt.drawString(String.valueOf(ch), charx, chary + fontMetrics.getAscent());
 		return fontImage;
 
 	}
@@ -225,11 +224,14 @@ public class TrueTypeFont {
 					// if center get next lines total width/2;
 				} else {
 					drawQuad((totalwidth + intObject.width) * scaleX + x,
-							startY * scaleY + y, totalwidth * scaleX + x,
-							(startY + intObject.height) * scaleY + y,
-							intObject.storedX + intObject.width,
-							intObject.storedY + intObject.height,
-							intObject.storedX, intObject.storedY);
+						startY * scaleY + y,
+						totalwidth * scaleX + x,
+						(startY + intObject.height) * scaleY + y,
+						intObject.storedX + intObject.width,
+						intObject.storedY + intObject.height,
+						intObject.storedX,
+						intObject.storedY
+					);
 					totalwidth += (intObject.width - c) * d;
 				}
 				i += d;
