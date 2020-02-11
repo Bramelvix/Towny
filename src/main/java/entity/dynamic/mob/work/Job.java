@@ -28,7 +28,7 @@ public abstract class Job implements Workable {
 	}
 
 	protected void start() {
-		worker.addJob(new MoveJob(xloc,yloc,zloc,worker,false),0);
+		worker.addJob(new MoveJob(xloc,yloc,zloc,worker,false),100);
 		started = true;
 	}
 

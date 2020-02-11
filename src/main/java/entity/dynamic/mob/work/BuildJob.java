@@ -30,7 +30,7 @@ public class BuildJob extends Job {
 
 	private void goPickupItem() {
 		if (!goingToPickUpItem) {
-			worker.addJob(new MoveItemJob(material, worker), 0);
+			worker.addJob(new MoveItemJob(material, worker), 100);
 			goingToPickUpItem = true;
 		}
 	}

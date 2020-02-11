@@ -1,10 +1,11 @@
 package entity.dynamic.mob;
 
-import java.util.ArrayList;
 import java.util.Optional;
+import java.util.PriorityQueue;
 
 import entity.dynamic.mob.work.BuildJob;
 import entity.dynamic.mob.work.GatherJob;
+import entity.dynamic.mob.work.PriorityJob;
 import entity.nonDynamic.building.BuildAbleObject;
 import entity.Entity;
 import entity.nonDynamic.building.container.Container;
@@ -26,14 +27,14 @@ public class Villager extends Humanoid {
 	private boolean male; // is the villager male (true = male, false = female)
 	private Sprite hair; // hair sprite
 	private int hairnr; // hair number (needed for the hair sprite to be decided)
-	private ArrayList<Job> jobs; // jobs the villager needs to do
+	private final PriorityQueue<PriorityJob> jobs; // jobs the villager needs to do
 
 	// basic constructors
 	public Villager(int x, int y, int z, Level[] levels) {
 		super(levels, x, y, z);
 		sprite = SpriteHashtable.getPerson();
 		inventory = new VillagerInventory(this);
-		jobs = new ArrayList<>();
+		jobs = new PriorityQueue<>();
 		male = Entity.RANDOM.nextBoolean();
 		hair = SpriteHashtable.get(generateHairNr());
 		setName("villager");
@@ -63,8 +64,8 @@ public class Villager extends Humanoid {
    //generate a random number to use for the hairsprite
 	private int generateHairNr() {
 		return male ?
-				SpriteHashtable.maleHairNrs[Entity.RANDOM.nextInt(SpriteHashtable.maleHairNrs.length)]
-				: SpriteHashtable.femaleHairNrs[Entity.RANDOM.nextInt(SpriteHashtable.femaleHairNrs.length)];
+			SpriteHashtable.maleHairNrs[Entity.RANDOM.nextInt(SpriteHashtable.maleHairNrs.length)]
+			: SpriteHashtable.femaleHairNrs[Entity.RANDOM.nextInt(SpriteHashtable.femaleHairNrs.length)];
 	}
 
 	// gets the item nearest to the villager(of the same kind and unreserved)
@@ -92,12 +93,13 @@ public class Villager extends Humanoid {
 
 	// work method for the villager to execute his jobs
 	public void work() {
-		if (jobs.get(0) != null) {
-			if (!jobs.get(0).isCompleted()) {
-				jobs.get(0).execute();
-			} else {
-				jobs.remove(0);
+		if (jobs.peek() != null) {
+			Job job = jobs.peek().getJob();
+			if (job.isCompleted()) {
+				jobs.remove(jobs.peek());
 			}
+			job.execute();
+
 		}
 	}
 
@@ -156,11 +158,11 @@ public class Villager extends Humanoid {
 	}
 
 	public void addJob(Job e) {
-		if (e != null) { jobs.add(e); }
+		if (e != null) { jobs.add(new PriorityJob(e, 50)); }
 	}
 
-	public void addJob(Job e, int index) {
-		if (e != null) { jobs.add(index, e); }
+	public void addJob(Job e, int priority) {
+		if (e != null) { jobs.add(new PriorityJob(e, priority)); }
 	}
 
 	// add a buildjob
@@ -174,7 +176,7 @@ public class Villager extends Humanoid {
 
 	// updates the villager in the game logic
 	public void update() {
-		if (jobs.size() != 0) {
+		if (!jobs.isEmpty()) {
 			work();
 		} else {
 			// IDLE

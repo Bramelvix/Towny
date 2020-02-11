@@ -45,9 +45,9 @@ public class MoveItemJob extends Job {
 		}
 		if (worker.levels[zloc].getEntityOn(xloc/Tile.SIZE, yloc/Tile.SIZE) instanceof Container) {
 			container = worker.levels[zloc].getEntityOn(xloc/Tile.SIZE, yloc/Tile.SIZE);
-			worker.addJob(new MoveJob(xloc, yloc, zloc, worker, false), 0);
+			worker.addJob(new MoveJob(xloc, yloc, zloc, worker, false), 100);
 		} else {
-			worker.addJob(new MoveJob(xloc, yloc, zloc, worker), 0);
+			worker.addJob(new MoveJob(xloc, yloc, zloc, worker), 100);
 		}
 	}
 
