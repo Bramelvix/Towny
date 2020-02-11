@@ -94,10 +94,12 @@ public class Villager extends Humanoid {
 
 	// work method for the villager to execute his jobs
 	public void work() {
-		if (jobs.peek() != null) {
-			Job job = jobs.peek().getJob();
+		PriorityJob priorityJob = jobs.peek();
+		if (priorityJob!= null) {
+			Job job = priorityJob.getJob();
 			if (job.isCompleted()) {
-				jobs.remove(jobs.peek());
+				jobs.remove(priorityJob);
+				return;
 			}
 			job.execute();
 
