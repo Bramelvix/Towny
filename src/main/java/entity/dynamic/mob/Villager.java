@@ -20,6 +20,7 @@ import graphics.OpenglUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;
+import map.Tile;
 
 public class Villager extends Humanoid {
 
@@ -77,11 +78,11 @@ public class Villager extends Humanoid {
 		Path path = null;
 		for (Item level_item : levels[z].getItems()) {
 			if (item.isSameType(level_item) && level_item.isReserved(this)) {
-				if (closest == null || path == null || (getPath(level_item.getX() / 48, level_item.getY() / 48) != null
-					&& path.getStepsSize() > getPath(level_item.getX() / 48, level_item.getY() / 48).getStepsSize()
+				if (closest == null || path == null || (getPath(level_item.getX() / Tile.SIZE, level_item.getY() / Tile.SIZE) != null
+					&& path.getStepsSize() > getPath(level_item.getX() / Tile.SIZE, level_item.getY() / Tile.SIZE).getStepsSize()
 				)) {
 					closest = level_item;
-					path = getPath(closest.getX() / 48, closest.getY() / 48);
+					path = getPath(closest.getX() / Tile.SIZE, closest.getY() / Tile.SIZE);
 				}
 			}
 		}
