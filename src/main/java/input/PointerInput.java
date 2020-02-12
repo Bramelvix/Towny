@@ -66,8 +66,8 @@ public class PointerInput {
 				released[button] = false;
 				heldDownButton = button;
 				if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
-					dragOffsetX = (int) xpos;
-					dragOffsetY = (int) ypos;
+					dragOffsetX = getX();
+					dragOffsetY = getY();
 				}
 			}
 		};
