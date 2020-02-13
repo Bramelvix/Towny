@@ -26,7 +26,7 @@ public class Tile {
 
 	// render a tile
 	 void render(int x, int y) {
-		if (entity == null || entity.isTransparent()) {
+		if (entity == null || entity.isTransparent() || !entity.isVisible()) {
 			sprite.draw(x,y);
 		}
 		if (entity != null && !solid) {

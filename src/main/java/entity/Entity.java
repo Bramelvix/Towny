@@ -45,7 +45,7 @@ public abstract class Entity {
     }
 
     // getters
-    protected boolean isVisible() {
+    public boolean isVisible() {
         return visible;
     }
 
