@@ -72,7 +72,6 @@ public abstract class OpenglUtils {
 		glEnd();
 
 		glPopMatrix();
-		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	public static void drawSelection(int x, int y, int width, int height) {
