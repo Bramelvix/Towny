@@ -76,6 +76,7 @@ public abstract class OpenglUtils {
 
 	public static void drawSelection(int x, int y, int width, int height) {
 		glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, 0);
 		glColor3f(1.0f,0.0f,0.0f);
 		glLineWidth(3);
 
@@ -105,6 +106,7 @@ public abstract class OpenglUtils {
 
 	public static void drawFilledSquare(int x, int y, int width, int height, float r, float g, float b, float a) {
 		glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, 0);
 		glColor4f(r, g, b, a);
 
 		glBegin(GL_QUADS);
