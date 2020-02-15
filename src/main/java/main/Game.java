@@ -177,7 +177,7 @@ public class Game {
 	private void spawnZombies() {
 		int teller = Entity.RANDOM.nextInt(5) + 1;
 		for (int i = 0; i < teller; i++) {
-			mobs.add(new Zombie(map, Entity.RANDOM.nextInt(768/48)*48 + Tile.SIZE, Entity.RANDOM.nextInt(768/48)*48 + Tile.SIZE, 0));
+			mobs.add(new Zombie(map, Entity.RANDOM.nextInt(768/ Tile.SIZE)* Tile.SIZE + Tile.SIZE, Entity.RANDOM.nextInt(768/ Tile.SIZE)*Tile.SIZE + Tile.SIZE, 0));
 		}
 	}
 

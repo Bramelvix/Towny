@@ -23,7 +23,7 @@ public class Sprite {
 
 	// load a sprites pixels into the pixel array
 	private int[] load(int xa, int ya, Spritesheet sheet) {
-		int[] pixels = new int[48 * 48];
+		int[] pixels = new int[SIZE * SIZE];
 		for (int y = 0; y < SIZE; y++) {
 			for (int x = 0; x < SIZE; x++) {
 				pixels[x + y * SIZE] = sheet.getPixels()[(x + xa) + (y + ya) * sheet.getWidth()];
