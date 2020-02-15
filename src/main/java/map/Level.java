@@ -165,7 +165,7 @@ public class Level {
 	}
 
 	public Optional<Item> getItemOn(int x, int y) {
-		Item item = tiles[x / 48][y / 48].getItem();
+		Item item = tiles[x / Tile.SIZE][y / Tile.SIZE].getItem();
 		return item != null ? Optional.of(item) : Optional.empty();
 	}
 
