@@ -7,6 +7,7 @@ import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;
 import sound.Sound;
+import util.vectors.Vec4f;
 
 public class Tree extends Resource {
 
@@ -46,7 +47,7 @@ public class Tree extends Resource {
 	@Override
 	protected void drawSelection() {
 		if (this.isSelected()) {
-			OpenGLUtils.drawSelection(x, y-Sprite.SIZE, Sprite.SIZE, Sprite.SIZE*2); // render the red square around selected resources
+			OpenGLUtils.drawOutline(x, y-Sprite.SIZE, Sprite.SIZE, Sprite.SIZE*2, new Vec4f(1,0,0,1)); // render the red square around selected resources
 		}
 	}
 

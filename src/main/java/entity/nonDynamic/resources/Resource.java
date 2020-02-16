@@ -5,6 +5,7 @@ import entity.nonDynamic.StaticEntity;
 import graphics.OpenGLUtils;
 import graphics.Sprite;
 import map.Level;
+import util.vectors.Vec4f;
 
 //superclass of gatherable resources such as trees and ore
 public abstract class Resource extends StaticEntity {
@@ -22,7 +23,7 @@ public abstract class Resource extends StaticEntity {
 
 	protected void drawSelection() {
 		if (this.isSelected()) {
-			OpenGLUtils.drawSelection(x,y, Sprite.SIZE, Sprite.SIZE); // render the red square around selected resources
+			OpenGLUtils.drawOutline(x,y, Sprite.SIZE, Sprite.SIZE, new Vec4f(1,0,0,1)); // render the red square around selected resources
 		}
 	}
 

@@ -4,16 +4,13 @@ import main.Game;
 import map.Tile;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL12;
-import util.vectors.Vec3f;
 import util.vectors.Vec4f;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 import java.nio.file.Paths;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -68,6 +65,9 @@ public abstract class OpenGLUtils {
 		glBufferData(GL_ARRAY_BUFFER, texCoords, GL_STATIC_DRAW);
 		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
 		glEnableVertexAttribArray(1);
+
+		glLineWidth(3);
+		glEnable(GL_LINE_SMOOTH);
 	}
 
 	private static float pToGL(float pixel, char o) { //converts between pixels and openGL coordinates
@@ -131,29 +131,19 @@ public abstract class OpenGLUtils {
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
-	public static void drawSelection(int x, int y, int width, int height) {
-		glPushMatrix();
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glColor3f(1.0f,0.0f,0.0f);
-		glLineWidth(3);
-
-		glBegin(GL_LINE_LOOP);
-
-		glVertex2f(x, y);
-		glVertex2f(x, y + height);
-		glVertex2f(x + width, y + height);
-		glVertex2f(x + width, y);
-
-		glEnd();
-
-		glColor3f(1.0f, 1.0f, 1.0f);
-		glPopMatrix();
+	public static void drawOutline(int x, int y, int width, int height, Vec4f color) {
+		colShader.use();
+		colShader.setUniform("offset", pToGL((float)x, 'w'), pToGL((float)y, 'h'));
+		colShader.setUniform("scale", (float) width/ Tile.SIZE, (float) height / Tile.SIZE);
+		colShader.setUniform("i_color", color);
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_LINE_LOOP, 0, 6);
 	}
 
 	public static void iconDraw(int id, int x, int y, int width,int height, boolean drawSelectionSquare) { //drawTexturedQuadScaled ui which does not need to be scaled up
 		drawTexturedQuadScaled(x,y,width,height, 0, 0 ,id);
 		if (drawSelectionSquare) {
-			drawSelection(x,y,width,height);
+			drawOutline(x,y,width,height, new Vec4f(1,0,0,1));
 		}
 	}
 
