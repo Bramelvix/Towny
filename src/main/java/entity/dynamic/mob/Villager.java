@@ -21,6 +21,7 @@ import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;
 import map.Tile;
+import util.vectors.Vec4f;
 
 public class Villager extends Humanoid {
 
@@ -208,7 +209,7 @@ public class Villager extends Humanoid {
 	public void render(float xOffset, float yOffset) {
 		drawVillager(x,y, xOffset, yOffset);
 		if (this.isSelected()) {
-			OpenGLUtils.drawSelection(x,y,Sprite.SIZE,Sprite.SIZE);// render the red square around selected villagers
+			OpenGLUtils.drawOutline(x,y,Sprite.SIZE,Sprite.SIZE,new Vec4f(1,0,0,1));// render the red square around selected villagers
 		}
 	}
 
