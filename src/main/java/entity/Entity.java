@@ -85,15 +85,15 @@ public abstract class Entity {
     }
 
     // render method
-    public void render() {
+    public void render(float xOffset, float yOffset) {
        if (isVisible()) {
-		   sprite.draw(x, y);
+		   sprite.draw(x, y, xOffset, yOffset);
 	   }
     }
 
-    public void renderIf(boolean ifCondition) {
+    public void renderIf(boolean ifCondition, float xOffset, float yOffset) {
         if (ifCondition) {
-        	render();
+        	render(xOffset, yOffset);
         }
     }
 
