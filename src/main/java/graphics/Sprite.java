@@ -13,12 +13,12 @@ public class Sprite {
 		pixels = load(x * SIZE + (x * sheet.getMargin()),
 			y * SIZE + (y * sheet.getMargin()), sheet
 		);
-		id = OpenglUtils.loadTexture(pixels, SIZE, SIZE);
+		id = OpenGLUtils.loadTexture(pixels, SIZE, SIZE);
 	}
 
 	public Sprite(int[] pixels) {
 		this.pixels = pixels;
-		id = OpenglUtils.loadTexture(this.pixels, SIZE, SIZE);
+		id = OpenGLUtils.loadTexture(this.pixels, SIZE, SIZE);
 	}
 
 	// load a sprites pixels into the pixel array
@@ -32,8 +32,8 @@ public class Sprite {
 		return pixels;
 	}
 
-	public void draw(int x, int y) {
-		OpenglUtils.drawTexturedQuadScaled(id, x, y, SIZE);
+	public void draw(int x, int y, float xOffset, float yOffset) {
+		OpenGLUtils.drawTexturedQuadScaled(id, x, y, xOffset, yOffset, SIZE);
 	}
 
 }

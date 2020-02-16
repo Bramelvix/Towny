@@ -22,10 +22,10 @@ public class Ui {
 	// rendering the ui
 	public void render() {
 		UiIcons.render();
-		selection.render();
+		selection.render(0,0);
 		menu.render();
 		map.render();
-		outline.render();
+		outline.render(0, 0);
 		layerLevelChanger.render();
 		top.render();
 	}

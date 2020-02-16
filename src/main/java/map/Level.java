@@ -297,7 +297,7 @@ public class Level {
 		int y1 = (yScroll + Game.height + Sprite.SIZE) / Tile.SIZE;
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
-				getTile(x, y).render(x * Sprite.SIZE, y * Sprite.SIZE);
+				getTile(x, y).render(x * Sprite.SIZE, y * Sprite.SIZE, xScroll, yScroll);
 			}
 		}
 		glTranslatef(xScroll, yScroll, 0);
@@ -312,7 +312,7 @@ public class Level {
 
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
-				getTile(x, y).renderHard();
+				getTile(x, y).renderHard(xScroll, yScroll);
 			}
 		}
 		glTranslatef(xScroll, yScroll, 0);

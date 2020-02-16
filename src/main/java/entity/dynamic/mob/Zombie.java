@@ -35,10 +35,10 @@ public class Zombie extends Humanoid {
 	}
 
 	@Override
-	public void render() {
-		super.render();
+	public void render(float xOffset, float yOffset) {
+		super.render(xOffset, yOffset);
 		if (getHolding() != null) {
-			getHolding().sprite.draw(x,y);// renders the item the zombie is holding
+			getHolding().sprite.draw(x,y, xOffset, yOffset);// renders the item the zombie is holding
 		}
 	}
 
