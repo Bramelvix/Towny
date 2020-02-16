@@ -1,7 +1,13 @@
 package input;
 
+import static input.PointerInput.EType.*;
 import static org.lwjgl.glfw.GLFW.*;
 
+import events.Event;
+import events.EventListener;
+import events.EventListenerCatalog;
+import events.EventType;
+import events.Subscription;
 import main.Game;
 import map.Tile;
 import org.lwjgl.glfw.GLFWCursorPosCallbackI;
@@ -9,6 +15,15 @@ import org.lwjgl.glfw.GLFWMouseButtonCallbackI;
 
 
 public class PointerInput {
+
+	public static class EType<T extends Event> implements EventType<T> {
+		public static final EType<PointerMoveEvent> MOVE = new EType<> ();
+		public static final EType<Event> DRAG = new EType<> ();
+		public static final EType<Event> DRAG_START = new EType<> ();
+		public static final EType<Event> DRAG_END = new EType<> ();
+		public static final EType<Event> CLICK = new EType<> ();
+		private EType () {}
+	}
 
 	private static PointerInput INSTANCE;
 
@@ -20,6 +35,8 @@ public class PointerInput {
 	public static void configure (Game game) {
 		INSTANCE = new PointerInput (game);
 	}
+
+	protected EventListenerCatalog listeners = new EventListenerCatalog ();
 
 	protected final Game game;
 	protected double xpos;
@@ -34,8 +51,14 @@ public class PointerInput {
 		this.game = game;
 	}
 
+	public <T extends Event> Subscription on (EType<T> type, EventListener<T> listener) {
+		return listeners.register (type, listener);
+	}
+
 	public GLFWCursorPosCallbackI positionCallback () {
 		return (long window, double xpos, double ypos) -> {
+			listeners.fire (MOVE, new PointerMoveEvent (xpos, ypos));
+
 			this.xpos = xpos;
 			this.ypos = ypos;
 
