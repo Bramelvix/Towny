@@ -574,6 +574,8 @@ public class Game {
 	private void renderMobs() {
 		int x1 = (xScroll + width + Sprite.SIZE);
 		int y1 = (yScroll + height + Sprite.SIZE);
+
+		glPushMatrix();
 		glTranslatef(-xScroll, -yScroll, 0);
 		mobs.forEach(mob -> mob.renderIf(
 			inBounds(mob.getX(), mob.getY(), mob.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1))
@@ -586,8 +588,7 @@ public class Game {
 		sols.forEach(sol -> sol.renderIf(
 			inBounds(sol.getX(), sol.getY(), sol.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1))
 		);
-
-		glTranslatef(xScroll, yScroll, 0);
+		glPopMatrix();
 	}
 
 	private boolean inBounds(int x, int y, int z, int layer, int xScroll, int x1, int yScroll, int y1) {

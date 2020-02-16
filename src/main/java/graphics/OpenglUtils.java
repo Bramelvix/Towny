@@ -52,7 +52,6 @@ public abstract class OpenglUtils {
 	}
 
 	public static void drawTexturedQuadScaled(int x, int y, int width, int height, int texture) {
-		glPushMatrix();
 		glBindTexture(GL_TEXTURE_2D, texture);
 
 		glBegin(GL_QUADS);
@@ -70,12 +69,9 @@ public abstract class OpenglUtils {
 		glVertex2f(x + width, y);
 
 		glEnd();
-
-		glPopMatrix();
 	}
 
 	public static void drawSelection(int x, int y, int width, int height) {
-		glPushMatrix();
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glColor3f(1.0f,0.0f,0.0f);
 		glLineWidth(3);
@@ -90,7 +86,6 @@ public abstract class OpenglUtils {
 		glEnd();
 
 		glColor3f(1.0f, 1.0f, 1.0f);
-		glPopMatrix();
 	}
 
 	public static void iconDraw(int id, int x, int y, int width,int height, boolean drawSelectionSquare) { //drawTexturedQuadScaled ui which does not need to be scaled up
