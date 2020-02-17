@@ -20,9 +20,9 @@ public class Ui {
 	private LayerLevelChanger layerLevelChanger;
 
 	// rendering the ui
-	public void render() {
+	public void render(float xOffset, float yOffset) {
 		UiIcons.render();
-		selection.render(0,0);
+		selection.render(xOffset,yOffset);
 		menu.render();
 		map.render();
 		outline.render(0, 0);

@@ -13,21 +13,24 @@ import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.nio.file.Paths;
 
+import static java.lang.Math.abs;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL44.glBindVertexBuffers;
 
 public abstract class OpenGLUtils {
 
 	private static int VAO;
-	public static Shader texShader, colShader;
+	public static Shader texShader, colShader, textShader;
 
 	public static void init() throws Exception {
 		texShader = new Shader(Paths.get(Game.class.getResource("/shaders/tex_shader.vert").toURI()),Paths.get(Game.class.getResource("/shaders/tex_shader.frag").toURI()));
 		colShader = new Shader(Paths.get(Game.class.getResource("/shaders/col_shader.vert").toURI()),Paths.get(Game.class.getResource("/shaders/col_shader.frag").toURI()));
+		textShader = new Shader(Paths.get(Game.class.getResource("/shaders/text_shader.vert").toURI()),Paths.get(Game.class.getResource("/shaders/tex_shader.frag").toURI()));
 
 		float[] vertices = {
 				// Left bottom triangle
@@ -115,27 +118,41 @@ public abstract class OpenGLUtils {
 		return buffer;
 	}
 
-	public static void drawTexturedQuadScaled(int id, int x, int y, float xOffset, float yOffset,  int size) { //drawTexturedQuadScaled ingame shit which needs to be scaled up
-		drawTexturedQuadScaled(x,y,size,size, xOffset, yOffset, id);
-	}
+	public static void drawGlyph(int texture, float x, float y, float width, float height, float u, float v, float texW, float texH) {
+		textShader.setUniform("offset", pToGL(x, 'w'), pToGL(y, 'h'));
+		textShader.setUniform("scale", width / Tile.SIZE, height / Tile.SIZE);
 
-	public static void drawTexturedQuadScaled(int x, int y, int width, int height, float xOffset, float yOffset, int texture) {
-		//TODO Move this out of here
-		texShader.use();
+		textShader.setUniform("tex_offset", u, v);
+		textShader.setUniform("tex_scale", texW, texH);
 
-		glBindTexture(GL_TEXTURE_2D, texture);
-
-		texShader.setUniform("offset", pToGL((float)x - xOffset, 'w'), pToGL((float)y - yOffset, 'h'));
-		texShader.setUniform("scale", (float) width/ Tile.SIZE, (float) height / Tile.SIZE);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
-	public static void drawOutline(int x, int y, int width, int height, Vec4f color) {
+	public static void drawTexturedQuadScaled(int id, int x, int y, float xOffset, float yOffset,  int size) { //drawTexturedQuadScaled ingame shit which needs to be scaled up
+		drawTexturedQuadScaled(x,y,size,size, xOffset, yOffset, id);
+	}
+
+	public static void drawTexturedQuadScaled(float x, float y, float width, float height, float xOffset, float yOffset, int texture) {
+		//TODO Move this out of here, shader.use() is very bad for fps
+		texShader.use();
+
+		glBindTexture(GL_TEXTURE_2D, texture);
+
+		texShader.setUniform("offset", pToGL(x - xOffset, 'w'), pToGL(y - yOffset, 'h'));
+		texShader.setUniform("scale", width / Tile.SIZE, height / Tile.SIZE);
+
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+	}
+
+	public static void drawOutline(int x, int y, int width, int height, float xOffset, float yOffset, Vec4f color) {
 		colShader.use();
-		colShader.setUniform("offset", pToGL((float)x, 'w'), pToGL((float)y, 'h'));
+
+		colShader.setUniform("offset", pToGL((float)x - xOffset, 'w'), pToGL((float)y - yOffset, 'h'));
 		colShader.setUniform("scale", (float) width/ Tile.SIZE, (float) height / Tile.SIZE);
 		colShader.setUniform("i_color", color);
+
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_LINE_LOOP, 0, 6);
 	}
@@ -143,7 +160,7 @@ public abstract class OpenGLUtils {
 	public static void iconDraw(int id, int x, int y, int width,int height, boolean drawSelectionSquare) { //drawTexturedQuadScaled ui which does not need to be scaled up
 		drawTexturedQuadScaled(x,y,width,height, 0, 0 ,id);
 		if (drawSelectionSquare) {
-			drawOutline(x,y,width,height, new Vec4f(1,0,0,1));
+			drawOutline(x,y,width,height, 0, 0, new Vec4f(1,0,0,1));
 		}
 	}
 

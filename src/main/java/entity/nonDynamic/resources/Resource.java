@@ -18,12 +18,12 @@ public abstract class Resource extends StaticEntity {
 
 	public void render(float xOffset, float yOffset) {
 		super.render(xOffset, yOffset);
-		drawSelection();
+		drawSelection(xOffset, yOffset);
 	}
 
-	protected void drawSelection() {
+	protected void drawSelection(float xOffset, float yOffset) {
 		if (this.isSelected()) {
-			OpenGLUtils.drawOutline(x,y, Sprite.SIZE, Sprite.SIZE, new Vec4f(1,0,0,1)); // render the red square around selected resources
+			OpenGLUtils.drawOutline(x,y, Sprite.SIZE, Sprite.SIZE, xOffset, yOffset, new Vec4f(1,0,0,1)); // render the red square around selected resources
 		}
 	}
 
