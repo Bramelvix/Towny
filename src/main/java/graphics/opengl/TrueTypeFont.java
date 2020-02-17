@@ -131,7 +131,7 @@ public class TrueTypeFont {
 		float texWidth = (SrcWidth / textureWidth);
 		float texHeight = (SrcHeight / textureHeight);
 
-		OpenGLUtils.drawGlyph(fontTextureID, x, y, glyphWidth, glyphHeight, u, v+texHeight, texWidth, -texHeight);
+		OpenGLUtils.drawGlyph(x, y, glyphWidth, glyphHeight, u, v+texHeight, texWidth, -texHeight);
 	}
 
 	public int getWidth(String whatchars) {
@@ -197,7 +197,7 @@ public class TrueTypeFont {
 		}
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fontTextureID);
-		OpenGLUtils.textShader.use();
+		OpenGLUtils.fontShader.use();
 		glBindTexture(GL_TEXTURE_2D, fontTextureID);
 		while (i >= startIndex && i <= endIndex) {
 			charCurrent = whatchars.charAt(i);

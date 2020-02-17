@@ -23,12 +23,14 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 public abstract class OpenGLUtils {
 
 	private static int VAO;
-	public static Shader texShader, colShader, textShader;
+	public static Shader texShader;
+	public static Shader colShader;
+	public static Shader fontShader;
 
 	public static void init() throws Exception {
 		texShader = new Shader(Paths.get(Game.class.getResource("/shaders/tex_shader.vert").toURI()), Paths.get(Game.class.getResource("/shaders/tex_shader.frag").toURI()));
 		colShader = new Shader(Paths.get(Game.class.getResource("/shaders/col_shader.vert").toURI()), Paths.get(Game.class.getResource("/shaders/col_shader.frag").toURI()));
-		textShader = new Shader(Paths.get(Game.class.getResource("/shaders/text_shader.vert").toURI()), Paths.get(Game.class.getResource("/shaders/tex_shader.frag").toURI()));
+		fontShader = new Shader(Paths.get(Game.class.getResource("/shaders/text_shader.vert").toURI()), Paths.get(Game.class.getResource("/shaders/tex_shader.frag").toURI()));
 
 		float[] vertices = {
 				// Left bottom triangle
@@ -111,12 +113,12 @@ public abstract class OpenGLUtils {
 		return buffer;
 	}
 
-	public static void drawGlyph(int texture, float x, float y, float width, float height, float u, float v, float texW, float texH) {
-		textShader.setUniform("offset", pToGL(x, 'w'), pToGL(y, 'h'));
-		textShader.setUniform("scale", width / Tile.SIZE, height / Tile.SIZE);
+	public static void drawGlyph(float x, float y, float width, float height, float u, float v, float texW, float texH) {
+		fontShader.setUniform("offset", pToGL(x, 'w'), pToGL(y, 'h'));
+		fontShader.setUniform("scale", width / Tile.SIZE, height / Tile.SIZE);
 
-		textShader.setUniform("tex_offset", u, v);
-		textShader.setUniform("tex_scale", texW, texH);
+		fontShader.setUniform("tex_offset", u, v);
+		fontShader.setUniform("tex_scale", texW, texH);
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
