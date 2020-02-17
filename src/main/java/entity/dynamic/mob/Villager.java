@@ -209,7 +209,7 @@ public class Villager extends Humanoid {
 	public void render(float xOffset, float yOffset) {
 		drawVillager(x,y, xOffset, yOffset);
 		if (this.isSelected()) {
-			OpenGLUtils.drawOutline(x,y,Sprite.SIZE,Sprite.SIZE,new Vec4f(1,0,0,1));// render the red square around selected villagers
+			OpenGLUtils.drawOutline(x,y,Sprite.SIZE,Sprite.SIZE, xOffset, yOffset, new Vec4f(1,0,0,1));// render the red square around selected villagers
 		}
 	}
 

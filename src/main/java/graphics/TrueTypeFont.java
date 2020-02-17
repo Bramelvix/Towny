@@ -7,6 +7,9 @@ import java.nio.IntBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+
 public class TrueTypeFont {
 
 	static TrueTypeFont black, red;
@@ -118,24 +121,17 @@ public class TrueTypeFont {
 		}
 	}
 
-	private void drawQuad(float drawX, float drawY, float drawX2, float drawY2, float srcX, float srcY, float srcX2, float srcY2) {
-		float DrawWidth = drawX2 - drawX;
-		float DrawHeight = drawY2 - drawY;
-		float TextureSrcX = srcX / textureWidth;
-		float TextureSrcY = srcY / textureHeight;
+	private void drawQuad(float x, float y, float drawX2, float drawY2, float srcX, float srcY, float srcX2, float srcY2) {
+		float glyphWidth = drawX2 - x;
+		float glyphHeight = drawY2 - y;
+		float u = srcX / textureWidth;
+		float v = srcY / textureHeight;
 		float SrcWidth = srcX2 - srcX;
 		float SrcHeight = srcY2 - srcY;
-		float RenderWidth = (SrcWidth / textureWidth);
-		float RenderHeight = (SrcHeight / textureHeight);
+		float texWidth = (SrcWidth / textureWidth);
+		float texHeight = (SrcHeight / textureHeight);
 
-		GL11.glTexCoord2f(TextureSrcX, TextureSrcY);
-		GL11.glVertex2f(drawX, drawY + DrawHeight);
-		GL11.glTexCoord2f(TextureSrcX + RenderWidth, TextureSrcY);
-		GL11.glVertex2f(drawX + DrawWidth, drawY + DrawHeight);
-		GL11.glTexCoord2f(TextureSrcX + RenderWidth, TextureSrcY + RenderHeight);
-		GL11.glVertex2f(drawX + DrawWidth, drawY);
-		GL11.glTexCoord2f(TextureSrcX, TextureSrcY + RenderHeight);
-		GL11.glVertex2f(drawX, drawY);
+		OpenGLUtils.drawGlyph(fontTextureID, x, y, glyphWidth, glyphHeight, u, v+texHeight, texWidth, -texHeight);
 	}
 
 	public int getWidth(String whatchars) {
@@ -199,11 +195,10 @@ public class TrueTypeFont {
 				c = 9;
 				break;
 		}
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fontTextureID);
-		GL11.glBegin(GL11.GL_QUADS);
+		OpenGLUtils.textShader.use();
+		glBindTexture(GL_TEXTURE_2D, fontTextureID);
 		while (i >= startIndex && i <= endIndex) {
 			charCurrent = whatchars.charAt(i);
 			intObject = charArray[charCurrent];
@@ -238,7 +233,6 @@ public class TrueTypeFont {
 
 			}
 		}
-		GL11.glEnd();
 	}
 
 	public void destroy() {

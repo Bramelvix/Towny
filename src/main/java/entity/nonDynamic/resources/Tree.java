@@ -45,9 +45,9 @@ public class Tree extends Resource {
 	}
 
 	@Override
-	protected void drawSelection() {
+	protected void drawSelection(float xOffset, float yOffset) {
 		if (this.isSelected()) {
-			OpenGLUtils.drawOutline(x, y-Sprite.SIZE, Sprite.SIZE, Sprite.SIZE*2, new Vec4f(1,0,0,1)); // render the red square around selected resources
+			OpenGLUtils.drawOutline(x, y-Sprite.SIZE, Sprite.SIZE, Sprite.SIZE*2, xOffset, yOffset, new Vec4f(1,0,0,1)); // render the red square around selected resources
 		}
 	}
 

@@ -36,6 +36,7 @@ import map.Level;
 import map.Tile;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.openal.EXTOffset;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLCapabilities;
 import util.StringUtils;
@@ -234,7 +235,7 @@ public class Game {
 		map[currentLayerNumber].render(xScroll, yScroll);
 		renderMobs();
 		map[currentLayerNumber].renderHardEntities(xScroll, yScroll);
-		ui.render();
+		ui.render(xScroll, yScroll);
 		//OpenglUtils.drawShit();
 		glfwSwapBuffers(window);
 	}
