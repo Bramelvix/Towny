@@ -128,7 +128,7 @@ public abstract class OpenGLUtils {
 
 	public static void drawTexturedQuadScaled(float x, float y, float width, float height, float xOffset, float yOffset, int texture) {
 		//TODO Move this out of here, shader.use() is very bad for fps
-		texShader.use();
+		//texShader.use();
 
 		glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -148,6 +148,7 @@ public abstract class OpenGLUtils {
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_LINE_LOOP, 0, 6);
+		texShader.use();
 	}
 
 	public static void iconDraw(int id, int x, int y, int width,int height, boolean drawSelectionSquare) { //drawTexturedQuadScaled ui which does not need to be scaled up
@@ -168,6 +169,7 @@ public abstract class OpenGLUtils {
 		colShader.setUniform("i_color", color);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+		texShader.use();
 
 	}
 
@@ -196,10 +198,12 @@ public abstract class OpenGLUtils {
 
 	public static void drawText(String text, int x, int y) {
 		TrueTypeFont.black.drawString(x,y,text,1,1);
+		texShader.use();
 	}
 
 	public static void drawTextRed(String text, int x, int y) {
 		TrueTypeFont.red.drawString(x,y,text,1,1);
+		texShader.use();
 	}
 
 }
