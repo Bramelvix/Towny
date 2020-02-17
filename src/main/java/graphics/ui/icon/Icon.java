@@ -3,7 +3,7 @@ package graphics.ui.icon;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import graphics.OpenglUtils;
+import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
 
 //icon on the bottom left of the screen (pickaxe, axe,...)
@@ -20,7 +20,7 @@ public class Icon {
 		this.x = x;
 		this.y = y;
 		int[] pixels = load(path, scale);
-		id = OpenglUtils.loadTexture(pixels, width,height);
+		id = OpenGLUtils.loadTexture(pixels, width, height);
 	}
 
 	// getters
@@ -58,14 +58,14 @@ public class Icon {
 
 	//render the icon on the screen
 	public void render() {
-		OpenglUtils.iconDraw(id, x, y, width,height, selected || hover);
+		OpenGLUtils.iconDraw(id, x, y, width, height, selected || hover);
 	}
 
 	//load the image
 	private int[] load(String path, float scaleValue) {
 		try {
 			BufferedImage before = ImageIO.read(Icon.class.getResource(path));
-			BufferedImage after = OpenglUtils.getScaledBufferedImage(before, scaleValue, scaleValue);
+			BufferedImage after = OpenGLUtils.getScaledBufferedImage(before, scaleValue, scaleValue);
 			width = after.getWidth();
 			height = after.getHeight();
 			int[] pixels = new int[width * height];

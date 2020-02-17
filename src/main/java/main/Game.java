@@ -26,6 +26,8 @@ import entity.nonDynamic.building.container.workstations.Anvil;
 import entity.nonDynamic.building.container.workstations.Furnace;
 import entity.pathfinding.PathFinder;
 import graphics.*;
+import graphics.opengl.OpenGLUtils;
+import graphics.opengl.TrueTypeFont;
 import graphics.ui.Ui;
 import graphics.ui.icon.Icon;
 import graphics.ui.icon.UiIcons;
@@ -61,8 +63,8 @@ public class Game {
 	private byte speed = 60;
 	private double ns = 1000000000.0 / speed;
 	private Villager selectedvill;
-	public int xScroll = 0;
-	public int yScroll = 0;
+	public static int xScroll = 0;
+	public static int yScroll = 0;
 	public int currentLayerNumber = 0;
 	private long window;
 	private PointerInput pointer;
@@ -105,7 +107,7 @@ public class Game {
 		glfwSwapInterval(0); //0 = VSYNC OFF, 1= VSYNC ON
 		setIcon();
 		glLoadIdentity();
-		glOrtho(0, width , height, 0.0f, 0.0f, 1.0f);
+		glOrtho(0, width , height, 0.0f, 0.0f, 10.0f);
 		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
@@ -115,8 +117,10 @@ public class Game {
 		this.pointer = PointerInput.getInstance ();
 		glfwSetMouseButtonCallback(window, pointer.buttonsCallback ());
 		glfwSetCursorPosCallback(window, pointer.positionCallback ());
-
 		glfwSetScrollCallback(window, this::scroll);
+
+		OpenGLUtils.init();
+
 		SpritesheetHashtable.registerSpritesheets();
 		SpriteHashtable.registerSprites();
 		ItemHashtable.registerItems();
@@ -139,7 +143,7 @@ public class Game {
 			int height = img.getHeight();
 			int[] pixels = new int[width * height];
 			img.getRGB(0, 0, width, height, pixels, 0, width);
-			ByteBuffer buffer = OpenglUtils.getByteBuffer(pixels, width, height);
+			ByteBuffer buffer = OpenGLUtils.getByteBuffer(pixels, width, height);
 			GLFWImage image = GLFWImage.malloc();
 			image.set(width, height, buffer);
 			GLFWImage.Buffer images = GLFWImage.malloc(1);
@@ -177,7 +181,7 @@ public class Game {
 	private void spawnZombies() {
 		int teller = Entity.RANDOM.nextInt(5) + 1;
 		for (int i = 0; i < teller; i++) {
-			mobs.add(new Zombie(map, Entity.RANDOM.nextInt(768/48)*48 + Tile.SIZE, Entity.RANDOM.nextInt(768/48)*48 + Tile.SIZE, 0));
+			mobs.add(new Zombie(map, Entity.RANDOM.nextInt(768/ Tile.SIZE)* Tile.SIZE + Tile.SIZE, Entity.RANDOM.nextInt(768/ Tile.SIZE)*Tile.SIZE + Tile.SIZE, 0));
 		}
 	}
 
@@ -225,11 +229,12 @@ public class Game {
 
 	private void draw() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
 		map[currentLayerNumber].render(xScroll, yScroll);
 		renderMobs();
 		map[currentLayerNumber].renderHardEntities(xScroll, yScroll);
-		ui.render();
+		ui.render(xScroll, yScroll);
+		//OpenglUtils.drawShit();
 		glfwSwapBuffers(window);
 	}
 
@@ -525,9 +530,9 @@ public class Game {
 	}
 
 	private void moveCamera(int xScroll, int yScroll) {
-		this.xScroll += xScroll;
-		this.yScroll += yScroll;
-		ui.setOffset(this.xScroll, this.yScroll);
+		Game.xScroll += xScroll;
+		Game.yScroll += yScroll;
+		ui.setOffset(Game.xScroll, Game.yScroll);
 	}
 
 	private void moveCamera() {
@@ -577,17 +582,25 @@ public class Game {
 
 		glPushMatrix();
 		glTranslatef(-xScroll, -yScroll, 0);
+
 		mobs.forEach(mob -> mob.renderIf(
-			inBounds(mob.getX(), mob.getY(), mob.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1))
-		);
+			inBounds(mob.getX(), mob.getY(), mob.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
+			(float) xScroll,
+			(float) yScroll
+		));
 
 		vills.forEach(vil -> vil.renderIf(
-			inBounds(vil.getX(), vil.getY(), vil.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1))
-		);
+			inBounds(vil.getX(), vil.getY(), vil.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
+			(float)xScroll,
+			(float)yScroll
+		));
 
 		sols.forEach(sol -> sol.renderIf(
-			inBounds(sol.getX(), sol.getY(), sol.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1))
-		);
+			inBounds(sol.getX(), sol.getY(), sol.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
+			(float)xScroll,
+			(float)yScroll
+		));
+
 		glPopMatrix();
 	}
 

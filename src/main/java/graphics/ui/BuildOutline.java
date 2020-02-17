@@ -3,7 +3,7 @@ package graphics.ui;
 import java.awt.Color;
 
 import entity.dynamic.mob.work.BuildingRecipe;
-import graphics.OpenglUtils;
+import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
 import map.Level;
 import map.Tile;
@@ -29,37 +29,40 @@ public class BuildOutline {
 	private int z = 0;
 
 	// rendering the outline
-	public void render() {
+	public void render(float xOffset, float yOffset) {
 		if (visible) {
 			if (lockedSize || buildSquareXE == 0 && buildSquareYE == 0) {
-				OpenglUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken,WIDTH,notBuildable((buildSquareXS /48), buildSquareYS /48, z) ? notbuildable : buildable);
+				OpenGLUtils.buildOutlineDraw(buildSquareXSTeken, buildSquareYSTeken, WIDTH, xOffset, yOffset,
+					notBuildable((buildSquareXS / Tile.SIZE), buildSquareYS / Tile.SIZE, z) ? notbuildable : buildable
+				);
 				return;
 			}
 			if (squarewidth > squareheight) {
-				if (buildSquareXSTeken < buildSquareXE) { // START LEFT VAN EIND == SLEEP NAAR RIGHT
+				if (buildSquareXSTeken < buildSquareXE) { // START LEFT OF END == DRAG TO RIGHT
 					for (int i = 0; i < squarewidth; i++) {
-						OpenglUtils.buildOutlineDraw(buildSquareXSTeken + (i * WIDTH),buildSquareYSTeken,WIDTH,notBuildable((buildSquareXS /48) + i, (buildSquareYS /48), z) ? notbuildable
-								: buildable);
+						OpenGLUtils.buildOutlineDraw(buildSquareXSTeken + (i * WIDTH), buildSquareYSTeken,WIDTH, xOffset, yOffset,
+							notBuildable((buildSquareXS /Tile.SIZE) + i, (buildSquareYS /Tile.SIZE), z) ? notbuildable : buildable
+						);
 					}
-				} else { // START RIGHT VAN EIND == SLEEP NAAR LEFT
+				} else { // START RIGHT OF END == DRAG TO LEFT
 					for (int i = 0; i < squarewidth; i++) {
-						OpenglUtils.buildOutlineDraw(buildSquareXSTeken - (WIDTH * (squarewidth - 1)) + (i * WIDTH),buildSquareYSTeken,WIDTH,(notBuildable(((buildSquareXS) - (WIDTH * (squarewidth - 1)) /48) + i,
-								(buildSquareYS /48), z)) ? notbuildable : buildable);
+						OpenGLUtils.buildOutlineDraw(buildSquareXSTeken - (WIDTH * (squarewidth - 1)) + (i * WIDTH), buildSquareYSTeken, WIDTH, xOffset, yOffset,
+							notBuildable(((buildSquareXS) - (WIDTH * (squarewidth - 1)) /Tile.SIZE) + i, (buildSquareYS / Tile.SIZE), z) ? notbuildable : buildable
+						);
 					}
 				}
 			} else {
-				if (buildSquareYSTeken < buildSquareYE) { // START BOVEN EIND == SLEEP NAAR ONDER
+				if (buildSquareYSTeken < buildSquareYE) { // START ABOVE END == DRAG DOWN
 					for (int i = 0; i < squareheight; i++) {
-						OpenglUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken + (WIDTH * i), WIDTH* (squareheight - i),(notBuildable((buildSquareXS /48), ((buildSquareYS) /48) + i, z))
-								? notbuildable
-								: buildable);
+						OpenGLUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken + (WIDTH * i), WIDTH * (squareheight - i), xOffset, yOffset,
+							notBuildable((buildSquareXS /Tile.SIZE), ((buildSquareYS) /Tile.SIZE) + i, z) ? notbuildable : buildable
+						);
 					}
-				} else { // START ONDER EIND == SLEEP NAAR BOVEN
+				} else { // START BELOW END == DRAG UP
 					for (int i = 0; i < squareheight; i++) {
-
-						OpenglUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken - (WIDTH * (squareheight - 1)) + (i * WIDTH),WIDTH,(notBuildable((buildSquareXS /48),
-								((buildSquareYS) - (WIDTH * (squareheight - 1)) /48) + i, z)) ? notbuildable
-								: buildable);
+						OpenGLUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken - (WIDTH * (squareheight - 1)) + (i * WIDTH), WIDTH, xOffset, yOffset,
+							notBuildable((buildSquareXS /Tile.SIZE), (buildSquareYS - (WIDTH * (squareheight - 1)) /Tile.SIZE) + i, z) ? notbuildable : buildable
+						);
 					}
 				}
 
@@ -82,31 +85,31 @@ public class BuildOutline {
 			coords[0][1] = buildSquareYS;
 		} else {
 			if (squarewidth > squareheight) {
-				if (buildSquareXSTeken < buildSquareXE) { // START LEFT VAN EIND == SLEEP NAAR RIGHT
+				if (buildSquareXSTeken < buildSquareXE) { // START LEFT OF END == DRAG RIGHT
 					coords = new int[squarewidth][2];
 					for (int i = 0; i < squarewidth; i++) {
-						coords[i][0] = buildSquareXS + (i *48);
+						coords[i][0] = buildSquareXS + (i * Tile.SIZE);
 						coords[i][1] = buildSquareYS;
 					}
-				} else { // START RIGHT VAN EIND == SLEEP NAAR LEFT
+				} else { // START RIGHT OF END == DRAG LEFT
 					coords = new int[squarewidth][2];
 					for (int i = 0; i < squarewidth; i++) {
-						coords[i][0] = (((buildSquareXS - (WIDTH * (squarewidth - 1))))) + (i *48);
+						coords[i][0] = (((buildSquareXS - (WIDTH * (squarewidth - 1))))) + (i * Tile.SIZE);
 						coords[i][1] = buildSquareYS;
 					}
 				}
 			} else {
-				if (buildSquareYSTeken < buildSquareYE) { // START BOVEN EIND == SLEEP NAAR ONDER
+				if (buildSquareYSTeken < buildSquareYE) { // START ABOVE END == DRAG DOWN
 					coords = new int[squareheight][2];
 					for (int i = 0; i < squareheight; i++) {
 						coords[i][0] = buildSquareXS;
-						coords[i][1] = buildSquareYS + (i *48);
+						coords[i][1] = buildSquareYS + (i * Tile.SIZE);
 					}
-				} else { // START ONDER EIND == SLEEP NAAR BOVEN
+				} else { // START BELOW END == DRAG UP
 					coords = new int[squareheight][2];
 					for (int i = 0; i < squareheight; i++) {
 						coords[i][0] = buildSquareXS;
-						coords[i][1] = buildSquareYS - (WIDTH * (squareheight - 1)) + (i *48);
+						coords[i][1] = buildSquareYS - (WIDTH * (squareheight - 1)) + (i * Tile.SIZE);
 					}
 				}
 			}
@@ -123,10 +126,10 @@ public class BuildOutline {
 	public void update(PointerInput pointer, int xOff, int yOff, boolean force, int z) {
 		this.z = z;
 		if (visible || force) { // TODO fix this aids
-			buildSquareXS = (pointer.getTileX() * 48);
-			buildSquareXSTeken = (pointer.getTileX() * 48)-xOff;
-			buildSquareYS = (pointer.getTileY() * 48);
-			buildSquareYSTeken = (pointer.getTileY() * 48)-yOff;
+			buildSquareXS = (pointer.getTileX() * Tile.SIZE);
+			buildSquareXSTeken = (pointer.getTileX() * Tile.SIZE)-xOff;
+			buildSquareYS = (pointer.getTileY() * Tile.SIZE);
+			buildSquareYSTeken = (pointer.getTileY() * Tile.SIZE)-yOff;
 			squarewidth = 1;
 			squareheight = 1;
 			buildSquareXE = 0;
@@ -156,8 +159,8 @@ public class BuildOutline {
 		if (!visible) {
 			update(pointer, xoff, yoff, true,z);
 			visible = true;
-			buildSquareXS = pointer.getTileX() *48;
-			buildSquareYS = pointer.getTileY() *48;
+			buildSquareXS = pointer.getTileX() *Tile.SIZE;
+			buildSquareYS = pointer.getTileY() *Tile.SIZE;
 			squarewidth = 1;
 			squareheight = 1;
 			this.build = build;

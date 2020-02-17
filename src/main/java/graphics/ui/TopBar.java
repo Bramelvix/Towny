@@ -1,9 +1,10 @@
 package graphics.ui;
 
-import graphics.OpenglUtils;
+import graphics.opengl.OpenGLUtils;
 import graphics.ui.icon.Icon;
 import input.PointerInput;
 import main.Game;
+import util.vectors.Vec4f;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
@@ -80,7 +81,7 @@ public class TopBar {
 
 	// render the topbar on the screen
 	public void render() {
-		OpenglUtils.drawFilledSquare(x, y, width, height, r, g, b, a);
+		OpenGLUtils.drawFilledSquare(x, y, width, height, 0, 0, new Vec4f(r, g, b, a));
 		vil.render();
 		sol.render();
 		slow.render();
@@ -90,20 +91,16 @@ public class TopBar {
 		} else {
 			play.render();
 		}
-		OpenglUtils.drawText("Villagers", x +5, y -5);
-		OpenglUtils.drawText(vilcount + "", x + 25, y + 65);
-		OpenglUtils.drawText("Speed: " + (speed - 2), x + 95, y + 60);
-		OpenglUtils.drawText("Soldiers", x + 200, y - 5);
-		OpenglUtils.drawText(solcount + "", x + 225, y + 65);
+		OpenGLUtils.drawText("Villagers", x +5, y -5);
+		OpenGLUtils.drawText(vilcount + "", x + 25, y + 65);
+		OpenGLUtils.drawText("Speed: " + (speed - 2), x + 95, y + 60);
+		OpenGLUtils.drawText("Soldiers", x + 200, y - 5);
+		OpenGLUtils.drawText(solcount + "", x + 225, y + 65);
 	}
 
 	// has the user clicked on the pause button
 	private boolean clickedOnPause(PointerInput pointer) {
-		return (
-			! pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT) ? false :
-			Game.paused ? play.hoverOn () :
-			pause.hoverOn ()
-		);
+		return (pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT) && (Game.paused ? play.hoverOn() : pause.hoverOn()));
 	}
 
 	private boolean clickedOnFast(PointerInput pointer) {

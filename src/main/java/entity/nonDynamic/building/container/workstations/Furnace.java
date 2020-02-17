@@ -16,17 +16,17 @@ public class Furnace extends Workstation {
 		setName("furnace");
 	}
 
-	public void render() {
+	public void render(float xOffset,float yOffset) {
 		if (!isRunning()) {
-			sprite1.draw(x,y);
+			sprite1.draw(x,y, xOffset, yOffset);
 		} else {
-			draw(animationCounter > 29 ? sprite2 : sprite3, x, y);
+			draw(animationCounter > 29 ? sprite2 : sprite3, x, y, xOffset, yOffset);
 			animationCounterTick();
 		}
 	}
 
-	private void draw(Sprite sprite, int x, int y) {
-		sprite.draw(x,y);
+	private void draw(Sprite sprite, int x, int y, float xOffset, float yOffset) {
+		sprite.draw(x ,y, xOffset, yOffset);
 	}
 
 	@Override

@@ -25,21 +25,21 @@ public class Tile {
 	}
 
 	// render a tile
-	 void render(int x, int y) {
+	 void render(int x, int y, float xOffset, float yOffset) {
 		if (entity == null || entity.isTransparent() || !entity.isVisible()) {
-			sprite.draw(x,y);
+			sprite.draw(x, y, xOffset, yOffset);
 		}
 		if (entity != null && !solid) {
-			entity.render();
+			entity.render(xOffset, yOffset);
 		}
 		if (item != null) {
-			item.render();
+			item.render(xOffset, yOffset);
 		}
 	}
 
-	void renderHard() {
+	void renderHard(float xOffset, float yOffset) {
 		if (solid && entity != null) {
-			entity.render();
+			entity.render(xOffset, yOffset);
 		}
 	}
 

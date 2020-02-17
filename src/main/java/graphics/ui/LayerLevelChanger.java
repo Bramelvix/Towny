@@ -1,8 +1,9 @@
 package graphics.ui;
 
-import graphics.OpenglUtils;
+import graphics.opengl.OpenGLUtils;
 import graphics.ui.icon.Icon;
 import input.PointerInput;
+import util.vectors.Vec4f;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
@@ -50,9 +51,9 @@ public class LayerLevelChanger {
 	}
 
 	public void render() {
-		OpenglUtils.drawFilledSquare(x, y, width, height, r, g, b, a);
+		OpenGLUtils.drawFilledSquare(x, y, width, height, 0, 0, new Vec4f(r, g, b, a));
 		up.render();
-		OpenglUtils.drawText(-z + "", x + 60, y + 10);
+		OpenGLUtils.drawText(-z + "", x + 60, y + 10);
 		down.render();
 	}
 

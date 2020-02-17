@@ -11,10 +11,8 @@ public class Spritesheet {
 	private int width; // width of the spritesheet
 	private int height; // height of the spritesheet
 	private int[] pixels; // pixels array
-	private int margin; // margin between sprites on the spreadsheet
 
-	public Spritesheet(String path, int margin) {
-		this.margin = margin;
+	public Spritesheet(String path) {
 		try {
 			BufferedImage image = ImageIO.read(Spritesheet.class.getResource(path));
 			width = image.getWidth();
@@ -36,10 +34,6 @@ public class Spritesheet {
 
 	public int getHeight() {
 		return height;
-	}
-
-	int getMargin() {
-		return margin;
 	}
 
 }

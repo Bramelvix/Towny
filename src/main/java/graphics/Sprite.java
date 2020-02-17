@@ -1,5 +1,6 @@
 package graphics;
 
+import graphics.opengl.OpenGLUtils;
 import map.Tile;
 
 //sprites in the game
@@ -10,20 +11,18 @@ public class Sprite {
 	public final int[] pixels;
 
 	protected Sprite(int x, int y, Spritesheet sheet) {
-		pixels = load(x * SIZE + (x * sheet.getMargin()),
-			y * SIZE + (y * sheet.getMargin()), sheet
-		);
-		id = OpenglUtils.loadTexture(pixels, SIZE, SIZE);
+		pixels = load(x * SIZE, y * SIZE, sheet);
+		id = OpenGLUtils.loadTexture(pixels, SIZE, SIZE);
 	}
 
 	public Sprite(int[] pixels) {
 		this.pixels = pixels;
-		id = OpenglUtils.loadTexture(this.pixels, SIZE, SIZE);
+		id = OpenGLUtils.loadTexture(this.pixels, SIZE, SIZE);
 	}
 
 	// load a sprites pixels into the pixel array
 	private int[] load(int xa, int ya, Spritesheet sheet) {
-		int[] pixels = new int[48 * 48];
+		int[] pixels = new int[SIZE * SIZE];
 		for (int y = 0; y < SIZE; y++) {
 			for (int x = 0; x < SIZE; x++) {
 				pixels[x + y * SIZE] = sheet.getPixels()[(x + xa) + (y + ya) * sheet.getWidth()];
@@ -32,8 +31,8 @@ public class Sprite {
 		return pixels;
 	}
 
-	public void draw(int x, int y) {
-		OpenglUtils.drawTexturedQuadScaled(id, x, y, SIZE);
+	public void draw(int x, int y, float xOffset, float yOffset) {
+		OpenGLUtils.drawTexturedQuadScaled(id, x, y, xOffset, yOffset, SIZE);
 	}
 
 }

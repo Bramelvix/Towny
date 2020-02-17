@@ -2,8 +2,9 @@ package graphics.ui;
 
 import java.awt.Color;
 
-import graphics.OpenglUtils;
+import graphics.opengl.OpenGLUtils;
 import map.Level;
+import util.vectors.Vec4f;
 
 class Minimap {
 
@@ -33,8 +34,8 @@ class Minimap {
 
 			}
 		}
-		OpenglUtils.deleteTexture(textureId);
-		textureId = OpenglUtils.loadTexture(pixels, width, height);
+		OpenGLUtils.deleteTexture(textureId);
+		textureId = OpenGLUtils.loadTexture(pixels, width, height);
 	}
 
 	public void update(Level[] map, int z) {
@@ -48,8 +49,9 @@ class Minimap {
 	public void render() {
 		float xloc = (x + (xoff * 0.04225f)); //TODO fix this. Pulled these numbers out of my arse
 		float yloc = (y + (yoff * 0.04225f));
-		OpenglUtils.drawTexturedQuadScaled(x, y, width, height, textureId);
-		OpenglUtils.drawFilledSquare((int) xloc, (int) yloc, (int) (62.5), (int) (35.15625), COL.getRed() / 255f, COL.getGreen() / 255f, COL.getBlue() / 255f, COL.getAlpha() / 255f);
+		OpenGLUtils.drawTexturedQuadScaled(x, y, width, height, 0, 0, textureId);
+		Vec4f outColor = new Vec4f(COL.getRed() / 255f, COL.getGreen() / 255f, COL.getBlue() / 255f, COL.getAlpha() / 255f);
+		OpenGLUtils.drawFilledSquare((int) xloc, (int) yloc, (int) (62.5), (int) (35.15625), 0, 0, outColor);
 	}
 
 	// setter

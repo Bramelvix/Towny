@@ -16,15 +16,15 @@ public class VillagerInventory {
 		weapons = new Weapon[2]; // 0 = weaponhand, 1 = shieldhand
 	}
 
-	public void render() {
+	public void render(float xOffset, float yOffset) {
 		for (Clothing i : clothes) {
 			if (i != null) {
-				i.sprite.draw(i.getX(),i.getY());
+				i.sprite.draw(i.getX(),i.getY(), xOffset, yOffset);
 			}
 		}
 		for (Weapon i : weapons) {
 			if (i != null) {
-				i.sprite.draw(i.getX(),i.getY());
+				i.sprite.draw(i.getX(),i.getY(), xOffset, yOffset);
 			}
 		}
 	}

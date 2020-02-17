@@ -4,7 +4,7 @@ import entity.Entity;
 import entity.dynamic.mob.work.BuildingRecipe;
 import entity.dynamic.mob.work.ItemRecipe;
 import entity.dynamic.mob.work.Recipe;
-import graphics.OpenglUtils;
+import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
@@ -70,7 +70,7 @@ public class MenuItem {
 
 	// rendering the menuitem's text
 	public void render() {
-		OpenglUtils.menuItemDraw(x, y, text, hover);
+		OpenGLUtils.menuItemDraw(x, y, text, hover);
 	}
 
 	// updating the mouse hover
