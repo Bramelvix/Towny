@@ -39,7 +39,7 @@ public class Wall extends BuildAbleObject {
 
 	public Wall(WallType type, boolean door) {
 		super();
-		setTransparent(false);
+		setTransparent(door);
 		this.door = door;
 		decideSprites(type, door);
 	}
