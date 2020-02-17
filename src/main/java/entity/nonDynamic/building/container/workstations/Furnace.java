@@ -26,7 +26,7 @@ public class Furnace extends Workstation {
 	}
 
 	private void draw(Sprite sprite, int x, int y, float xOffset, float yOffset) {
-		sprite.draw(x,y, xOffset, yOffset);
+		sprite.draw(x ,y, xOffset, yOffset);
 	}
 
 	@Override

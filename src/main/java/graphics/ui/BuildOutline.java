@@ -3,7 +3,7 @@ package graphics.ui;
 import java.awt.Color;
 
 import entity.dynamic.mob.work.BuildingRecipe;
-import graphics.OpenGLUtils;
+import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
 import map.Level;
 import map.Tile;
@@ -32,34 +32,37 @@ public class BuildOutline {
 	public void render(float xOffset, float yOffset) {
 		if (visible) {
 			if (lockedSize || buildSquareXE == 0 && buildSquareYE == 0) {
-				OpenGLUtils.buildOutlineDraw(buildSquareXSTeken, buildSquareYSTeken, WIDTH, xOffset, yOffset, notBuildable((buildSquareXS / Tile.SIZE), buildSquareYS / Tile.SIZE, z) ? notbuildable : buildable);
+				OpenGLUtils.buildOutlineDraw(buildSquareXSTeken, buildSquareYSTeken, WIDTH, xOffset, yOffset,
+					notBuildable((buildSquareXS / Tile.SIZE), buildSquareYS / Tile.SIZE, z) ? notbuildable : buildable
+				);
 				return;
 			}
 			if (squarewidth > squareheight) {
-				if (buildSquareXSTeken < buildSquareXE) { // START LEFT VAN EIND == SLEEP NAAR RIGHT
+				if (buildSquareXSTeken < buildSquareXE) { // START LEFT OF END == DRAG TO RIGHT
 					for (int i = 0; i < squarewidth; i++) {
-						OpenGLUtils.buildOutlineDraw(buildSquareXSTeken + (i * WIDTH),buildSquareYSTeken,WIDTH, xOffset, yOffset, notBuildable((buildSquareXS /Tile.SIZE) + i, (buildSquareYS /Tile.SIZE), z) ? notbuildable
-								: buildable);
+						OpenGLUtils.buildOutlineDraw(buildSquareXSTeken + (i * WIDTH), buildSquareYSTeken,WIDTH, xOffset, yOffset,
+							notBuildable((buildSquareXS /Tile.SIZE) + i, (buildSquareYS /Tile.SIZE), z) ? notbuildable : buildable
+						);
 					}
-				} else { // START RIGHT VAN EIND == SLEEP NAAR LEFT
+				} else { // START RIGHT OF END == DRAG TO LEFT
 					for (int i = 0; i < squarewidth; i++) {
-						OpenGLUtils.buildOutlineDraw(buildSquareXSTeken - (WIDTH * (squarewidth - 1)) + (i * WIDTH),buildSquareYSTeken,WIDTH, xOffset, yOffset, (notBuildable(((buildSquareXS) - (WIDTH * (squarewidth - 1)) /Tile.SIZE) + i,
-								(buildSquareYS / Tile.SIZE), z)) ? notbuildable : buildable);
+						OpenGLUtils.buildOutlineDraw(buildSquareXSTeken - (WIDTH * (squarewidth - 1)) + (i * WIDTH), buildSquareYSTeken, WIDTH, xOffset, yOffset,
+							notBuildable(((buildSquareXS) - (WIDTH * (squarewidth - 1)) /Tile.SIZE) + i, (buildSquareYS / Tile.SIZE), z) ? notbuildable : buildable
+						);
 					}
 				}
 			} else {
-				if (buildSquareYSTeken < buildSquareYE) { // START BOVEN EIND == SLEEP NAAR ONDER
+				if (buildSquareYSTeken < buildSquareYE) { // START ABOVE END == DRAG DOWN
 					for (int i = 0; i < squareheight; i++) {
-						OpenGLUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken + (WIDTH * i), WIDTH* (squareheight - i), xOffset, yOffset, (notBuildable((buildSquareXS /Tile.SIZE), ((buildSquareYS) /Tile.SIZE) + i, z))
-								? notbuildable
-								: buildable);
+						OpenGLUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken + (WIDTH * i), WIDTH * (squareheight - i), xOffset, yOffset,
+							notBuildable((buildSquareXS /Tile.SIZE), ((buildSquareYS) /Tile.SIZE) + i, z) ? notbuildable : buildable
+						);
 					}
-				} else { // START ONDER EIND == SLEEP NAAR BOVEN
+				} else { // START BELOW END == DRAG UP
 					for (int i = 0; i < squareheight; i++) {
-
-						OpenGLUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken - (WIDTH * (squareheight - 1)) + (i * WIDTH),WIDTH,xOffset,yOffset, (notBuildable((buildSquareXS /Tile.SIZE),
-								((buildSquareYS) - (WIDTH * (squareheight - 1)) /Tile.SIZE) + i, z)) ? notbuildable
-								: buildable);
+						OpenGLUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken - (WIDTH * (squareheight - 1)) + (i * WIDTH), WIDTH, xOffset, yOffset,
+							notBuildable((buildSquareXS /Tile.SIZE), (buildSquareYS - (WIDTH * (squareheight - 1)) /Tile.SIZE) + i, z) ? notbuildable : buildable
+						);
 					}
 				}
 
@@ -82,13 +85,13 @@ public class BuildOutline {
 			coords[0][1] = buildSquareYS;
 		} else {
 			if (squarewidth > squareheight) {
-				if (buildSquareXSTeken < buildSquareXE) { // START LEFT VAN EIND == SLEEP NAAR RIGHT
+				if (buildSquareXSTeken < buildSquareXE) { // START LEFT OF END == DRAG RIGHT
 					coords = new int[squarewidth][2];
 					for (int i = 0; i < squarewidth; i++) {
 						coords[i][0] = buildSquareXS + (i * Tile.SIZE);
 						coords[i][1] = buildSquareYS;
 					}
-				} else { // START RIGHT VAN EIND == SLEEP NAAR LEFT
+				} else { // START RIGHT OF END == DRAG LEFT
 					coords = new int[squarewidth][2];
 					for (int i = 0; i < squarewidth; i++) {
 						coords[i][0] = (((buildSquareXS - (WIDTH * (squarewidth - 1))))) + (i * Tile.SIZE);
@@ -96,13 +99,13 @@ public class BuildOutline {
 					}
 				}
 			} else {
-				if (buildSquareYSTeken < buildSquareYE) { // START BOVEN EIND == SLEEP NAAR ONDER
+				if (buildSquareYSTeken < buildSquareYE) { // START ABOVE END == DRAG DOWN
 					coords = new int[squareheight][2];
 					for (int i = 0; i < squareheight; i++) {
 						coords[i][0] = buildSquareXS;
 						coords[i][1] = buildSquareYS + (i * Tile.SIZE);
 					}
-				} else { // START ONDER EIND == SLEEP NAAR BOVEN
+				} else { // START BELOW END == DRAG UP
 					coords = new int[squareheight][2];
 					for (int i = 0; i < squareheight; i++) {
 						coords[i][0] = buildSquareXS;

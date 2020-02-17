@@ -1,4 +1,4 @@
-package graphics;
+package graphics.opengl;
 
 import java.awt.*;
 import java.awt.color.ColorSpace;
@@ -22,7 +22,7 @@ class BufferedImageUtil {
 		int textHeight = resourceimage.getHeight();
 		int textWidth = resourceimage.getWidth();
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRROR_CLAMP_TO_EDGE_EXT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRROR_CLAMP_TO_EDGE_EXT);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, textWidth, textHeight, 0, srcPixelFormat, GL_UNSIGNED_BYTE, textureBuffer);

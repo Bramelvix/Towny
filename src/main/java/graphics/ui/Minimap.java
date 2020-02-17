@@ -2,7 +2,7 @@ package graphics.ui;
 
 import java.awt.Color;
 
-import graphics.OpenGLUtils;
+import graphics.opengl.OpenGLUtils;
 import map.Level;
 import util.vectors.Vec4f;
 

@@ -2,7 +2,7 @@ package entity.nonDynamic.resources;
 
 import entity.dynamic.mob.Villager;
 import entity.nonDynamic.StaticEntity;
-import graphics.OpenGLUtils;
+import graphics.opengl.OpenGLUtils;
 import graphics.Sprite;
 import map.Level;
 import util.vectors.Vec4f;

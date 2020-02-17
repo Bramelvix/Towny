@@ -1,4 +1,4 @@
-package graphics;
+package graphics.opengl;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

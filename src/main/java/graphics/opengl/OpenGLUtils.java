@@ -1,4 +1,4 @@
-package graphics;
+package graphics.opengl;
 
 import main.Game;
 import map.Tile;
@@ -13,14 +13,12 @@ import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.nio.file.Paths;
 
-import static java.lang.Math.abs;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
-import static org.lwjgl.opengl.GL44.glBindVertexBuffers;
 
 public abstract class OpenGLUtils {
 
@@ -28,19 +26,19 @@ public abstract class OpenGLUtils {
 	public static Shader texShader, colShader, textShader;
 
 	public static void init() throws Exception {
-		texShader = new Shader(Paths.get(Game.class.getResource("/shaders/tex_shader.vert").toURI()),Paths.get(Game.class.getResource("/shaders/tex_shader.frag").toURI()));
-		colShader = new Shader(Paths.get(Game.class.getResource("/shaders/col_shader.vert").toURI()),Paths.get(Game.class.getResource("/shaders/col_shader.frag").toURI()));
-		textShader = new Shader(Paths.get(Game.class.getResource("/shaders/text_shader.vert").toURI()),Paths.get(Game.class.getResource("/shaders/tex_shader.frag").toURI()));
+		texShader = new Shader(Paths.get(Game.class.getResource("/shaders/tex_shader.vert").toURI()), Paths.get(Game.class.getResource("/shaders/tex_shader.frag").toURI()));
+		colShader = new Shader(Paths.get(Game.class.getResource("/shaders/col_shader.vert").toURI()), Paths.get(Game.class.getResource("/shaders/col_shader.frag").toURI()));
+		textShader = new Shader(Paths.get(Game.class.getResource("/shaders/text_shader.vert").toURI()), Paths.get(Game.class.getResource("/shaders/tex_shader.frag").toURI()));
 
 		float[] vertices = {
 				// Left bottom triangle
 				pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2, 'h'), 0f,
-				pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2+48, 'h'), 0f,
-				pToGL((float)Game.width/2+48, 'w'), pToGL((float)Game.height/2+48, 'h'), 0f,
+				pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2 + Tile.SIZE, 'h'), 0f,
+				pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2 + Tile.SIZE, 'h'), 0f,
 				// Right top triangle
-				pToGL((float)Game.width/2+48, 'w'), pToGL((float)Game.height/2+48, 'h'), 0f,
-				pToGL((float)Game.width/2+48, 'w'), pToGL((float)Game.height/2+0, 'h'), 0f,
-				pToGL((float)Game.width/2+0, 'w'), pToGL((float)Game.height/2+0, 'h'), 0f
+				pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2 + Tile.SIZE, 'h'), 0f,
+				pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2, 'h'), 0f,
+				pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2, 'h'), 0f
 		};
 
 		float[] texCoords = {
@@ -52,9 +50,8 @@ public abstract class OpenGLUtils {
 				0f, 0f
 		};
 
-		int VBO;
 		VAO = glGenVertexArrays();
-		VBO = glGenBuffers();
+		int VBO = glGenBuffers();
 
 		glBindVertexArray(VAO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -74,12 +71,8 @@ public abstract class OpenGLUtils {
 	}
 
 	private static float pToGL(float pixel, char o) { //converts between pixels and openGL coordinates
-		float orientation;
-		if(o == 'w') orientation = Game.width;
-		else {
-			orientation = Game.height;
-			pixel = Game.height-pixel;
-		}
+		float orientation = o == 'w' ? Game.width : Game.height;
+		if(o != 'w') { pixel = Game.height - pixel; }
 		return (2f * pixel + 1f) / orientation - 1f;
 	}
 
@@ -129,7 +122,7 @@ public abstract class OpenGLUtils {
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
-	public static void drawTexturedQuadScaled(int id, int x, int y, float xOffset, float yOffset,  int size) { //drawTexturedQuadScaled ingame shit which needs to be scaled up
+	public static void drawTexturedQuadScaled(int id, int x, int y, float xOffset, float yOffset, int size) { //drawTexturedQuadScaled ingame shit which needs to be scaled up
 		drawTexturedQuadScaled(x,y,size,size, xOffset, yOffset, id);
 	}
 
@@ -158,9 +151,9 @@ public abstract class OpenGLUtils {
 	}
 
 	public static void iconDraw(int id, int x, int y, int width,int height, boolean drawSelectionSquare) { //drawTexturedQuadScaled ui which does not need to be scaled up
-		drawTexturedQuadScaled(x,y,width,height, 0, 0 ,id);
+		drawTexturedQuadScaled(x, y, width, height, 0, 0, id);
 		if (drawSelectionSquare) {
-			drawOutline(x,y,width,height, 0, 0, new Vec4f(1,0,0,1));
+			drawOutline(x, y, width, height, 0, 0, new Vec4f(1,0,0,1));
 		}
 	}
 

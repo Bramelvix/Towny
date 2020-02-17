@@ -1,5 +1,6 @@
 package graphics;
 
+import graphics.opengl.OpenGLUtils;
 import map.Tile;
 
 //sprites in the game
@@ -10,9 +11,7 @@ public class Sprite {
 	public final int[] pixels;
 
 	protected Sprite(int x, int y, Spritesheet sheet) {
-		pixels = load(x * SIZE + (x * sheet.getMargin()),
-			y * SIZE + (y * sheet.getMargin()), sheet
-		);
+		pixels = load(x * SIZE, y * SIZE, sheet);
 		id = OpenGLUtils.loadTexture(pixels, SIZE, SIZE);
 	}
 

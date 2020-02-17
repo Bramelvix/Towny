@@ -1,6 +1,6 @@
 package graphics.ui;
 
-import graphics.OpenGLUtils;
+import graphics.opengl.OpenGLUtils;
 import graphics.ui.icon.Icon;
 import input.PointerInput;
 import main.Game;
@@ -81,7 +81,7 @@ public class TopBar {
 
 	// render the topbar on the screen
 	public void render() {
-		OpenGLUtils.drawFilledSquare(x, y, width, height, 0, 0, new Vec4f(r,g,b,a));
+		OpenGLUtils.drawFilledSquare(x, y, width, height, 0, 0, new Vec4f(r, g, b, a));
 		vil.render();
 		sol.render();
 		slow.render();
@@ -100,11 +100,7 @@ public class TopBar {
 
 	// has the user clicked on the pause button
 	private boolean clickedOnPause(PointerInput pointer) {
-		return (
-			! pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT) ? false :
-			Game.paused ? play.hoverOn () :
-			pause.hoverOn ()
-		);
+		return (pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT) && (Game.paused ? play.hoverOn() : pause.hoverOn()));
 	}
 
 	private boolean clickedOnFast(PointerInput pointer) {

@@ -1,7 +1,7 @@
 package graphics.ui;
 
 import java.awt.Color;
-import graphics.OpenGLUtils;
+import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
 import util.vectors.Vec4f;
 
@@ -47,7 +47,7 @@ public class SelectionSquare {
 	public void render(float xOffset, float yOffset) {
 		if (visible) {
 			Vec4f outColor = new Vec4f(COL.getRed()/255f,COL.getGreen()/255f,COL.getBlue()/255f,COL.getAlpha()/255f);
-			OpenGLUtils.drawFilledSquare(x,y,width,height,xOffset,yOffset,outColor);
+			OpenGLUtils.drawFilledSquare(x, y, width, height, xOffset, yOffset, outColor);
 		}
 	}
 

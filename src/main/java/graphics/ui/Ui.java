@@ -22,7 +22,7 @@ public class Ui {
 	// rendering the ui
 	public void render(float xOffset, float yOffset) {
 		UiIcons.render();
-		selection.render(xOffset,yOffset);
+		selection.render(xOffset, yOffset);
 		menu.render();
 		map.render();
 		outline.render(0, 0);

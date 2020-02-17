@@ -2,7 +2,7 @@ package entity.nonDynamic.resources;
 
 import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.mob.Villager;
-import graphics.OpenGLUtils;
+import graphics.opengl.OpenGLUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;

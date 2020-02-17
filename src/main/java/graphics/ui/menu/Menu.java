@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import entity.dynamic.mob.work.Recipe;
-import graphics.OpenGLUtils;
+import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
 
 public class Menu { // the menu is the little options menu that shows up when you right click

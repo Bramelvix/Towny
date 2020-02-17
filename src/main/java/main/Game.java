@@ -26,6 +26,8 @@ import entity.nonDynamic.building.container.workstations.Anvil;
 import entity.nonDynamic.building.container.workstations.Furnace;
 import entity.pathfinding.PathFinder;
 import graphics.*;
+import graphics.opengl.OpenGLUtils;
+import graphics.opengl.TrueTypeFont;
 import graphics.ui.Ui;
 import graphics.ui.icon.Icon;
 import graphics.ui.icon.UiIcons;
@@ -36,9 +38,7 @@ import map.Level;
 import map.Tile;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.openal.EXTOffset;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GLCapabilities;
 import util.StringUtils;
 
 import javax.imageio.ImageIO;
@@ -68,8 +68,6 @@ public class Game {
 	public int currentLayerNumber = 0;
 	private long window;
 	private PointerInput pointer;
-
-	Shader shader;
 
 	public static void main(String[] args) {
 		try {
@@ -103,7 +101,7 @@ public class Game {
 		glfwSetWindowPos(window, (vidmode.width() - (width)) / 2, (vidmode.height() - (height )) / 2);
 		glfwMakeContextCurrent(window);
 		glfwShowWindow(window);
-		GLCapabilities capabilities = GL.createCapabilities();
+		GL.createCapabilities();
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glMatrixMode(GL_PROJECTION);
 		glfwSwapInterval(0); //0 = VSYNC OFF, 1= VSYNC ON
@@ -532,9 +530,9 @@ public class Game {
 	}
 
 	private void moveCamera(int xScroll, int yScroll) {
-		this.xScroll += xScroll;
-		this.yScroll += yScroll;
-		ui.setOffset(this.xScroll, this.yScroll);
+		Game.xScroll += xScroll;
+		Game.yScroll += yScroll;
+		ui.setOffset(Game.xScroll, Game.yScroll);
 	}
 
 	private void moveCamera() {
@@ -584,20 +582,25 @@ public class Game {
 
 		glPushMatrix();
 		glTranslatef(-xScroll, -yScroll, 0);
+
 		mobs.forEach(mob -> mob.renderIf(
 			inBounds(mob.getX(), mob.getY(), mob.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-			(float)xScroll, (float)yScroll)
-		);
+			(float) xScroll,
+			(float) yScroll
+		));
 
 		vills.forEach(vil -> vil.renderIf(
 			inBounds(vil.getX(), vil.getY(), vil.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-			(float)xScroll, (float)yScroll)
-		);
+			(float)xScroll,
+			(float)yScroll
+		));
 
 		sols.forEach(sol -> sol.renderIf(
 			inBounds(sol.getX(), sol.getY(), sol.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-			(float)xScroll, (float)yScroll)
-		);
+			(float)xScroll,
+			(float)yScroll
+		));
+
 		glPopMatrix();
 	}
 

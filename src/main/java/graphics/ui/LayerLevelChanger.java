@@ -1,6 +1,6 @@
 package graphics.ui;
 
-import graphics.OpenGLUtils;
+import graphics.opengl.OpenGLUtils;
 import graphics.ui.icon.Icon;
 import input.PointerInput;
 import util.vectors.Vec4f;

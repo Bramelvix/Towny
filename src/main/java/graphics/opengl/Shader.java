@@ -1,8 +1,7 @@
-package graphics;
+package graphics.opengl;
 
 import util.vectors.Vec4f;
 
-import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;

@@ -16,7 +16,7 @@ import entity.dynamic.item.VillagerInventory;
 import entity.dynamic.item.weapon.Weapon;
 import entity.dynamic.mob.work.Job;
 import entity.pathfinding.Path;
-import graphics.OpenGLUtils;
+import graphics.opengl.OpenGLUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;
@@ -207,9 +207,9 @@ public class Villager extends Humanoid {
 	// render onto the screen
 	@Override
 	public void render(float xOffset, float yOffset) {
-		drawVillager(x,y, xOffset, yOffset);
+		drawVillager(x, y, xOffset, yOffset);
 		if (this.isSelected()) {
-			OpenGLUtils.drawOutline(x,y,Sprite.SIZE,Sprite.SIZE, xOffset, yOffset, new Vec4f(1,0,0,1));// render the red square around selected villagers
+			OpenGLUtils.drawOutline(x, y, Sprite.SIZE, Sprite.SIZE, xOffset, yOffset, new Vec4f(1,0,0,1));// render the red square around selected villagers
 		}
 	}
 
