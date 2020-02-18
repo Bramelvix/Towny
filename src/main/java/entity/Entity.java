@@ -4,6 +4,7 @@ import java.util.Random;
 
 import graphics.Sprite;
 import input.PointerInput;
+import util.vectors.Vec2f;
 
 public abstract class Entity {
 
@@ -85,15 +86,15 @@ public abstract class Entity {
 	}
 
 	// render method
-	public void render(float xOffset, float yOffset) {
+	public void render(Vec2f offset) {
 	   if (isVisible()) {
-		   sprite.draw(x, y, xOffset, yOffset);
+		   sprite.draw(new Vec2f(x,y), offset);
 	   }
 	}
 
-	public void renderIf(boolean ifCondition, float xOffset, float yOffset) {
+	public void renderIf(boolean ifCondition, Vec2f offset) {
 		if (ifCondition) {
-			render(xOffset, yOffset);
+			render(offset);
 		}
 	}
 

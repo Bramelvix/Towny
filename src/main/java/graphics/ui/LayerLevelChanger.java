@@ -3,6 +3,7 @@ package graphics.ui;
 import graphics.opengl.OpenGLUtils;
 import graphics.ui.icon.Icon;
 import input.PointerInput;
+import util.vectors.Vec2f;
 import util.vectors.Vec4f;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
@@ -51,7 +52,7 @@ public class LayerLevelChanger {
 	}
 
 	public void render() {
-		OpenGLUtils.drawFilledSquare(x, y, width, height, 0, 0, new Vec4f(r, g, b, a));
+		OpenGLUtils.drawFilledSquare(new Vec2f(x, y), new Vec2f(width, height), new Vec2f(0, 0), new Vec4f(r, g, b, a));
 		up.render();
 		OpenGLUtils.drawText(-z + "", x + 60, y + 10);
 		down.render();

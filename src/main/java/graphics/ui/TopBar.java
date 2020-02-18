@@ -4,6 +4,7 @@ import graphics.opengl.OpenGLUtils;
 import graphics.ui.icon.Icon;
 import input.PointerInput;
 import main.Game;
+import util.vectors.Vec2f;
 import util.vectors.Vec4f;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
@@ -81,7 +82,7 @@ public class TopBar {
 
 	// render the topbar on the screen
 	public void render() {
-		OpenGLUtils.drawFilledSquare(x, y, width, height, 0, 0, new Vec4f(r, g, b, a));
+		OpenGLUtils.drawFilledSquare(new Vec2f(x, y), new Vec2f(width, height), new Vec2f(0, 0), new Vec4f(r, g, b, a));
 		vil.render();
 		sol.render();
 		slow.render();

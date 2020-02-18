@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
+import util.vectors.Vec2f;
 
 //icon on the bottom left of the screen (pickaxe, axe,...)
 public class Icon {
@@ -58,7 +59,7 @@ public class Icon {
 
 	//render the icon on the screen
 	public void render() {
-		OpenGLUtils.iconDraw(id, x, y, width, height, selected || hover);
+		OpenGLUtils.iconDraw(id, new Vec2f(x, y), new Vec2f(width, height), selected || hover);
 	}
 
 	//load the image

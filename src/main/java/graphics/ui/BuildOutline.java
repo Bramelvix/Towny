@@ -7,6 +7,7 @@ import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
 import map.Level;
 import map.Tile;
+import util.vectors.Vec2f;
 
 //the green or red outline used to select where to build things
 public class BuildOutline {
@@ -29,10 +30,10 @@ public class BuildOutline {
 	private int z = 0;
 
 	// rendering the outline
-	public void render(float xOffset, float yOffset) {
+	public void render(Vec2f offset) {
 		if (visible) {
 			if (lockedSize || buildSquareXE == 0 && buildSquareYE == 0) {
-				OpenGLUtils.buildOutlineDraw(buildSquareXSTeken, buildSquareYSTeken, WIDTH, xOffset, yOffset,
+				OpenGLUtils.buildOutlineDraw(new Vec2f(buildSquareXSTeken, buildSquareYSTeken), WIDTH, offset,
 					notBuildable((buildSquareXS / Tile.SIZE), buildSquareYS / Tile.SIZE, z) ? notbuildable : buildable
 				);
 				return;
@@ -40,13 +41,13 @@ public class BuildOutline {
 			if (squarewidth > squareheight) {
 				if (buildSquareXSTeken < buildSquareXE) { // START LEFT OF END == DRAG TO RIGHT
 					for (int i = 0; i < squarewidth; i++) {
-						OpenGLUtils.buildOutlineDraw(buildSquareXSTeken + (i * WIDTH), buildSquareYSTeken,WIDTH, xOffset, yOffset,
+						OpenGLUtils.buildOutlineDraw(new Vec2f(buildSquareXSTeken + (i * WIDTH), buildSquareYSTeken), WIDTH, offset,
 							notBuildable((buildSquareXS /Tile.SIZE) + i, (buildSquareYS /Tile.SIZE), z) ? notbuildable : buildable
 						);
 					}
 				} else { // START RIGHT OF END == DRAG TO LEFT
 					for (int i = 0; i < squarewidth; i++) {
-						OpenGLUtils.buildOutlineDraw(buildSquareXSTeken - (WIDTH * (squarewidth - 1)) + (i * WIDTH), buildSquareYSTeken, WIDTH, xOffset, yOffset,
+						OpenGLUtils.buildOutlineDraw(new Vec2f(buildSquareXSTeken - (WIDTH * (squarewidth - 1)) + (i * WIDTH), buildSquareYSTeken), WIDTH, offset,
 							notBuildable(((buildSquareXS) - (WIDTH * (squarewidth - 1)) /Tile.SIZE) + i, (buildSquareYS / Tile.SIZE), z) ? notbuildable : buildable
 						);
 					}
@@ -54,13 +55,13 @@ public class BuildOutline {
 			} else {
 				if (buildSquareYSTeken < buildSquareYE) { // START ABOVE END == DRAG DOWN
 					for (int i = 0; i < squareheight; i++) {
-						OpenGLUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken + (WIDTH * i), WIDTH * (squareheight - i), xOffset, yOffset,
+						OpenGLUtils.buildOutlineDraw(new Vec2f(buildSquareXSTeken,buildSquareYSTeken + (WIDTH * i)), WIDTH * (squareheight - i), offset,
 							notBuildable((buildSquareXS /Tile.SIZE), ((buildSquareYS) /Tile.SIZE) + i, z) ? notbuildable : buildable
 						);
 					}
 				} else { // START BELOW END == DRAG UP
 					for (int i = 0; i < squareheight; i++) {
-						OpenGLUtils.buildOutlineDraw(buildSquareXSTeken,buildSquareYSTeken - (WIDTH * (squareheight - 1)) + (i * WIDTH), WIDTH, xOffset, yOffset,
+						OpenGLUtils.buildOutlineDraw(new Vec2f(buildSquareXSTeken,buildSquareYSTeken - (WIDTH * (squareheight - 1)) + (i * WIDTH)), WIDTH, offset,
 							notBuildable((buildSquareXS /Tile.SIZE), (buildSquareYS - (WIDTH * (squareheight - 1)) /Tile.SIZE) + i, z) ? notbuildable : buildable
 						);
 					}

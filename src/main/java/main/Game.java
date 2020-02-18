@@ -40,6 +40,7 @@ import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import util.StringUtils;
+import util.vectors.Vec2f;
 
 import javax.imageio.ImageIO;
 
@@ -49,6 +50,7 @@ import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.stb.STBImage.stbi_load;
 
 public class Game {
 
@@ -68,6 +70,9 @@ public class Game {
 	public int currentLayerNumber = 0;
 	private long window;
 	private PointerInput pointer;
+
+	//TODO remove this
+	int temp_texture_id = 0;
 
 	public static void main(String[] args) {
 		try {
@@ -137,6 +142,9 @@ public class Game {
 		PathFinder.init(100, 100);
 		spawnvills();
 		spawnZombies();
+
+		temp_texture_id = OpenGLUtils.loadTexture(System.getProperty("user.dir")+"/src/main/resources/tiles.png").id;
+		System.out.println(System.getProperty("user.dir"));
 	}
 
 	private void setIcon() {
@@ -233,11 +241,12 @@ public class Game {
 	private void draw() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
-		map[currentLayerNumber].render(xScroll, yScroll);
+		map[currentLayerNumber].render(new Vec2f(xScroll, yScroll));
 		renderMobs();
-		map[currentLayerNumber].renderHardEntities(xScroll, yScroll);
-		ui.render(xScroll, yScroll);
+		map[currentLayerNumber].renderHardEntities(new Vec2f(xScroll, yScroll));
+		ui.render(new Vec2f(xScroll, yScroll));
 		//OpenglUtils.drawShit();
+		OpenGLUtils.drawTexturedQuadScaled(new Vec2f(200,200), new Vec2f(100,100), new Vec2f(0,0), temp_texture_id);
 		glfwSwapBuffers(window);
 	}
 
@@ -585,20 +594,17 @@ public class Game {
 
 		mobs.forEach(mob -> mob.renderIf(
 			inBounds(mob.getX(), mob.getY(), mob.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-			(float) xScroll,
-			(float) yScroll
+			new Vec2f(xScroll, yScroll)
 		));
 
 		vills.forEach(vil -> vil.renderIf(
 			inBounds(vil.getX(), vil.getY(), vil.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-			(float)xScroll,
-			(float)yScroll
+			new Vec2f(xScroll, yScroll)
 		));
 
 		sols.forEach(sol -> sol.renderIf(
 			inBounds(sol.getX(), sol.getY(), sol.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-			(float)xScroll,
-			(float)yScroll
+			new Vec2f(xScroll, yScroll)
 		));
 
 	}

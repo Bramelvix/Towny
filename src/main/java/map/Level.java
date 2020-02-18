@@ -14,6 +14,7 @@ import graphics.Sprite;
 import graphics.SpriteHashtable;
 import main.Game;
 import util.BiPredicateInteger;
+import util.vectors.Vec2f;
 
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
@@ -289,27 +290,28 @@ public class Level {
 	}
 
 	// render the tiles
-	public void render(int xScroll, int yScroll) {
-		int x0 = xScroll / Tile.SIZE;
-		int x1 = (xScroll + Game.width + Sprite.SIZE) / Tile.SIZE;
-		int y0 = yScroll / Tile.SIZE;
-		int y1 = (yScroll + Game.height + Sprite.SIZE) / Tile.SIZE;
+	public void render(Vec2f scroll) {
+		int x0 = (int)scroll.x / Tile.SIZE;
+		int x1 = (int)(scroll.x + Game.width + Sprite.SIZE) / Tile.SIZE;
+		int y0 = (int)scroll.y / Tile.SIZE;
+		int y1 = (int)(scroll.y + Game.height + Sprite.SIZE) / Tile.SIZE;
+
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
-				getTile(x, y).render(x * Sprite.SIZE, y * Sprite.SIZE, xScroll, yScroll);
+				getTile(x, y).render(new Vec2f(x * Sprite.SIZE, y * Sprite.SIZE), scroll);
 			}
 		}
 	}
 
-	public void renderHardEntities(int xScroll, int yScroll) {
-		int x0 = xScroll / Tile.SIZE;
-		int x1 = (xScroll + Game.width + Sprite.SIZE * 2) / Tile.SIZE;
-		int y0 = yScroll/ Tile.SIZE;
-		int y1 = (yScroll + Game.height + Sprite.SIZE * 2) / Tile.SIZE;
+	public void renderHardEntities(Vec2f scroll) {
+		int x0 = (int)scroll.x / Tile.SIZE;
+		int x1 = (int)(scroll.x + Game.width + Sprite.SIZE * 2) / Tile.SIZE;
+		int y0 = (int)scroll.y/ Tile.SIZE;
+		int y1 = (int)(scroll.y + Game.height + Sprite.SIZE * 2) / Tile.SIZE;
 
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
-				getTile(x, y).renderHard(xScroll, yScroll);
+				getTile(x, y).renderHard(scroll);
 			}
 		}
 	}

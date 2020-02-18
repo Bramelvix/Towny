@@ -7,6 +7,7 @@ import graphics.ui.menu.MenuItem;
 import input.PointerInput;
 import main.Game;
 import map.Level;
+import util.vectors.Vec2f;
 
 //main class used to manage the ui
 public class Ui {
@@ -20,12 +21,12 @@ public class Ui {
 	private LayerLevelChanger layerLevelChanger;
 
 	// rendering the ui
-	public void render(float xOffset, float yOffset) {
+	public void render(Vec2f offset) {
 		UiIcons.render();
-		selection.render(xOffset, yOffset);
+		selection.render(offset);
 		menu.render();
 		map.render();
-		outline.render(0, 0);
+		outline.render(new Vec2f(0,0));
 		layerLevelChanger.render();
 		top.render();
 	}

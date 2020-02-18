@@ -7,6 +7,7 @@ import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;
 import sound.Sound;
+import util.vectors.Vec2f;
 import util.vectors.Vec4f;
 
 public class Tree extends Resource {
@@ -24,9 +25,9 @@ public class Tree extends Resource {
 	}
 
 	// render method to render onto the screen
-	public void render(float xOffset, float yOffset) {
-		super.render(xOffset, yOffset);
-		topsprite.draw(x,y-Sprite.SIZE, xOffset, yOffset);
+	public void render(Vec2f offset) {
+		super.render(offset);
+		topsprite.draw(new Vec2f(x,y-Sprite.SIZE), offset);
 	}
 
 	// work method (same as in the Ore class)
@@ -45,9 +46,9 @@ public class Tree extends Resource {
 	}
 
 	@Override
-	protected void drawSelection(float xOffset, float yOffset) {
+	protected void drawSelection(Vec2f offset) {
 		if (this.isSelected()) {
-			OpenGLUtils.drawOutline(x, y-Sprite.SIZE, Sprite.SIZE, Sprite.SIZE*2, xOffset, yOffset, new Vec4f(1,0,0,1)); // render the red square around selected resources
+			OpenGLUtils.drawOutline(new Vec2f(x, y-Sprite.SIZE), new Vec2f(Sprite.SIZE, Sprite.SIZE*2), offset, new Vec4f(1,0,0,1)); // render the red square around selected resources
 		}
 	}
 

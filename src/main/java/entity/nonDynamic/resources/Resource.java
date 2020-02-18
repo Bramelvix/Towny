@@ -5,6 +5,7 @@ import entity.nonDynamic.StaticEntity;
 import graphics.opengl.OpenGLUtils;
 import graphics.Sprite;
 import map.Level;
+import util.vectors.Vec2f;
 import util.vectors.Vec4f;
 
 //superclass of gatherable resources such as trees and ore
@@ -16,14 +17,14 @@ public abstract class Resource extends StaticEntity {
 
 	public abstract boolean work(Villager worker);
 
-	public void render(float xOffset, float yOffset) {
-		super.render(xOffset, yOffset);
-		drawSelection(xOffset, yOffset);
+	public void render(Vec2f offset) {
+		super.render(offset);
+		drawSelection(offset);
 	}
 
-	protected void drawSelection(float xOffset, float yOffset) {
+	protected void drawSelection(Vec2f offset) {
 		if (this.isSelected()) {
-			OpenGLUtils.drawOutline(x,y, Sprite.SIZE, Sprite.SIZE, xOffset, yOffset, new Vec4f(1,0,0,1)); // render the red square around selected resources
+			OpenGLUtils.drawOutline(new Vec2f(x,y), new Vec2f(Sprite.SIZE), offset, new Vec4f(1,0,0,1)); // render the red square around selected resources
 		}
 	}
 

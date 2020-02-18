@@ -3,6 +3,7 @@ package graphics.ui;
 import java.awt.Color;
 import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
+import util.vectors.Vec2f;
 import util.vectors.Vec4f;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
@@ -44,10 +45,10 @@ public class SelectionSquare {
 		}
 	}
 
-	public void render(float xOffset, float yOffset) {
+	public void render(Vec2f offset) {
 		if (visible) {
 			Vec4f outColor = new Vec4f(COL.getRed()/255f,COL.getGreen()/255f,COL.getBlue()/255f,COL.getAlpha()/255f);
-			OpenGLUtils.drawFilledSquare(x, y, width, height, xOffset, yOffset, outColor);
+			OpenGLUtils.drawFilledSquare(new Vec2f(x, y), new Vec2f(width, height), offset, outColor);
 		}
 	}
 
