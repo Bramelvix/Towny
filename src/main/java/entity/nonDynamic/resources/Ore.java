@@ -3,11 +3,15 @@ package entity.nonDynamic.resources;
 import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.mob.Villager;
+import graphics.MultiSprite;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
+import graphics.SpritesheetHashtable;
 import map.Level;
 import map.Tile;
 import sound.Sound;
+import util.vectors.Vec2f;
+import util.vectors.Vec2i;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,7 +104,13 @@ public class Ore extends Resource {
 		else if (!topHasWall) sprites.add(SpriteHashtable.get(175)); //14
 		else if (!topLeftHasWall) sprites.add(SpriteHashtable.get(180)); //19
 
-		if(dynamicSpriteList.containsKey(sprites)) { //if a dynamic sprite exists, use it
+		Vec2f[] texCoordList = new Vec2f[sprites.size()];
+		for (int i = 0; i<sprites.size(); i++) {
+			texCoordList[i] = (sprites.get(i).getTexCoords());
+		}
+		sprite = new MultiSprite(texCoordList, SpritesheetHashtable.get(1));
+
+		/*if(dynamicSpriteList.containsKey(sprites)) { //if a dynamic sprite exists, use it
 			sprite = dynamicSpriteList.get(sprites);
 		} else { //otherwise make it
 			final int SIZE = Tile.SIZE;
@@ -117,7 +127,7 @@ public class Ore extends Resource {
 			}
 			sprite = new Sprite(pixels);
 			dynamicSpriteList.put(sprites, new Sprite(pixels));
-		}
+		}*/
 	}
 
 }

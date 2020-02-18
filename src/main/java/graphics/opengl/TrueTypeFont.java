@@ -6,6 +6,7 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import util.vectors.Vec2f;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;
@@ -122,8 +123,7 @@ public class TrueTypeFont {
 	}
 
 	private void drawQuad(float x, float y, float drawX2, float drawY2, float srcX, float srcY, float srcX2, float srcY2) {
-		float glyphWidth = drawX2 - x;
-		float glyphHeight = drawY2 - y;
+		Vec2f glyphSize = new Vec2f(drawX2 - x, drawY2 - y);
 		float u = srcX / textureWidth;
 		float v = srcY / textureHeight;
 		float SrcWidth = srcX2 - srcX;
@@ -131,7 +131,7 @@ public class TrueTypeFont {
 		float texWidth = (SrcWidth / textureWidth);
 		float texHeight = (SrcHeight / textureHeight);
 
-		OpenGLUtils.drawGlyph(x, y, glyphWidth, glyphHeight, u, v+texHeight, texWidth, -texHeight);
+		OpenGLUtils.drawTexturedQuad(new Vec2f(x,y), glyphSize, new Vec2f(0,0), new Vec2f(u, v+texHeight), new Vec2f(texWidth, -texHeight), fontTextureID);
 	}
 
 	public int getWidth(String whatchars) {

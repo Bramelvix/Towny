@@ -4,9 +4,8 @@ import main.Game;
 import map.Tile;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL12;
-import util.ImgInfo;
+import util.TextureInfo;
 import util.vectors.Vec2f;
-import util.vectors.Vec3f;
 import util.vectors.Vec4f;
 
 import java.awt.*;
@@ -98,13 +97,14 @@ public abstract class OpenGLUtils {
 		return textureID;
 	}
 
-	public static ImgInfo loadTexture(String filename) {
+	public static TextureInfo loadTexture(String filename) {
 		int[] imageWidth = new int[1];
 		int[] imageHeight = new int[1];
 		int[] channels = new int[1];
+		filename = System.getProperty("user.dir")+"/src/main/resources"+filename;
 		ByteBuffer buffer = stbi_load(filename, imageWidth, imageHeight, channels, 4);
 
-		//System.out.println(stbi_failure_reason());
+		System.out.println(stbi_failure_reason());
 
 		int textureID = glGenTextures();
 		glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
@@ -113,7 +113,7 @@ public abstract class OpenGLUtils {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, imageWidth[0], imageHeight[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-		return new ImgInfo(textureID, imageWidth[0], imageHeight[0], channels[0]);
+		return new TextureInfo(textureID, imageWidth[0], imageHeight[0], channels[0]);
 	}
 
 	public static void deleteTexture(int textId) {
@@ -135,18 +135,7 @@ public abstract class OpenGLUtils {
 		return buffer;
 	}
 
-	public static void drawGlyph(float x, float y, float width, float height, float u, float v, float texW, float texH) {
-		fontShader.setUniform("offset", pToGL(x, 'w'), pToGL(y, 'h'));
-		fontShader.setUniform("scale", width / Tile.SIZE, height / Tile.SIZE);
-
-		fontShader.setUniform("tex_offset", u, v);
-		fontShader.setUniform("tex_scale", texW, texH);
-
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-	}
-
-	public static void drawCool(Vec2f pos, Vec2f size, Vec2f offset, Vec2f texPos, Vec2f texSize, int texture) {
+	public static void drawTexturedQuad(Vec2f pos, Vec2f size, Vec2f offset, Vec2f texPos, Vec2f texSize, int texture) {
 		//fontShader.use();
 		glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -154,7 +143,6 @@ public abstract class OpenGLUtils {
 		fontShader.setUniform("scale", size.x / Tile.SIZE, size.y / Tile.SIZE);
 
 		fontShader.setUniform("tex_offset", texPos.x, texPos.y);
-		//System.out.println(texPos.x + "  " + texPos.y);
 		fontShader.setUniform("tex_scale", texSize.x, texSize.y);
 
 		glBindVertexArray(VAO);

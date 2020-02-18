@@ -2,56 +2,54 @@ package graphics;
 
 import graphics.opengl.OpenGLUtils;
 import map.Tile;
-import util.ImgInfo;
 import util.vectors.Vec2f;
+import util.vectors.Vec2i;
+import util.vectors.Vec3f;
 
 //sprites in the game
 public class Sprite {
 
-	private final int id;
 	private final int spriteSheetID;
 	public static final int SIZE = Tile.SIZE; // 48
-	public final int[] pixels;
 	private Vec2f texCoords = new Vec2f(0); //The location of the texture coordinates for this sprite in it's spritesheet
-	private Vec2f texSize = new Vec2f(1); //The size of the texture (in uv coordinates)
+	Vec2f texSize = new Vec2f(1); //The size of the texture (in uv coordinates)
+
+	Vec3f avgColor;
 
 	protected Sprite(int x, int y, Spritesheet sheet) {
-		pixels = load(x * SIZE, y * SIZE, sheet);
-		//id = OpenGLUtils.loadTexture(pixels, SIZE, SIZE);
-		spriteSheetID = sheet.id;
-		id = spriteSheetID;
-		texCoords.x = (float) (x*SIZE) / sheet.width; //0.01754386f*4;
-		texCoords.y = (float) (y*SIZE) / sheet.height; //0.032258064f*0;
-
-		texSize.x = (float) SIZE / sheet.width;
-		texSize.y = ((float) SIZE / sheet.height);
-
-		System.out.println("______");
-		System.out.println(texCoords.x + "  " + texCoords.y);
-		System.out.println((float)SIZE / sheet.width);
+		this(new Vec2i(x,y), sheet);
 	}
 
-	public Sprite(int[] pixels) {
-		this.pixels = pixels;
-		id = OpenGLUtils.loadTexture(this.pixels, SIZE, SIZE);
-		spriteSheetID = 0;
-	}
+	protected Sprite(Vec2i pos, Spritesheet sheet) {
+		spriteSheetID = sheet.getId();
+		texCoords.x = (float) (pos.x*SIZE) / sheet.getWidth();
+		texCoords.y = (float) (pos.y*SIZE) / sheet.getHeight();
 
-	// load a sprites pixels into the pixel array
-	private int[] load(int xa, int ya, Spritesheet sheet) {
-		int[] pixels = new int[SIZE * SIZE];
-		for (int y = 0; y < SIZE; y++) {
-			for (int x = 0; x < SIZE; x++) {
-				pixels[x + y * SIZE] = sheet.getPixels()[(x + xa) + (y + ya) * sheet.getWidth()];
-			}
-		}
-		return pixels;
+		texSize.x = (float) SIZE / sheet.getWidth();
+		texSize.y = ((float) SIZE / sheet.getHeight());
+
+		
 	}
 
 	public void draw(Vec2f pos, Vec2f offset) {
-		//OpenGLUtils.drawTexturedQuadScaled(pos, new Vec2f(SIZE), offset, id);
-		//System.out.println(texCoords.x);
-		OpenGLUtils.drawCool(pos, new Vec2f(SIZE), offset, texCoords, texSize, id);
+		OpenGLUtils.drawTexturedQuad(pos, new Vec2f(SIZE), offset, texCoords, texSize, spriteSheetID);
 	}
+
+	public int getSpriteSheetID() {
+		return spriteSheetID;
+	}
+
+	public Vec2f getTexCoords() {
+		return texCoords;
+	}
+
+	public Vec2f getTexSize() {
+		return texSize;
+	}
+
+	public Vec3f getAvgColor() {
+		return avgColor;
+	}
+
 
 }
