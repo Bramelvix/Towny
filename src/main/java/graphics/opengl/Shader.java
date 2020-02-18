@@ -2,16 +2,18 @@ package graphics.opengl;
 
 import util.vectors.Vec4f;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL20.*;
 
 public class Shader {
-	private static int VERT_SHADER = 0;
-	private static int FRAG_SHADER = 1;
-	private static int SHADER_PROGRAM = 2;
+	private static final int VERT_SHADER = 0;
+	private static final int FRAG_SHADER = 1;
+	private static final int SHADER_PROGRAM = 2;
 
 	protected String log = "";
 
@@ -45,8 +47,25 @@ public class Shader {
 		glDeleteShader(frag);
 	}
 
-	public Shader(Path vert, Path frag) throws Exception {
-		this(new String(Files.readAllBytes(vert)), new String(Files.readAllBytes(frag)));
+	public Shader(URL vert, URL frag) throws Exception {
+		this(readFromFile(vert), readFromFile(frag));
+	}
+
+	private static String readFromFile(URL file) {
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		try {
+			byte[] chunk = new byte[4096];
+			int bytesRead;
+			InputStream stream = file.openStream();
+
+			while ((bytesRead = stream.read(chunk)) > 0) {
+				outputStream.write(chunk, 0, bytesRead);
+			}
+		} catch (IOException e) {
+			System.err.printf("Failed reading bytes from file: %s", file.toExternalForm());
+			e.printStackTrace();
+		}
+		return new String(outputStream.toByteArray());
 	}
 
 	public void use() {

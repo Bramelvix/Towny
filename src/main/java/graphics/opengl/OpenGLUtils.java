@@ -28,9 +28,9 @@ public abstract class OpenGLUtils {
 	public static Shader fontShader;
 
 	public static void init() throws Exception {
-		texShader = new Shader(Paths.get(Game.class.getResource("/shaders/tex_shader.vert").toURI()), Paths.get(Game.class.getResource("/shaders/tex_shader.frag").toURI()));
-		colShader = new Shader(Paths.get(Game.class.getResource("/shaders/col_shader.vert").toURI()), Paths.get(Game.class.getResource("/shaders/col_shader.frag").toURI()));
-		fontShader = new Shader(Paths.get(Game.class.getResource("/shaders/text_shader.vert").toURI()), Paths.get(Game.class.getResource("/shaders/tex_shader.frag").toURI()));
+		texShader = new Shader(Game.class.getResource("/shaders/tex_shader.vert"), Game.class.getResource("/shaders/tex_shader.frag"));
+		colShader = new Shader(Game.class.getResource("/shaders/col_shader.vert"), Game.class.getResource("/shaders/col_shader.frag"));
+		fontShader = new Shader(Game.class.getResource("/shaders/text_shader.vert"), Game.class.getResource("/shaders/tex_shader.frag"));
 
 		float[] vertices = {
 				// Left bottom triangle
