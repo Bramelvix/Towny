@@ -71,9 +71,6 @@ public class Game {
 	private long window;
 	private PointerInput pointer;
 
-	//TODO remove this
-	int temp_texture_id = 0;
-
 	public static void main(String[] args) {
 		try {
 			new Game();
@@ -142,9 +139,6 @@ public class Game {
 		PathFinder.init(100, 100);
 		spawnvills();
 		spawnZombies();
-
-		temp_texture_id = OpenGLUtils.loadTexture(System.getProperty("user.dir")+"/src/main/resources/tiles.png").id;
-		System.out.println(System.getProperty("user.dir"));
 	}
 
 	private void setIcon() {
@@ -245,8 +239,6 @@ public class Game {
 		renderMobs();
 		map[currentLayerNumber].renderHardEntities(new Vec2f(xScroll, yScroll));
 		ui.render(new Vec2f(xScroll, yScroll));
-		//OpenglUtils.drawShit();
-		OpenGLUtils.drawTexturedQuadScaled(new Vec2f(200,200), new Vec2f(100,100), new Vec2f(0,0), temp_texture_id);
 		glfwSwapBuffers(window);
 	}
 
