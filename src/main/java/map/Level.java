@@ -290,7 +290,6 @@ public class Level {
 
 	// render the tiles
 	public void render(int xScroll, int yScroll) {
-		glTranslatef(-xScroll, -yScroll, 0);
 		int x0 = xScroll / Tile.SIZE;
 		int x1 = (xScroll + Game.width + Sprite.SIZE) / Tile.SIZE;
 		int y0 = yScroll / Tile.SIZE;
@@ -300,11 +299,9 @@ public class Level {
 				getTile(x, y).render(x * Sprite.SIZE, y * Sprite.SIZE, xScroll, yScroll);
 			}
 		}
-		glTranslatef(xScroll, yScroll, 0);
 	}
 
 	public void renderHardEntities(int xScroll, int yScroll) {
-		glTranslatef(-xScroll, -yScroll, 0);
 		int x0 = xScroll / Tile.SIZE;
 		int x1 = (xScroll + Game.width + Sprite.SIZE * 2) / Tile.SIZE;
 		int y0 = yScroll/ Tile.SIZE;
@@ -315,7 +312,6 @@ public class Level {
 				getTile(x, y).renderHard(xScroll, yScroll);
 			}
 		}
-		glTranslatef(xScroll, yScroll, 0);
 	}
 
 	// return the tile on x and y

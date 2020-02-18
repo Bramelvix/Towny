@@ -87,8 +87,15 @@ public class Game {
 			System.err.println("GLFW failed to initialize");
 			return;
 		}
+
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+
 		window = glfwCreateWindow(width, height, "Towny by Bramelvix", 0, 0);
+
 		if (window == 0) {
 			System.err.println("Window failed to be created");
 			return;
@@ -103,12 +110,8 @@ public class Game {
 		glfwShowWindow(window);
 		GL.createCapabilities();
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		glMatrixMode(GL_PROJECTION);
 		glfwSwapInterval(0); //0 = VSYNC OFF, 1= VSYNC ON
 		setIcon();
-		glLoadIdentity();
-		glOrtho(0, width , height, 0.0f, 0.0f, 10.0f);
-		glMatrixMode(GL_MODELVIEW);
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glfwSetKeyCallback(window, new Keyboard());
@@ -580,9 +583,6 @@ public class Game {
 		int x1 = (xScroll + width + Sprite.SIZE);
 		int y1 = (yScroll + height + Sprite.SIZE);
 
-		glPushMatrix();
-		glTranslatef(-xScroll, -yScroll, 0);
-
 		mobs.forEach(mob -> mob.renderIf(
 			inBounds(mob.getX(), mob.getY(), mob.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
 			(float) xScroll,
@@ -601,7 +601,6 @@ public class Game {
 			(float)yScroll
 		));
 
-		glPopMatrix();
 	}
 
 	private boolean inBounds(int x, int y, int z, int layer, int xScroll, int x1, int yScroll, int y1) {
