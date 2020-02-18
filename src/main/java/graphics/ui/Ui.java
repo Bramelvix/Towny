@@ -24,7 +24,7 @@ public class Ui {
 	// rendering the ui
 	public void render(int z, int speed) {
 		icons.render();
-		selection.render(new Vec2f(0, 0));
+		selection.render(new Vec2f(0,0));
 		menu.render();
 		map.render();
 		outline.render(new Vec2f(0,0));
