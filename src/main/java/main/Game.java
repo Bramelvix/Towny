@@ -1,7 +1,5 @@
 package main;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,7 +27,6 @@ import graphics.*;
 import graphics.opengl.OpenGLUtils;
 import graphics.opengl.TrueTypeFont;
 import graphics.ui.Ui;
-import graphics.ui.icon.Icon;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.MenuItem;
 import input.Keyboard;
@@ -40,9 +37,9 @@ import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import util.StringUtils;
+import util.TextureInfo;
 import util.vectors.Vec2f;
 
-import javax.imageio.ImageIO;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -141,23 +138,16 @@ public class Game {
 	}
 
 	private void setIcon() {
-		try {
-			BufferedImage img = ImageIO.read(Icon.class.getResource("/icons/soldier.png"));
-			int width = img.getWidth();
-			int height = img.getHeight();
-			int[] pixels = new int[width * height];
-			img.getRGB(0, 0, width, height, pixels, 0, width);
-			ByteBuffer buffer = OpenGLUtils.getByteBuffer(pixels, width, height);
-			GLFWImage image = GLFWImage.malloc();
-			image.set(width, height, buffer);
-			GLFWImage.Buffer images = GLFWImage.malloc(1);
-			images.put(0, image);
-			glfwSetWindowIcon(window, images);
-			images.free();
-			image.free();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		GLFWImage image = GLFWImage.malloc();
+		TextureInfo texture = OpenGLUtils.loadTexture("/icons/soldier.png");
+		ByteBuffer temp = texture.buffer;
+		image.set(texture.width, texture.height, temp);
+		GLFWImage.Buffer images = GLFWImage.malloc(1);
+		images.put(0, image);
+		glfwSetWindowIcon(window, images);
+		images.free();
+		image.free();
+
 	}
 
 	private void generateLevel() {
