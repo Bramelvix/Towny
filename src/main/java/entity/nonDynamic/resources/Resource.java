@@ -11,7 +11,7 @@ import util.vectors.Vec4f;
 //superclass of gatherable resources such as trees and ore
 public abstract class Resource extends StaticEntity {
 
-	Resource(int x, int y, int z, Level level) {
+	Resource(float x, float y, int z, Level level) {
 		super(x, y, z, level);
 	}
 
@@ -24,7 +24,7 @@ public abstract class Resource extends StaticEntity {
 
 	protected void drawSelection(Vec2f offset) {
 		if (this.isSelected()) {
-			OpenGLUtils.drawOutline(new Vec2f(x,y), new Vec2f(Sprite.SIZE), offset, new Vec4f(1,0,0,1)); // render the red square around selected resources
+			OpenGLUtils.drawOutline(location, new Vec2f(Sprite.SIZE), offset, new Vec4f(1,0,0,1)); // render the red square around selected resources
 		}
 	}
 

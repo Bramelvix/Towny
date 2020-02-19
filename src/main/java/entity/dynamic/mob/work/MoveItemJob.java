@@ -29,7 +29,7 @@ public class MoveItemJob extends Job {
 		this.pickUpJob = pickUpJob;
 	}
 
-	public MoveItemJob(int xloc, int yloc, int zloc, Villager worker) {
+	public MoveItemJob(float xloc, float yloc, int zloc, Villager worker) {
 		this(worker, false);
 		this.xloc = (xloc/Tile.SIZE)*Tile.SIZE; //locations are in tile numbers
 		this.yloc = (yloc/Tile.SIZE)*Tile.SIZE;
@@ -39,12 +39,12 @@ public class MoveItemJob extends Job {
 	@Override
 	protected void start() {
 		started = true;
-		if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[zloc].isClearTile(xloc / Tile.SIZE, yloc / Tile.SIZE) && !(worker.levels[zloc].getEntityOn(xloc/Tile.SIZE, yloc/Tile.SIZE) instanceof Container)))) {
+		if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[zloc].isClearTile((int) xloc / Tile.SIZE, (int) yloc / Tile.SIZE) && !(worker.levels[zloc].getEntityOn((int) xloc/Tile.SIZE, (int) yloc/Tile.SIZE) instanceof Container)))) {
 			completed = true;
 			return;
 		}
-		if (worker.levels[zloc].getEntityOn(xloc/Tile.SIZE, yloc/Tile.SIZE) instanceof Container) {
-			container = worker.levels[zloc].getEntityOn(xloc/Tile.SIZE, yloc/Tile.SIZE);
+		if (worker.levels[zloc].getEntityOn((int) xloc/Tile.SIZE, (int) yloc/Tile.SIZE) instanceof Container) {
+			container = worker.levels[zloc].getEntityOn((int) xloc/Tile.SIZE, (int) yloc/Tile.SIZE);
 			worker.addJob(new MoveJob(xloc, yloc, zloc, worker, false), 100);
 		} else {
 			worker.addJob(new MoveJob(xloc, yloc, zloc, worker), 100);

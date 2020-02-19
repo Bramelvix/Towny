@@ -41,9 +41,9 @@ public class Stairs extends BuildAbleObject {
 
 	public void goOnStairs(Villager villager) {
 		if (!top && z > 0) { //GO UP
-			villager.setLocation(x, y, z - 1);
+			villager.setLocation(location.x, location.y, z - 1);
 		} else if (top && z < villager.levels.length - 1) { //GO DOWN
-			villager.setLocation(x, y, z + 1);
+			villager.setLocation(location.x, location.y, z + 1);
 		}
 	}
 

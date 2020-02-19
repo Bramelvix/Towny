@@ -24,7 +24,7 @@ public abstract class Humanoid extends Mob {
 	public <T extends Item> void setHolding(T item) {
 		holding = item;
 		if (holding != null) {
-			holding.setLocation(this.x, this.y, this.z);
+			holding.setLocation(this.location.x, this.location.y, this.z);
 		}
 	}
 
@@ -44,7 +44,7 @@ public abstract class Humanoid extends Mob {
 	protected final void moveTo(int x, int y) {
 		super.moveTo(x, y);
 		if (!(holding == null)) {
-			holding.setLocation(this.x, this.y, this.z);
+			holding.setLocation(this.location.x, this.location.y, this.z);
 		}
 	}
 

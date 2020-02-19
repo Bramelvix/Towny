@@ -50,7 +50,6 @@ import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.stb.STBImage.stbi_load;
 
 public class Game {
 
@@ -330,7 +329,7 @@ public class Game {
 		}
 		if (pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
 			if (UiIcons.isMiningSelected() && UiIcons.hoverOnNoIcons()) {
-				map[currentLayerNumber].selectOre(pointer.getX(), pointer.getY()).ifPresent(ore -> {
+				map[currentLayerNumber].selectOre(pointer.getTileX(), pointer.getTileY()).ifPresent(ore -> {
 					Villager idle = getIdlestVil();
 					deselectAllVills();
 					idle.addJob(ore);
@@ -504,9 +503,7 @@ public class Game {
 							res[i] = idle.getNearestItemOfType(recipe.getResources()[i]).orElse(null);
 						}
 						map[currentLayerNumber].getNearestWorkstation(
-								recipe.getWorkstationClass(),
-								idle.getX()/Tile.SIZE,
-								idle.getY()/Tile.SIZE
+							recipe.getWorkstationClass(), idle.getTileX(), idle.getTileY()
 						).ifPresent(station -> idle.addJob(new CraftJob(idle, res, recipe.getProduct(), station)));
 
 						ui.deSelectIcons();
@@ -601,7 +598,7 @@ public class Game {
 
 	}
 
-	private boolean inBounds(int x, int y, int z, int layer, int xScroll, int x1, int yScroll, int y1) {
+	private boolean inBounds(float x, float y, int z, int layer, int xScroll, int x1, int yScroll, int y1) {
 		return z == layer && x + Tile.SIZE >= xScroll && x - Tile.SIZE <= x1 && y + Tile.SIZE >= yScroll && y - Tile.SIZE <= y1;
 	}
 

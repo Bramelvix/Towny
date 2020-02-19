@@ -86,7 +86,7 @@ public class VillagerInventory {
 		Arrays.stream(weapons).forEach(this::removeWeapon);
 	}
 
-	public void update(int x, int y, int z) {
+	public void update(float x, float y, int z) {
 		for (Clothing i : clothes) {
 			if (i != null) {
 				i.setLocation(x, y, z);

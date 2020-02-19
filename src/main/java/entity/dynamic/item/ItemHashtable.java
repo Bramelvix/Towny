@@ -27,7 +27,7 @@ public abstract class ItemHashtable {
 		return table.get(key).copy();
 	}
 
-	public static Item get(int key, int x, int y, int z) {
+	public static Item get(int key, float x, float y, int z) {
 		return table.get(key).copy(x, y, z);
 	}
 

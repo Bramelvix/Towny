@@ -13,7 +13,7 @@ import util.vectors.Vec4f;
 public class Tree extends Resource {
 
 	private byte chopped = 100;
-	private Sprite topsprite;
+	private final Sprite topsprite;
 
 	// basic constructor
 	public Tree(int x, int y, int z, Level level) {
@@ -27,7 +27,7 @@ public class Tree extends Resource {
 	// render method to render onto the screen
 	public void render(Vec2f offset) {
 		super.render(offset);
-		topsprite.draw(new Vec2f(x,y-Sprite.SIZE), offset);
+		topsprite.draw(new Vec2f(location.x, location.y-Sprite.SIZE), offset);
 	}
 
 	// work method (same as in the Ore class)
@@ -40,7 +40,7 @@ public class Tree extends Resource {
 			return false;
 		} else {
 			level.removeEntity(this);
-			level.addItem(ItemHashtable.get(1, this.x, this.y, this.z));
+			level.addItem(ItemHashtable.get(1, location.x, location.y, this.z));
 			return true;
 		}
 	}
@@ -48,7 +48,7 @@ public class Tree extends Resource {
 	@Override
 	protected void drawSelection(Vec2f offset) {
 		if (this.isSelected()) {
-			OpenGLUtils.drawOutline(new Vec2f(x, y-Sprite.SIZE), new Vec2f(Sprite.SIZE, Sprite.SIZE*2), offset, new Vec4f(1,0,0,1)); // render the red square around selected resources
+			OpenGLUtils.drawOutline(new Vec2f(location.x, location.y-Sprite.SIZE), new Vec2f(Sprite.SIZE, Sprite.SIZE*2), offset, new Vec4f(1,0,0,1)); // render the red square around selected resources
 		}
 	}
 

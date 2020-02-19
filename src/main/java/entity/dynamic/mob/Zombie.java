@@ -39,7 +39,7 @@ public class Zombie extends Humanoid {
 	public void render(Vec2f offset) {
 		super.render(offset);
 		if (getHolding() != null) {
-			getHolding().sprite.draw(new Vec2f(x,y), offset);// renders the item the zombie is holding
+			getHolding().sprite.draw(location, offset);// renders the item the zombie is holding
 		}
 	}
 

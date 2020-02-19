@@ -3,7 +3,6 @@ package entity.dynamic.mob.work;
 import entity.dynamic.item.Item;
 import entity.dynamic.mob.Villager;
 import entity.nonDynamic.building.container.workstations.Workstation;
-import map.Tile;
 
 public class CraftJob extends Job {
 
@@ -54,7 +53,7 @@ public class CraftJob extends Job {
 				if (craft()) {
 					worker.setHolding(product);
 					product.setVisible(true);
-					if (worker.levels[worker.getZ()].isClearTile(worker.getX() / Tile.SIZE, worker.getY() / Tile.SIZE)) {
+					if (worker.levels[worker.getZ()].isClearTile(worker.getTileX(), worker.getTileY())) {
 						worker.drop();
 					}
 					completed = true;
@@ -76,7 +75,7 @@ public class CraftJob extends Job {
 
 	@Override
 	protected void start() {
-		worker.setPath(worker.getPathAround(station.getX() , station.getY() ));
+		worker.setPath(worker.getPathAround(station.getTileX() , station.getTileY()));
 		started = true;
 	}
 

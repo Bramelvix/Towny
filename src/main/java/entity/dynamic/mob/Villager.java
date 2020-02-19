@@ -20,7 +20,6 @@ import graphics.opengl.OpenGLUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;
-import map.Tile;
 import util.vectors.Vec2f;
 import util.vectors.Vec4f;
 
@@ -80,11 +79,11 @@ public class Villager extends Humanoid {
 		Path path = null;
 		for (Item level_item : levels[z].getItems()) {
 			if (item.isSameType(level_item) && level_item.isReserved(this)) {
-				if (closest == null || path == null || (getPath(level_item.getX() / Tile.SIZE, level_item.getY() / Tile.SIZE) != null
-					&& path.getStepsSize() > getPath(level_item.getX() / Tile.SIZE, level_item.getY() / Tile.SIZE).getStepsSize()
+				if (closest == null || path == null || (getPath(level_item.getTileX(), level_item.getTileY()) != null
+					&& path.getStepsSize() > getPath(level_item.getTileX(), level_item.getTileY()).getStepsSize()
 				)) {
 					closest = level_item;
-					path = getPath(closest.getX() / Tile.SIZE, closest.getY() / Tile.SIZE);
+					path = getPath(closest.getTileX(), closest.getTileY());
 				}
 			}
 		}
@@ -188,7 +187,7 @@ public class Villager extends Humanoid {
 			if (idleTime()) { idle(); }
 			move();
 		}
-		inventory.update(x, y, z);
+		inventory.update(location.x, location.y, z);
 	}
 
 	// add clothing to the villager
@@ -208,9 +207,9 @@ public class Villager extends Humanoid {
 	// render onto the screen
 	@Override
 	public void render(Vec2f offset) {
-		drawVillager(new Vec2f(x,y), offset);
+		drawVillager(location, offset);
 		if (this.isSelected()) {
-			OpenGLUtils.drawOutline(new Vec2f(x,y), new Vec2f((float)Sprite.SIZE), offset, new Vec4f(1,0,0,1));// render the red square around selected villagers
+			OpenGLUtils.drawOutline(location, new Vec2f((float)Sprite.SIZE), offset, new Vec4f(1,0,0,1));// render the red square around selected villagers
 		}
 	}
 

@@ -6,19 +6,16 @@ import graphics.Sprite;
 import graphics.SpriteHashtable;
 import graphics.SpritesheetHashtable;
 import map.Level;
-import map.Tile;
 import util.vectors.Vec2f;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 public class Wall extends BuildAbleObject {
 
-	private boolean door;
+	private final boolean door;
 	private WallType type;
-	private static HashMap<List<Sprite>, Sprite> dynamicSpriteList = new HashMap<>();
 
 	// basic constructor
 	public Wall(WallType type) {
@@ -51,14 +48,14 @@ public class Wall extends BuildAbleObject {
 	// this method has a boolean that stops the walls next to this wall to retrigger checking the sides of this wall, which would create an infinite
 	// loop of walls checking eachother again and again
 	private void checkSides(boolean firstTime) {
-		Optional<Wall> left = level.getWallOn(x/Tile.SIZE - 1, y/Tile.SIZE);
-		Optional<Wall> right = level.getWallOn(x/Tile.SIZE + 1, y/Tile.SIZE);
-		Optional<Wall> up = level.getWallOn(x/Tile.SIZE, (y/Tile.SIZE - 1));
-		Optional<Wall> down = level.getWallOn(x/Tile.SIZE, (y/Tile.SIZE + 1));
-		Optional<Wall> upLeft = level.getWallOn(x/Tile.SIZE - 1, (y/Tile.SIZE - 1));
-		Optional<Wall> downLeft = level.getWallOn(x/Tile.SIZE - 1, (y/Tile.SIZE + 1));
-		Optional<Wall> upRight = level.getWallOn((x/Tile.SIZE + 1), y/Tile.SIZE - 1);
-		Optional<Wall> downRight = level.getWallOn((x/Tile.SIZE + 1), y/Tile.SIZE + 1);
+		Optional<Wall> left = level.getWallOn(getTileX() - 1, getTileY());
+		Optional<Wall> right = level.getWallOn(getTileX() + 1, getTileY());
+		Optional<Wall> up = level.getWallOn(getTileX(), (getTileY() - 1));
+		Optional<Wall> down = level.getWallOn(getTileX(), (getTileY() + 1));
+		Optional<Wall> upLeft = level.getWallOn(getTileX() - 1, (getTileY() - 1));
+		Optional<Wall> downLeft = level.getWallOn(getTileX() - 1, (getTileY() + 1));
+		Optional<Wall> upRight = level.getWallOn((getTileX() + 1), getTileY() - 1);
+		Optional<Wall> downRight = level.getWallOn((getTileX() + 1), getTileY() + 1);
 		if (firstTime) {
 			left.ifPresent(Wall::checkSides);
 			right.ifPresent(Wall::checkSides);

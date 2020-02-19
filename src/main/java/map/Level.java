@@ -16,8 +16,6 @@ import main.Game;
 import util.BiPredicateInteger;
 import util.vectors.Vec2f;
 
-import static org.lwjgl.opengl.GL11.glTranslatef;
-
 public class Level {
 
 	private final Tile[][] tiles; // array of tiles on the map
@@ -49,14 +47,14 @@ public class Level {
 	// adding an item to the tile
 	public <T extends Item> void addItem(T e) {
 		if (e != null) {
-			tiles[e.getX() / Tile.SIZE][e.getY() / Tile.SIZE].setItem(e);
+			tiles[e.getTileX()][e.getTileY()].setItem(e);
 		}
 	}
 
 	// removing an item from the spritesheets
 	public <T extends Item> void removeItem(T e) {
 		if (e != null) {
-			tiles[e.getX() / Tile.SIZE][e.getY() / Tile.SIZE].setItem(null);
+			tiles[e.getTileX()][e.getTileY()].setItem(null);
 		}
 	}
 
@@ -244,7 +242,7 @@ public class Level {
 		if (outOfMapBounds(x,y)) {
 			return Optional.empty();
 		}
-		Entity entity = tiles[x / Tile.SIZE][y / Tile.SIZE].getEntity();
+		Entity entity = tiles[x][y].getEntity();
 		return entity instanceof Ore ? Optional.of((Ore) entity) : Optional.empty();
 	}
 
@@ -323,7 +321,7 @@ public class Level {
 
 	public <T extends Entity> void addEntity(T entity, boolean solid) {
 		if (entity != null) {
-			tiles[entity.getX() / Tile.SIZE][entity.getY() / Tile.SIZE].setEntity(entity, solid);
+			tiles[entity.getTileX()][entity.getTileY()].setEntity(entity, solid);
 		}
 	}
 
@@ -332,7 +330,7 @@ public class Level {
 	}
 
 	public void removeEntity(Entity entity) {
-		removeEntity(entity.getX() / Tile.SIZE, entity.getY() / Tile.SIZE);
+		removeEntity(entity.getTileX(), entity.getTileY());
 	}
 
 }

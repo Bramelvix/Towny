@@ -7,7 +7,9 @@ import util.vectors.Vec2f;
 
 public class Furnace extends Workstation {
 
-	private Sprite sprite1, sprite2, sprite3;
+	private final Sprite sprite1;
+	private final Sprite sprite2;
+	private final Sprite sprite3;
 
 	public Furnace() {
 		super();
@@ -19,9 +21,9 @@ public class Furnace extends Workstation {
 
 	public void render(Vec2f offset) {
 		if (!isRunning()) {
-			sprite1.draw(new Vec2f(x,y), offset);
+			sprite1.draw(location, offset);
 		} else {
-			draw(animationCounter > 29 ? sprite2 : sprite3, new Vec2f(x, y), offset);
+			draw(animationCounter > 29 ? sprite2 : sprite3, location, offset);
 			animationCounterTick();
 		}
 	}
