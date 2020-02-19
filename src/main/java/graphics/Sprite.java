@@ -1,38 +1,63 @@
 package graphics;
 
 import graphics.opengl.OpenGLUtils;
+import javafx.scene.paint.Color;
 import map.Tile;
+import util.vectors.Vec2f;
+import util.vectors.Vec2i;
+import util.vectors.Vec3f;
+
+import java.nio.ByteOrder;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.GL_RGB_INTEGER;
 
 //sprites in the game
 public class Sprite {
 
-	private final int id;
+	private final int spriteSheetID;
 	public static final int SIZE = Tile.SIZE; // 48
-	public final int[] pixels;
+	private Vec2f texCoords = new Vec2f(0); //The location of the texture coordinates for this sprite in it's spritesheet
+	Vec2f texSize = new Vec2f(1); //The size of the texture (in uv coordinates)
+
+	//TODO make this the actual average color, right now its just the first pixel
+	int avgColor;
 
 	protected Sprite(int x, int y, Spritesheet sheet) {
-		pixels = load(x * SIZE, y * SIZE, sheet);
-		id = OpenGLUtils.loadTexture(pixels, SIZE, SIZE);
+		this(new Vec2i(x,y), sheet);
 	}
 
-	public Sprite(int[] pixels) {
-		this.pixels = pixels;
-		id = OpenGLUtils.loadTexture(this.pixels, SIZE, SIZE);
+	protected Sprite(Vec2i pos, Spritesheet sheet) {
+		spriteSheetID = sheet.getId();
+		texCoords.x = (float) (pos.x*SIZE) / sheet.getWidth();
+		texCoords.y = (float) (pos.y*SIZE) / sheet.getHeight();
+
+		texSize.x = (float) SIZE / sheet.getWidth();
+		texSize.y = ((float) SIZE / sheet.getHeight());
+
+		avgColor = sheet.getBuffer().order(ByteOrder.BIG_ENDIAN).getInt(((pos.y*SIZE)*sheet.getWidth()*4) + pos.x*SIZE*4 );
+
 	}
 
-	// load a sprites pixels into the pixel array
-	private int[] load(int xa, int ya, Spritesheet sheet) {
-		int[] pixels = new int[SIZE * SIZE];
-		for (int y = 0; y < SIZE; y++) {
-			for (int x = 0; x < SIZE; x++) {
-				pixels[x + y * SIZE] = sheet.getPixels()[(x + xa) + (y + ya) * sheet.getWidth()];
-			}
-		}
-		return pixels;
+	public void draw(Vec2f pos, Vec2f offset) {
+		OpenGLUtils.drawTexturedQuad(pos, new Vec2f(SIZE), offset, texCoords, texSize, spriteSheetID);
 	}
 
-	public void draw(int x, int y, float xOffset, float yOffset) {
-		OpenGLUtils.drawTexturedQuadScaled(id, x, y, xOffset, yOffset, SIZE);
+	public int getSpriteSheetID() {
+		return spriteSheetID;
 	}
+
+	public Vec2f getTexCoords() {
+		return texCoords;
+	}
+
+	public Vec2f getTexSize() {
+		return texSize;
+	}
+
+	public int getAvgColor() {
+		return avgColor;
+	}
+
 
 }

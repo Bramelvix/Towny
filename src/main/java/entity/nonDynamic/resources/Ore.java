@@ -3,19 +3,19 @@ package entity.nonDynamic.resources;
 import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.mob.Villager;
+import graphics.MultiSprite;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
+import graphics.SpritesheetHashtable;
 import map.Level;
-import map.Tile;
 import sound.Sound;
+import util.vectors.Vec2f;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Ore extends Resource {
 
-	private static HashMap<List<Sprite>, Sprite> dynamicSpriteList = new HashMap<>();
 	private byte mined = 100; // mined percentage (100 = unfinished / 0 = finished)
 	private Item minedItem; // Item dropped when the ore is mined
 
@@ -30,7 +30,7 @@ public class Ore extends Resource {
 	// decide the sprite for the ore
 	private void decideSprite(OreType type) {
 		String name = type == OreType.STONE ? type.toString().toLowerCase() : type.toString().toLowerCase() + " ore";
-		setOre(name, SpriteHashtable.get(type.getSpriteId()), ItemHashtable.get(type.getItemSpriteId(), this.x, this.y, this.z));
+		setOre(name, SpriteHashtable.get(type.getSpriteId()), ItemHashtable.get(type.getItemSpriteId(), getX(), getY(), this.z));
 	}
 
 	private void setOre(String name, Sprite oreSprite, Item item) {
@@ -54,15 +54,15 @@ public class Ore extends Resource {
 	}
 
 	public void checkSides(Level level) {
-		boolean leftHasWall = level.selectOre(x - Tile.SIZE, y).isPresent();
-		boolean rightHasWall = level.selectOre(x + Tile.SIZE, y).isPresent();
-		boolean topHasWall = level.selectOre(x, y - Tile.SIZE).isPresent();
-		boolean bottomHasWall = level.selectOre(x, y + Tile.SIZE).isPresent();
+		boolean leftHasWall = level.selectOre(getTileX() - 1, getTileY()).isPresent();
+		boolean rightHasWall = level.selectOre(getTileX() + 1, getTileY()).isPresent();
+		boolean topHasWall = level.selectOre(getTileX(), getTileY() - 1).isPresent();
+		boolean bottomHasWall = level.selectOre(getTileX(), getTileY() + 1).isPresent();
 
-		boolean topRightHasWall = level.selectOre(x + Tile.SIZE, y - Tile.SIZE).isPresent();
-		boolean bottomRightHasWall = level.selectOre(x + Tile.SIZE, y + Tile.SIZE).isPresent();
-		boolean bottomLeftHasWall = level.selectOre(x - Tile.SIZE, y + Tile.SIZE).isPresent();
-		boolean topLeftHasWall = level.selectOre(x - Tile.SIZE, y - Tile.SIZE).isPresent();
+		boolean topRightHasWall = level.selectOre(getTileX() + 1, getTileY() - 1).isPresent();
+		boolean bottomRightHasWall = level.selectOre(getTileX() + 1, getTileY() + 1).isPresent();
+		boolean bottomLeftHasWall = level.selectOre(getTileX() - 1, getTileY() + 1).isPresent();
+		boolean topLeftHasWall = level.selectOre(getTileX() - 1, getTileY() - 1).isPresent();
 		decideSprite(leftHasWall, rightHasWall, topHasWall, bottomHasWall, topRightHasWall, bottomRightHasWall, bottomLeftHasWall, topLeftHasWall);
 	}
 
@@ -100,7 +100,14 @@ public class Ore extends Resource {
 		else if (!topHasWall) sprites.add(SpriteHashtable.get(175)); //14
 		else if (!topLeftHasWall) sprites.add(SpriteHashtable.get(180)); //19
 
-		if(dynamicSpriteList.containsKey(sprites)) { //if a dynamic sprite exists, use it
+		Vec2f[] texCoordList = new Vec2f[sprites.size()];
+
+		for (int i = 0; i<sprites.size(); i++) {
+			texCoordList[i] = (sprites.get(i).getTexCoords());
+		}
+		sprite = new MultiSprite(texCoordList, SpritesheetHashtable.get(1));
+
+		/*if(dynamicSpriteList.containsKey(sprites)) { //if a dynamic sprite exists, use it
 			sprite = dynamicSpriteList.get(sprites);
 		} else { //otherwise make it
 			final int SIZE = Tile.SIZE;
@@ -117,7 +124,7 @@ public class Ore extends Resource {
 			}
 			sprite = new Sprite(pixels);
 			dynamicSpriteList.put(sprites, new Sprite(pixels));
-		}
+		}*/
 	}
 
 }

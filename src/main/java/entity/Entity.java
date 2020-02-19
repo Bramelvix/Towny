@@ -4,10 +4,13 @@ import java.util.Random;
 
 import graphics.Sprite;
 import input.PointerInput;
+import map.Tile;
+import util.vectors.Vec2f;
 
 public abstract class Entity {
 
-	protected int x, y, z; // x, y and z of the entity
+	protected Vec2f location = new Vec2f(-1, -1);
+	protected int z; // x, y and z of the entity
 	public static final Random RANDOM = new Random(); // random needed for various chance calculations
 	public Sprite sprite; // the entity's sprite
 	private boolean visible; // is the entity visible or not
@@ -34,9 +37,9 @@ public abstract class Entity {
 		displayName = name;
 	}
 
-	public void setLocation(int x, int y, int z) {
-		this.x = x;
-		this.y = y;
+	public void setLocation(float x, float y, int z) {
+		location.x = x;
+		location.y = y;
 		this.z = z;
 	}
 
@@ -49,12 +52,20 @@ public abstract class Entity {
 		return visible;
 	}
 
-	public int getX() {
-		return x;
+	public float getX() {
+		return location.x;
 	}
 
-	public int getY() {
-		return y;
+	public float getY() {
+		return location.y;
+	}
+
+	public int getTileX() {
+		return (int) location.x/ Tile.SIZE;
+	}
+
+	public int getTileY() {
+		return (int) location.y / Tile.SIZE;
 	}
 
 	public int getZ() {
@@ -68,8 +79,9 @@ public abstract class Entity {
 	public boolean isTransparent() { return transparent; }
 
 	// basic constructor
-	public Entity(int x, int y, int z) {
+	public Entity(float x, float y, int z) {
 		this();
+		location = new Vec2f(x, y);
 		setLocation(x, y, z);
 	}
 
@@ -81,19 +93,19 @@ public abstract class Entity {
 
 	// does the mouse hover over the entity
 	public boolean hoverOn(PointerInput pointer, int z) {
-		return (z == this.z && pointer.getX() >= this.x && pointer.getX() <= this.x + Sprite.SIZE && pointer.getY() >= this.y && pointer.getY() <= this.y + Sprite.SIZE);
+		return (z == this.z && pointer.getX() >= location.x && pointer.getX() <= location.x + Sprite.SIZE && pointer.getY() >= location.y && pointer.getY() <= location.y + Sprite.SIZE);
 	}
 
 	// render method
-	public void render(float xOffset, float yOffset) {
+	public void render(Vec2f offset) {
 	   if (isVisible()) {
-		   sprite.draw(x, y, xOffset, yOffset);
+		   sprite.draw(location, offset);
 	   }
 	}
 
-	public void renderIf(boolean ifCondition, float xOffset, float yOffset) {
+	public void renderIf(boolean ifCondition, Vec2f offset) {
 		if (ifCondition) {
-			render(xOffset, yOffset);
+			render(offset);
 		}
 	}
 

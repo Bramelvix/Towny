@@ -2,6 +2,7 @@ package entity.dynamic.mob.work;
 
 import entity.dynamic.mob.Mob;
 import entity.dynamic.mob.Villager;
+import map.Tile;
 
 public class FightJob extends Job {
 
@@ -15,7 +16,7 @@ public class FightJob extends Job {
 
 	@Override
 	protected void start() {
-		worker.setPath(worker.getPath(xloc, yloc));
+		worker.setPath(worker.getPath((int) xloc/ Tile.SIZE, (int) yloc/ Tile.SIZE));
 		if (worker.isMovementNull()) {
 			completed = true;
 		}
@@ -47,8 +48,8 @@ public class FightJob extends Job {
 				}
 			} else {
 				if (worker.isMovementNull()) {
-					if (worker.getPath(xloc, yloc) != null) {
-						worker.setPath(worker.getPath(xloc, yloc));
+					if (worker.getPath((int) xloc / Tile.SIZE, (int) yloc / Tile.SIZE) != null) {
+						worker.setPath(worker.getPath((int) xloc / Tile.SIZE, (int) yloc / Tile.SIZE));
 					} else {
 						worker.drop();
 						completed = true;

@@ -1,32 +1,31 @@
 package graphics;
 
+import graphics.opengl.OpenGLUtils;
+import util.TextureInfo;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
 
 //picture with all the sprites in it
 public class Spritesheet {
 
-	private int width; // width of the spritesheet
-	private int height; // height of the spritesheet
-	private int[] pixels; // pixels array
+	private final int id; // OpenGL texture id
+	private final int width; // width of the spritesheet
+	private final int height; // height of the spritesheet
+	private final ByteBuffer buffer;
 
 	public Spritesheet(String path) {
-		try {
-			BufferedImage image = ImageIO.read(Spritesheet.class.getResource(path));
-			width = image.getWidth();
-			height = image.getHeight();
-			pixels = new int[width * height];
-			image.getRGB(0, 0, width, height, pixels, 0, width);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		TextureInfo img = OpenGLUtils.loadTexture(path);
+		this.id = img.id;
+		this.width = img.width;
+		this.height = img.height;
+		this.buffer = img.buffer;
 	}
 
-	public int[] getPixels() {
-		return pixels;
-	}
+	public int getId() {return id;}
 
 	public int getWidth() {
 		return width;
@@ -35,5 +34,7 @@ public class Spritesheet {
 	public int getHeight() {
 		return height;
 	}
+
+	public ByteBuffer getBuffer() {return buffer;}
 
 }

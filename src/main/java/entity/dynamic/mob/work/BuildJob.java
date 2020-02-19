@@ -56,13 +56,13 @@ public class BuildJob extends Job {
 					worker.move();
 				} else {
 					if (buildJobObj != null) {
-						if (!worker.levels[zloc].tileIsEmpty(xloc / Tile.SIZE, yloc / Tile.SIZE) && !buildJobObj.initialised) {
+						if (!worker.levels[zloc].tileIsEmpty((int) xloc / Tile.SIZE, (int) yloc / Tile.SIZE) && !buildJobObj.initialised) {
 							// wait if the buildLocation is blocked by an item or entity
 							System.out.println("Postponing Construction of: " + buildJobObj.toString());
 							return;
 						}
 						if (!buildJobObj.initialised) {
-							buildJobObj.initialise(xloc / Tile.SIZE, yloc / Tile.SIZE, worker.levels, zloc);
+							buildJobObj.initialise((int) xloc / Tile.SIZE, (int) yloc / Tile.SIZE, worker.levels, zloc);
 						}
 						completed = buildJobObj.build();
 						if (material != null) {

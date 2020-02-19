@@ -3,10 +3,13 @@ package entity.nonDynamic.building.container.workstations;
 import entity.nonDynamic.building.BuildAbleObject;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
+import util.vectors.Vec2f;
 
 public class Furnace extends Workstation {
 
-	private Sprite sprite1, sprite2, sprite3;
+	private final Sprite sprite1;
+	private final Sprite sprite2;
+	private final Sprite sprite3;
 
 	public Furnace() {
 		super();
@@ -16,17 +19,17 @@ public class Furnace extends Workstation {
 		setName("furnace");
 	}
 
-	public void render(float xOffset,float yOffset) {
+	public void render(Vec2f offset) {
 		if (!isRunning()) {
-			sprite1.draw(x,y, xOffset, yOffset);
+			sprite1.draw(location, offset);
 		} else {
-			draw(animationCounter > 29 ? sprite2 : sprite3, x, y, xOffset, yOffset);
+			draw(animationCounter > 29 ? sprite2 : sprite3, location, offset);
 			animationCounterTick();
 		}
 	}
 
-	private void draw(Sprite sprite, int x, int y, float xOffset, float yOffset) {
-		sprite.draw(x ,y, xOffset, yOffset);
+	private void draw(Sprite sprite, Vec2f pos, Vec2f offset) {
+		sprite.draw(pos, offset);
 	}
 
 	@Override

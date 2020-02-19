@@ -14,8 +14,7 @@ import graphics.Sprite;
 import graphics.SpriteHashtable;
 import main.Game;
 import util.BiPredicateInteger;
-
-import static org.lwjgl.opengl.GL11.glTranslatef;
+import util.vectors.Vec2f;
 
 public class Level {
 
@@ -48,14 +47,14 @@ public class Level {
 	// adding an item to the tile
 	public <T extends Item> void addItem(T e) {
 		if (e != null) {
-			tiles[e.getX() / Tile.SIZE][e.getY() / Tile.SIZE].setItem(e);
+			tiles[e.getTileX()][e.getTileY()].setItem(e);
 		}
 	}
 
 	// removing an item from the spritesheets
 	public <T extends Item> void removeItem(T e) {
 		if (e != null) {
-			tiles[e.getX() / Tile.SIZE][e.getY() / Tile.SIZE].setItem(null);
+			tiles[e.getTileX()][e.getTileY()].setItem(null);
 		}
 	}
 
@@ -243,7 +242,7 @@ public class Level {
 		if (outOfMapBounds(x,y)) {
 			return Optional.empty();
 		}
-		Entity entity = tiles[x / Tile.SIZE][y / Tile.SIZE].getEntity();
+		Entity entity = tiles[x][y].getEntity();
 		return entity instanceof Ore ? Optional.of((Ore) entity) : Optional.empty();
 	}
 
@@ -289,27 +288,28 @@ public class Level {
 	}
 
 	// render the tiles
-	public void render(int xScroll, int yScroll) {
-		int x0 = xScroll / Tile.SIZE;
-		int x1 = (xScroll + Game.width + Sprite.SIZE) / Tile.SIZE;
-		int y0 = yScroll / Tile.SIZE;
-		int y1 = (yScroll + Game.height + Sprite.SIZE) / Tile.SIZE;
+	public void render(Vec2f scroll) {
+		int x0 = (int)scroll.x / Tile.SIZE;
+		int x1 = (int)(scroll.x + Game.width + Sprite.SIZE) / Tile.SIZE;
+		int y0 = (int)scroll.y / Tile.SIZE;
+		int y1 = (int)(scroll.y + Game.height + Sprite.SIZE) / Tile.SIZE;
+
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
-				getTile(x, y).render(x * Sprite.SIZE, y * Sprite.SIZE, xScroll, yScroll);
+				getTile(x, y).render(new Vec2f(x * Sprite.SIZE, y * Sprite.SIZE), scroll);
 			}
 		}
 	}
 
-	public void renderHardEntities(int xScroll, int yScroll) {
-		int x0 = xScroll / Tile.SIZE;
-		int x1 = (xScroll + Game.width + Sprite.SIZE * 2) / Tile.SIZE;
-		int y0 = yScroll/ Tile.SIZE;
-		int y1 = (yScroll + Game.height + Sprite.SIZE * 2) / Tile.SIZE;
+	public void renderHardEntities(Vec2f scroll) {
+		int x0 = (int)scroll.x / Tile.SIZE;
+		int x1 = (int)(scroll.x + Game.width + Sprite.SIZE * 2) / Tile.SIZE;
+		int y0 = (int)scroll.y/ Tile.SIZE;
+		int y1 = (int)(scroll.y + Game.height + Sprite.SIZE * 2) / Tile.SIZE;
 
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
-				getTile(x, y).renderHard(xScroll, yScroll);
+				getTile(x, y).renderHard(scroll);
 			}
 		}
 	}
@@ -321,7 +321,7 @@ public class Level {
 
 	public <T extends Entity> void addEntity(T entity, boolean solid) {
 		if (entity != null) {
-			tiles[entity.getX() / Tile.SIZE][entity.getY() / Tile.SIZE].setEntity(entity, solid);
+			tiles[entity.getTileX()][entity.getTileY()].setEntity(entity, solid);
 		}
 	}
 
@@ -330,7 +330,7 @@ public class Level {
 	}
 
 	public void removeEntity(Entity entity) {
-		removeEntity(entity.getX() / Tile.SIZE, entity.getY() / Tile.SIZE);
+		removeEntity(entity.getTileX(), entity.getTileY());
 	}
 
 }

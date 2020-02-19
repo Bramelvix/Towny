@@ -9,6 +9,11 @@ public class Vec2f {
 		this.y = y;
 	}
 
+	public Vec2f(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
 	public Vec2f(float n) {
 		this(n,n);
 	}

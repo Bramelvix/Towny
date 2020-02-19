@@ -5,12 +5,13 @@ import entity.dynamic.mob.Villager;
 public abstract class Job implements Workable {
 
 	boolean completed; // is the job done
-	int xloc, yloc, zloc; // the x and y location of the job
+	float xloc, yloc;
+	int zloc; // the x and y location of the job
 	final Villager worker; // the villager doing the job
 	boolean started = false;
 
 	// constructors
-	Job(int xloc, int yloc, int zloc, Villager worker) {
+	Job(float xloc, float yloc, int zloc, Villager worker) {
 		this(worker);
 		completed = false;
 		this.xloc = xloc;
@@ -28,7 +29,7 @@ public abstract class Job implements Workable {
 	}
 
 	protected void start() {
-		worker.addJob(new MoveJob(xloc,yloc,zloc,worker,false),100);
+		worker.addJob(new MoveJob(xloc, yloc, zloc, worker,false),100);
 		started = true;
 	}
 

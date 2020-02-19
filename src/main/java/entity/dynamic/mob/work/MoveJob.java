@@ -13,13 +13,13 @@ public class MoveJob extends Job {
 
 	private ArrayList<Path> paths;
 	private int counter = 0;
-	private boolean exactLocation;
+	private final boolean exactLocation;
 
-	public MoveJob(int xloc, int yloc, int zloc, Villager worker) { //movejob to move to this exact tile
+	public MoveJob(float xloc, float yloc, int zloc, Villager worker) { //movejob to move to this exact tile
 		this(xloc, yloc, zloc, worker, true);
 	}
 
-	MoveJob(int xloc, int yloc, int zloc, Villager worker, boolean exactLocation) { //movejob to move to a tile or around this tile
+	MoveJob(float xloc, float yloc, int zloc, Villager worker, boolean exactLocation) { //movejob to move to a tile or around this tile
 		super(xloc, yloc, zloc, worker);
 		this.exactLocation = exactLocation;
 	}
@@ -33,7 +33,7 @@ public class MoveJob extends Job {
 			return;
 		}
 		if (zloc == worker.getZ()) {
-			Path path = exactLocation ? worker.getPath(xloc / Tile.SIZE, yloc / Tile.SIZE) : worker.getPathAround(xloc / Tile.SIZE, yloc / Tile.SIZE);
+			Path path = exactLocation ? worker.getPath((int) xloc / Tile.SIZE, (int) yloc / Tile.SIZE) : worker.getPathAround((int) xloc / Tile.SIZE, (int)yloc / Tile.SIZE);
 			if (path != null) {
 				paths.add(path);
 			} else { //no path
@@ -41,17 +41,17 @@ public class MoveJob extends Job {
 				return;
 			}
 		} else {
-			int stairsX = -1;
-			int stairsY = -1;
+			float stairsX = -1;
+			float stairsY = -1;
 			boolean up = worker.getZ() < zloc;
 			for (int i = 0; i < Math.abs(zloc - worker.getZ()); i++) {
-				Optional<Stairs> optional = worker.levels[worker.getZ() + (up ? i : -i)].getNearestStairs(worker.getX()/Tile.SIZE, worker.getY()/ Tile.SIZE, zloc > worker.getZ());
+				Optional<Stairs> optional = worker.levels[worker.getZ() + (up ? i : -i)].getNearestStairs((int) worker.getX()/Tile.SIZE, (int) worker.getY()/ Tile.SIZE, zloc > worker.getZ());
 				if (optional.isPresent()) {
-					int startx = stairsX == -1 ? worker.getX() : stairsX;
-					int starty = stairsY == -1 ? worker.getY() : stairsY;
+					float startx = stairsX == -1 ? worker.getX() : stairsX;
+					float starty = stairsY == -1 ? worker.getY() : stairsY;
 					stairsX = optional.get().getX();
 					stairsY = optional.get().getY();
-					Path path = PathFinder.findPath(startx / Tile.SIZE, starty / Tile.SIZE, stairsX / Tile.SIZE, stairsY / Tile.SIZE, worker.levels[worker.getZ() + (up ? i : -i)]);
+					Path path = PathFinder.findPath((int) startx / Tile.SIZE, (int) starty / Tile.SIZE, (int) stairsX / Tile.SIZE, (int) stairsY / Tile.SIZE, worker.levels[worker.getZ() + (up ? i : -i)]);
 					if (path != null) {
 						paths.add(path);
 					} else { //no path
@@ -63,7 +63,7 @@ public class MoveJob extends Job {
 					return;
 				}
 			}
-			Path path = exactLocation ? PathFinder.findPath(stairsX / Tile.SIZE, stairsY / Tile.SIZE, xloc / Tile.SIZE, yloc / Tile.SIZE, worker.levels[zloc]) : PathFinder.findPathAround(stairsX / Tile.SIZE, stairsY / Tile.SIZE, xloc / Tile.SIZE, yloc / Tile.SIZE, worker.levels[zloc]);
+			Path path = exactLocation ? PathFinder.findPath((int) stairsX / Tile.SIZE, (int) stairsY / Tile.SIZE, (int) xloc / Tile.SIZE, (int) yloc / Tile.SIZE, worker.levels[zloc]) : PathFinder.findPathAround((int) stairsX / Tile.SIZE, (int) stairsY / Tile.SIZE, (int) xloc / Tile.SIZE, (int) yloc / Tile.SIZE, worker.levels[zloc]);
 			if (!((exactLocation &&(xloc / Tile.SIZE) == (stairsX / Tile.SIZE) && (yloc / Tile.SIZE) == (stairsY / Tile.SIZE)) || (!exactLocation && (stairsX <= ((xloc + Tile.SIZE))) && (stairsX >= ((xloc - Tile.SIZE)) && ((stairsY >= ((yloc - Tile.SIZE))) && (stairsY <= ((yloc + Tile.SIZE)))))))) {
 				if (path == null) { //no path
 					completed = true;
@@ -98,7 +98,7 @@ public class MoveJob extends Job {
 	}
 
 	private void goOnStairs() {
-		Stairs stairs = worker.levels[worker.getZ()].getEntityOn(worker.getX()/Tile.SIZE, worker.getY()/Tile.SIZE);
+		Stairs stairs = worker.levels[worker.getZ()].getEntityOn((int)worker.getX()/Tile.SIZE, (int) worker.getY()/Tile.SIZE);
 		if (stairs != null) {
 			stairs.goOnStairs(worker);
 		}

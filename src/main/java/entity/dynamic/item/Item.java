@@ -18,10 +18,10 @@ public class Item extends Entity {
 	}
 
 	public Item copy() {
-		return this.copy(this.x,this.y,this.z);
+		return this.copy(this.location.x, this.location.y, this.z);
 	}
 
-	public Item copy(int x, int y, int z) {
+	public Item copy(float x, float y, int z) {
 		Item copy = new Item(this.getName(),this.sprite,this.getToolTip(),this.getId());
 		copy.setLocation(x,y,z);
 		return copy;

@@ -1,21 +1,21 @@
 package entity.nonDynamic.building.wall;
 
 import entity.nonDynamic.building.BuildAbleObject;
+import graphics.MultiSprite;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
+import graphics.SpritesheetHashtable;
 import map.Level;
-import map.Tile;
+import util.vectors.Vec2f;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 public class Wall extends BuildAbleObject {
 
-	private boolean door;
+	private final boolean door;
 	private WallType type;
-	private static HashMap<List<Sprite>, Sprite> dynamicSpriteList = new HashMap<>();
 
 	// basic constructor
 	public Wall(WallType type) {
@@ -48,14 +48,14 @@ public class Wall extends BuildAbleObject {
 	// this method has a boolean that stops the walls next to this wall to retrigger checking the sides of this wall, which would create an infinite
 	// loop of walls checking eachother again and again
 	private void checkSides(boolean firstTime) {
-		Optional<Wall> left = level.getWallOn(x/Tile.SIZE - 1, y/Tile.SIZE);
-		Optional<Wall> right = level.getWallOn(x/Tile.SIZE + 1, y/Tile.SIZE);
-		Optional<Wall> up = level.getWallOn(x/Tile.SIZE, (y/Tile.SIZE - 1));
-		Optional<Wall> down = level.getWallOn(x/Tile.SIZE, (y/Tile.SIZE + 1));
-		Optional<Wall> upLeft = level.getWallOn(x/Tile.SIZE - 1, (y/Tile.SIZE - 1));
-		Optional<Wall> downLeft = level.getWallOn(x/Tile.SIZE - 1, (y/Tile.SIZE + 1));
-		Optional<Wall> upRight = level.getWallOn((x/Tile.SIZE + 1), y/Tile.SIZE - 1);
-		Optional<Wall> downRight = level.getWallOn((x/Tile.SIZE + 1), y/Tile.SIZE + 1);
+		Optional<Wall> left = level.getWallOn(getTileX() - 1, getTileY());
+		Optional<Wall> right = level.getWallOn(getTileX() + 1, getTileY());
+		Optional<Wall> up = level.getWallOn(getTileX(), (getTileY() - 1));
+		Optional<Wall> down = level.getWallOn(getTileX(), (getTileY() + 1));
+		Optional<Wall> upLeft = level.getWallOn(getTileX() - 1, (getTileY() - 1));
+		Optional<Wall> downLeft = level.getWallOn(getTileX() - 1, (getTileY() + 1));
+		Optional<Wall> upRight = level.getWallOn((getTileX() + 1), getTileY() - 1);
+		Optional<Wall> downRight = level.getWallOn((getTileX() + 1), getTileY() + 1);
 		if (firstTime) {
 			left.ifPresent(Wall::checkSides);
 			right.ifPresent(Wall::checkSides);
@@ -86,8 +86,7 @@ public class Wall extends BuildAbleObject {
 		}
 	}
 
-	// decide the sprite for the wall, depending on the other 4 sides next to
-	// the wall
+	// decide the sprite for the wall, depending on the other 4 sides next to the wall
 	private void decideSprite(boolean leftHasWall, boolean rightHasWall, boolean topHasWall, boolean bottomHasWall, boolean topRightHasWall, boolean bottomRightHasWall, boolean topLeftHasWall, boolean bottomLeftHasWall) {
 		List<Sprite> sprites = new ArrayList<>();
 
@@ -130,7 +129,14 @@ public class Wall extends BuildAbleObject {
 			else if (!topHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 28 : 200));
 			else if (!topLeftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 35 : 207));
 		}
-		if (dynamicSpriteList.containsKey(sprites)) { //if a dynamic sprite exists, use it
+
+		Vec2f[] texCoordList = new Vec2f[sprites.size()];
+		for (int i = 0; i<sprites.size(); i++) {
+			texCoordList[i] = (sprites.get(i).getTexCoords());
+		}
+		sprite = new MultiSprite(texCoordList, SpritesheetHashtable.get(1));
+
+		/*if (dynamicSpriteList.containsKey(sprites)) { //if a dynamic sprite exists, use it
 			sprite = dynamicSpriteList.get(sprites);
 		} else { //otherwise make it
 			final int SIZE = Tile.SIZE;
@@ -147,7 +153,7 @@ public class Wall extends BuildAbleObject {
 			}
 			sprite = new Sprite(pixels);
 			dynamicSpriteList.put(sprites, new Sprite(pixels));
-		}
+		}*/
 	}
 
 	@Override

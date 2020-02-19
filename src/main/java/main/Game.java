@@ -40,6 +40,7 @@ import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import util.StringUtils;
+import util.vectors.Vec2f;
 
 import javax.imageio.ImageIO;
 
@@ -233,11 +234,10 @@ public class Game {
 	private void draw() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
-		map[currentLayerNumber].render(xScroll, yScroll);
+		map[currentLayerNumber].render(new Vec2f(xScroll, yScroll));
 		renderMobs();
-		map[currentLayerNumber].renderHardEntities(xScroll, yScroll);
-		ui.render(xScroll, yScroll);
-		//OpenglUtils.drawShit();
+		map[currentLayerNumber].renderHardEntities(new Vec2f(xScroll, yScroll));
+		ui.render(new Vec2f(xScroll, yScroll));
 		glfwSwapBuffers(window);
 	}
 
@@ -329,7 +329,7 @@ public class Game {
 		}
 		if (pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
 			if (UiIcons.isMiningSelected() && UiIcons.hoverOnNoIcons()) {
-				map[currentLayerNumber].selectOre(pointer.getX(), pointer.getY()).ifPresent(ore -> {
+				map[currentLayerNumber].selectOre(pointer.getTileX(), pointer.getTileY()).ifPresent(ore -> {
 					Villager idle = getIdlestVil();
 					deselectAllVills();
 					idle.addJob(ore);
@@ -503,9 +503,7 @@ public class Game {
 							res[i] = idle.getNearestItemOfType(recipe.getResources()[i]).orElse(null);
 						}
 						map[currentLayerNumber].getNearestWorkstation(
-								recipe.getWorkstationClass(),
-								idle.getX()/Tile.SIZE,
-								idle.getY()/Tile.SIZE
+							recipe.getWorkstationClass(), idle.getTileX(), idle.getTileY()
 						).ifPresent(station -> idle.addJob(new CraftJob(idle, res, recipe.getProduct(), station)));
 
 						ui.deSelectIcons();
@@ -585,25 +583,22 @@ public class Game {
 
 		mobs.forEach(mob -> mob.renderIf(
 			inBounds(mob.getX(), mob.getY(), mob.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-			(float) xScroll,
-			(float) yScroll
+			new Vec2f(xScroll, yScroll)
 		));
 
 		vills.forEach(vil -> vil.renderIf(
 			inBounds(vil.getX(), vil.getY(), vil.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-			(float)xScroll,
-			(float)yScroll
+			new Vec2f(xScroll, yScroll)
 		));
 
 		sols.forEach(sol -> sol.renderIf(
 			inBounds(sol.getX(), sol.getY(), sol.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-			(float)xScroll,
-			(float)yScroll
+			new Vec2f(xScroll, yScroll)
 		));
 
 	}
 
-	private boolean inBounds(int x, int y, int z, int layer, int xScroll, int x1, int yScroll, int y1) {
+	private boolean inBounds(float x, float y, int z, int layer, int xScroll, int x1, int yScroll, int y1) {
 		return z == layer && x + Tile.SIZE >= xScroll && x - Tile.SIZE <= x1 && y + Tile.SIZE >= yScroll && y - Tile.SIZE <= y1;
 	}
 

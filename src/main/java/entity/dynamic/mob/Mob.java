@@ -40,14 +40,14 @@ public abstract class Mob extends Entity {
 			}
 		}
 		if (!collision(dir)) {
-			x += xa;
-			y += ya;
+			location.x += xa;
+			location.y += ya;
 		}
 	}
 
 	void idle() {
 		while (movement == null) {
-			movement = getPath((x / Tile.SIZE) + Entity.RANDOM.nextInt(4) - 2, (y / Tile.SIZE) + Entity.RANDOM.nextInt(4) - 2);
+			movement = getPath(getTileX() + Entity.RANDOM.nextInt(4) - 2, getTileY() + Entity.RANDOM.nextInt(4) - 2);
 		}
 	}
 
@@ -105,19 +105,20 @@ public abstract class Mob extends Entity {
 	}
 
 	// is the mob around a tile (x and y in pixels)
-	public boolean aroundTile(int x, int y, int z) {
+	public boolean aroundTile(float x, float y, float z) {
 		return (
 				this.z == z
-				&& ((this.x/Tile.SIZE) <= ((x/Tile.SIZE) + 1)) && ((this.x/Tile.SIZE) >= ((x/Tile.SIZE) - 1))
-				&& ((this.y/Tile.SIZE >= ((y/Tile.SIZE) - 1)) && (this.y/Tile.SIZE <= ((y/Tile.SIZE) + 1))));
+				&& (getTileX() <= ((x/Tile.SIZE) + 1)) && (getTileX() >= ((x/Tile.SIZE) - 1))
+				&& (getTileY() >= ((y/Tile.SIZE) - 1)) && (getTileY() <= ((y/Tile.SIZE) + 1))
+		);
 	}
 
-	public boolean onSpot(int x, int y, int z) {
-		return (this.z == z && this.x == x && this.y == y);
+	public boolean onSpot(float x, float y, float z) {
+		return (this.z == z && this.location.x == x && this.location.y == y);
 	}
 
 	public Path getPathAround(int x, int y) {
-		return PathFinder.findPathAround(this.x / Tile.SIZE, this.y / Tile.SIZE, x, y, levels[z]);
+		return PathFinder.findPathAround(getTileX(), getTileY(), x, y, levels[z]);
 	}
 
 	// getter
@@ -138,7 +139,7 @@ public abstract class Mob extends Entity {
 
 	// pathfinder method
 	public Path getPath(int tx, int ty) {
-		return PathFinder.findPath(x / Tile.SIZE, y / Tile.SIZE, tx, ty, levels[z]);
+		return PathFinder.findPath(getTileX(), getTileY(), tx, ty, levels[z]);
 	}
 
 	public int getHealth() {
@@ -162,27 +163,27 @@ public abstract class Mob extends Entity {
 				dir == Direction.DOWN
 				|| dir == Direction.DOWN_LEFT
 				|| dir == Direction.DOWN_RIGHT
-				|| levels[z].getTile((x / Tile.SIZE), ((y + 1) / Tile.SIZE)).isSolid()
+				|| levels[z].getTile(getTileX(), getTileY() + 1).isSolid()
 			) && (
 				dir == Direction.UP || dir == Direction.UP_LEFT || dir == Direction.UP_RIGHT
-				|| levels[z].getTile((x / Tile.SIZE), ((y - 1) / Tile.SIZE)).isSolid()
+				|| levels[z].getTile(getTileY(), getTileY() - 1).isSolid()
 			) && (
 				dir == Direction.LEFT || dir == Direction.UP_LEFT || dir == Direction.DOWN_LEFT
-				|| levels[z].getTile(((x - 1) / Tile.SIZE), (y / Tile.SIZE)).isSolid()
+				|| levels[z].getTile(getTileX() - 1, getTileY()).isSolid()
 			) && (
 				dir == Direction.RIGHT || dir == Direction.UP_RIGHT || dir == Direction.DOWN_RIGHT
-				|| levels[z].getTile(((x + 1) / Tile.SIZE), (y / Tile.SIZE)).isSolid()
+				|| levels[z].getTile(getTileX() + 1, getTileY()).isSolid()
 			) && (
-				levels[z].getTile((x / Tile.SIZE), (y / Tile.SIZE)).isSolid()
-				|| levels[z].getTile(((x + 1) / Tile.SIZE), ((y + 1) / Tile.SIZE)).isSolid()
+				levels[z].getTile(getTileX(), getTileY()).isSolid()
+				|| levels[z].getTile(getTileX() + 1, getTileY() + 1).isSolid()
 			)
 		);
 	}
 
 	// DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()!! DO NOT USE!!!
 	protected void moveTo(int x, int y) {
-		int xmov = Integer.compare(x*Tile.SIZE, this.x);
-		int ymov = Integer.compare(y*Tile.SIZE, this.y);
+		int xmov = Integer.compare(x*Tile.SIZE, (int) this.location.x);
+		int ymov = Integer.compare(y*Tile.SIZE, (int) this.location.y);
 		move(xmov*3, ymov*3);
 	}
 

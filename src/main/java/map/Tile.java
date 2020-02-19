@@ -4,6 +4,7 @@ import entity.Entity;
 import entity.dynamic.item.Item;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
+import util.vectors.Vec2f;
 
 public class Tile {
 
@@ -25,21 +26,21 @@ public class Tile {
 	}
 
 	// render a tile
-	 void render(int x, int y, float xOffset, float yOffset) {
+	 void render(Vec2f pos, Vec2f offset) {
 		if (entity == null || entity.isTransparent() || !entity.isVisible()) {
-			sprite.draw(x, y, xOffset, yOffset);
+			sprite.draw(pos, offset);
 		}
 		if (entity != null && !solid) {
-			entity.render(xOffset, yOffset);
+			entity.render(offset);
 		}
 		if (item != null) {
-			item.render(xOffset, yOffset);
+			item.render(offset);
 		}
 	}
 
-	void renderHard(float xOffset, float yOffset) {
+	void renderHard(Vec2f offset) {
 		if (solid && entity != null) {
-			entity.render(xOffset, yOffset);
+			entity.render(offset);
 		}
 	}
 

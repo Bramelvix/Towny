@@ -18,7 +18,7 @@ public abstract class BuildAbleObject extends StaticEntity {
 	protected void setOpened(boolean open) { //the open value has to be changeable for certain objects like doors
 		this.open = open;
 		if (initialised) {
-			level.getTile(x/ Tile.SIZE, y/Tile.SIZE).setSolid(!this.open);
+			level.getTile(getTileX(), getTileY()).setSolid(!this.open);
 		}
 	}
 

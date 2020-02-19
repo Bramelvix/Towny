@@ -2,6 +2,8 @@ package entity.dynamic.item;
 
 import entity.dynamic.item.weapon.Weapon;
 import entity.dynamic.mob.Villager;
+import util.vectors.Vec2f;
+
 import java.util.Arrays;
 
 public class VillagerInventory {
@@ -16,15 +18,15 @@ public class VillagerInventory {
 		weapons = new Weapon[2]; // 0 = weaponhand, 1 = shieldhand
 	}
 
-	public void render(float xOffset, float yOffset) {
+	public void render(Vec2f offset) {
 		for (Clothing i : clothes) {
 			if (i != null) {
-				i.sprite.draw(i.getX(),i.getY(), xOffset, yOffset);
+				i.sprite.draw(new Vec2f(i.getX(),i.getY()), offset);
 			}
 		}
 		for (Weapon i : weapons) {
 			if (i != null) {
-				i.sprite.draw(i.getX(),i.getY(), xOffset, yOffset);
+				i.sprite.draw(new Vec2f(i.getX(),i.getY()), offset);
 			}
 		}
 	}
@@ -84,7 +86,7 @@ public class VillagerInventory {
 		Arrays.stream(weapons).forEach(this::removeWeapon);
 	}
 
-	public void update(int x, int y, int z) {
+	public void update(float x, float y, int z) {
 		for (Clothing i : clothes) {
 			if (i != null) {
 				i.setLocation(x, y, z);
