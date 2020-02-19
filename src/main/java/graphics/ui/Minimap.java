@@ -31,8 +31,8 @@ class Minimap {
 	private void init(Level map) { //TODO fix entities rendering on the minimap
 		int[] pixels = new int[(int)width * (int)height];
 		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) { //TODO add color variable to sprites
-				pixels[x + y * (int)width] = 2;//map.getTile(y / 2, x / 2).sprite.avgColor;
+			for (int y = 0; y < height; y++) {
+				pixels[x + y * (int)width] = map.getTile(y / 2, x / 2).sprite.getAvgColor();
 			}
 		}
 		OpenGLUtils.deleteTexture(textureId);

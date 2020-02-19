@@ -3,7 +3,6 @@ package graphics.opengl;
 import main.Game;
 import map.Tile;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL12;
 import util.TextureInfo;
 import util.vectors.Vec2f;
 import util.vectors.Vec4f;
@@ -15,7 +14,6 @@ import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.nio.file.Paths;
 
-import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
@@ -73,6 +71,7 @@ public abstract class OpenGLUtils {
 
 		glLineWidth(3);
 		glEnable(GL_LINE_SMOOTH);
+
 	}
 
 	private static float pToGL(float pixel, char o) { //converts between pixels and openGL coordinates
@@ -86,8 +85,8 @@ public abstract class OpenGLUtils {
 		int textureID = glGenTextures();
 		glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
 		//Setup wrap mode
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		//Setup texture scaling filtering
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -104,16 +103,16 @@ public abstract class OpenGLUtils {
 		filename = System.getProperty("user.dir")+"/src/main/resources"+filename;
 		ByteBuffer buffer = stbi_load(filename, imageWidth, imageHeight, channels, 4);
 
-		System.out.println(stbi_failure_reason());
+		//System.out.println(stbi_failure_reason());
 
 		int textureID = glGenTextures();
 		glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, imageWidth[0], imageHeight[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-		return new TextureInfo(textureID, imageWidth[0], imageHeight[0], channels[0]);
+		return new TextureInfo(textureID, imageWidth[0], imageHeight[0], channels[0], buffer);
 	}
 
 	public static void deleteTexture(int textId) {
@@ -125,10 +124,10 @@ public abstract class OpenGLUtils {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				int pixel = pixels[y * width + x];
+				buffer.put((byte) ((pixel >> 24) & 0xFF));     // Alpha component.
 				buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
 				buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
 				buffer.put((byte) (pixel & 0xFF));             // Blue component
-				buffer.put((byte) ((pixel >> 24) & 0xFF));     // Alpha component.
 			}
 		}
 		buffer.flip();

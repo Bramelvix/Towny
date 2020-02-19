@@ -5,6 +5,7 @@ import util.TextureInfo;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import javax.imageio.ImageIO;
 
@@ -14,12 +15,14 @@ public class Spritesheet {
 	private final int id; // OpenGL texture id
 	private final int width; // width of the spritesheet
 	private final int height; // height of the spritesheet
+	private final ByteBuffer buffer;
 
 	public Spritesheet(String path) {
 		TextureInfo img = OpenGLUtils.loadTexture(path);
 		this.id = img.id;
 		this.width = img.width;
 		this.height = img.height;
+		this.buffer = img.buffer;
 	}
 
 	public int getId() {return id;}
@@ -31,5 +34,7 @@ public class Spritesheet {
 	public int getHeight() {
 		return height;
 	}
+
+	public ByteBuffer getBuffer() {return buffer;}
 
 }

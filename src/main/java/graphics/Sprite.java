@@ -1,10 +1,16 @@
 package graphics;
 
 import graphics.opengl.OpenGLUtils;
+import javafx.scene.paint.Color;
 import map.Tile;
 import util.vectors.Vec2f;
 import util.vectors.Vec2i;
 import util.vectors.Vec3f;
+
+import java.nio.ByteOrder;
+
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.GL_RGB_INTEGER;
 
 //sprites in the game
 public class Sprite {
@@ -14,7 +20,8 @@ public class Sprite {
 	private Vec2f texCoords = new Vec2f(0); //The location of the texture coordinates for this sprite in it's spritesheet
 	Vec2f texSize = new Vec2f(1); //The size of the texture (in uv coordinates)
 
-	Vec3f avgColor;
+	//TODO make this the actual average color, right now its just the first pixel
+	int avgColor;
 
 	protected Sprite(int x, int y, Spritesheet sheet) {
 		this(new Vec2i(x,y), sheet);
@@ -28,7 +35,8 @@ public class Sprite {
 		texSize.x = (float) SIZE / sheet.getWidth();
 		texSize.y = ((float) SIZE / sheet.getHeight());
 
-		
+		avgColor = sheet.getBuffer().order(ByteOrder.BIG_ENDIAN).getInt(((pos.y*SIZE)*sheet.getWidth()*4) + pos.x*SIZE*4 );
+
 	}
 
 	public void draw(Vec2f pos, Vec2f offset) {
@@ -47,7 +55,7 @@ public class Sprite {
 		return texSize;
 	}
 
-	public Vec3f getAvgColor() {
+	public int getAvgColor() {
 		return avgColor;
 	}
 
