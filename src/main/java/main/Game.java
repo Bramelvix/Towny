@@ -398,7 +398,7 @@ public class Game {
 						tree -> options.add(new MenuItem((MenuItem.CHOP), tree))
 				);
 
-				map[currentLayerNumber].selectOre(pointer.getX(), pointer.getY()).ifPresent(
+				map[currentLayerNumber].selectOre(pointer.getTileX(), pointer.getTileY()).ifPresent(
 						ore ->  options.add(new MenuItem((MenuItem.MINE), ore))
 				);
 
