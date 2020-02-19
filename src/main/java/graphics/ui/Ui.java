@@ -23,7 +23,7 @@ public class Ui {
 	// rendering the ui
 	public void render(Vec2f offset) {
 		UiIcons.render();
-		selection.render(offset);
+		selection.render(new Vec2f(0, 0));
 		menu.render();
 		map.render();
 		outline.render(new Vec2f(0,0));
