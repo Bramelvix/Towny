@@ -1,6 +1,5 @@
 package events;
 
-import input.PointerInput;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,6 +1,5 @@
 package input;
 
-import static input.PointerInput.EType.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 import events.Event;
@@ -57,7 +56,7 @@ public class PointerInput {
 
 	public GLFWCursorPosCallbackI positionCallback () {
 		return (long window, double xpos, double ypos) -> {
-			listeners.fire (MOVE, new PointerMoveEvent (xpos, ypos));
+			listeners.fire (EType.MOVE, new PointerMoveEvent (xpos, ypos));
 
 			this.xpos = xpos;
 			this.ypos = ypos;

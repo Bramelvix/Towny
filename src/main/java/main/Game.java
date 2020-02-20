@@ -61,8 +61,8 @@ public class Game {
 	private byte speed = 60;
 	private double ns = 1000000000.0 / speed;
 	private Villager selectedvill;
-	public static int xScroll = 0;
-	public static int yScroll = 0;
+	public int xScroll = 0;
+	public int yScroll = 0;
 	public int currentLayerNumber = 0;
 	private long window;
 	private PointerInput pointer;
@@ -521,9 +521,9 @@ public class Game {
 	}
 
 	private void moveCamera(int xScroll, int yScroll) {
-		Game.xScroll += xScroll;
-		Game.yScroll += yScroll;
-		ui.setOffset(Game.xScroll, Game.yScroll);
+		this.xScroll += xScroll;
+		this.yScroll += yScroll;
+		ui.setOffset(this.xScroll, this.yScroll);
 	}
 
 	private void moveCamera() {
