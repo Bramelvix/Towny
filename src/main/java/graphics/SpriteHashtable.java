@@ -1,8 +1,5 @@
 package graphics;
 
-import entity.dynamic.item.weapon.WeaponMaterial;
-import entity.dynamic.item.weapon.WeaponType;
-
 import java.util.Hashtable;
 import java.util.Random;
 

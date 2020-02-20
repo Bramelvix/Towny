@@ -1,16 +1,11 @@
 package graphics;
 
 import graphics.opengl.OpenGLUtils;
-import javafx.scene.paint.Color;
 import map.Tile;
 import util.vectors.Vec2f;
 import util.vectors.Vec2i;
-import util.vectors.Vec3f;
 
 import java.nio.ByteOrder;
-
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL30.GL_RGB_INTEGER;
 
 //sprites in the game
 public class Sprite {
@@ -49,10 +44,6 @@ public class Sprite {
 
 	public Vec2f getTexCoords() {
 		return texCoords;
-	}
-
-	public Vec2f getTexSize() {
-		return texSize;
 	}
 
 	public int getAvgColor() {

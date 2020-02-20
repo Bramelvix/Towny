@@ -134,20 +134,6 @@ public class TrueTypeFont {
 		OpenGLUtils.drawTexturedQuad(new Vec2f(x,y), glyphSize, new Vec2f(0,0), new Vec2f(u, v+texHeight), new Vec2f(texWidth, -texHeight), fontTextureID);
 	}
 
-	public int getWidth(String whatchars) {
-		int totalwidth = 0;
-		IntObject intObject;
-		int currentChar;
-		for (int i = 0; i < whatchars.length(); i++) {
-			currentChar = whatchars.charAt(i);
-			intObject = charArray[currentChar];
-			if (intObject != null) {
-				totalwidth += intObject.width;
-			}
-		}
-		return totalwidth;
-	}
-
 	public int getHeight() {
 		return fontHeight;
 	}
