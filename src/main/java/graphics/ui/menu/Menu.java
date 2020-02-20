@@ -52,6 +52,7 @@ public class Menu { // the menu is the little options menu that shows up when yo
 	public void hide() {
 		this.visible = false;
 		this.height = 0;
+		items.forEach(MenuItem::destroy);
 		items = new ArrayList<>();
 	}
 
@@ -67,11 +68,12 @@ public class Menu { // the menu is the little options menu that shows up when yo
 		if (forceInvisible) {
 			hide();
 		} else {
-			if (!((pointer.getTrueX() >= getX() - 10)
+			if (!(
+					(pointer.getTrueX() >= getX() - 10)
 					&& (pointer.getTrueX() <= getX() + (getWidth() + 10))
 					&& (pointer.getTrueY() >= getY() - 10)
-					&& (pointer.getTrueY() <= getY() + (getHeight() + 10)))
-			){
+					&& (pointer.getTrueY() <= getY() + (getHeight() + 10))
+			)){
 				hide();
 			}
 		}
@@ -104,20 +106,6 @@ public class Menu { // the menu is the little options menu that shows up when yo
 
 	public float getY() {
 		return position.y;
-	}
-
-	private Optional<MenuItem> clickedItem(PointerInput pointer, String type) {
-		Optional<MenuItem> clickedItem = clickedItem(pointer);
-		return clickedItem.isPresent() && clickedItem.get().getText().contains(type) ? clickedItem : Optional.empty();
-	}
-
-	public Optional<MenuItem> clickedItem(PointerInput pointer) {
-		return items.stream().filter(item -> item.clicked (pointer)).findAny();
-	}
-
-	public <T extends Recipe> T recipeFromMenuOption(PointerInput pointer, String menuItem) {
-		Optional<MenuItem> clickedItem = clickedItem(pointer, menuItem);
-		return clickedItem.<T>map(MenuItem::getRecipe).orElse(null);
 	}
 
 	// adding an item to the menu

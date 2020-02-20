@@ -39,7 +39,6 @@ import util.StringUtils;
 import util.TextureInfo;
 import util.vectors.Vec2f;
 
-
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
@@ -243,6 +242,9 @@ public class Game {
 		ui = new Ui(map, pointer);
 		ui.initLayerLevelChangerActions(pointer, this::onClickLayerUp, this::onClickLayerDown);
 		ui.initTopBarActions(pointer, this::onClickPause, this::onClickupSpeed, this::onClickdownSpeed);
+		ui.getIcons().setShovelOnClick(pointer, this::onClickShovel);
+		ui.getIcons().setPlowOnclick(pointer, this::onClickPlow);
+		ui.getIcons().setSawOnClick(pointer, this::onClickSaw);
 	}
 
 	private void onClickLayerUp() {
@@ -282,6 +284,144 @@ public class Game {
 			speed-=10;
 			ns = 1000000000.0 / speed;
 		}
+	}
+
+	private void onClickShovel() {
+		if (!ui.menuVisible()) {
+			deselectAllVills();
+			ui.showBuildSquare(pointer, xScroll, yScroll, true, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
+			ui.deSelectIcons();
+		}
+	}
+
+	private void onClickPlow() {
+		if (!ui.menuVisible()){
+			ui.showBuildSquare(pointer, xScroll, yScroll, false, BuildingRecipe.TILLED_SOIL, currentLayerNumber);
+			ui.deSelectIcons();
+		}
+	}
+
+	private void onClickBuild(MenuItem item) {
+		ui.showBuildSquare(pointer, xScroll, yScroll, false, item.getRecipe(), currentLayerNumber);
+		ui.deSelectIcons();
+		ui.getMenu().hide();
+	}
+
+	private void onClickSaw() {
+		if (!ui.menuVisible()) {
+			deselectAllVills();
+			MenuItem[] items = new MenuItem[BuildingRecipe.RECIPES.length + 1];
+			for (int i = 0; i < BuildingRecipe.RECIPES.length; i++) {
+				items[i] = new MenuItem(BuildingRecipe.RECIPES[i], this::onClickBuild, pointer);
+			}
+			items[items.length - 1] = new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer);
+			ui.showMenu(pointer, items);
+		}
+	}
+
+	private void onClickMove() {
+		selectedvill.resetAll();
+		selectedvill.addJob(new MoveJob(pointer.getX(), pointer.getY(), currentLayerNumber, selectedvill));
+		deselect(selectedvill);
+		ui.deSelectIcons();
+		ui.getMenu().hide();
+	}
+
+	private void onClickPickup(MenuItem item) {
+		selectedvill.setPath(null);
+		Item e = (Item) item.getEntity();
+		selectedvill.addJob(new MoveItemJob(e, selectedvill));
+		ui.deSelectIcons();
+		deselect(selectedvill);
+		ui.getMenu().hide();
+
+	}
+
+	private void onClickChop(MenuItem item) {
+		selectedvill.setPath(null);
+		selectedvill.addJob((Tree) item.getEntity());
+		deselect(selectedvill);
+		ui.deSelectIcons();
+		ui.getMenu().hide();
+	}
+
+	private void onClickSmelt() {
+		MenuItem[] craftingOptions = new MenuItem[ItemRecipe.FURNACE_RECIPES.length + 1];
+		for (int i = 0; i < ItemRecipe.FURNACE_RECIPES.length; i++) {
+			craftingOptions[i] = new MenuItem(ItemRecipe.FURNACE_RECIPES[i], this::onClickCraft, pointer);
+		}
+		craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer);
+		ui.showMenu(pointer, craftingOptions);
+
+	}
+
+	private void onClickCraft(MenuItem item) {
+		Villager idle = getIdlestVil();
+		ItemRecipe recipe = item.getRecipe();
+		if (recipe != null) {
+			idle.setPath(null);
+			Item[] res = new Item[recipe.getResources().length];
+			for (int i = 0; i < res.length; i++) {
+				res[i] = idle.getNearestItemOfType(recipe.getResources()[i]).orElse(null);
+			}
+			map[currentLayerNumber].getNearestWorkstation(
+				recipe.getWorkstationClass(), idle.getTileX(), idle.getTileY()
+			).ifPresent(station -> idle.addJob(new CraftJob(idle, res, recipe.getProduct(), station)));
+			ui.deSelectIcons();
+			ui.getMenu().hide();
+		}
+	}
+
+	private void onClickSmith() {
+		MenuItem[] craftingOptions = new MenuItem[WeaponMaterial.values().length + 1];
+		for (int i = 0; i < WeaponMaterial.values().length; i++) {
+			craftingOptions[i] = new MenuItem(StringUtils.capitalize(WeaponMaterial.values()[i].toString().toLowerCase()), this::showMaterials, pointer);
+		}
+		craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer);
+		ui.showMenu(pointer, craftingOptions);
+	}
+
+	private void showMaterials(MenuItem item) {
+			ItemRecipe[] recipes = ItemRecipe.smithingRecipesFromWeaponMaterial(WeaponMaterial.valueOf(item.getText().toUpperCase()));
+			MenuItem[] craftingOptions = new MenuItem[recipes.length + 1];
+			for (int i = 0; i < WeaponMaterial.values().length; i++) {
+				craftingOptions[i] = new MenuItem(recipes[i], this::onClickCraft, pointer);
+			}
+			craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer);
+			ui.showMenu(pointer, craftingOptions);
+
+	}
+
+	private void onClickMine(MenuItem item) {
+		selectedvill.setPath(null);
+		selectedvill.addJob((Ore) item.getEntity());
+		deselect(selectedvill);
+		ui.deSelectIcons();
+		ui.getMenu().hide();
+	}
+
+	private void onClickDrop() {
+		selectedvill.setPath(null);
+		selectedvill.addJob(new MoveItemJob(ui.getMenuIngameX(), ui.getMenuIngameY(), currentLayerNumber, selectedvill));
+		ui.deSelectIcons();
+		deselect(selectedvill);
+		ui.getMenu().hide();
+	}
+
+	private void onClickCancel() {
+		ui.getMenu().hide();
+		ui.deSelectIcons();
+		if (selectedvill != null) {
+			deselect(selectedvill);
+		}
+	}
+
+	private void onClickFight(MenuItem item) {
+		selectedvill.setPath(null);
+		selectedvill.addJob(new FightJob(selectedvill, (Mob) item.getEntity()));
+		deselect(selectedvill);
+		ui.deSelectIcons();
+		ui.getMenu().hide();
 	}
 
 	private void scroll(long window, double v, double v1) {
@@ -364,21 +504,10 @@ public class Game {
 					ui.deSelectIcons();
 				});
 			}
-			if (ui.getIcons().isShovelHover() && !ui.menuVisible()) {
-				deselectAllVills();
-				ui.showBuildSquare(pointer, xScroll, yScroll, true, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
-				ui.deSelectIcons();
-				return;
-			}
-			if (ui.getIcons().isPlowHover() && !ui.menuVisible()){
-				ui.showBuildSquare(pointer, xScroll, yScroll, false, BuildingRecipe.TILLED_SOIL, currentLayerNumber);
-				ui.deSelectIcons();
-				return;
-			}
 			if (((ui.getIcons().isSwordsSelected()) && ui.getIcons().hoverOnNoIcons())) {
 				Villager idle = getIdlestVil();
 				deselectAllVills();
-				anyMobHoverOn().ifPresent(mob -> idle.addJob(new FightJob(idle,mob)));
+				anyMobHoverOn().ifPresent(mob -> idle.addJob(new FightJob(idle, mob)));
 				ui.deSelectIcons();
 				return;
 
@@ -390,16 +519,6 @@ public class Game {
 					selectedvill.setSelected(true);
 					ui.deSelectIcons();
 				});
-			}
-			if (ui.getIcons().isSawHover() && !ui.menuVisible()) {
-				deselectAllVills();
-				MenuItem[] items = new MenuItem[BuildingRecipe.RECIPES.length + 1];
-				for (int i = 0; i < BuildingRecipe.RECIPES.length; i++) {
-					items[i] = new MenuItem(BuildingRecipe.RECIPES[i]);
-				}
-				items[items.length - 1] = new MenuItem(MenuItem.CANCEL);
-				ui.showMenu(pointer, items);
-				return;
 			}
 			if (ui.outlineIsVisible() && !ui.menuVisible() && ui.getIcons().hoverOnNoIcons()) {
 				int[][] coords = ui.getOutlineCoords();
@@ -413,146 +532,59 @@ public class Game {
 				ui.removeBuildSquare();
 				deselectAllVills();
 				ui.deSelectIcons();
-				return;
 			}
 		} else if (pointer.wasPressed(GLFW_MOUSE_BUTTON_RIGHT)) {
 			if (selectedvill != null) {
 				List<MenuItem> options = new ArrayList<>();
 				if (selectedvill.getHolding() != null&&(map[currentLayerNumber].tileIsEmpty(pointer.getTileX(),pointer.getTileY()) || map[currentLayerNumber].getEntityOn(pointer.getTileX(),pointer.getTileY()) instanceof Chest)) {
-					options.add(new MenuItem((MenuItem.DROP + " " + selectedvill.getHolding().getName())));
+					options.add(new MenuItem((MenuItem.DROP + " " + selectedvill.getHolding().getName()), in -> onClickDrop(), pointer));
 				}
 
 				map[currentLayerNumber].selectTree(pointer.getX(), pointer.getY()).ifPresent(
-						tree -> options.add(new MenuItem((MenuItem.CHOP), tree))
+					tree -> options.add(new MenuItem((MenuItem.CHOP), tree, this::onClickChop, pointer))
 				);
 
 				map[currentLayerNumber].selectOre(pointer.getTileX(), pointer.getTileY()).ifPresent(
-						ore ->  options.add(new MenuItem((MenuItem.MINE), ore))
+					ore ->  options.add(new MenuItem((MenuItem.MINE), ore, this::onClickMine, pointer))
 				);
 
-				anyMobHoverOn().ifPresent(mob -> options.add(new MenuItem((MenuItem.FIGHT), mob)));
+				anyMobHoverOn().ifPresent(mob -> options.add(new MenuItem(MenuItem.FIGHT, mob, this::onClickFight, pointer)));
 
 				map[currentLayerNumber].getItemOn(pointer.getX(), pointer.getY()).ifPresent(item -> {
 					if (item instanceof Weapon) {
-						options.add(new MenuItem((MenuItem.EQUIP), item));
+						options.add(new MenuItem((MenuItem.EQUIP), item, this::onClickPickup, pointer));
 					} else if (item instanceof Clothing) {
-						options.add(new MenuItem((MenuItem.WEAR), item));
+						options.add(new MenuItem((MenuItem.WEAR), item, this::onClickPickup, pointer));
 					} else {
-						options.add(new MenuItem((MenuItem.PICKUP), item));
+						options.add(new MenuItem((MenuItem.PICKUP), item, this::onClickPickup, pointer));
 					}
 				});
 
 				if (map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY()) instanceof Container) {
 					Container container = map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY());
 					for (Item i : container.getItems()) {
-						options.add(new MenuItem((MenuItem.PICKUP), i));
+						options.add(new MenuItem((MenuItem.PICKUP), i, this::onClickPickup, pointer));
 					}
 				} else {
-					options.add(new MenuItem(MenuItem.MOVE));
+					options.add(new MenuItem(MenuItem.MOVE, in -> onClickMove(), pointer));
 				}
-				options.add(new MenuItem(MenuItem.CANCEL));
+				options.add(new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer));
 				ui.showMenu(pointer, options.toArray(new MenuItem[0]));
 			} else {
 				if (map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY()) instanceof Furnace) {
-					ui.showMenu(pointer, new MenuItem(MenuItem.SMELT), new MenuItem(MenuItem.CANCEL));
+					ui.showMenu(
+						pointer,
+						new MenuItem(MenuItem.SMELT, in -> onClickSmelt(), pointer),
+						new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer)
+					);
 				} else if (map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY()) instanceof Anvil) {
-					ui.showMenu(pointer, new MenuItem(MenuItem.SMITH), new MenuItem(MenuItem.CANCEL));
+					ui.showMenu(
+						pointer,
+						new MenuItem(MenuItem.SMITH, in -> onClickSmith(), pointer),
+						new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer)
+					);
 				} else {
-					ui.showMenu(pointer, new MenuItem(MenuItem.CANCEL));
-				}
-			}
-		}
-		if (ui.menuVisible()) {
-			Optional<MenuItem> optional = ui.getMenu().clickedItem(pointer);
-			if (optional.isPresent()) {
-				MenuItem item = optional.get();
-				if (item.getText().contains(MenuItem.CANCEL)) {
-					ui.getMenu().hide();
-					ui.deSelectIcons();
-					if (selectedvill != null) {
-						deselect(selectedvill);
-					}
-				} else if (item.getText().contains(MenuItem.MOVE)) {
-					selectedvill.resetAll();
-					selectedvill.addJob(new MoveJob(pointer.getX(), pointer.getY(), currentLayerNumber, selectedvill));
-					deselect(selectedvill);
-					ui.deSelectIcons();
-					ui.getMenu().hide();
-				} else if (item.getText().contains(MenuItem.CHOP)) {
-					selectedvill.setPath(null);
-					selectedvill.addJob((Tree) item.getEntity());
-					deselect(selectedvill);
-					ui.deSelectIcons();
-					ui.getMenu().hide();
-				} else if (item.getText().contains(MenuItem.FIGHT)) {
-					selectedvill.setPath(null);
-					selectedvill.addJob(new FightJob(selectedvill, (Mob) item.getEntity()));
-					deselect(selectedvill);
-					ui.deSelectIcons();
-					ui.getMenu().hide();
-				} else if (item.getText().contains(MenuItem.MINE)) {
-					selectedvill.setPath(null);
-					selectedvill.addJob((Ore) item.getEntity());
-					deselect(selectedvill);
-					ui.deSelectIcons();
-					ui.getMenu().hide();
-				} else if (item.getText().contains(MenuItem.BUILD) && !ui.outlineIsVisible()) {
-					ui.showBuildSquare(pointer, xScroll, yScroll, false, item.getRecipe(), currentLayerNumber);
-					ui.deSelectIcons();
-					ui.getMenu().hide();
-				} else if ((item.getText().contains(MenuItem.PICKUP) || item.getText().contains(MenuItem.EQUIP)
-						|| item.getText().contains(MenuItem.WEAR)) && !ui.outlineIsVisible()) {
-					selectedvill.setPath(null);
-					Item e = (Item) item.getEntity();
-					selectedvill.addJob(new MoveItemJob(e, selectedvill));
-					ui.deSelectIcons();
-					deselect(selectedvill);
-					ui.getMenu().hide();
-				} else if (item.getText().contains(MenuItem.DROP) && !ui.outlineIsVisible()) {
-					selectedvill.setPath(null);
-					selectedvill.addJob(new MoveItemJob(ui.getMenuIngameX(), ui.getMenuIngameY(), currentLayerNumber, selectedvill));
-					ui.deSelectIcons();
-					deselect(selectedvill);
-					ui.getMenu().hide();
-				} else if (item.getText().contains(MenuItem.SMELT)) {
-					MenuItem[] craftingOptions = new MenuItem[ItemRecipe.FURNACE_RECIPES.length + 1];
-					for (int i = 0; i < ItemRecipe.FURNACE_RECIPES.length; i++) {
-						craftingOptions[i] = new MenuItem(ItemRecipe.FURNACE_RECIPES[i]);
-					}
-					craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
-					ui.showMenu(pointer, craftingOptions);
-				} else if (item.getText().contains(MenuItem.CRAFT)) {
-					Villager idle = getIdlestVil();
-					ItemRecipe recipe = ui.getMenu().recipeFromMenuOption(pointer, MenuItem.CRAFT);
-					if (recipe != null) {
-						idle.setPath(null);
-						Item[] res = new Item[recipe.getResources().length];
-						for (int i = 0; i < res.length; i++) {
-							res[i] = idle.getNearestItemOfType(recipe.getResources()[i]).orElse(null);
-						}
-						map[currentLayerNumber].getNearestWorkstation(
-							recipe.getWorkstationClass(), idle.getTileX(), idle.getTileY()
-						).ifPresent(station -> idle.addJob(new CraftJob(idle, res, recipe.getProduct(), station)));
-
-						ui.deSelectIcons();
-						ui.getMenu().hide();
-					}
-				} else if (item.getText().contains(MenuItem.SMITH)) {
-					MenuItem[] craftingOptions = new MenuItem[WeaponMaterial.values().length + 1];
-					for (int i = 0; i < WeaponMaterial.values().length; i++) {
-						craftingOptions[i] = new MenuItem(StringUtils.capitalize(WeaponMaterial.values()[i].toString().toLowerCase()));
-					}
-					craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
-					ui.showMenu(pointer, craftingOptions);
-				} else if (MenuItem.isEqualToAnyMaterial(item.getText())) {
-					ItemRecipe[] recipes = ItemRecipe
-							.smithingRecipesFromWeaponMaterial(WeaponMaterial.valueOf(item.getText().toUpperCase()));
-					MenuItem[] craftingOptions = new MenuItem[recipes.length + 1];
-					for (int i = 0; i < WeaponMaterial.values().length; i++) {
-						craftingOptions[i] = new MenuItem(recipes[i]);
-					}
-					craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL);
-					ui.showMenu(pointer, craftingOptions);
+					ui.showMenu(pointer, new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer));
 				}
 			}
 		}

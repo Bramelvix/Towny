@@ -4,10 +4,13 @@ import entity.Entity;
 import entity.dynamic.mob.work.BuildingRecipe;
 import entity.dynamic.mob.work.ItemRecipe;
 import entity.dynamic.mob.work.Recipe;
+import events.Subscription;
 import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
 import input.PointerMoveEvent;
 import util.vectors.Vec2f;
+
+import java.util.function.Consumer;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
@@ -39,25 +42,31 @@ public class MenuItem {
 	public static final String WOOD = "Wood";
 	private Recipe recipe;
 	private Entity entity;
+	private final Subscription subscriptionMove;
+	private final Subscription subscriptionClick;
 
 	// constructor
-	public MenuItem(String text) {
+	public MenuItem(String text, Consumer<MenuItem> onClick, PointerInput pointer) {
 		this.text = text;
 		position = new Vec2f(0);
+		subscriptionClick = pointer.on(PointerInput.EType.PRESSED, event -> {
+			if (event.button == GLFW_MOUSE_BUTTON_LEFT && hover) { onClick.accept(this); }
+		});
+		subscriptionMove = pointer.on(PointerInput.EType.MOVE, this::update);
 	}
 
-	public MenuItem(String text, Entity e) {
-		this(text + " " + e.getName());
+	public MenuItem(String text, Entity e, Consumer<MenuItem> onClick, PointerInput pointer) {
+		this(text + " " + e.getName(), onClick, pointer);
 		this.entity = e;
 	}
 
-	public MenuItem(ItemRecipe recipe) {
-		this(CRAFT + " " + recipe.getRecipeName());
+	public MenuItem(ItemRecipe recipe, Consumer<MenuItem> onClick, PointerInput pointer) {
+		this(CRAFT + " " + recipe.getRecipeName(), onClick, pointer);
 		this.recipe = recipe;
 	}
 
-	public MenuItem(BuildingRecipe recipe) {
-		this(BUILD + " " + recipe.getRecipeName());
+	public MenuItem(BuildingRecipe recipe, Consumer<MenuItem> onClick, PointerInput pointer) {
+		this(BUILD + " " + recipe.getRecipeName(), onClick, pointer);
 		this.recipe = recipe;
 	}
 
@@ -65,7 +74,11 @@ public class MenuItem {
 		position.x = menu.getX();
 		position.y = menu.getYLocForMenuItem();
 		width = menu.getWidth();
-		menu.pointer.on(PointerInput.EType.MOVE, this::update);
+	}
+
+	public void destroy() {
+		if (subscriptionClick != null) { subscriptionClick.unsubscribe(); }
+		if (subscriptionMove != null) { subscriptionMove.unsubscribe(); }
 	}
 
 	public Entity getEntity() {
@@ -79,9 +92,7 @@ public class MenuItem {
 
 	// updating the mouse hover
 	public void update(PointerMoveEvent event) {
-		hover = ((event.x >= position.x) && (event.x <= position.x + width)
-			&& (event.y >= position.y) && (event.y <= position.y + 10)
-		);
+		hover = (event.x >= position.x && event.x <= position.x + width && event.y >= position.y && event.y <= position.y + 10);
 	}
 
 	// getter
@@ -99,8 +110,13 @@ public class MenuItem {
 	}
 
 	public static boolean isEqualToAnyMaterial(String input) {
-		return input.equals(MenuItem.WOOD) || input.equals(MenuItem.IRON) || input.equals(MenuItem.COPPER)
-				|| input.equals(MenuItem.GOLD) || input.equals(MenuItem.CRYSTAL);
+		return (
+			input.equals(MenuItem.WOOD)
+			|| input.equals(MenuItem.IRON)
+			|| input.equals(MenuItem.COPPER)
+			|| input.equals(MenuItem.GOLD)
+			|| input.equals(MenuItem.CRYSTAL)
+		);
 	}
 
 }

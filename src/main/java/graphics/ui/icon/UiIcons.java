@@ -40,28 +40,16 @@ public class UiIcons {
 		return true;
 	}
 
-	public boolean isWoodHover() {
-		return icons[0].hoverOn();
+	public void setShovelOnClick(PointerInput pointer, Runnable action) {
+		icons[5].setOnClick(pointer, action);
 	}
 
-	public boolean isMiningHover() {
-		return icons[1].hoverOn();
+	public void setPlowOnclick(PointerInput pointer, Runnable action) {
+		icons[6].setOnClick(pointer, action);
 	}
 
-	public boolean isSickleHover() {
-		return icons[2].hoverOn();
-	}
-
-	public boolean isSawHover() {
-		return icons[3].hoverOn();
-	}
-
-	public boolean isSwordsHover() {
-		return icons[4].hoverOn();
-	}
-
-	public boolean isShovelHover() {
-		return icons[5].hoverOn();
+	public void setSawOnClick(PointerInput pointer, Runnable action) {
+		icons[3].setOnClick(pointer, action);
 	}
 
 	public boolean isAxeSelected() {
@@ -72,28 +60,8 @@ public class UiIcons {
 		return icons[1].isSelected();
 	}
 
-	public boolean isSickleSelected() {
-		return icons[2].isSelected();
-	}
-
-	public boolean isSawSelected() {
-		return icons[3].isSelected();
-	}
-
 	public boolean isSwordsSelected() {
 		return icons[4].isSelected();
-	}
-
-	public boolean isShovelSelected() {
-		return icons[5].isSelected();
-	}
-
-	public boolean isPlowSelected() {
-		return icons[6].isSelected();
-	}
-
-	public boolean isPlowHover() {
-		return icons[6].hoverOn();
 	}
 
 	// checks if all icons (other than the one provided in num) are unselected
