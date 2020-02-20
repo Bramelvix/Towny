@@ -8,11 +8,7 @@ import util.vectors.Vec2f;
 import util.vectors.Vec4f;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
-import java.nio.file.Paths;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
@@ -195,11 +191,11 @@ public abstract class OpenGLUtils {
 
 	}
 
-	public static void menuItemDraw(int x, int y, String text, boolean selected) {
+	public static void menuItemDraw(Vec2f pos, String text, boolean selected) {
 		if (selected) {
-			drawTextRed(text, x, y - 5);
+			drawTextRed(text, pos.x, pos.y - 5);
 		} else {
-			drawText(text,x,y - 5);
+			drawText(text, pos.x,pos.y - 5);
 		}
 
 	}
@@ -209,21 +205,12 @@ public abstract class OpenGLUtils {
 		drawFilledSquare(pos, new Vec2f(size), offset, outColor);
 	}
 
-	public static BufferedImage getScaledBufferedImage(BufferedImage before, float xScale, float yScale) {
-		AffineTransform at = new AffineTransform();
-		at.scale(xScale, yScale);
-		AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-		BufferedImage after = new BufferedImage( (int)(before.getWidth()*xScale), (int)(before.getHeight()*yScale), BufferedImage.TYPE_INT_ARGB);
-		after = scaleOp.filter(before, after);
-		return after;
-	}
-
-	public static void drawText(String text, int x, int y) {
+	public static void drawText(String text, float x, float y) {
 		TrueTypeFont.black.drawString(x,y,text,1,1);
 		//texShader.use();
 	}
 
-	public static void drawTextRed(String text, int x, int y) {
+	public static void drawTextRed(String text, float x, float y) {
 		TrueTypeFont.red.drawString(x,y,text,1,1);
 		//texShader.use();
 	}

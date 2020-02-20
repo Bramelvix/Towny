@@ -1,6 +1,5 @@
 package graphics.ui;
 
-import java.awt.Color;
 import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
 import util.vectors.Vec2f;
@@ -10,61 +9,65 @@ import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class SelectionSquare {
 
-	private static final Color COL = new Color(91, 94, 99, 110); // colour of the square
-	private int x, y; // ONSCREEN
-	private int ingameX, ingameY; // INGAME
-	private int width, height;
+	private static final Vec4f colour = new Vec4f(0.3568f, 0.3686f, 0.3882f, 0.43137f); //colour of the square
+	private final Vec2f position; // ONSCREEN
+	private final Vec2f ingame; // INGAME
+	private float width, height;
 	private boolean visible;
+
+	public SelectionSquare() {
+		position = new Vec2f(0);
+		ingame = new Vec2f(0);
+	}
 
 	public void update(PointerInput pointer) {
 		if (visible) {
 			if (pointer.heldDown(GLFW_MOUSE_BUTTON_LEFT)) {
-				width = pointer.getTrueX() - x;
-				height = pointer.getTrueY() - y;
+				width = pointer.getTrueX() - position.x;
+				height = pointer.getTrueY() - position.y;
 			}
 		}
 	}
 
 	void reset() {
 		visible = false;
-		ingameX = 0;
-		ingameY = 0;
-		x = 0;
-		y = 0;
+		ingame.x = 0;
+		ingame.y = 0;
+		position.x = 0;
+		position.y = 0;
 		width = 0;
 		height = 0;
 	}
 
 	public void init(PointerInput pointer) {
 		if (!visible) {
-			x = pointer.getTrueX();
-			y = pointer.getTrueY();
-			ingameX = pointer.getX();
-			ingameY =  pointer.getY();
+			position.x = pointer.getTrueX();
+			position.y = pointer.getTrueY();
+			ingame.x = pointer.getX();
+			ingame.y =  pointer.getY();
 			visible = true;
 		}
 	}
 
 	public void render(Vec2f offset) {
 		if (visible) {
-			Vec4f outColor = new Vec4f(COL.getRed()/255f,COL.getGreen()/255f,COL.getBlue()/255f,COL.getAlpha()/255f);
-			OpenGLUtils.drawFilledSquare(new Vec2f(x, y), new Vec2f(width, height), offset, outColor);
+			OpenGLUtils.drawFilledSquare(position, new Vec2f(width, height), offset, colour);
 		}
 	}
 
-	public int getX() {
-		return (width < 0) ? ingameX + width : ingameX;
+	public float getX() {
+		return (width < 0) ? ingame.x + width : ingame.x;
 	}
 
-	public int getY() {
-		return (height < 0) ? ingameY += height : ingameY;
+	public float getY() {
+		return (height < 0) ? ingame.y += height : ingame.y;
 	}
 
-	public int getWidth() {
+	public float getWidth() {
 		return (width < 0) ? width = -width : width;
 	}
 
-	public int getHeight() {
+	public float getHeight() {
 		return (height < 0) ? height = -height : height;
 	}
 

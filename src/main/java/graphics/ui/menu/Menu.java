@@ -11,17 +11,19 @@ import util.vectors.Vec2f;
 
 public class Menu { // the menu is the little options menu that shows up when you right click
 
-	private int x, y; // x and y of the top left corner
-	private int ingameX, ingameY;
-	private int width = 70; // width and height hardcoded
-	private int height = 20;
-	private List<MenuItem> items; // spritesheets of items on the menu
+	private final Vec2f position; // x and y of the top left corner
+	private final Vec2f ingame;
+	private float width = 70; // width and height hardcoded
+	private float height = 20;
+	private List<MenuItem> items; // list of items on the menu
 	private boolean visible; // is the item visible
+	PointerInput pointer;
 
 	// constructor
-	public Menu() {
-		x = 0;
-		y = 0;
+	public Menu(PointerInput pointer) {
+		this.pointer = pointer;
+		position = new Vec2f(0);
+		ingame = new Vec2f(0);
 		items = new ArrayList<>();
 		hide();
 	}
@@ -29,16 +31,16 @@ public class Menu { // the menu is the little options menu that shows up when yo
 	// render method
 	public void render() {
 		if (visible) {
-			OpenGLUtils.menuDraw(new Vec2f(x,y), new Vec2f(width,height));
+			OpenGLUtils.menuDraw(position, new Vec2f(width,height));
 			items.forEach(MenuItem::render);
 		}
 	}
 
 	// showing the menu
-	public void show(PointerInput pointer) {
+	public void show() {
 		visible = true;
-		ingameX = pointer.getX();
-		ingameY = pointer.getY();
+		ingame.x = pointer.getX();
+		ingame.y = pointer.getY();
 	}
 
 	// getter
@@ -65,7 +67,6 @@ public class Menu { // the menu is the little options menu that shows up when yo
 		if (forceInvisible) {
 			hide();
 		} else {
-			items.forEach(item -> item.update (pointer));
 			if (!((pointer.getTrueX() >= getX() - 10)
 					&& (pointer.getTrueX() <= getX() + (getWidth() + 10))
 					&& (pointer.getTrueY() >= getY() - 10)
@@ -77,32 +78,32 @@ public class Menu { // the menu is the little options menu that shows up when yo
 	}
 
 	// getters
-	public int getWidth() {
+	public float getWidth() {
 		return width;
 	}
 
-	public int getHeight() {
+	public float getHeight() {
 		return height;
 	}
 
-	int getYLocForMenuItem() {
-		return y + (items.size() * 15);
+	float getYLocForMenuItem() {
+		return position.y + (items.size() * 15);
 	}
 
-	public int getIngameX() {
-		return ingameX;
+	public float getIngameX() {
+		return ingame.x;
 	}
 
-	public int getIngameY() {
-		return ingameY;
+	public float getIngameY() {
+		return ingame.y;
 	}
 
-	public int getX() {
-		return x;
+	public float getX() {
+		return position.x;
 	}
 
-	public int getY() {
-		return y;
+	public float getY() {
+		return position.y;
 	}
 
 	private Optional<MenuItem> clickedItem(PointerInput pointer, String type) {
@@ -134,12 +135,12 @@ public class Menu { // the menu is the little options menu that shows up when yo
 	}
 
 	// setter
-	public void setX(int x) {
-		this.x = x;
+	public void setX(float x) {
+		this.position.x = x;
 	}
 
-	public void setY(int y) {
-		this.y = y;
+	public void setY(float y) {
+		this.position.y = y;
 	}
 
 }

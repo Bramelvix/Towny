@@ -6,25 +6,28 @@ import input.PointerMoveEvent;
 import util.TextureInfo;
 import util.vectors.Vec2f;
 
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
+
 //icon on the bottom left of the screen (pickaxe, axe,...)
 public class Icon {
 
-	private final int x;
-	private final int y; // x and y of the top left corner
+	private final float x;
+	private final float y; // x and y of the top left corner
 	private boolean hover; // is the mouse hovering over the icon
-	private final float width;
-	private final float height; // width and length
+	private float width;
+	private float height; // width and length
 	private boolean selected; // is the icon selected
-	private final int id; //OpenGL texture id
+	private int id; //OpenGL texture id
 
 	// constructor
-	public Icon(int x, int y, String path, float scale, PointerInput pointer) {
+	public Icon(float x, float y, String path, float scale, PointerInput pointer) {
+		this(x, y, OpenGLUtils.loadTexture(path), scale, pointer);
+	}
+
+	public Icon (float x, float y, TextureInfo texture, float scale, PointerInput pointer) {
 		this.x = x;
 		this.y = y;
-		TextureInfo imgInfo = OpenGLUtils.loadTexture(path);
-		id = imgInfo.id;
-		width = imgInfo.width * scale;
-		height = imgInfo.height * scale;
+		setTexture(texture, scale);
 		pointer.on(PointerInput.EType.MOVE, this::update);
 	}
 
@@ -33,11 +36,11 @@ public class Icon {
 		return selected;
 	}
 
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 
@@ -69,11 +72,31 @@ public class Icon {
 	public void update(PointerInput pointer) {
 		update(pointer.getTrueX(), pointer.getTrueY());
 	}
+
 	public void update (PointerMoveEvent event) {
 		update(event.x, event.y);
 	}
+
 	public void update(double x, double y) {
 		setHover(x >= getX() && (x <= getX() + getWidth()) && (y >= getY()) && (y <= getY() + getHeight()));
+	}
+
+	public void setOnClick(PointerInput pointer, Runnable action) {
+		pointer.on(PointerInput.EType.RELEASED, event -> {
+			if (event.button == GLFW_MOUSE_BUTTON_LEFT && hoverOn()) {
+				action.run();
+			}
+		});
+	}
+
+	public void setTexture(TextureInfo info, float scale) {
+		this.id = info.id;
+		this.height = info.height * scale;
+		this.width = info.width * scale;
+	}
+
+	public int getTextureId() {
+		return id;
 	}
 
 }

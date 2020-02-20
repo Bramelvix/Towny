@@ -6,14 +6,16 @@ import entity.dynamic.mob.work.ItemRecipe;
 import entity.dynamic.mob.work.Recipe;
 import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
+import input.PointerMoveEvent;
+import util.vectors.Vec2f;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class MenuItem {
 
-	private String text; // text on the menuitem
-	private int x, y; // x and y of top left corner
-	private int width; // width of the menuitem
+	private final String text; // text on the menuitem
+	private final Vec2f position; // x and y of top left corner
+	private float width; // width of the menuitem
 	private boolean hover; // is the mouse hovering over the item
 	// some static strings to use as menuitem texts
 	// TODO theres probably a better way to do this
@@ -41,6 +43,7 @@ public class MenuItem {
 	// constructor
 	public MenuItem(String text) {
 		this.text = text;
+		position = new Vec2f(0);
 	}
 
 	public MenuItem(String text, Entity e) {
@@ -59,9 +62,10 @@ public class MenuItem {
 	}
 
 	public void init(Menu menu) {
-		x = menu.getX();
+		position.x = menu.getX();
+		position.y = menu.getYLocForMenuItem();
 		width = menu.getWidth();
-		y = menu.getYLocForMenuItem();
+		menu.pointer.on(PointerInput.EType.MOVE, this::update);
 	}
 
 	public Entity getEntity() {
@@ -70,13 +74,13 @@ public class MenuItem {
 
 	// rendering the menuitem's text
 	public void render() {
-		OpenGLUtils.menuItemDraw(x, y, text, hover);
+		OpenGLUtils.menuItemDraw(position, text, hover);
 	}
 
 	// updating the mouse hover
-	public void update(PointerInput pointer) {
-		hover = ((pointer.getTrueX() >= x) && (pointer.getTrueX() <= x + width)
-				&& (pointer.getTrueY() >= y) && (pointer.getTrueY() <= y + 10)
+	public void update(PointerMoveEvent event) {
+		hover = ((event.x >= position.x) && (event.x <= position.x + width)
+			&& (event.y >= position.y) && (event.y <= position.y + 10)
 		);
 	}
 

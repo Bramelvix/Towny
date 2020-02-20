@@ -1,28 +1,24 @@
 package graphics.ui;
 
-import java.awt.Color;
 
 import graphics.opengl.OpenGLUtils;
 import map.Level;
 import util.vectors.Vec2f;
-import util.vectors.Vec3f;
 import util.vectors.Vec4f;
 
 class Minimap {
 
+	private final Vec2f position;
 	private final float width;
 	private final float height; // width and height of the minimap
-	private final float x;
-	private final float y; // x and y of the top left corner
 	private int z;
-	private static final Color COL = new Color(91, 94, 99, 110); // colour of the small rectangle on the minimap showing where the screen is
+	private static final Vec4f colour = new Vec4f(0.3568f, 0.3686f, 0.3882f, 0.43137f); //colour for background
 	private int xoff, yoff; // offset
 	private int textureId;
 
 	// constructor
 	Minimap(int x, int y, Level map) {
-		this.x = x;
-		this.y = y;
+		this.position = new Vec2f(x, y);
 		this.z = 0;
 		width = 200;
 		height = 200;
@@ -50,11 +46,10 @@ class Minimap {
 
 	// render the minimap
 	public void render() {
-		float xLoc = (x + (xoff * 0.04225f)); //TODO fix this. Pulled these numbers out of my arse
-		float yLoc = (y + (yoff * 0.04225f));
-		OpenGLUtils.drawTexturedQuadScaled(new Vec2f(x,y), new Vec2f(width, height), new Vec2f(0,0), textureId);
-		Vec4f outColor = new Vec4f(COL.getRed() / 255f, COL.getGreen() / 255f, COL.getBlue() / 255f, COL.getAlpha() / 255f);
-		OpenGLUtils.drawFilledSquare(new Vec2f(xLoc, yLoc), new Vec2f(62.5f, 35.15625f), new Vec2f(0,0), outColor);
+		float xLoc = (position.x + (xoff * 0.04225f)); //TODO fix this. Pulled these numbers out of my arse
+		float yLoc = (position.y + (yoff * 0.04225f));
+		OpenGLUtils.drawTexturedQuadScaled(position, new Vec2f(width, height), new Vec2f(0,0), textureId);
+		OpenGLUtils.drawFilledSquare(new Vec2f(xLoc, yLoc), new Vec2f(62.5f, 35.15625f), new Vec2f(0,0), colour);
 	}
 
 	// setter

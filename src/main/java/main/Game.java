@@ -56,7 +56,7 @@ public class Game {
 	private ArrayList<Villager> sols;
 	private ArrayList<Mob> mobs;
 	private Ui ui;
-	public static boolean paused = false;
+	private boolean paused = false;
 	private byte speed = 60;
 	private double ns = 1000000000.0 / speed;
 	private Villager selectedvill;
@@ -130,7 +130,9 @@ public class Game {
 		mobs = new ArrayList<>();
 		vills = new ArrayList<>();
 		sols = new ArrayList<>();
-		ui = new Ui(map, pointer);
+
+		initUi();
+
 		PathFinder.init(100, 100);
 		spawnvills();
 		spawnZombies();
@@ -226,7 +228,7 @@ public class Game {
 		map[currentLayerNumber].render(new Vec2f(xScroll, yScroll));
 		renderMobs();
 		map[currentLayerNumber].renderHardEntities(new Vec2f(xScroll, yScroll));
-		ui.render();
+		ui.render(currentLayerNumber, speed);
 		glfwSwapBuffers(window);
 	}
 
@@ -234,16 +236,52 @@ public class Game {
 		ui.update(pointer, xScroll, yScroll, currentLayerNumber);
 		updateMouse();
 		moveCamera();
-		if (speed != ui.getSpeed()) {
-			speed = ui.getSpeed();
-			ns = 100000000.0 / speed;
-		}
-		if (currentLayerNumber != ui.getZFromLevelChanger()) {
-			currentLayerNumber = ui.getZFromLevelChanger();
-			ui.updateMinimap(map, currentLayerNumber);
-			ui.setZForLevelChanger(currentLayerNumber);
-		}
 		pointer.resetLeftAndRight();
+	}
+
+	private void initUi() {
+		ui = new Ui(map, pointer);
+		ui.initLayerLevelChangerActions(pointer, this::onClickLayerUp, this::onClickLayerDown);
+		ui.initTopBarActions(pointer, this::onClickPause, this::onClickupSpeed, this::onClickdownSpeed);
+	}
+
+	private void onClickLayerUp() {
+		if (this.currentLayerNumber != 0) {
+			this.currentLayerNumber--;
+			ui.updateMinimap(map, currentLayerNumber);
+		}
+	}
+
+	private void onClickLayerDown() {
+		if (this.currentLayerNumber != map.length - 1) {
+			this.currentLayerNumber++;
+			ui.updateMinimap(map, currentLayerNumber);
+		}
+	}
+
+	private void onClickPause() {
+		if (paused) {
+			paused = false;
+			speed = 60;
+		} else {
+			paused = true;
+			speed = 20;
+		}
+
+	}
+
+	private void onClickupSpeed() {
+		if (speed < 90) {
+			speed+=10;
+			ns = 1000000000.0 / speed;
+		}
+	}
+
+	private void onClickdownSpeed() {
+		if (speed > 30) {
+			speed-=10;
+			ns = 1000000000.0 / speed;
+		}
 	}
 
 	private void scroll(long window, double v, double v1) {
@@ -255,7 +293,6 @@ public class Game {
 				currentLayerNumber = map.length - 1;
 			}
 			ui.updateMinimap(map, currentLayerNumber);
-			ui.setZForLevelChanger(currentLayerNumber);
 		}
 	}
 
@@ -290,24 +327,24 @@ public class Game {
 		if ((ui.getIcons().isAxeSelected()) && ui.getIcons().hoverOnNoIcons()) {
 			if (pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
 				ui.showSelectionSquare(pointer);
-				int x = ui.getSelectionX();
-				int y = ui.getSelectionY();
-				int width = ui.getSelectionWidth();
-				int height = ui.getSelectionHeight();
-				for (int xs = x; xs < (x + width); xs += Tile.SIZE) {
-					for (int ys = y; ys < (y + height); ys += Tile.SIZE) {
+				float x = ui.getSelectionX();
+				float y = ui.getSelectionY();
+				float width = ui.getSelectionWidth();
+				float height = ui.getSelectionHeight();
+				for (int xs = (int)x; xs < (x + width); xs += Tile.SIZE) {
+					for (int ys = (int)y; ys < (y + height); ys += Tile.SIZE) {
 						map[currentLayerNumber].selectTree(xs, ys).ifPresent(tree -> tree.setSelected(true));
 					}
 				}
 				return;
 			}
 			if (pointer.wasReleased(GLFW_MOUSE_BUTTON_LEFT)) {
-				int x = ui.getSelectionX();
-				int y = ui.getSelectionY();
-				int width = ui.getSelectionWidth();
-				int height = ui.getSelectionHeight();
-				for (int xs = x; xs < (x + width); xs += Tile.SIZE) {
-					for (int ys = y; ys < (y + height); ys += Tile.SIZE) {
+				float x = ui.getSelectionX();
+				float y = ui.getSelectionY();
+				float width = ui.getSelectionWidth();
+				float height = ui.getSelectionHeight();
+				for (int xs = (int)x; xs < (x + width); xs += Tile.SIZE) {
+					for (int ys = (int)y; ys < (y + height); ys += Tile.SIZE) {
 						map[currentLayerNumber].selectTree(xs, ys, false).ifPresent(tree -> getIdlestVil().addJob(tree));
 					}
 				}

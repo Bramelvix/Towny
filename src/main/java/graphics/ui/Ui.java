@@ -22,28 +22,32 @@ public class Ui {
 	private final UiIcons icons;
 
 	// rendering the ui
-	public void render() {
+	public void render(int z, int speed) {
 		icons.render();
 		selection.render(new Vec2f(0, 0));
 		menu.render();
 		map.render();
 		outline.render(new Vec2f(0,0));
-		layerLevelChanger.render();
-		top.render();
-	}
-
-	public byte getSpeed() {
-		return top.getSpeed();
+		layerLevelChanger.render(z);
+		top.render(speed);
 	}
 
 	public Ui(Level[] levels, PointerInput pointer) {
 		icons = new UiIcons( 0.176056338028169f, pointer);
-		menu = new Menu();
+		menu = new Menu(pointer);
 		selection = new SelectionSquare();
 		map = new Minimap(1290, 8, levels[0]);
-		top = new TopBar((Game.width - 270) / 2,5,270,85, pointer);
+		top = new TopBar((Game.width - 270) / 2f,5,270,85, pointer);
 		outline = new BuildOutline(levels);
-		layerLevelChanger = new LayerLevelChanger(1320, 210,140,40, levels.length, pointer);
+		layerLevelChanger = new LayerLevelChanger(1320, 210,140,40, pointer);
+	}
+
+	public void initLayerLevelChangerActions(PointerInput pointer, Runnable actionup, Runnable actionDown) {
+		layerLevelChanger.init(pointer, actionup, actionDown);
+	}
+
+	public void initTopBarActions(PointerInput pointer, Runnable toggle, Runnable upSpeed, Runnable downSpeed) {
+		top.init(pointer, toggle, upSpeed, downSpeed);
 	}
 
 	public int[][] getOutlineCoords() {
@@ -64,9 +68,9 @@ public class Ui {
 
 	public void showMenu(PointerInput pointer, MenuItem... items) {
 		if (!outline.isVisible()) {
-			showMenu(pointer.getTrueX(), pointer.getTrueY());
+			showMenu(pointer, pointer.getTrueX(), pointer.getTrueY());
 			menu.addItems(items);
-			menu.show(pointer);
+			menu.show();
 		}
 	}
 
@@ -74,17 +78,17 @@ public class Ui {
 		return outline.getBuildRecipe();
 	}
 
-	public int getMenuIngameY() {
+	public float getMenuIngameY() {
 		return menu.getIngameY();
 	}
 
-	public int getMenuIngameX() {
+	public float getMenuIngameX() {
 		return menu.getIngameX();
 	}
 
-	private void showMenu(int x, int y) {
+	private void showMenu(PointerInput pointer, int x, int y) {
 		if (!outline.isVisible()) {
-			menu = new Menu();
+			menu = new Menu(pointer);
 			menu.setX(x);
 			menu.setY(y);
 		}
@@ -106,19 +110,19 @@ public class Ui {
 		selection.reset();
 	}
 
-	public int getSelectionX() {
+	public float getSelectionX() {
 		return selection.getX();
 	}
 
-	public int getSelectionY() {
+	public float getSelectionY() {
 		return selection.getY();
 	}
 
-	public int getSelectionWidth() {
+	public float getSelectionWidth() {
 		return selection.getWidth();
 	}
 
-	public int getSelectionHeight() {
+	public float getSelectionHeight() {
 		return selection.getHeight();
 	}
 
@@ -134,7 +138,6 @@ public class Ui {
 		menu.update(pointer, outline.isVisible());
 		outline.update(pointer, xOff, yOff, z);
 		selection.update(pointer);
-		top.update(pointer);
 	}
 
 	public void updateCounts(int solcount, int vilcount) {
@@ -143,14 +146,6 @@ public class Ui {
 
 	public void updateMinimap(Level[] level, int z) {
 		map.update(level, z);
-	}
-
-	public int getZFromLevelChanger() {
-		return layerLevelChanger.getZ();
-	}
-
-	public void setZForLevelChanger(int z) {
-		layerLevelChanger.setZ(z);
 	}
 
 	public UiIcons getIcons () {

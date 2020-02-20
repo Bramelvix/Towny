@@ -12,8 +12,8 @@ import util.vectors.Vec2f;
 //the green or red outline used to select where to build things
 public class BuildOutline {
 
-	private Color buildable = new Color(78, 244, 66, 210); // green
-	private Color notbuildable = new Color(244, 66, 66, 210); // red
+	private final Color buildable = new Color(78, 244, 66, 210); // green
+	private final Color notbuildable = new Color(244, 66, 66, 210); // red
 	private int buildSquareXS; // x coord of the start in the game world
 	private int buildSquareYS; // y coord of the start in the game world
 	private int buildSquareXSTeken; // x coord of the start on the screen
