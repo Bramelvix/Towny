@@ -192,7 +192,8 @@ public class SpriteHashtable {
 		registerSprite(138, new Sprite(35, 0, SpritesheetHashtable.get(2)));//woodheater
 		registerSprite(139, new Sprite(44, 1, SpritesheetHashtable.get(2)));//copperspear
 		registerSprite(140, new Sprite(1, 5, SpritesheetHashtable.get(1))); //darkStone
-		registerSprite(141,new Sprite(5,6,SpritesheetHashtable.get(1)));
+		registerSprite(141, new Sprite(5, 6, SpritesheetHashtable.get(1)));
+		registerSprite(142, new Sprite(6, 6, SpritesheetHashtable.get(1))); //nothing, transparent
 		//GAP
 
 		registerSprite(161, new Sprite(9, 0, SpritesheetHashtable.get(1))); //HardStoneNoSides

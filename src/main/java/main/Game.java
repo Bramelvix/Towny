@@ -50,7 +50,7 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 public class Game {
 
 	public static final int width = 1500;
-	public static final int height = width / 16 * 9;
+	public static final int height = (int)(width / 16f * 9f); //843.75
 	public Level[] map;
 	private ArrayList<Villager> vills;
 	private ArrayList<Villager> sols;
@@ -139,16 +139,16 @@ public class Game {
 	}
 
 	private void setIcon() {
+		TextureInfo textureInfo = OpenGLUtils.loadTexture("/icons/soldier.png");
+		ByteBuffer buffer = textureInfo.buffer;
 		GLFWImage image = GLFWImage.malloc();
-		TextureInfo texture = OpenGLUtils.loadTexture("/icons/soldier.png");
-		ByteBuffer temp = texture.buffer;
-		image.set(texture.width, texture.height, temp);
+		image.set(textureInfo.width, textureInfo.height, buffer);
 		GLFWImage.Buffer images = GLFWImage.malloc(1);
 		images.put(0, image);
 		glfwSetWindowIcon(window, images);
+
 		images.free();
 		image.free();
-
 	}
 
 	private void generateLevel() {

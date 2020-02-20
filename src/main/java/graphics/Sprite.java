@@ -46,6 +46,10 @@ public class Sprite {
 		return texCoords;
 	}
 
+	public Vec2f getTexSize() {
+		return texSize;
+	}
+
 	public int getAvgColor() {
 		return avgColor;
 	}

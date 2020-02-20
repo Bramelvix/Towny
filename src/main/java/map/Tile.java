@@ -4,7 +4,10 @@ import entity.Entity;
 import entity.dynamic.item.Item;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
+import graphics.SpritesheetHashtable;
 import util.vectors.Vec2f;
+
+import java.util.ArrayList;
 
 public class Tile {
 
@@ -26,15 +29,24 @@ public class Tile {
 	}
 
 	// render a tile
-	 void render(Vec2f pos, Vec2f offset) {
+	void render(Vec2f pos, Vec2f offset, ArrayList<Vec2f> tileRenderList, ArrayList<Vec2f> entityRenderList, ArrayList<Vec2f> itemRenderList) {
 		if (entity == null || entity.isTransparent() || !entity.isVisible()) {
-			sprite.draw(pos, offset);
+			//sprite.draw(pos, offset);
+			tileRenderList.add(sprite.getTexCoords());
+			//tileRenderList.add(sprite.getTexCoords().y);
+		} else {
+			tileRenderList.add(new Vec2f(0f,0f));
 		}
 		if (entity != null && !solid) {
-			entity.render(offset);
+			//entity.render(offset);
+			entityRenderList.add(entity.sprite.getTexCoords());
+		} else {
+			entityRenderList.add(SpriteHashtable.get(142).getTexCoords());
 		}
 		if (item != null) {
-			item.render(offset);
+			itemRenderList.add(item.sprite.getTexCoords());
+		} else {
+			itemRenderList.add(SpriteHashtable.get(142).getTexCoords());
 		}
 	}
 
@@ -70,6 +82,8 @@ public class Tile {
 	<T extends Entity> T getEntity() {
 		return (T) entity;
 	}
+
+	public boolean hasEntity() {return entity != null;}
 
 	//removes the entity from the tile
 	void removeEntity() {
