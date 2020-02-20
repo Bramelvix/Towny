@@ -14,15 +14,16 @@ public class Ui {
 
 	// different ui elements
 	private Menu menu;
-	private TopBar top;
-	private Minimap map;
-	private BuildOutline outline;
-	private SelectionSquare selection;
-	private LayerLevelChanger layerLevelChanger;
+	private final TopBar top;
+	private final Minimap map;
+	private final BuildOutline outline;
+	private final SelectionSquare selection;
+	private final LayerLevelChanger layerLevelChanger;
+	private final UiIcons icons;
 
 	// rendering the ui
-	public void render(Vec2f offset) {
-		UiIcons.render();
+	public void render() {
+		icons.render();
 		selection.render(new Vec2f(0, 0));
 		menu.render();
 		map.render();
@@ -35,18 +36,14 @@ public class Ui {
 		return top.getSpeed();
 	}
 
-	private void init(Level[] levels) {
-		UiIcons.init();
+	public Ui(Level[] levels, PointerInput pointer) {
+		icons = new UiIcons( 0.176056338028169f, pointer);
 		menu = new Menu();
 		selection = new SelectionSquare();
 		map = new Minimap(1290, 8, levels[0]);
-		top = new TopBar((Game.width - 270) / 2,5,270,85);
+		top = new TopBar((Game.width - 270) / 2,5,270,85, pointer);
 		outline = new BuildOutline(levels);
-		layerLevelChanger = new LayerLevelChanger(1320, 210,140,40,levels.length);
-	}
-
-	public Ui(Level[] levels) {
-		init(levels);
+		layerLevelChanger = new LayerLevelChanger(1320, 210,140,40, levels.length, pointer);
 	}
 
 	public int[][] getOutlineCoords() {
@@ -62,7 +59,7 @@ public class Ui {
 	}
 
 	public void deSelectIcons() {
-		UiIcons.deSelect();
+		icons.deSelect();
 	}
 
 	public void showMenu(PointerInput pointer, MenuItem... items) {
@@ -135,11 +132,9 @@ public class Ui {
 
 	public void update(PointerInput pointer, int xOff, int yOff, int z) {
 		menu.update(pointer, outline.isVisible());
-		UiIcons.update(pointer);
 		outline.update(pointer, xOff, yOff, z);
 		selection.update(pointer);
 		top.update(pointer);
-		layerLevelChanger.update(pointer, z);
 	}
 
 	public void updateCounts(int solcount, int vilcount) {
@@ -152,6 +147,14 @@ public class Ui {
 
 	public int getZFromLevelChanger() {
 		return layerLevelChanger.getZ();
+	}
+
+	public void setZForLevelChanger(int z) {
+		layerLevelChanger.setZ(z);
+	}
+
+	public UiIcons getIcons () {
+		return icons;
 	}
 
 }

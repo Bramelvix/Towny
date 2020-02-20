@@ -10,8 +10,10 @@ import util.vectors.Vec4f;
 
 class Minimap {
 
-	private float width, height; // width and height of the minimap
-	private float x, y; // x and y of the top left corner
+	private final float width;
+	private final float height; // width and height of the minimap
+	private final float x;
+	private final float y; // x and y of the top left corner
 	private int z;
 	private static final Color COL = new Color(91, 94, 99, 110); // colour of the small rectangle on the minimap showing where the screen is
 	private int xoff, yoff; // offset

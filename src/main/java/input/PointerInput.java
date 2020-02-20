@@ -20,7 +20,8 @@ public class PointerInput {
 		public static final EType<Event> DRAG = new EType<> ();
 		public static final EType<Event> DRAG_START = new EType<> ();
 		public static final EType<Event> DRAG_END = new EType<> ();
-		public static final EType<Event> CLICK = new EType<> ();
+		public static final EType<PointerClickEvent> PRESSED = new EType<> ();
+		public static final EType<PointerClickEvent> RELEASED = new EType<> ();
 		private EType () {}
 	}
 
@@ -78,15 +79,16 @@ public class PointerInput {
 		return (long window, int button, int action, int mods) -> {
 			// stop pesky gaming mice with their fancy buttons from crashing my entire game
 			if (button > 3 || button < 0) { return; }
-
 			if (action == GLFW_RELEASE) {
 				released[button] = true;
 				pressed[button] = false;
 				heldDownButton = -1;
+				listeners.fire(EType.RELEASED, new PointerClickEvent(button, action, this.xpos, this.ypos));
 			} else if (action == GLFW_PRESS) {
 				pressed[button] = true;
 				released[button] = false;
 				heldDownButton = button;
+				listeners.fire(EType.PRESSED, new PointerClickEvent(button, action, this.xpos, this.ypos) );
 				if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
 					dragOffsetX = getX();
 					dragOffsetY = getY();

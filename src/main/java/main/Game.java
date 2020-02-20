@@ -27,7 +27,6 @@ import graphics.*;
 import graphics.opengl.OpenGLUtils;
 import graphics.opengl.TrueTypeFont;
 import graphics.ui.Ui;
-import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.MenuItem;
 import input.Keyboard;
 import input.PointerInput;
@@ -131,7 +130,7 @@ public class Game {
 		mobs = new ArrayList<>();
 		vills = new ArrayList<>();
 		sols = new ArrayList<>();
-		ui = new Ui(map);
+		ui = new Ui(map, pointer);
 		PathFinder.init(100, 100);
 		spawnvills();
 		spawnZombies();
@@ -227,7 +226,7 @@ public class Game {
 		map[currentLayerNumber].render(new Vec2f(xScroll, yScroll));
 		renderMobs();
 		map[currentLayerNumber].renderHardEntities(new Vec2f(xScroll, yScroll));
-		ui.render(new Vec2f(xScroll, yScroll));
+		ui.render();
 		glfwSwapBuffers(window);
 	}
 
@@ -242,6 +241,7 @@ public class Game {
 		if (currentLayerNumber != ui.getZFromLevelChanger()) {
 			currentLayerNumber = ui.getZFromLevelChanger();
 			ui.updateMinimap(map, currentLayerNumber);
+			ui.setZForLevelChanger(currentLayerNumber);
 		}
 		pointer.resetLeftAndRight();
 	}
@@ -255,6 +255,7 @@ public class Game {
 				currentLayerNumber = map.length - 1;
 			}
 			ui.updateMinimap(map, currentLayerNumber);
+			ui.setZForLevelChanger(currentLayerNumber);
 		}
 	}
 
@@ -286,7 +287,7 @@ public class Game {
 	}
 
 	private void updateMouse() {
-		if ((UiIcons.isAxeSelected()) && UiIcons.hoverOnNoIcons()) {
+		if ((ui.getIcons().isAxeSelected()) && ui.getIcons().hoverOnNoIcons()) {
 			if (pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
 				ui.showSelectionSquare(pointer);
 				int x = ui.getSelectionX();
@@ -318,7 +319,7 @@ public class Game {
 			return;
 		}
 		if (pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
-			if (UiIcons.isMiningSelected() && UiIcons.hoverOnNoIcons()) {
+			if (ui.getIcons().isMiningSelected() && ui.getIcons().hoverOnNoIcons()) {
 				map[currentLayerNumber].selectOre(pointer.getTileX(), pointer.getTileY()).ifPresent(ore -> {
 					Villager idle = getIdlestVil();
 					deselectAllVills();
@@ -326,18 +327,18 @@ public class Game {
 					ui.deSelectIcons();
 				});
 			}
-			if (UiIcons.isShovelHover() && !ui.menuVisible()) {
+			if (ui.getIcons().isShovelHover() && !ui.menuVisible()) {
 				deselectAllVills();
 				ui.showBuildSquare(pointer, xScroll, yScroll, true, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
 				ui.deSelectIcons();
 				return;
 			}
-			if (UiIcons.isPlowHover() && !ui.menuVisible()){
+			if (ui.getIcons().isPlowHover() && !ui.menuVisible()){
 				ui.showBuildSquare(pointer, xScroll, yScroll, false, BuildingRecipe.TILLED_SOIL, currentLayerNumber);
 				ui.deSelectIcons();
 				return;
 			}
-			if (((UiIcons.isSwordsSelected()) && UiIcons.hoverOnNoIcons())) {
+			if (((ui.getIcons().isSwordsSelected()) && ui.getIcons().hoverOnNoIcons())) {
 				Villager idle = getIdlestVil();
 				deselectAllVills();
 				anyMobHoverOn().ifPresent(mob -> idle.addJob(new FightJob(idle,mob)));
@@ -353,7 +354,7 @@ public class Game {
 					ui.deSelectIcons();
 				});
 			}
-			if (UiIcons.isSawHover() && !ui.menuVisible()) {
+			if (ui.getIcons().isSawHover() && !ui.menuVisible()) {
 				deselectAllVills();
 				MenuItem[] items = new MenuItem[BuildingRecipe.RECIPES.length + 1];
 				for (int i = 0; i < BuildingRecipe.RECIPES.length; i++) {
@@ -363,7 +364,7 @@ public class Game {
 				ui.showMenu(pointer, items);
 				return;
 			}
-			if (ui.outlineIsVisible() && !ui.menuVisible() && UiIcons.hoverOnNoIcons()) {
+			if (ui.outlineIsVisible() && !ui.menuVisible() && ui.getIcons().hoverOnNoIcons()) {
 				int[][] coords = ui.getOutlineCoords();
 				for (int[] blok : coords) {
 					if (map[currentLayerNumber].tileIsEmpty(blok[0] / Tile.SIZE, blok[1] / Tile.SIZE)) {

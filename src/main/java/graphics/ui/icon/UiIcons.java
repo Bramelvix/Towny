@@ -1,35 +1,37 @@
 package graphics.ui.icon;
 
+import input.PointerClickEvent;
 import input.PointerInput;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class UiIcons {
 
-	private static Icon[] icons; // array of the 4 icons
+	private final Icon[] icons; // array of the 4 icons
 
 	// initialising the icons
-	public static void init() {
-		float scale = 0.176056338028169f;
+	public UiIcons (float scale, PointerInput pointer) {
+
 		icons = new Icon[7];
-		icons[0] = new Icon(15, 660, "/icons/tools/wood-axe.png", scale);
-		icons[1] = new Icon(120, 660, "/icons/tools/mining.png", scale);
-		icons[2] = new Icon(225, 660, "/icons/tools/sickle.png", scale);
-		icons[3] = new Icon(330, 660, "/icons/tools/saw.png", scale);
-		icons[4] = new Icon(435, 660, "/icons/tools/swords.png", scale);
-		icons[5] = new Icon(540, 660, "/icons/tools/spade.png", scale);
-		icons[6] = new Icon(645, 660, "/icons/tools/plow.png", scale);
+		icons[0] = new Icon(15, 660, "/icons/tools/wood-axe.png", scale, pointer);
+		icons[1] = new Icon(120, 660, "/icons/tools/mining.png", scale, pointer);
+		icons[2] = new Icon(225, 660, "/icons/tools/sickle.png", scale, pointer);
+		icons[3] = new Icon(330, 660, "/icons/tools/saw.png", scale, pointer);
+		icons[4] = new Icon(435, 660, "/icons/tools/swords.png", scale, pointer);
+		icons[5] = new Icon(540, 660, "/icons/tools/spade.png", scale, pointer);
+		icons[6] = new Icon(645, 660, "/icons/tools/plow.png", scale, pointer);
+		pointer.on(PointerInput.EType.RELEASED, this::setSelected);
 	}
 
 	// rendering the icons on the screen
-	public static void render() {
+	public void render() {
 		for (Icon i : icons) {
 			i.render();
 		}
 	}
 
 	// getters
-	public static boolean hoverOnNoIcons() {
+	public boolean hoverOnNoIcons() {
 		for (Icon i : icons) {
 			if (i.hoverOn()) {
 				return false;
@@ -38,72 +40,64 @@ public class UiIcons {
 		return true;
 	}
 
-	public static boolean isWoodHover() {
+	public boolean isWoodHover() {
 		return icons[0].hoverOn();
 	}
 
-	public static boolean isMiningHover() {
+	public boolean isMiningHover() {
 		return icons[1].hoverOn();
 	}
 
-	public static boolean isSickleHover() {
+	public boolean isSickleHover() {
 		return icons[2].hoverOn();
 	}
 
-	public static boolean isSawHover() {
+	public boolean isSawHover() {
 		return icons[3].hoverOn();
 	}
 
-	public static boolean isSwordsHover() {
+	public boolean isSwordsHover() {
 		return icons[4].hoverOn();
 	}
 
-	public static boolean isShovelHover() {
+	public boolean isShovelHover() {
 		return icons[5].hoverOn();
 	}
 
-	public static boolean isAxeSelected() {
+	public boolean isAxeSelected() {
 		return icons[0].isSelected();
 	}
 
-	public static boolean isMiningSelected() {
+	public boolean isMiningSelected() {
 		return icons[1].isSelected();
 	}
 
-	public static boolean isSickleSelected() {
+	public boolean isSickleSelected() {
 		return icons[2].isSelected();
 	}
 
-	public static boolean isSawSelected() {
+	public boolean isSawSelected() {
 		return icons[3].isSelected();
 	}
 
-	public static boolean isSwordsSelected() {
+	public boolean isSwordsSelected() {
 		return icons[4].isSelected();
 	}
 
-	public static boolean isShovelSelected() {
+	public boolean isShovelSelected() {
 		return icons[5].isSelected();
 	}
 
-	public static boolean isPlowSelected() {
+	public boolean isPlowSelected() {
 		return icons[6].isSelected();
 	}
 
-	public static boolean isPlowHover() {
+	public boolean isPlowHover() {
 		return icons[6].hoverOn();
 	}
 
-	// update the icons
-	public static void update(PointerInput pointer) {
-		for (Icon i : icons) {
-			i.update(pointer);
-		}
-		setSelected(pointer);
-	}
-
 	// checks if all icons (other than the one provided in num) are unselected
-	private static boolean allOtherIconsNotSelected(int num) {
+	private boolean allOtherIconsNotSelected(int num) {
 		for (int i = 0; i < icons.length; i++) {
 			if (i == num) {
 				continue;
@@ -116,16 +110,16 @@ public class UiIcons {
 	}
 
 	// selecting an icon
-	private static void setSelected(PointerInput pointer) {
+	private void setSelected(PointerClickEvent event) {
 		for (int i = 0; i < icons.length; i++) {
-			if (pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT) && icons[i].hoverOn() && allOtherIconsNotSelected(i)) {
+			if (event.button == GLFW_MOUSE_BUTTON_LEFT && icons[i].hoverOn() && allOtherIconsNotSelected(i)) {
 				icons[i].setSelect(true);
 			}
 		}
 	}
 
 	// deseleting all icons
-	public static void deSelect() {
+	public void deSelect() {
 		for (Icon i : icons) {
 			i.setSelect(false);
 		}
