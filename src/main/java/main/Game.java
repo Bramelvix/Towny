@@ -116,7 +116,6 @@ public class Game {
 
 		PointerInput.configure (this);
 		this.pointer = PointerInput.getInstance ();
-
 		glfwSetMouseButtonCallback(window, pointer.buttonsCallback ());
 		glfwSetCursorPosCallback(window, pointer.positionCallback ());
 		glfwSetScrollCallback(window, this::scroll);
