@@ -9,12 +9,14 @@ import util.vectors.Vec4f;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
 import static org.lwjgl.stb.STBImage.*;
 
 public abstract class OpenGLUtils {
@@ -23,11 +25,15 @@ public abstract class OpenGLUtils {
 	public static Shader texShader;
 	public static Shader colShader;
 	public static Shader fontShader;
+	public static Shader tileShader;
+
+	public static int texOffsetVBO;
 
 	public static void init() throws Exception {
 		texShader = new Shader(Game.class.getResource("/shaders/tex_shader.vert"), Game.class.getResource("/shaders/tex_shader.frag"));
 		colShader = new Shader(Game.class.getResource("/shaders/col_shader.vert"), Game.class.getResource("/shaders/col_shader.frag"));
 		fontShader = new Shader(Game.class.getResource("/shaders/text_shader.vert"), Game.class.getResource("/shaders/tex_shader.frag"));
+		tileShader = new Shader(Game.class.getResource("/shaders/tile_shader.vert"), Game.class.getResource("/shaders/tex_shader.frag"));
 
 		float[] vertices = {
 				// Left bottom triangle
@@ -54,16 +60,20 @@ public abstract class OpenGLUtils {
 
 		glBindVertexArray(VAO);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glEnableVertexAttribArray(0);
 		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
 		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		int VBO2 = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+		glEnableVertexAttribArray(1);
 		glBufferData(GL_ARRAY_BUFFER, texCoords, GL_STATIC_DRAW);
 		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
-		glEnableVertexAttribArray(1);
+
+		texOffsetVBO = glGenBuffers();
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 2, GL_FLOAT, false, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		glLineWidth(3);
 		glEnable(GL_LINE_SMOOTH);
@@ -137,12 +147,40 @@ public abstract class OpenGLUtils {
 		fontShader.setUniform("offset", pToGL(pos.x - offset.x, 'w'), pToGL(pos.y - offset.y, 'h'));
 		fontShader.setUniform("scale", size.x / Tile.SIZE, size.y / Tile.SIZE);
 
-		fontShader.setUniform("tex_offset", texPos.x, texPos.y);
-		fontShader.setUniform("tex_scale", texSize.x, texSize.y);
+		fontShader.setUniform("tex_offset", texPos);
+		fontShader.setUniform("tex_scale", texSize);
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		//texShader.use();
+	}
+
+	public static void drawTiles(ArrayList<Vec2f> texOffsets, Vec2f tileSize, int rowLength, Vec2f offset, int texture) {
+		/*float[] texOffsetsA = new float[texOffsets.size()];
+		for (int i=0; i < texOffsetsA.length; i++) {
+			texOffsetsA[i] = texOffsets.get(i).intValue();
+		}*/
+
+		tileShader.use();
+
+		//glBindBuffer(GL_ARRAY_BUFFER, texOffsetVBO);
+		//glBufferData(GL_ARRAY_BUFFER, texOffsetsA, GL_STATIC_DRAW);
+
+		glBindTexture(GL_TEXTURE_2D, texture);
+
+		tileShader.setUniform("scale", tileSize.x / Tile.SIZE, tileSize.y / Tile.SIZE);
+		for (int i = 0; i < texOffsets.size(); i++) {
+			tileShader.setUniform("texCoordOffsets["+i+"]", texOffsets.get(i));
+		}
+		tileShader.setUniform("offset", pToGL(-offset.x % Tile.SIZE, 'w'), pToGL(-offset.y % Tile.SIZE, 'h'));
+		tileShader.setUniform("rowLength", rowLength);
+		tileShader.setUniform("tex_scale", 0.01754385964f, 0.032258064f);
+
+		//System.out.println(texOffsets.size());
+
+		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, texOffsets.size());
+
+		fontShader.use();
 	}
 
 	public static void drawTexturedQuadScaled(Vec2f pos, Vec2f size, Vec2f offset, int texture) {

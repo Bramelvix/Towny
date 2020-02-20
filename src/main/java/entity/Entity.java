@@ -6,6 +6,7 @@ import graphics.Sprite;
 import input.PointerInput;
 import map.Tile;
 import util.vectors.Vec2f;
+import util.vectors.Vec2i;
 
 public abstract class Entity {
 
@@ -50,6 +51,10 @@ public abstract class Entity {
 	// getters
 	public boolean isVisible() {
 		return visible;
+	}
+
+	public Vec2f getXY() {
+		return location;
 	}
 
 	public float getX() {

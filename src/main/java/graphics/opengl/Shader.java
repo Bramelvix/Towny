@@ -1,5 +1,6 @@
 package graphics.opengl;
 
+import util.vectors.Vec2f;
 import util.vectors.Vec4f;
 
 import java.io.ByteArrayOutputStream;
@@ -77,7 +78,7 @@ public class Shader {
 	}
 
 	public void setUniform(String name, int n) {
-		glUniform1i(uniforms.get(name), n);
+		glUniform1i(glGetUniformLocation(ID, name), n);
 	}
 	public void setUniform(String name, int n1, int n2) {
 		glUniform2i(glGetUniformLocation(ID, name), n1, n2);
@@ -100,6 +101,9 @@ public class Shader {
 	}
 	public void setUniform(String name, float n1, float n2, float n3, float n4) {
 		glUniform4f(uniforms.get(name), n1, n2, n3, n4);
+	}
+	public void setUniform(String name, Vec2f v) {
+		glUniform2f(glGetUniformLocation(ID, name), v.x, v.y);
 	}
 
 	public void setUniform(String name, Vec4f v) {
