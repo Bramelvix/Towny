@@ -1,25 +1,23 @@
 package events;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class EventListenerCatalog {
 
 	// TODO: listeners containers are not thread safe.
-	protected Map<EventType<?>, List<EventListener<? extends Event>>> listeners = new HashMap<> ();
+	protected Map<EventType<?>, Set<EventListener<? extends Event>>> listeners = new ConcurrentHashMap<>();
 
 	public <T extends Event> Subscription register (EventType<T> type, EventListener<T> listener) {
-		List<EventListener<?>> ls = listeners.computeIfAbsent (type, t -> new ArrayList<> ());
+		Set<EventListener<?>> ls = listeners.computeIfAbsent (type, t -> ConcurrentHashMap.newKeySet());
 		ls.add (listener);
 		return () -> CompletableFuture.runAsync(() -> ls.remove(listener));
 	}
 
 	public <T extends Event> void fire (EventType<T> type, T event) {
-		List<EventListener<Event>> ls = (List) listeners.computeIfAbsent (type, t -> new ArrayList<> ());
+		Set<EventListener<Event>> ls = (Set) listeners.computeIfAbsent (type, t -> ConcurrentHashMap.newKeySet());
 		ls.forEach(l -> {
 			try { l.handle (event); }
 			catch ( RuntimeException e) { throw e; }
