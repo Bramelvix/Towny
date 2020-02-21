@@ -38,7 +38,7 @@ public class Ui {
 		selection = new SelectionSquare();
 		map = new Minimap(1290, 8, levels[0]);
 		top = new TopBar((Game.width - 270) / 2f,5,270,85, pointer);
-		outline = new BuildOutline(levels);
+		outline = new BuildOutline(levels, pointer);
 		layerLevelChanger = new LayerLevelChanger(1320, 210,140,40, pointer);
 	}
 
@@ -50,7 +50,7 @@ public class Ui {
 		top.init(pointer, toggle, upSpeed, downSpeed);
 	}
 
-	public int[][] getOutlineCoords() {
+	public float[][] getOutlineCoords() {
 		return outline.getSquareCoords();
 	}
 
@@ -124,17 +124,17 @@ public class Ui {
 		return selection.getHeight();
 	}
 
-	public void showBuildSquare(PointerInput pointer, float xoff, float yoff, boolean lockedSize, BuildingRecipe build, int z) {
-		outline.show(pointer, xoff, yoff, z, lockedSize, build);
+	public void showBuildSquare(boolean lockedSize, BuildingRecipe build, int z, float xScroll, float yScroll) {
+		outline.show(z, xScroll, yScroll, lockedSize, build);
 	}
 
 	public void removeBuildSquare() {
 		outline.remove();
 	}
 
-	public void update(PointerInput pointer, float xOff, float yOff, int z) {
+	public void update(PointerInput pointer, int z, float xScroll, float yScroll) {
 		menu.update(outline.isVisible());
-		outline.update(pointer, xOff, yOff, z);
+		outline.update(z, xScroll, yScroll);
 		selection.update(pointer);
 	}
 

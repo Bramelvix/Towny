@@ -67,7 +67,7 @@ public class Level {
 
 	// is the tile on X and Y walkable (items can still be there)
 	public boolean isWalkAbleTile(int x, int y) {
-		return !tiles[x][y].isSolid();
+		return x > 0 && x < width && y > 0 && y < height && !tiles[x][y].isSolid();
 	}
 
 	public boolean tileIsEmpty(int x, int y) {//no mobs, no items, no buildings,...

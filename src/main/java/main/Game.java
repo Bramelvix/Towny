@@ -234,7 +234,7 @@ public class Game {
 	}
 
 	private void updateUI() {
-		ui.update(pointer, xScroll, yScroll, currentLayerNumber);
+		ui.update(pointer, currentLayerNumber, xScroll, yScroll);
 		updateMouse();
 		moveCamera();
 		pointer.resetLeftAndRight();
@@ -291,20 +291,20 @@ public class Game {
 	private void onClickShovel() {
 		if (!ui.menuVisible()) {
 			deselectAllVills();
-			ui.showBuildSquare(pointer, xScroll, yScroll, true, BuildingRecipe.STAIRSDOWN, currentLayerNumber);
+			ui.showBuildSquare( true, BuildingRecipe.STAIRSDOWN, currentLayerNumber, xScroll, yScroll);
 			ui.deSelectIcons();
 		}
 	}
 
 	private void onClickPlow() {
 		if (!ui.menuVisible()){
-			ui.showBuildSquare(pointer, xScroll, yScroll, false, BuildingRecipe.TILLED_SOIL, currentLayerNumber);
+			ui.showBuildSquare( false, BuildingRecipe.TILLED_SOIL, currentLayerNumber, xScroll, yScroll);
 			ui.deSelectIcons();
 		}
 	}
 
 	private void onClickBuild(MenuItem item) {
-		ui.showBuildSquare(pointer, xScroll, yScroll, false, item.getRecipe(), currentLayerNumber);
+		ui.showBuildSquare(false, item.getRecipe(), currentLayerNumber, xScroll, yScroll);
 		ui.deSelectIcons();
 		ui.getMenu().hide();
 	}
@@ -523,11 +523,11 @@ public class Game {
 				});
 			}
 			if (ui.outlineIsVisible() && !ui.menuVisible() && ui.getIcons().hoverOnNoIcons()) {
-				int[][] coords = ui.getOutlineCoords();
-				for (int[] blok : coords) {
-					if (map[currentLayerNumber].tileIsEmpty(blok[0] / Tile.SIZE, blok[1] / Tile.SIZE)) {
+				float[][] coords = ui.getOutlineCoords();
+				for (float[] blok : coords) {
+					if (map[currentLayerNumber].tileIsEmpty((int) blok[0] / Tile.SIZE, (int) blok[1] / Tile.SIZE)) {
 						Villager idle = getIdlestVil();
-						idle.addBuildJob(blok[0] / Tile.SIZE, blok[1] / Tile.SIZE, currentLayerNumber, ui.getBuildRecipeOutline().getProduct(),
+						idle.addBuildJob((int) blok[0] / Tile.SIZE, (int) blok[1] / Tile.SIZE, currentLayerNumber, ui.getBuildRecipeOutline().getProduct(),
 							ui.getBuildRecipeOutline().getResources()[0]);
 					}
 				}

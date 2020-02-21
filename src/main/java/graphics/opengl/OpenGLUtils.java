@@ -242,9 +242,8 @@ public abstract class OpenGLUtils {
 
 	}
 
-	public static void buildOutlineDraw(Vec2f pos, float size, Vec2f offset, Color color) {
-		Vec4f outColor = new Vec4f(color.getRed()/255f,color.getGreen()/255f,color.getBlue()/255f,color.getAlpha()/255f);
-		drawFilledSquare(pos, new Vec2f(size), offset, outColor);
+	public static void buildOutlineDraw(Vec2f pos, float size, Vec2f offset, Vec4f color) {
+		drawFilledSquare(pos, new Vec2f(size), offset, color);
 	}
 
 	public static void drawText(String text, float x, float y) {
