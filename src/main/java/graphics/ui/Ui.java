@@ -1,6 +1,6 @@
 package graphics.ui;
 
-import entity.dynamic.mob.work.BuildingRecipe;
+import entity.dynamic.mob.work.recipe.BuildingRecipe;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.Menu;
 import graphics.ui.menu.MenuItem;
@@ -68,7 +68,7 @@ public class Ui {
 
 	public void showMenu(PointerInput pointer, MenuItem... items) {
 		if (!outline.isVisible()) {
-			showMenu(pointer, pointer.getTrueX(), pointer.getTrueY());
+			showMenu(pointer);
 			menu.addItems(items);
 			menu.show();
 		}
@@ -86,11 +86,9 @@ public class Ui {
 		return menu.getIngameX();
 	}
 
-	private void showMenu(PointerInput pointer, int x, int y) {
+	private void showMenu(PointerInput pointer) {
 		if (!outline.isVisible()) {
 			menu = new Menu(pointer);
-			menu.setX(x);
-			menu.setY(y);
 		}
 	}
 
@@ -98,7 +96,7 @@ public class Ui {
 		return menu.isVisible();
 	}
 
-	public void setOffset(int x, int y) {
+	public void setOffset(float x, float y) {
 		map.setOffset(x, y);
 	}
 
@@ -126,7 +124,7 @@ public class Ui {
 		return selection.getHeight();
 	}
 
-	public void showBuildSquare(PointerInput pointer, int xoff, int yoff, boolean lockedSize, BuildingRecipe build, int z) {
+	public void showBuildSquare(PointerInput pointer, float xoff, float yoff, boolean lockedSize, BuildingRecipe build, int z) {
 		outline.show(pointer, xoff, yoff, z, lockedSize, build);
 	}
 
@@ -134,8 +132,8 @@ public class Ui {
 		outline.remove();
 	}
 
-	public void update(PointerInput pointer, int xOff, int yOff, int z) {
-		menu.update(pointer, outline.isVisible());
+	public void update(PointerInput pointer, float xOff, float yOff, int z) {
+		menu.update(outline.isVisible());
 		outline.update(pointer, xOff, yOff, z);
 		selection.update(pointer);
 	}

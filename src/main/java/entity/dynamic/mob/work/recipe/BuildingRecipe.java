@@ -1,4 +1,4 @@
-package entity.dynamic.mob.work;
+package entity.dynamic.mob.work.recipe;
 
 import entity.nonDynamic.building.BuildAbleObject;
 import entity.nonDynamic.building.Stairs;

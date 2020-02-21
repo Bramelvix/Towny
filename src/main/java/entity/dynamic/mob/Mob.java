@@ -96,7 +96,7 @@ public abstract class Mob extends Entity {
 						return;
 					}
 					moveTo(step.x, step.y);
-					if (onSpot(step.x*Tile.SIZE,step.y*Tile.SIZE,this.z)) {
+					if (onSpot(step.x, step.y, this.z)) {
 						arrived = true;
 					}
 				}
@@ -104,17 +104,17 @@ public abstract class Mob extends Entity {
 		}
 	}
 
-	// is the mob around a tile (x and y in pixels)
-	public boolean aroundTile(float x, float y, float z) {
+	// is the mob around a tile (x and y in tile numbers)
+	public boolean aroundTile(int x, int y, int z) {
 		return (
 				this.z == z
-				&& (getTileX() <= ((x/Tile.SIZE) + 1)) && (getTileX() >= ((x/Tile.SIZE) - 1))
-				&& (getTileY() >= ((y/Tile.SIZE) - 1)) && (getTileY() <= ((y/Tile.SIZE) + 1))
+				&& (getTileX() <= (x + 1)) && (getTileX() >= (x - 1))
+				&& (getTileY() >= (y - 1)) && (getTileY() <= (y + 1))
 		);
 	}
 
-	public boolean onSpot(float x, float y, float z) {
-		return (this.z == z && this.location.x == x && this.location.y == y);
+	public boolean onSpot(int x, int y, int z) {
+		return (this.z == z && this.location.x == x * Tile.SIZE && this.location.y == y * Tile.SIZE);
 	}
 
 	public Path getPathAround(int x, int y) {

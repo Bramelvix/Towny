@@ -2,7 +2,7 @@ package graphics.ui;
 
 import java.awt.Color;
 
-import entity.dynamic.mob.work.BuildingRecipe;
+import entity.dynamic.mob.work.recipe.BuildingRecipe;
 import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
 import map.Level;
@@ -28,6 +28,7 @@ public class BuildOutline {
 	private boolean lockedSize = false;
 	private BuildingRecipe build;
 	private int z = 0;
+	//TODO all these location x and y need to be floats
 
 	// rendering the outline
 	public void render(Vec2f offset) {
@@ -124,13 +125,13 @@ public class BuildOutline {
 	}
 
 	// update the outline
-	public void update(PointerInput pointer, int xOff, int yOff, boolean force, int z) {
+	public void update(PointerInput pointer, float xOff, float yOff, boolean force, int z) {
 		this.z = z;
 		if (visible || force) { // TODO fix this aids
 			buildSquareXS = (pointer.getTileX() * Tile.SIZE);
-			buildSquareXSTeken = (pointer.getTileX() * Tile.SIZE)-xOff;
+			buildSquareXSTeken = (int) ((pointer.getTileX() * Tile.SIZE)-xOff);
 			buildSquareYS = (pointer.getTileY() * Tile.SIZE);
-			buildSquareYSTeken = (pointer.getTileY() * Tile.SIZE)-yOff;
+			buildSquareYSTeken = (int) ((pointer.getTileY() * Tile.SIZE)-yOff);
 			squarewidth = 1;
 			squareheight = 1;
 			buildSquareXE = 0;
@@ -138,7 +139,7 @@ public class BuildOutline {
 		}
 	}
 
-	public void update(PointerInput pointer, int xOff, int yOff,int z) {
+	public void update(PointerInput pointer, float xOff, float yOff,int z) {
 		update(pointer, xOff, yOff, false,z);
 	}
 
@@ -156,7 +157,7 @@ public class BuildOutline {
 	}
 
 	// show the outline
-	void show(PointerInput pointer, int xoff, int yoff, int z ,boolean lockedSize, BuildingRecipe build) {
+	void show(PointerInput pointer, float xoff, float yoff, int z ,boolean lockedSize, BuildingRecipe build) {
 		if (!visible) {
 			update(pointer, xoff, yoff, true,z);
 			visible = true;

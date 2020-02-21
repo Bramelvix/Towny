@@ -13,7 +13,7 @@ class Minimap {
 	private final float height; // width and height of the minimap
 	private int z;
 	private static final Vec4f colour = new Vec4f(0.3568f, 0.3686f, 0.3882f, 0.43137f); //colour for background
-	private int xoff, yoff; // offset
+	private float xoff, yoff; // offset
 	private int textureId;
 
 	// constructor
@@ -53,7 +53,7 @@ class Minimap {
 	}
 
 	// setter
-	void setOffset(int x, int y) {
+	void setOffset(float x, float y) {
 		xoff = x;
 		yoff = y;
 	}

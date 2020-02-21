@@ -28,7 +28,7 @@ public class CraftJob extends Job {
 				return;
 			}
 			worker.addJob(new MoveItemJob(item, worker), prio+1);
-			worker.addJob(new MoveItemJob(station.getX(), station.getY(),worker.getZ(), worker), prio);
+			worker.addJob(new MoveItemJob(station.getTileX(), station.getTileY(), worker.getZ(), worker), prio);
 			prio+=2;
 		}
 	}
@@ -36,7 +36,7 @@ public class CraftJob extends Job {
 	@Override
 	public void execute() {
 		if (started && !completed) {
-			if (!worker.aroundTile(station.getX(), station.getY(), station.getZ())) {
+			if (!worker.aroundTile(station.getTileX(), station.getTileY(), station.getZ())) {
 				if (worker.isMovementNull()) {
 					completed = true;
 				} else {

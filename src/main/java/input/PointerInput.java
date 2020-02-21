@@ -45,7 +45,7 @@ public class PointerInput {
 	protected boolean[] released = new boolean[3];
 	protected boolean[] pressed = new boolean[3];
 	protected int heldDownButton = -1;
-	protected int dragOffsetX, dragOffsetY;
+	protected float dragOffsetX, dragOffsetY;
 
 	public PointerInput (Game game) {
 		this.game = game;
@@ -116,21 +116,21 @@ public class PointerInput {
 		return heldDownButton == button;
 	}
 
-	public int getDragOffsetX() {
+	public float getDragOffsetX() {
 		return dragOffsetX;
 	}
 
-	public int getDragOffsetY() {
+	public float getDragOffsetY() {
 		return dragOffsetY;
 	}
 
 	// the x and y of the tiles in the game that the mouse is on
 	public int getTileX() {
-		return ((int) xpos + game.xScroll) / Tile.SIZE;
+		return (int) (xpos + game.xScroll) / Tile.SIZE;
 	}
 
 	public int getTileY() {
-		return ((int) ypos + game.yScroll) / Tile.SIZE;
+		return (int) (ypos + game.yScroll) / Tile.SIZE;
 	}
 
 	public int getTrueX() {
@@ -142,12 +142,12 @@ public class PointerInput {
 	}
 
 	// x and y coord on the screen, in pixels , WITH OFFSET
-	public int getX() {
-		return (int) xpos + game.xScroll;
+	public float getX() {
+		return (float) xpos + game.xScroll;
 	}
 
-	public int getY() {
-		return (int) ypos + game.yScroll;
+	public float getY() {
+		return (float) ypos + game.yScroll;
 	}
 
 }

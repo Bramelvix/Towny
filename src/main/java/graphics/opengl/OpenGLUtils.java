@@ -26,6 +26,7 @@ public abstract class OpenGLUtils {
 	public static Shader colShader;
 	public static Shader fontShader;
 	public static Shader tileShader;
+	private static final Vec4f outlineColour = new Vec4f(1,0,0,1);
 
 	public static int texOffsetVBO;
 
@@ -205,6 +206,9 @@ public abstract class OpenGLUtils {
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_LINE_LOOP, 0, 6);
 		fontShader.use();
+	}
+	public static void drawOutline(Vec2f pos, Vec2f size, Vec2f offset) {
+		drawOutline(pos, size, offset, outlineColour);
 	}
 
 	public static void iconDraw(int id, Vec2f pos, Vec2f size, boolean drawSelectionSquare) { //drawTexturedQuadScaled ui which does not need to be scaled up

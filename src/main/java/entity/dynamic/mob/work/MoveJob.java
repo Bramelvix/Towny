@@ -4,7 +4,6 @@ import entity.dynamic.mob.Villager;
 import entity.nonDynamic.building.Stairs;
 import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
-import map.Tile;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -15,11 +14,11 @@ public class MoveJob extends Job {
 	private int counter = 0;
 	private final boolean exactLocation;
 
-	public MoveJob(float xloc, float yloc, int zloc, Villager worker) { //movejob to move to this exact tile
+	public MoveJob(int xloc, int yloc, int zloc, Villager worker) { //movejob to move to this exact tile
 		this(xloc, yloc, zloc, worker, true);
 	}
 
-	MoveJob(float xloc, float yloc, int zloc, Villager worker, boolean exactLocation) { //movejob to move to a tile or around this tile
+	MoveJob(int xloc, int yloc, int zloc, Villager worker, boolean exactLocation) { //movejob to move to a tile or around this tile
 		super(xloc, yloc, zloc, worker);
 		this.exactLocation = exactLocation;
 	}
@@ -33,7 +32,7 @@ public class MoveJob extends Job {
 			return;
 		}
 		if (zloc == worker.getZ()) {
-			Path path = exactLocation ? worker.getPath((int) xloc / Tile.SIZE, (int) yloc / Tile.SIZE) : worker.getPathAround((int) xloc / Tile.SIZE, (int)yloc / Tile.SIZE);
+			Path path = exactLocation ? worker.getPath(xloc, yloc) : worker.getPathAround(xloc, yloc);
 			if (path != null) {
 				paths.add(path);
 			} else { //no path
@@ -41,17 +40,17 @@ public class MoveJob extends Job {
 				return;
 			}
 		} else {
-			float stairsX = -1;
-			float stairsY = -1;
+			int stairsX = -1;
+			int stairsY = -1;
 			boolean up = worker.getZ() < zloc;
 			for (int i = 0; i < Math.abs(zloc - worker.getZ()); i++) {
-				Optional<Stairs> optional = worker.levels[worker.getZ() + (up ? i : -i)].getNearestStairs((int) worker.getX()/Tile.SIZE, (int) worker.getY()/ Tile.SIZE, zloc > worker.getZ());
+				Optional<Stairs> optional = worker.levels[worker.getZ() + (up ? i : -i)].getNearestStairs(worker.getTileX(), worker.getTileY(), zloc > worker.getZ());
 				if (optional.isPresent()) {
-					float startx = stairsX == -1 ? worker.getX() : stairsX;
-					float starty = stairsY == -1 ? worker.getY() : stairsY;
-					stairsX = optional.get().getX();
-					stairsY = optional.get().getY();
-					Path path = PathFinder.findPath((int) startx / Tile.SIZE, (int) starty / Tile.SIZE, (int) stairsX / Tile.SIZE, (int) stairsY / Tile.SIZE, worker.levels[worker.getZ() + (up ? i : -i)]);
+					int startx = stairsX == -1 ? worker.getTileX() : stairsX;
+					int starty = stairsY == -1 ? worker.getTileY() : stairsY;
+					stairsX = optional.get().getTileX();
+					stairsY = optional.get().getTileY();
+					Path path = PathFinder.findPath(startx, starty, stairsX, stairsY, worker.levels[worker.getZ() + (up ? i : -i)]);
 					if (path != null) {
 						paths.add(path);
 					} else { //no path
@@ -63,8 +62,8 @@ public class MoveJob extends Job {
 					return;
 				}
 			}
-			Path path = exactLocation ? PathFinder.findPath((int) stairsX / Tile.SIZE, (int) stairsY / Tile.SIZE, (int) xloc / Tile.SIZE, (int) yloc / Tile.SIZE, worker.levels[zloc]) : PathFinder.findPathAround((int) stairsX / Tile.SIZE, (int) stairsY / Tile.SIZE, (int) xloc / Tile.SIZE, (int) yloc / Tile.SIZE, worker.levels[zloc]);
-			if (!((exactLocation &&(xloc / Tile.SIZE) == (stairsX / Tile.SIZE) && (yloc / Tile.SIZE) == (stairsY / Tile.SIZE)) || (!exactLocation && (stairsX <= ((xloc + Tile.SIZE))) && (stairsX >= ((xloc - Tile.SIZE)) && ((stairsY >= ((yloc - Tile.SIZE))) && (stairsY <= ((yloc + Tile.SIZE)))))))) {
+			Path path = exactLocation ? PathFinder.findPath(stairsX, stairsY, xloc, yloc, worker.levels[zloc]) : PathFinder.findPathAround(stairsX , stairsY ,  xloc, yloc , worker.levels[zloc]);
+			if (!((exactLocation && xloc == stairsX && yloc == stairsY) || (!exactLocation && (stairsX <= ((xloc + 1))) && (stairsX >= ((xloc - 1)) && ((stairsY >= ((yloc - 1))) && (stairsY <= ((yloc + 1)))))))) {
 				if (path == null) { //no path
 					completed = true;
 					return;
@@ -78,7 +77,7 @@ public class MoveJob extends Job {
 
 	public void execute() {
 		if (!completed && started) {
-			if (worker.onSpot(paths.get(counter).getXdest() * Tile.SIZE, paths.get(counter).getYdest() * Tile.SIZE, worker.getZ())) {
+			if (worker.onSpot(paths.get(counter).getXdest(), paths.get(counter).getYdest(), worker.getZ())) {
 				if (counter == paths.size() - 1) {
 					completed = true;
 					if (zloc != worker.getZ()) {
@@ -98,7 +97,7 @@ public class MoveJob extends Job {
 	}
 
 	private void goOnStairs() {
-		Stairs stairs = worker.levels[worker.getZ()].getEntityOn((int)worker.getX()/Tile.SIZE, (int) worker.getY()/Tile.SIZE);
+		Stairs stairs = worker.levels[worker.getZ()].getEntityOn(worker.getTileX(), worker.getTileY());
 		if (stairs != null) {
 			stairs.goOnStairs(worker);
 		}

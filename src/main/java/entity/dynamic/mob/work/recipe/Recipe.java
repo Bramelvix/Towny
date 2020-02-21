@@ -1,4 +1,4 @@
-package entity.dynamic.mob.work;
+package entity.dynamic.mob.work.recipe;
 
 import entity.Entity;
 import entity.dynamic.item.Item;

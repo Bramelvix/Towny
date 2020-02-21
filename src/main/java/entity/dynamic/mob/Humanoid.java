@@ -8,9 +8,9 @@ public abstract class Humanoid extends Mob {
 
 	private Item holding; // item the mob is holding in his hands
 
-	Humanoid(Level[] levels, int x, int y, int z) {
+	Humanoid(Level[] levels, float x, float y, int z) {
 		super(levels);
-		while (!levels[z].isWalkAbleTile(x / Tile.SIZE, y / Tile.SIZE)) {
+		while (!levels[z].isWalkAbleTile((int) x / Tile.SIZE, (int) y / Tile.SIZE)) {
 			x += Tile.SIZE;
 			y += Tile.SIZE;
 		}

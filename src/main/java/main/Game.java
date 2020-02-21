@@ -8,6 +8,8 @@ import java.util.Optional;
 
 import entity.Entity;
 import entity.dynamic.mob.work.*;
+import entity.dynamic.mob.work.recipe.BuildingRecipe;
+import entity.dynamic.mob.work.recipe.ItemRecipe;
 import entity.nonDynamic.building.container.Chest;
 import entity.nonDynamic.building.container.Container;
 import entity.nonDynamic.resources.Ore;
@@ -59,8 +61,8 @@ public class Game {
 	private byte speed = 60;
 	private double ns = 1000000000.0 / speed;
 	private Villager selectedvill;
-	public int xScroll = 0;
-	public int yScroll = 0;
+	public float xScroll = 0;
+	public float yScroll = 0;
 	public int currentLayerNumber = 0;
 	private long window;
 	private PointerInput pointer;
@@ -321,7 +323,7 @@ public class Game {
 
 	private void onClickMove() {
 		selectedvill.resetAll();
-		selectedvill.addJob(new MoveJob(pointer.getX(), pointer.getY(), currentLayerNumber, selectedvill));
+		selectedvill.addJob(new MoveJob(pointer.getTileX(), pointer.getTileY(), currentLayerNumber, selectedvill));
 		deselect(selectedvill);
 		ui.deSelectIcons();
 		ui.getMenu().hide();
@@ -402,7 +404,7 @@ public class Game {
 
 	private void onClickDrop() {
 		selectedvill.setPath(null);
-		selectedvill.addJob(new MoveItemJob(ui.getMenuIngameX(), ui.getMenuIngameY(), currentLayerNumber, selectedvill));
+		selectedvill.addJob(new MoveItemJob((int) ui.getMenuIngameX()/Tile.SIZE, (int) ui.getMenuIngameY() / Tile.SIZE, currentLayerNumber, selectedvill));
 		ui.deSelectIcons();
 		deselect(selectedvill);
 		ui.getMenu().hide();
@@ -525,8 +527,8 @@ public class Game {
 				for (int[] blok : coords) {
 					if (map[currentLayerNumber].tileIsEmpty(blok[0] / Tile.SIZE, blok[1] / Tile.SIZE)) {
 						Villager idle = getIdlestVil();
-						idle.addBuildJob(blok[0], blok[1], currentLayerNumber, ui.getBuildRecipeOutline().getProduct(),
-								ui.getBuildRecipeOutline().getResources()[0]);
+						idle.addBuildJob(blok[0] / Tile.SIZE, blok[1] / Tile.SIZE, currentLayerNumber, ui.getBuildRecipeOutline().getProduct(),
+							ui.getBuildRecipeOutline().getResources()[0]);
 					}
 				}
 				ui.removeBuildSquare();
@@ -536,7 +538,7 @@ public class Game {
 		} else if (pointer.wasPressed(GLFW_MOUSE_BUTTON_RIGHT)) {
 			if (selectedvill != null) {
 				List<MenuItem> options = new ArrayList<>();
-				if (selectedvill.getHolding() != null&&(map[currentLayerNumber].tileIsEmpty(pointer.getTileX(),pointer.getTileY()) || map[currentLayerNumber].getEntityOn(pointer.getTileX(),pointer.getTileY()) instanceof Chest)) {
+				if (selectedvill.getHolding() != null&&(map[currentLayerNumber].tileIsEmpty(pointer.getTileX(), pointer.getTileY()) || map[currentLayerNumber].getEntityOn(pointer.getTileX(),pointer.getTileY()) instanceof Chest)) {
 					options.add(new MenuItem((MenuItem.DROP + " " + selectedvill.getHolding().getName()), in -> onClickDrop(), pointer));
 				}
 
@@ -638,8 +640,8 @@ public class Game {
 	}
 
 	private void renderMobs() {
-		int x1 = (xScroll + width + Sprite.SIZE);
-		int y1 = (yScroll + height + Sprite.SIZE);
+		float x1 = (xScroll + width + Sprite.SIZE);
+		float y1 = (yScroll + height + Sprite.SIZE);
 
 		mobs.forEach(mob -> mob.renderIf(
 			inBounds(mob.getX(), mob.getY(), mob.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
@@ -658,7 +660,7 @@ public class Game {
 
 	}
 
-	private boolean inBounds(float x, float y, int z, int layer, int xScroll, int x1, int yScroll, int y1) {
+	private boolean inBounds(float x, float y, int z, int layer, float xScroll, float x1, float yScroll, float y1) {
 		return z == layer && x + Tile.SIZE >= xScroll && x - Tile.SIZE <= x1 && y + Tile.SIZE >= yScroll && y - Tile.SIZE <= y1;
 	}
 

@@ -8,7 +8,7 @@ public class GatherJob extends Job {
 	private final Resource jobObj; // the resource the worker needs to gather
 
 	public <T extends Resource> GatherJob(T jobObj, Villager worker) {
-		super(jobObj.getX(),jobObj.getY(),jobObj.getZ(), worker);
+		super(jobObj.getTileX(), jobObj.getTileY(), jobObj.getZ(), worker);
 		this.jobObj = jobObj;
 		this.jobObj.setSelected(true);
 	}

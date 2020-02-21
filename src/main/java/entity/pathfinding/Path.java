@@ -5,8 +5,9 @@ import java.util.ArrayList;
 //path for the villager to take to a destination
 public class Path {
 
-	private ArrayList<Point> steps = new ArrayList<>(); // list of steps to the destination
-	private int xdest, ydest; // x and y coord of the destination
+	private final ArrayList<Point> steps = new ArrayList<>(); // list of steps to the destination
+	private final int xdest;
+	private final int ydest; // x and y coord of the destination
 
 	// getters
 	public int getXdest() {

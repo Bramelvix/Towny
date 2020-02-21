@@ -1,9 +1,9 @@
 package graphics.ui.menu;
 
 import entity.Entity;
-import entity.dynamic.mob.work.BuildingRecipe;
-import entity.dynamic.mob.work.ItemRecipe;
-import entity.dynamic.mob.work.Recipe;
+import entity.dynamic.mob.work.recipe.BuildingRecipe;
+import entity.dynamic.mob.work.recipe.ItemRecipe;
+import entity.dynamic.mob.work.recipe.Recipe;
 import events.Subscription;
 import graphics.opengl.OpenGLUtils;
 import input.PointerInput;

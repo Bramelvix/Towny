@@ -21,7 +21,6 @@ import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;
 import util.vectors.Vec2f;
-import util.vectors.Vec4f;
 
 public class Villager extends Humanoid {
 
@@ -32,7 +31,7 @@ public class Villager extends Humanoid {
 	private final PriorityQueue<PriorityJob> jobs; // jobs the villager needs to do
 
 	// basic constructors
-	public Villager(int x, int y, int z, Level[] levels) {
+	public Villager(float x, float y, int z, Level[] levels) {
 		super(levels, x, y, z);
 		sprite = SpriteHashtable.getPerson();
 		inventory = new VillagerInventory(this);
@@ -109,7 +108,7 @@ public class Villager extends Humanoid {
 
 	// pickup an item
 	public <T extends Item> boolean pickUp(T e) {
-		if (!onSpot(e.getX(), e.getY(), e.getZ())) { return false; }
+		if (!onSpot(e.getTileX(), e.getTileY(), e.getZ())) { return false; }
 		e.setReserved(this);
 		levels[z].removeItem(e);
 		pickUpItem(e);
@@ -140,7 +139,7 @@ public class Villager extends Humanoid {
 	}
 
 	public void drop(Container container) {
-		if (getHolding() != null && this.aroundTile(container.getX(), container.getY(), container.getZ())) {
+		if (getHolding() != null && this.aroundTile(container.getTileX(), container.getTileY(), container.getZ())) {
 			container.addItemTo(getHolding());
 			getHolding().removeReserved();
 			setHolding(null);
@@ -148,7 +147,7 @@ public class Villager extends Humanoid {
 	}
 
 	public <T extends Item> boolean pickUp(T e, Container container) {
-		if (aroundTile(container.getX(), container.getY(), container.getZ())) {
+		if (aroundTile(container.getTileX(), container.getTileY(), container.getZ())) {
 			Optional<Item> foundItem = container.takeItem(e);
 			foundItem.ifPresent(this::pickUpItem);
 			return true;
@@ -209,7 +208,7 @@ public class Villager extends Humanoid {
 	public void render(Vec2f offset) {
 		drawVillager(location, offset);
 		if (this.isSelected()) {
-			OpenGLUtils.drawOutline(location, new Vec2f((float)Sprite.SIZE), offset, new Vec4f(1,0,0,1));// render the red square around selected villagers
+			OpenGLUtils.drawOutline(location, new Vec2f((float)Sprite.SIZE), offset);// render the red square around selected villagers
 		}
 	}
 

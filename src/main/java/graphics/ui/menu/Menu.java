@@ -2,9 +2,7 @@ package graphics.ui.menu;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import entity.dynamic.mob.work.Recipe;
 import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
 import util.vectors.Vec2f;
@@ -17,12 +15,12 @@ public class Menu { // the menu is the little options menu that shows up when yo
 	private float height = 20;
 	private List<MenuItem> items; // list of items on the menu
 	private boolean visible; // is the item visible
-	PointerInput pointer;
+	private final PointerInput pointer;
 
 	// constructor
 	public Menu(PointerInput pointer) {
 		this.pointer = pointer;
-		position = new Vec2f(0);
+		position = new Vec2f(pointer.getTrueX(), pointer.getTrueY());
 		ingame = new Vec2f(0);
 		items = new ArrayList<>();
 		hide();
@@ -64,7 +62,7 @@ public class Menu { // the menu is the little options menu that shows up when yo
 	}
 
 	// updating the menu
-	public void update(PointerInput pointer, boolean forceInvisible) {
+	public void update(boolean forceInvisible) {
 		if (forceInvisible) {
 			hide();
 		} else {

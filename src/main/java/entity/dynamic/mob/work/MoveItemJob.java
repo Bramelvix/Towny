@@ -18,8 +18,8 @@ public class MoveItemJob extends Job {
 			completed = true;
 		} else {
 			this.material.setReserved(this.worker);
-			xloc = material.getX();
-			yloc = material.getY();
+			xloc = material.getTileX();
+			yloc = material.getTileY();
 			zloc = material.getZ();
 		}
 	}
@@ -29,22 +29,22 @@ public class MoveItemJob extends Job {
 		this.pickUpJob = pickUpJob;
 	}
 
-	public MoveItemJob(float xloc, float yloc, int zloc, Villager worker) {
+	public MoveItemJob(int xloc, int yloc, int zloc, Villager worker) {
 		this(worker, false);
-		this.xloc = (xloc/Tile.SIZE)*Tile.SIZE; //locations are in tile numbers
-		this.yloc = (yloc/Tile.SIZE)*Tile.SIZE;
+		this.xloc = xloc; //locations are in tile numbers
+		this.yloc = yloc;
 		this.zloc = zloc;
 	}
 
 	@Override
 	protected void start() {
 		started = true;
-		if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[zloc].isClearTile((int) xloc / Tile.SIZE, (int) yloc / Tile.SIZE) && !(worker.levels[zloc].getEntityOn((int) xloc/Tile.SIZE, (int) yloc/Tile.SIZE) instanceof Container)))) {
+		if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[zloc].isClearTile(xloc, yloc) && !(worker.levels[zloc].getEntityOn(xloc, yloc) instanceof Container)))) {
 			completed = true;
 			return;
 		}
-		if (worker.levels[zloc].getEntityOn((int) xloc/Tile.SIZE, (int) yloc/Tile.SIZE) instanceof Container) {
-			container = worker.levels[zloc].getEntityOn((int) xloc/Tile.SIZE, (int) yloc/Tile.SIZE);
+		if (worker.levels[zloc].getEntityOn( xloc, yloc) instanceof Container) {
+			container = worker.levels[zloc].getEntityOn(xloc, yloc);
 			worker.addJob(new MoveJob(xloc, yloc, zloc, worker, false), 100);
 		} else {
 			worker.addJob(new MoveJob(xloc, yloc, zloc, worker), 100);
@@ -58,13 +58,13 @@ public class MoveItemJob extends Job {
 					completed = true;
 				} else {
 					if (container != null) {
-						if (worker.aroundTile(material.getX(), material.getY(), material.getZ())) {
+						if (worker.aroundTile(material.getTileX(), material.getTileY(), material.getZ())) {
 							if (worker.pickUp(material, container)) {
 								completed = true;
 							}
 							return;
 						}
-					} else if (worker.onSpot(material.getX(), material.getY(), material.getZ())) {
+					} else if (worker.onSpot(material.getTileX(), material.getTileY(), material.getZ())) {
 						if (worker.pickUp(material)) {
 							completed = true;
 						}

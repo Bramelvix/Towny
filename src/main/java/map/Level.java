@@ -1,6 +1,5 @@
 package map;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Optional;
 import entity.*;
@@ -77,6 +76,10 @@ public class Level {
 
 	public <T extends Entity> T getEntityOn(int x, int y) {
 		return tiles[x][y].getEntity();
+	}
+
+	public <T extends Entity> T getEntityOn(float x, float y) {
+		return getEntityOn(x / Tile.SIZE, y / Tile.SIZE);
 	}
 
 	public <T extends Entity> int[] getNearestSpotThatHasX(int xloc, int yloc, Class<T> clazz) {
@@ -166,8 +169,11 @@ public class Level {
 		return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 && clazz.isInstance(tiles[x][y].getEntity());
 	}
 
+	public Optional<Item> getItemOn(float x, float y) {
+		return getItemOn((int) x / Tile.SIZE, (int) y / Tile.SIZE);
+	}
 	public Optional<Item> getItemOn(int x, int y) {
-		Item item = tiles[x / Tile.SIZE][y / Tile.SIZE].getItem();
+		Item item = tiles[x][y].getItem();
 		return item != null ? Optional.of(item) : Optional.empty();
 	}
 
@@ -223,21 +229,27 @@ public class Level {
 		return (x <= 0 || x > (width - 1) * Tile.SIZE || y <= 0 || y > (height - 1) * Tile.SIZE);
 	}
 
-	// if there is a tree on X and Y, return it
-	public Optional<Tree> selectTree(int x, int y) {
-		return selectTree(x, y, true);
-	}
 
 	public Optional<Tree> selectTree(int x, int y, boolean seperate) {
 		if (outOfMapBounds(x,y)) {
 			return Optional.empty();
 		}
-		if (tiles[x/Tile.SIZE][y/Tile.SIZE].getEntity() instanceof Tree) {
-			return Optional.of(tiles[x/Tile.SIZE][y/Tile.SIZE].getEntity());
+		if (tiles[x][y].getEntity() instanceof Tree) {
+			return Optional.of(tiles[x][y].getEntity());
 		} else {
-			Entity entity = tiles[x/Tile.SIZE][y/Tile.SIZE+1].getEntity();
+			Entity entity = tiles[x][y+1].getEntity();
 			return seperate && entity instanceof Tree ? Optional.of((Tree) entity) : Optional.empty();
 		}
+	}
+
+	// if there is a tree on X and Y (IN TILES), return it
+	public Optional<Tree> selectTree(int x, int y) {
+		return selectTree(x, y, true);
+	}
+
+	// if there is a tree on X and Y (IN PIXELS), return it
+	public Optional<Tree> selectTree(float x, float y) {
+		return selectTree((int) x/ Tile.SIZE, (int) y / Tile.SIZE, true);
 	}
 
 	// if there is ore on X and Y, return it
