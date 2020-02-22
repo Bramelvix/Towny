@@ -78,7 +78,7 @@ public class Level {
 	}
 
 	public <T extends Entity> T getEntityOn(float x, float y) {
-		return getEntityOn(x / Tile.SIZE, y / Tile.SIZE);
+		return getEntityOn((int) (x / Tile.SIZE), (int) (y / Tile.SIZE));
 	}
 
 	public <T extends Entity> int[] getNearestSpotThatHasX(int xloc, int yloc, Class<T> clazz) {

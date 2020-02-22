@@ -46,7 +46,6 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 
 public class Game {
 
@@ -470,31 +469,20 @@ public class Game {
 		if ((ui.getIcons().isAxeSelected()) && ui.getIcons().hoverOnNoIcons()) {
 			if (pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
 				ui.showSelectionSquare(pointer);
-				float x = ui.getSelectionX();
-				float y = ui.getSelectionY();
-				float width = ui.getSelectionWidth();
-				float height = ui.getSelectionHeight();
-				for (int xs = (int)x; xs < (x + width); xs += Tile.SIZE) {
-					for (int ys = (int)y; ys < (y + height); ys += Tile.SIZE) {
-						map[currentLayerNumber].selectTree(xs, ys).ifPresent(tree -> tree.setSelected(true));
-					}
-				}
 				return;
 			}
 			if (pointer.wasReleased(GLFW_MOUSE_BUTTON_LEFT)) {
-				float x = ui.getSelectionX();
-				float y = ui.getSelectionY();
-				float width = ui.getSelectionWidth();
-				float height = ui.getSelectionHeight();
-				for (int xs = (int)x; xs < (x + width); xs += Tile.SIZE) {
-					for (int ys = (int)y; ys < (y + height); ys += Tile.SIZE) {
+				int x = (int) (ui.getSelectionX() / Tile.SIZE);
+				int y = (int) (ui.getSelectionY() / Tile.SIZE);
+				int width = (int) (ui.getSelectionWidth() / Tile.SIZE);
+				int height = (int) (ui.getSelectionHeight() / Tile.SIZE);
+				for (int xs = x; xs < (x + width); xs ++) {
+					for (int ys = y; ys < (y + height); ys++) {
 						map[currentLayerNumber].selectTree(xs, ys, false).ifPresent(tree -> getIdlestVil().addJob(tree));
 					}
 				}
 				ui.resetSelection();
 				ui.deSelectIcons();
-				return;
-
 			}
 			return;
 		}
@@ -539,7 +527,7 @@ public class Game {
 		} else if (pointer.wasPressed(GLFW_MOUSE_BUTTON_RIGHT)) {
 			if (selectedvill != null) {
 				List<MenuItem> options = new ArrayList<>();
-				if (selectedvill.getHolding() != null&&(map[currentLayerNumber].tileIsEmpty(pointer.getTileX(), pointer.getTileY()) || map[currentLayerNumber].getEntityOn(pointer.getTileX(),pointer.getTileY()) instanceof Chest)) {
+				if (selectedvill.getHolding() != null&&(map[currentLayerNumber].tileIsEmpty(pointer.getTileX(), pointer.getTileY()) || map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY()) instanceof Chest)) {
 					options.add(new MenuItem((MenuItem.DROP + " " + selectedvill.getHolding().getName()), in -> onClickDrop(), pointer));
 				}
 
