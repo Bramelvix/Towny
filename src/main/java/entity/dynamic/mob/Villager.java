@@ -16,11 +16,13 @@ import entity.dynamic.item.VillagerInventory;
 import entity.dynamic.item.weapon.Weapon;
 import entity.dynamic.mob.work.Job;
 import entity.pathfinding.Path;
+import graphics.opengl.InstanceData;
 import graphics.opengl.OpenGLUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;
 import util.vectors.Vec2f;
+import util.vectors.Vec3f;
 
 public class Villager extends Humanoid {
 
@@ -39,6 +41,7 @@ public class Villager extends Humanoid {
 		male = Entity.RANDOM.nextBoolean();
 		hair = SpriteHashtable.get(generateHairNr());
 		setName("villager");
+		location.z = 0.1f;
 	}
 
 	@Override
@@ -205,20 +208,20 @@ public class Villager extends Humanoid {
 
 	// render onto the screen
 	@Override
-	public void render(Vec2f offset) {
-		drawVillager(location, offset);
+	public void render(InstanceData instanceData) {
+		drawVillager(location, instanceData);
 		if (this.isSelected()) {
-			OpenGLUtils.drawOutline(location, new Vec2f((float)Sprite.SIZE), offset);// render the red square around selected villagers
+			OpenGLUtils.addOutline(location.xy(), new Vec2f((float)Sprite.SIZE));
 		}
 	}
 
-	private void drawVillager(Vec2f pos, Vec2f offset) {
+	private void drawVillager(Vec3f pos, InstanceData instanceData) {
 		if (isVisible()) {
-			sprite.draw(pos, offset);
-			hair.draw(pos, offset);
-			inventory.render(offset);
+			sprite.draw(pos, instanceData);
+			hair.draw(new Vec3f(pos.x, pos.y,pos.z+0.1f), instanceData);
+			inventory.render(pos.z, instanceData);
 			if (getHolding() != null) {
-				getHolding().sprite.draw(pos, offset);// renders the item the villager is holding
+				getHolding().sprite.draw(new Vec3f(pos.x, pos.y,pos.z+0.05f), instanceData);// renders the item the villager is holding
 			}
 		}
 	}

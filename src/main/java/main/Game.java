@@ -223,11 +223,34 @@ public class Game {
 	}
 
 	private void draw() {
+		OpenGLUtils.clearOutlines();
+		OpenGLUtils.clearAllInstanceData();
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
-		map[currentLayerNumber].render(new Vec2f(xScroll, yScroll));
+		Vec2f scroll = new Vec2f(xScroll, yScroll);
+		map[currentLayerNumber].render(scroll);
 		renderMobs();
-		map[currentLayerNumber].renderHardEntities(new Vec2f(xScroll, yScroll));
+
+		OpenGLUtils.drawInstanced(OpenGLUtils.tileData, new Vec2f(Sprite.SIZE), scroll);
+
+		if(OpenGLUtils.entityData.getInstances() > 0) {
+			OpenGLUtils.drawInstanced(OpenGLUtils.entityData, new Vec2f(Sprite.SIZE), scroll);
+		}
+
+		if(OpenGLUtils.itemData.getInstances() > 0) {
+			OpenGLUtils.drawInstanced(OpenGLUtils.itemData, new Vec2f(Sprite.SIZE), scroll);
+		}
+
+		if(OpenGLUtils.mobData.getInstances() > 0) {
+			OpenGLUtils.drawInstanced(OpenGLUtils.mobData, new Vec2f(Tile.SIZE), new Vec2f(xScroll, yScroll));
+		}
+
+		if(OpenGLUtils.hardEntityData.getInstances() > 0) {
+			OpenGLUtils.drawInstanced(OpenGLUtils.hardEntityData, new Vec2f(Sprite.SIZE), scroll);
+		}
+
+		OpenGLUtils.drawOutlines(scroll);
 		ui.render(currentLayerNumber, speed);
 		glfwSwapBuffers(window);
 		OpenGLUtils.checkGLError();
@@ -634,17 +657,17 @@ public class Game {
 
 		mobs.forEach(mob -> mob.renderIf(
 			inBounds(mob.getX(), mob.getY(), mob.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-			new Vec2f(xScroll, yScroll)
+			OpenGLUtils.mobData
 		));
 
 		vills.forEach(vil -> vil.renderIf(
 			inBounds(vil.getX(), vil.getY(), vil.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-			new Vec2f(xScroll, yScroll)
+				OpenGLUtils.mobData
 		));
 
 		sols.forEach(sol -> sol.renderIf(
 			inBounds(sol.getX(), sol.getY(), sol.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-			new Vec2f(xScroll, yScroll)
+				OpenGLUtils.mobData
 		));
 
 	}

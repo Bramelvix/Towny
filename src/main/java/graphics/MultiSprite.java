@@ -1,8 +1,10 @@
 package graphics;
 
+import graphics.opengl.InstanceData;
 import graphics.opengl.OpenGLUtils;
 import util.vectors.Vec2f;
 import util.vectors.Vec2i;
+import util.vectors.Vec3f;
 
 //A MultiSprite is a Sprite composed of multiple images overlaid on top of each other
 public class MultiSprite extends Sprite{
@@ -19,9 +21,9 @@ public class MultiSprite extends Sprite{
 	}
 
 	@Override
-	public void draw(Vec2f pos, Vec2f offset) {
+	public void draw(Vec3f pos, InstanceData instanceData) {
 		for (Vec2f texPos : texCoordList) {
-			OpenGLUtils.drawTexturedQuad(pos, new Vec2f(SIZE), offset, texPos, texSize, this.getSpriteSheetID());
+			instanceData.put(new Vec3f(OpenGLUtils.pToGL(pos.x, 'w'), OpenGLUtils.pToGL(pos.y, 'h'), 0.f), texPos);
 		}
 	}
 }

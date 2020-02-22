@@ -310,28 +310,7 @@ public class Level {
 
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
-				getTile(x, y).render(x, y, OpenGLUtils.tileData, OpenGLUtils.entityData, OpenGLUtils.itemData);
-			}
-		}
-
-		OpenGLUtils.drawInstanced(OpenGLUtils.tileData, new Vec2f(Sprite.SIZE), scroll);
-		if (OpenGLUtils.entityData.getInstances() > 0) {
-			OpenGLUtils.drawInstanced(OpenGLUtils.entityData, new Vec2f(Sprite.SIZE), scroll);
-		}
-		if (OpenGLUtils.itemData.getInstances() > 0) {
-			OpenGLUtils.drawInstanced(OpenGLUtils.itemData, new Vec2f(Sprite.SIZE), scroll);
-		}
-	}
-
-	public void renderHardEntities(Vec2f scroll) {
-		int x0 = (int)scroll.x / Tile.SIZE;
-		int x1 = (int)(scroll.x + Game.width + Sprite.SIZE * 2) / Tile.SIZE;
-		int y0 = (int)scroll.y/ Tile.SIZE;
-		int y1 = (int)(scroll.y + Game.height + Sprite.SIZE * 2) / Tile.SIZE;
-
-		for (int y = y0; y < y1; y++) {
-			for (int x = x0; x < x1; x++) {
-				getTile(x, y).renderHard(scroll);
+				getTile(x, y).render(x, y);
 			}
 		}
 	}
