@@ -12,7 +12,6 @@ import entity.nonDynamic.resources.OreType;
 import entity.nonDynamic.resources.Tree;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
-import graphics.SpritesheetHashtable;
 import graphics.opengl.OpenGLUtils;
 import main.Game;
 import util.BiPredicateInteger;
@@ -309,23 +308,19 @@ public class Level {
 		int y0 = (int)scroll.y / Tile.SIZE;
 		int y1 = (int)(scroll.y + Game.height + Sprite.SIZE) / Tile.SIZE;
 
-		ArrayList<Vec2f> tileRenderList = new ArrayList<>();
-		ArrayList<Vec2f> entityRenderList = new ArrayList<>();
-		ArrayList<Vec2f> itemRenderList = new ArrayList<>();
-
-		int rowLength = 0;
-
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
-				if(y == y0) rowLength++;
-				getTile(x, y).render(new Vec2f(x * Sprite.SIZE, y * Sprite.SIZE), scroll, tileRenderList, entityRenderList, itemRenderList);
+				getTile(x, y).render(x, y, OpenGLUtils.tileData, OpenGLUtils.entityData, OpenGLUtils.itemData);
 			}
 		}
 
-		//System.out.println(tileRenderList.size());
-		OpenGLUtils.drawTiles(tileRenderList, new Vec2f(Sprite.SIZE), rowLength, scroll, SpritesheetHashtable.get(1).getId());
-		OpenGLUtils.drawTiles(entityRenderList, new Vec2f(Sprite.SIZE), rowLength, scroll, SpritesheetHashtable.get(1).getId());
-		OpenGLUtils.drawTiles(itemRenderList, new Vec2f(Sprite.SIZE), rowLength, scroll, SpritesheetHashtable.get(1).getId());
+		OpenGLUtils.drawInstanced(OpenGLUtils.tileData, new Vec2f(Sprite.SIZE), scroll);
+		if (OpenGLUtils.entityData.getInstances() > 0) {
+			OpenGLUtils.drawInstanced(OpenGLUtils.entityData, new Vec2f(Sprite.SIZE), scroll);
+		}
+		if (OpenGLUtils.itemData.getInstances() > 0) {
+			OpenGLUtils.drawInstanced(OpenGLUtils.itemData, new Vec2f(Sprite.SIZE), scroll);
+		}
 	}
 
 	public void renderHardEntities(Vec2f scroll) {

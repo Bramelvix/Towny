@@ -1,5 +1,6 @@
 package graphics.opengl;
 
+import graphics.SpritesheetHashtable;
 import main.Game;
 import map.Tile;
 import org.lwjgl.BufferUtils;
@@ -7,16 +8,16 @@ import util.TextureInfo;
 import util.vectors.Vec2f;
 import util.vectors.Vec4f;
 
-import java.awt.*;
 import java.nio.ByteBuffer;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 
+import static org.lwjgl.opengl.ARBImaging.GL_TABLE_TOO_LARGE;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
+import static org.lwjgl.opengl.GL33.glVertexAttribDivisor;
+import static org.lwjgl.opengl.GL45.GL_CONTEXT_LOST;
 import static org.lwjgl.stb.STBImage.*;
 
 public abstract class OpenGLUtils {
@@ -28,7 +29,13 @@ public abstract class OpenGLUtils {
 	public static Shader tileShader;
 	private static final Vec4f outlineColour = new Vec4f(1,0,0,1);
 
-	public static int texOffsetVBO;
+
+	private static final int maxInstances = 627; //maximum amount of instances that can be drawn in one frame (per buffer)
+
+	public static InstanceData tileData;
+	public static InstanceData entityData;
+	public static InstanceData itemData;
+
 
 	public static void init() throws Exception {
 		texShader = new Shader(Game.class.getResource("/shaders/tex_shader.vert"), Game.class.getResource("/shaders/tex_shader.frag"));
@@ -38,13 +45,19 @@ public abstract class OpenGLUtils {
 
 		float[] vertices = {
 				// Left bottom triangle
-				pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2, 'h'), 0f,
-				pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2 + Tile.SIZE, 'h'), 0f,
-				pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2 + Tile.SIZE, 'h'), 0f,
+				pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2, 'h'),
+				pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2 + Tile.SIZE, 'h'),
+				pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2 + Tile.SIZE, 'h'),
 				// Right top triangle
-				pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2 + Tile.SIZE, 'h'), 0f,
-				pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2, 'h'), 0f,
-				pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2, 'h'), 0f
+				pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2 + Tile.SIZE, 'h'),
+				pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2, 'h'),
+				pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2, 'h')
+				/*0f, 0f,
+				0f, pToGL(1, 'h'),
+				pToGL(1, 'w'), pToGL(1, 'h'),
+				pToGL(1, 'w'), pToGL(1, 'h'),
+				pToGL(1, 'w'), 0f,
+				0f, 0f*/
 		};
 
 		float[] texCoords = {
@@ -56,14 +69,17 @@ public abstract class OpenGLUtils {
 				0f, 0f
 		};
 
-		VAO = glGenVertexArrays();
-		int VBO = glGenBuffers();
 
+		VAO = glGenVertexArrays();
 		glBindVertexArray(VAO);
+
+		glEnable(GL_BLEND);
+
+		int VBO = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glEnableVertexAttribArray(0);
 		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+		glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
 
 		int VBO2 = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, VBO2);
@@ -71,17 +87,23 @@ public abstract class OpenGLUtils {
 		glBufferData(GL_ARRAY_BUFFER, texCoords, GL_STATIC_DRAW);
 		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
 
-		texOffsetVBO = glGenBuffers();
+		tileData = new InstanceData(maxInstances);
+		tileData.setTextureID(SpritesheetHashtable.get(1).getId());
+		entityData = new InstanceData(maxInstances);
+		entityData.setTextureID(SpritesheetHashtable.get(1).getId());
+		itemData = new InstanceData(maxInstances);
+		itemData.setTextureID(SpritesheetHashtable.get(1).getId());
+
 		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 2, GL_FLOAT, false, 0, 0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glEnableVertexAttribArray(3);
+		glVertexAttribDivisor(2,1); //this sends the vertex attrib to the shader per instance instead of per vertex
+		glVertexAttribDivisor(3,1); //this sends the vertex attrib to the shader per instance instead of per vertex
 
-		glLineWidth(3);
+		glLineWidth(1.f); //mac's don't support more than 1
 		glEnable(GL_LINE_SMOOTH);
-
 	}
 
-	private static float pToGL(float pixel, char o) { //converts between pixels and openGL coordinates
+	public static float pToGL(float pixel, char o) { //converts between pixels and openGL coordinates
 		float orientation = o == 'w' ? Game.width : Game.height;
 		if(o != 'w') { pixel = Game.height - pixel; }
 		return (2f * pixel + 1f) / orientation - 1f;
@@ -156,31 +178,26 @@ public abstract class OpenGLUtils {
 		//texShader.use();
 	}
 
-	public static void drawTiles(ArrayList<Vec2f> texOffsets, Vec2f tileSize, int rowLength, Vec2f offset, int texture) {
-		/*float[] texOffsetsA = new float[texOffsets.size()];
-		for (int i=0; i < texOffsetsA.length; i++) {
-			texOffsetsA[i] = texOffsets.get(i).intValue();
-		}*/
-
+	public static void drawInstanced(InstanceData instanceData, Vec2f tileSize, Vec2f offset) {
 		tileShader.use();
-
-		//glBindBuffer(GL_ARRAY_BUFFER, texOffsetVBO);
-		//glBufferData(GL_ARRAY_BUFFER, texOffsetsA, GL_STATIC_DRAW);
-
-		glBindTexture(GL_TEXTURE_2D, texture);
+		instanceData.bindTexture();
 
 		tileShader.setUniform("scale", tileSize.x / Tile.SIZE, tileSize.y / Tile.SIZE);
-		for (int i = 0; i < texOffsets.size(); i++) {
-			tileShader.setUniform("texCoordOffsets["+i+"]", texOffsets.get(i));
-		}
-		tileShader.setUniform("offset", pToGL(-offset.x % Tile.SIZE, 'w'), pToGL(-offset.y % Tile.SIZE, 'h'));
-		tileShader.setUniform("rowLength", rowLength);
+		//tileShader.setUniform("offset", pToGL(-offset.x % Tile.SIZE, 'w'), pToGL(-offset.y % Tile.SIZE, 'h'));
+		fontShader.setUniform("offset", (2f*-offset.x)/ Game.width, (2f*offset.y)/ Game.height);
 		tileShader.setUniform("tex_scale", 0.01754385964f, 0.032258064f);
 
-		//System.out.println(texOffsets.size());
+		instanceData.unmapBuffer();
 
-		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, texOffsets.size());
+		//I don't like this
+		glVertexAttribPointer(2, 3, GL_FLOAT, false, 5*4, 0);
+		glVertexAttribPointer(3, 2, GL_FLOAT, false, 5*4, 3*4);
 
+		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, instanceData.getInstances());
+
+		//GL_MAP_UNSYNCHRONIZED may break something at some point
+		int accessBits = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_UNSYNCHRONIZED_BIT;
+		instanceData.mapBuffer(accessBits);
 		fontShader.use();
 	}
 
@@ -201,7 +218,7 @@ public abstract class OpenGLUtils {
 	public static void drawOutline(Vec2f pos, Vec2f size, Vec2f offset, Vec4f color) {
 		colShader.use();
 		colShader.setUniform("offset", pToGL(pos.x - offset.x, 'w'), pToGL(pos.y - offset.y, 'h'));
-		colShader.setUniform("scale", size.x/ Tile.SIZE, size.y / Tile.SIZE);
+		colShader.setUniform("scale", size.x / Tile.SIZE, size.y / Tile.SIZE);
 		colShader.setUniform("i_color", color);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_LINE_LOOP, 0, 6);
@@ -225,7 +242,7 @@ public abstract class OpenGLUtils {
 	public static void drawFilledSquare(Vec2f pos, Vec2f size, Vec2f offset, Vec4f color) {
 		colShader.use();
 		colShader.setUniform("offset", pToGL(pos.x - offset.x, 'w'), pToGL(pos.y - offset.y, 'h'));
-		colShader.setUniform("scale", size.x/ Tile.SIZE, size.y / Tile.SIZE);
+		colShader.setUniform("scale", size.x / Tile.SIZE, size.y / Tile.SIZE);
 		colShader.setUniform("i_color", color);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -256,4 +273,26 @@ public abstract class OpenGLUtils {
 		//texShader.use();
 	}
 
+	private static String errorToString(int error) {
+		switch (error) {
+			case GL_INVALID_ENUM: return "GL_INVALID_ENUM";
+			case GL_INVALID_VALUE: return "GL_INVALID_VALUE";
+			case GL_INVALID_OPERATION: return "GL_INVALID_OPERATION";
+			case GL_STACK_OVERFLOW: return "GL_STACK_OVERFLOW";
+			case GL_STACK_UNDERFLOW: return "GL_STACK_UNDERFLOW";
+			case GL_OUT_OF_MEMORY: return "GL_OUT_OF_MEMORY";
+			case GL_INVALID_FRAMEBUFFER_OPERATION: return "GL_INVALID_FRAMEBUFFER_OPERATION";
+			case GL_CONTEXT_LOST: return "GL_CONTEXT_LOST";
+			case GL_TABLE_TOO_LARGE: return "GL_TABLE_TOO_LARGE";
+			default: return "UNKNOWN_ERROR";
+		}
+	}
+
+	public static void checkGLError() {
+		int glError = glGetError();
+		if(glError != 0) {
+			String errorName = errorToString(glError);
+			System.out.println("GL ERROR: " + Integer.toHexString(glError) + " " + errorName);
+		}
+	}
 }
