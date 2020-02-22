@@ -68,11 +68,8 @@ public class PointerInput {
 				int maxScrollX = (game.map[game.currentLayerNumber].width * Tile.SIZE) - (Game.width+1);
 				int maxScrollY = (game.map[game.currentLayerNumber].height * Tile.SIZE) - (Game.height+1);
 
-				if(newScrollX < 0) game.xScroll = 0;
-				else game.xScroll = Math.min(newScrollX, maxScrollX);
-
-				if(newScrollY < 0) game.yScroll = 0;
-				else game.yScroll = Math.min(newScrollY, maxScrollY);
+				game.xScroll = newScrollX < 0 ? 0 : Math.min(newScrollX, maxScrollX);
+				game.yScroll = newScrollY < 0 ? 0 :  Math.min(newScrollY, maxScrollY);
 			}
 		};
 	}
