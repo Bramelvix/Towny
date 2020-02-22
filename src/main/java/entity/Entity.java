@@ -11,7 +11,7 @@ import util.vectors.Vec2i;
 public abstract class Entity {
 
 	protected Vec2f location = new Vec2f(-1, -1);
-	protected int z; // x, y and z of the entity
+	protected int z; // z of the entity
 	public static final Random RANDOM = new Random(); // random needed for various chance calculations
 	public Sprite sprite; // the entity's sprite
 	private boolean visible; // is the entity visible or not

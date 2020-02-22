@@ -110,21 +110,21 @@ public class Game {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glfwSwapInterval(0); //0 = VSYNC OFF, 1= VSYNC ON
 		setIcon();
-		glEnable(GL_TEXTURE_2D);
-		glEnable(GL_BLEND);
 		glfwSetKeyCallback(window, new Keyboard());
-
 		PointerInput.configure (this);
 		this.pointer = PointerInput.getInstance ();
 		glfwSetMouseButtonCallback(window, pointer.buttonsCallback ());
 		glfwSetCursorPosCallback(window, pointer.positionCallback ());
 		glfwSetScrollCallback(window, this::scroll);
 
-		OpenGLUtils.init();
+
 
 		SpritesheetHashtable.registerSpritesheets();
 		SpriteHashtable.registerSprites();
 		ItemHashtable.registerItems();
+
+		OpenGLUtils.init();
+
 		//Sound.initSound();
 		TrueTypeFont.init();
 		generateLevel();
@@ -231,6 +231,7 @@ public class Game {
 		map[currentLayerNumber].renderHardEntities(new Vec2f(xScroll, yScroll));
 		ui.render(currentLayerNumber, speed);
 		glfwSwapBuffers(window);
+		OpenGLUtils.checkGLError();
 	}
 
 	private void updateUI() {

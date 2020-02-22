@@ -5,12 +5,15 @@ import entity.dynamic.item.Item;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import graphics.SpritesheetHashtable;
+import graphics.opengl.InstanceData;
+import graphics.opengl.OpenGLUtils;
 import util.vectors.Vec2f;
+import util.vectors.Vec3f;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class Tile {
-
 	public Sprite sprite; // tile's sprite
 	private boolean solid; // is the tile solid
 	public static final int SIZE = 48; // fixed size
@@ -29,24 +32,18 @@ public class Tile {
 	}
 
 	// render a tile
-	void render(Vec2f pos, Vec2f offset, ArrayList<Vec2f> tileRenderList, ArrayList<Vec2f> entityRenderList, ArrayList<Vec2f> itemRenderList) {
+	void render(int xi, int yi, InstanceData tileData, InstanceData entityData, InstanceData itemData) {
 		if (entity == null || entity.isTransparent() || !entity.isVisible()) {
-			//sprite.draw(pos, offset);
-			tileRenderList.add(sprite.getTexCoords());
-			//tileRenderList.add(sprite.getTexCoords().y);
-		} else {
-			tileRenderList.add(new Vec2f(0f,0f));
+			Vec3f pos = new Vec3f(OpenGLUtils.pToGL(xi*Tile.SIZE,'w'), OpenGLUtils.pToGL(yi*Tile.SIZE,'h'), -10.f);
+			tileData.put(pos, sprite.getTexCoords());
 		}
 		if (entity != null && !solid) {
-			//entity.render(offset);
-			entityRenderList.add(entity.sprite.getTexCoords());
-		} else {
-			entityRenderList.add(SpriteHashtable.get(142).getTexCoords());
+			Vec3f pos = new Vec3f(OpenGLUtils.pToGL(entity.getX(),'w'), OpenGLUtils.pToGL(entity.getY(),'h'), (float)entity.getZ());
+			entityData.put(pos, entity.sprite.getTexCoords());
 		}
 		if (item != null) {
-			itemRenderList.add(item.sprite.getTexCoords());
-		} else {
-			itemRenderList.add(SpriteHashtable.get(142).getTexCoords());
+			Vec3f pos = new Vec3f(OpenGLUtils.pToGL(item.getX(),'w'), OpenGLUtils.pToGL(item.getY(),'h'), (float)item.getZ());
+			itemData.put(pos, item.sprite.getTexCoords());
 		}
 	}
 
