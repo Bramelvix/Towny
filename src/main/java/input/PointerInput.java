@@ -63,14 +63,13 @@ public class PointerInput {
 			this.ypos = ypos;
 
 			if (heldDownButton == GLFW_MOUSE_BUTTON_MIDDLE) {
-				int deltaX = - (int) xpos;
-				int deltaY = - (int) ypos;
-				if (deltaX + dragOffsetX >= 0 && deltaX + dragOffsetX <= ((game.map[game.currentLayerNumber].width * Tile.SIZE) - Game.width)) {
-					game.xScroll = deltaX + dragOffsetX;
-				}
-				if (deltaY + dragOffsetY >= 0 && deltaY + dragOffsetY <= ((game.map[game.currentLayerNumber].height * Tile.SIZE) - Game.height)) {
-					game.yScroll = deltaY + dragOffsetY;
-				}
+				int newScrollX = (int)(- xpos + dragOffsetX);
+				int newScrollY = (int)(- ypos + dragOffsetY);
+				int maxScrollX = (game.map[game.currentLayerNumber].width * Tile.SIZE) - (Game.width+1);
+				int maxScrollY = (game.map[game.currentLayerNumber].height * Tile.SIZE) - (Game.height+1);
+
+				game.xScroll = newScrollX < 0 ? 0 : Math.min(newScrollX, maxScrollX);
+				game.yScroll = newScrollY < 0 ? 0 :  Math.min(newScrollY, maxScrollY);
 			}
 		};
 	}
