@@ -3,15 +3,17 @@ package entity;
 import java.util.Random;
 
 import graphics.Sprite;
+import graphics.opengl.InstanceData;
 import input.PointerInput;
 import map.Tile;
 import util.vectors.Vec2f;
 import util.vectors.Vec2i;
+import util.vectors.Vec3f;
 
 public abstract class Entity {
 
-	protected Vec2f location = new Vec2f(-1, -1);
-	protected int z; // z of the entity
+	protected Vec3f location = new Vec3f(-1, -1, -1);
+	protected int z; // This needs to be renamed
 	public static final Random RANDOM = new Random(); // random needed for various chance calculations
 	public Sprite sprite; // the entity's sprite
 	private boolean visible; // is the entity visible or not
@@ -53,7 +55,7 @@ public abstract class Entity {
 		return visible;
 	}
 
-	public Vec2f getXY() {
+	public Vec3f getXY() {
 		return location;
 	}
 
@@ -65,16 +67,16 @@ public abstract class Entity {
 		return location.y;
 	}
 
+	public int getZ() {
+		return z;
+	}
+
 	public int getTileX() {
 		return (int) location.x/ Tile.SIZE;
 	}
 
 	public int getTileY() {
 		return (int) location.y / Tile.SIZE;
-	}
-
-	public int getZ() {
-		return z;
 	}
 
 	protected boolean isSelected() {
@@ -86,7 +88,7 @@ public abstract class Entity {
 	// basic constructor
 	public Entity(float x, float y, int z) {
 		this();
-		location = new Vec2f(x, y);
+		location = new Vec3f(x, y, z);
 		setLocation(x, y, z);
 	}
 
@@ -102,15 +104,15 @@ public abstract class Entity {
 	}
 
 	// render method
-	public void render(Vec2f offset) {
+	public void render(InstanceData instanceData) {
 	   if (isVisible()) {
-		   sprite.draw(location, offset);
+		   sprite.draw(location, instanceData);
 	   }
 	}
 
-	public void renderIf(boolean ifCondition, Vec2f offset) {
+	public void renderIf(boolean ifCondition, InstanceData instanceData) {
 		if (ifCondition) {
-			render(offset);
+			render(instanceData);
 		}
 	}
 

@@ -32,24 +32,27 @@ public class Tile {
 	}
 
 	// render a tile
-	void render(int xi, int yi, InstanceData tileData, InstanceData entityData, InstanceData itemData) {
-		if (entity == null || entity.isTransparent() || !entity.isVisible()) {
-			Vec3f pos = new Vec3f(OpenGLUtils.pToGL(xi*Tile.SIZE,'w'), OpenGLUtils.pToGL(yi*Tile.SIZE,'h'), -10.f);
-			tileData.put(pos, sprite.getTexCoords());
-		}
-		if (entity != null && !solid) {
-			Vec3f pos = new Vec3f(OpenGLUtils.pToGL(entity.getX(),'w'), OpenGLUtils.pToGL(entity.getY(),'h'), (float)entity.getZ());
-			entityData.put(pos, entity.sprite.getTexCoords());
-		}
-		if (item != null) {
-			Vec3f pos = new Vec3f(OpenGLUtils.pToGL(item.getX(),'w'), OpenGLUtils.pToGL(item.getY(),'h'), (float)item.getZ());
-			itemData.put(pos, item.sprite.getTexCoords());
+	void render(int xi, int yi) {
+		if(sprite != null) {
+			if (entity == null || entity.isTransparent() || !entity.isVisible()) {
+				sprite.draw(new Vec3f(xi*Tile.SIZE, yi*Tile.SIZE, -1.f), OpenGLUtils.tileData);
+			}
+			if (entity != null) {
+				if (!solid) {
+					entity.render(OpenGLUtils.entityData);
+				} else {
+					entity.render(OpenGLUtils.hardEntityData);
+				}
+			}
+			if (item != null) {
+				item.render(OpenGLUtils.itemData);
+			}
 		}
 	}
 
 	void renderHard(Vec2f offset) {
 		if (solid && entity != null) {
-			entity.render(offset);
+			//entity.render(offset);
 		}
 	}
 

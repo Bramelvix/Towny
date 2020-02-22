@@ -1,6 +1,7 @@
 package graphics.opengl;
 
 import graphics.SpritesheetHashtable;
+import graphics.ui.SelectionSquare;
 import main.Game;
 import map.Tile;
 import org.lwjgl.BufferUtils;
@@ -9,6 +10,7 @@ import util.vectors.Vec2f;
 import util.vectors.Vec4f;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 import static org.lwjgl.opengl.ARBImaging.GL_TABLE_TOO_LARGE;
 import static org.lwjgl.opengl.GL15.*;
@@ -35,7 +37,10 @@ public abstract class OpenGLUtils {
 	public static InstanceData tileData;
 	public static InstanceData entityData;
 	public static InstanceData itemData;
+	public static InstanceData hardEntityData;
+	public static InstanceData mobData;
 
+	private static ArrayList<Outline> outlines = new ArrayList<>();
 
 	public static void init() throws Exception {
 		texShader = new Shader(Game.class.getResource("/shaders/tex_shader.vert"), Game.class.getResource("/shaders/tex_shader.frag"));
@@ -88,11 +93,15 @@ public abstract class OpenGLUtils {
 		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
 
 		tileData = new InstanceData(maxInstances);
-		tileData.setTextureID(SpritesheetHashtable.get(1).getId());
+		tileData.setSpritesheet(SpritesheetHashtable.get(1));
 		entityData = new InstanceData(maxInstances);
-		entityData.setTextureID(SpritesheetHashtable.get(1).getId());
+		entityData.setSpritesheet(SpritesheetHashtable.get(1));
 		itemData = new InstanceData(maxInstances);
-		itemData.setTextureID(SpritesheetHashtable.get(1).getId());
+		itemData.setSpritesheet(SpritesheetHashtable.get(1));
+		hardEntityData = new InstanceData(maxInstances*10);
+		hardEntityData.setSpritesheet(SpritesheetHashtable.get(1));
+		mobData = new InstanceData(maxInstances);
+		mobData.setSpritesheet(SpritesheetHashtable.get(2));
 
 		glEnableVertexAttribArray(2);
 		glEnableVertexAttribArray(3);
@@ -101,6 +110,14 @@ public abstract class OpenGLUtils {
 
 		glLineWidth(1.f); //mac's don't support more than 1
 		glEnable(GL_LINE_SMOOTH);
+	}
+
+	public static void clearAllInstanceData() {
+		tileData.clearInstances();
+		entityData.clearInstances();
+		itemData.clearInstances();
+		hardEntityData.clearInstances();
+		mobData.clearInstances();
 	}
 
 	public static float pToGL(float pixel, char o) { //converts between pixels and openGL coordinates
@@ -164,7 +181,6 @@ public abstract class OpenGLUtils {
 	}
 
 	public static void drawTexturedQuad(Vec2f pos, Vec2f size, Vec2f offset, Vec2f texPos, Vec2f texSize, int texture) {
-		//fontShader.use();
 		glBindTexture(GL_TEXTURE_2D, texture);
 
 		fontShader.setUniform("offset", pToGL(pos.x - offset.x, 'w'), pToGL(pos.y - offset.y, 'h'));
@@ -175,7 +191,6 @@ public abstract class OpenGLUtils {
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
-		//texShader.use();
 	}
 
 	public static void drawInstanced(InstanceData instanceData, Vec2f tileSize, Vec2f offset) {
@@ -185,7 +200,8 @@ public abstract class OpenGLUtils {
 		tileShader.setUniform("scale", tileSize.x / Tile.SIZE, tileSize.y / Tile.SIZE);
 		//tileShader.setUniform("offset", pToGL(-offset.x % Tile.SIZE, 'w'), pToGL(-offset.y % Tile.SIZE, 'h'));
 		fontShader.setUniform("offset", (2f*-offset.x)/ Game.width, (2f*offset.y)/ Game.height);
-		tileShader.setUniform("tex_scale", 0.01754385964f, 0.032258064f);
+		Vec2f texScale = new Vec2f((float)Tile.SIZE/ instanceData.getSpriteSheet().getWidth(), (float)Tile.SIZE/ instanceData.getSpriteSheet().getHeight());
+		tileShader.setUniform("tex_scale", texScale);
 
 		instanceData.unmapBuffer();
 
@@ -198,7 +214,6 @@ public abstract class OpenGLUtils {
 		//GL_MAP_UNSYNCHRONIZED may break something at some point
 		int accessBits = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_UNSYNCHRONIZED_BIT;
 		instanceData.mapBuffer(accessBits);
-		fontShader.use();
 	}
 
 	public static void drawTexturedQuadScaled(Vec2f pos, Vec2f size, Vec2f offset, int texture) {
@@ -212,7 +227,6 @@ public abstract class OpenGLUtils {
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
-		fontShader.use();
 	}
 
 	public static void drawOutline(Vec2f pos, Vec2f size, Vec2f offset, Vec4f color) {
@@ -222,7 +236,6 @@ public abstract class OpenGLUtils {
 		colShader.setUniform("i_color", color);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_LINE_LOOP, 0, 6);
-		fontShader.use();
 	}
 	public static void drawOutline(Vec2f pos, Vec2f size, Vec2f offset) {
 		drawOutline(pos, size, offset, outlineColour);
@@ -241,13 +254,12 @@ public abstract class OpenGLUtils {
 
 	public static void drawFilledSquare(Vec2f pos, Vec2f size, Vec2f offset, Vec4f color) {
 		colShader.use();
+
 		colShader.setUniform("offset", pToGL(pos.x - offset.x, 'w'), pToGL(pos.y - offset.y, 'h'));
 		colShader.setUniform("scale", size.x / Tile.SIZE, size.y / Tile.SIZE);
 		colShader.setUniform("i_color", color);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
-		fontShader.use();
-
 	}
 
 	public static void menuItemDraw(Vec2f pos, String text, boolean selected) {
@@ -265,12 +277,29 @@ public abstract class OpenGLUtils {
 
 	public static void drawText(String text, float x, float y) {
 		TrueTypeFont.black.drawString(x,y,text,1,1);
-		//texShader.use();
 	}
 
 	public static void drawTextRed(String text, float x, float y) {
 		TrueTypeFont.red.drawString(x,y,text,1,1);
-		//texShader.use();
+	}
+
+	public static void clearOutlines() {
+		outlines.clear();
+	}
+	public static void addOutline(Outline outline) {
+		outlines.add(outline);
+	}
+	public static void addOutline(Vec2f pos, Vec2f size, Vec4f color) {
+		addOutline(new Outline(pos, size, color));
+	}
+	public static void addOutline(Vec2f pos, Vec2f size) {
+		addOutline(pos, size, outlineColour);
+	}
+
+	public static void drawOutlines(Vec2f offset) {
+		for(Outline outline : outlines) {
+			drawOutline(outline.pos, outline.size, offset, outline.color);
+		}
 	}
 
 	private static String errorToString(int error) {

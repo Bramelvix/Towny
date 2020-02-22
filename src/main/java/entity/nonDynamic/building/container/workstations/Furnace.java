@@ -3,7 +3,9 @@ package entity.nonDynamic.building.container.workstations;
 import entity.nonDynamic.building.BuildAbleObject;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
+import graphics.opengl.InstanceData;
 import util.vectors.Vec2f;
+import util.vectors.Vec3f;
 
 public class Furnace extends Workstation {
 
@@ -19,17 +21,18 @@ public class Furnace extends Workstation {
 		setName("furnace");
 	}
 
-	public void render(Vec2f offset) {
+	@Override
+	public void render(InstanceData instanceData) {
 		if (!isRunning()) {
-			sprite1.draw(location, offset);
+			sprite1.draw(location, instanceData);
 		} else {
-			draw(animationCounter > 29 ? sprite2 : sprite3, location, offset);
+			draw(animationCounter > 29 ? sprite2 : sprite3, location, instanceData);
 			animationCounterTick();
 		}
 	}
 
-	private void draw(Sprite sprite, Vec2f pos, Vec2f offset) {
-		sprite.draw(pos, offset);
+	private void draw(Sprite sprite, Vec3f pos, InstanceData instanceData) {
+		sprite.draw(pos, instanceData);
 	}
 
 	@Override

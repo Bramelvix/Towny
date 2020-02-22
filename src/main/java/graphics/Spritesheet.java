@@ -2,6 +2,7 @@ package graphics;
 
 import graphics.opengl.OpenGLUtils;
 import util.TextureInfo;
+import util.vectors.Vec2f;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

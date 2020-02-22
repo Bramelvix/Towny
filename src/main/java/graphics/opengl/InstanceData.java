@@ -1,5 +1,7 @@
 package graphics.opengl;
 
+import graphics.Sprite;
+import graphics.Spritesheet;
 import util.vectors.Vec2f;
 import util.vectors.Vec3f;
 
@@ -11,20 +13,18 @@ import static org.lwjgl.opengl.GL30.GL_MAP_WRITE_BIT;
 import static org.lwjgl.opengl.GL30.glMapBufferRange;
 
 public class InstanceData {
-	private static boolean firstTime = true;
-
 	private int maxInstances;
 	private int instances; //amount of instances to render per frame
 
 	private int vbo;
 	private int bufferSize;
-	private ByteBuffer buffer;
+	public ByteBuffer buffer;
 
-	private int textureID;
+	private Spritesheet spritesheet;
 
 	public InstanceData(int maxInstances) {
 		this.maxInstances = maxInstances; //maximum amount of instances that can be drawn in one frame (per buffer)
-		bufferSize = (maxInstances*3*4) + (maxInstances*2*4); //bufferSize in bytes, 3 pos and 2 tex
+		bufferSize = (maxInstances*5*4) + (maxInstances*5*4); //bufferSize in bytes, 3 pos and 2 tex
 
 		vbo = glGenBuffers();
 
@@ -41,6 +41,10 @@ public class InstanceData {
 		buffer.putFloat((instances*5*4)+12, texCoords.x);
 		buffer.putFloat((instances*5*4)+16, texCoords.y);
 		instances++;
+	}
+
+	public void clearInstances() {
+		instances = 0;
 	}
 
 	public int getInstances() {
@@ -67,11 +71,15 @@ public class InstanceData {
 		return bufferSize;
 	}
 
-	public void setTextureID(int id) {
-		textureID = id;
+	public void setSpritesheet(Spritesheet spritesheet) {
+		this.spritesheet = spritesheet;
+	}
+
+	public Spritesheet getSpriteSheet() {
+		return spritesheet;
 	}
 
 	public void bindTexture() {
-		glBindTexture(GL_TEXTURE_2D, textureID);
+		glBindTexture(GL_TEXTURE_2D, spritesheet.getId());
 	}
 }

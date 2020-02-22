@@ -2,12 +2,14 @@ package entity.nonDynamic.resources;
 
 import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.mob.Villager;
+import graphics.opengl.InstanceData;
 import graphics.opengl.OpenGLUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;
 import sound.Sound;
 import util.vectors.Vec2f;
+import util.vectors.Vec3f;
 
 public class Tree extends Resource {
 
@@ -21,12 +23,13 @@ public class Tree extends Resource {
 		topsprite = SpriteHashtable.get(13);
 		setVisible(true);
 		setName("tree");
+		location.z = 0.9f;
 	}
 
 	// render method to render onto the screen
-	public void render(Vec2f offset) {
-		super.render(offset);
-		topsprite.draw(new Vec2f(location.x, location.y-Sprite.SIZE), offset);
+	public void render(InstanceData instanceData) {
+		super.render(instanceData);
+		topsprite.draw(new Vec3f(location.x, location.y-Sprite.SIZE, location.z), instanceData);
 	}
 
 	// work method (same as in the Ore class)
@@ -45,9 +48,9 @@ public class Tree extends Resource {
 	}
 
 	@Override
-	protected void drawSelection(Vec2f offset) {
+	protected void drawSelection() {
 		if (this.isSelected()) {
-			OpenGLUtils.drawOutline(new Vec2f(location.x, location.y-Sprite.SIZE), new Vec2f(Sprite.SIZE, Sprite.SIZE*2), offset); // render the red square around selected resources
+			OpenGLUtils.addOutline(new Vec2f(location.x, location.y-Sprite.SIZE), new Vec2f(Sprite.SIZE, Sprite.SIZE*2)); // render the red square around selected resources
 		}
 	}
 
