@@ -1,9 +1,11 @@
 package graphics;
 
+import graphics.opengl.InstanceData;
 import graphics.opengl.OpenGLUtils;
 import map.Tile;
 import util.vectors.Vec2f;
 import util.vectors.Vec2i;
+import util.vectors.Vec3f;
 
 import java.nio.ByteOrder;
 
@@ -15,7 +17,7 @@ public class Sprite {
 	private Vec2f texCoords = new Vec2f(0); //The location of the texture coordinates for this sprite in it's spritesheet
 	Vec2f texSize = new Vec2f(1); //The size of the texture (in uv coordinates)
 
-	//TODO make this the actual average color, right now its just the first pixel
+	//TODO make this the actual average colour, right now its just the first pixel
 	int avgColor;
 
 	protected Sprite(int x, int y, Spritesheet sheet) {
@@ -34,8 +36,8 @@ public class Sprite {
 
 	}
 
-	public void draw(Vec2f pos, Vec2f offset) {
-		OpenGLUtils.drawTexturedQuad(pos, new Vec2f(SIZE), offset, texCoords, texSize, spriteSheetID);
+	public void draw(Vec3f pos, InstanceData instanceData) {
+		instanceData.put(new Vec3f(OpenGLUtils.pToGL(pos.x, 'w'), OpenGLUtils.pToGL(pos.y, 'h'), pos.z), texCoords);
 	}
 
 	public int getSpriteSheetID() {

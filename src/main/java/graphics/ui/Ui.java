@@ -23,13 +23,13 @@ public class Ui {
 
 	// rendering the ui
 	public void render(int z, int speed) {
-		icons.render();
-		selection.render(new Vec2f(0,0));
-		menu.render();
-		map.render();
-		outline.render(new Vec2f(0,0));
-		layerLevelChanger.render(z);
-		top.render(speed);
+		icons.render(); //texShader
+		selection.render(new Vec2f(0,0)); //colShader
+		menu.render(); //colShader + fontShader
+		map.render();  //texShader + colShader
+		outline.render(new Vec2f(0,0)); //colShader
+		layerLevelChanger.render(z); //colShader + fontShader
+		top.render(speed); //colShader + texShader + fontShader
 	}
 
 	public Ui(Level[] levels, PointerInput pointer) {

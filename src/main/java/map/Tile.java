@@ -4,14 +4,8 @@ import entity.Entity;
 import entity.dynamic.item.Item;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
-import graphics.SpritesheetHashtable;
-import graphics.opengl.InstanceData;
 import graphics.opengl.OpenGLUtils;
-import util.vectors.Vec2f;
 import util.vectors.Vec3f;
-
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
 
 public class Tile {
 	public Sprite sprite; // tile's sprite
@@ -32,24 +26,17 @@ public class Tile {
 	}
 
 	// render a tile
-	void render(int xi, int yi, InstanceData tileData, InstanceData entityData, InstanceData itemData) {
-		if (entity == null || entity.isTransparent() || !entity.isVisible()) {
-			Vec3f pos = new Vec3f(OpenGLUtils.pToGL(xi*Tile.SIZE,'w'), OpenGLUtils.pToGL(yi*Tile.SIZE,'h'), -10.f);
-			tileData.put(pos, sprite.getTexCoords());
-		}
-		if (entity != null && !solid) {
-			Vec3f pos = new Vec3f(OpenGLUtils.pToGL(entity.getX(),'w'), OpenGLUtils.pToGL(entity.getY(),'h'), (float)entity.getZ());
-			entityData.put(pos, entity.sprite.getTexCoords());
-		}
-		if (item != null) {
-			Vec3f pos = new Vec3f(OpenGLUtils.pToGL(item.getX(),'w'), OpenGLUtils.pToGL(item.getY(),'h'), (float)item.getZ());
-			itemData.put(pos, item.sprite.getTexCoords());
-		}
-	}
-
-	void renderHard(Vec2f offset) {
-		if (solid && entity != null) {
-			entity.render(offset);
+	void render(int xi, int yi) {
+		if(sprite != null) {
+			if (entity == null || entity.isTransparent() || !entity.isVisible()) {
+				sprite.draw(new Vec3f(xi*Tile.SIZE, yi*Tile.SIZE, -1.f), OpenGLUtils.tileData);
+			}
+			if (entity != null) {
+				entity.render(solid ? OpenGLUtils.hardEntityData : OpenGLUtils.entityData);
+			}
+			if (item != null) {
+				item.render(OpenGLUtils.itemData);
+			}
 		}
 	}
 

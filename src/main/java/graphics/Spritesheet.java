@@ -2,12 +2,7 @@ package graphics;
 
 import graphics.opengl.OpenGLUtils;
 import util.TextureInfo;
-
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.nio.ByteBuffer;
-
-import javax.imageio.ImageIO;
 
 //picture with all the sprites in it
 public class Spritesheet {

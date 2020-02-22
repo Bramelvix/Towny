@@ -2,6 +2,7 @@ package entity.nonDynamic.resources;
 
 import entity.dynamic.mob.Villager;
 import entity.nonDynamic.StaticEntity;
+import graphics.opengl.InstanceData;
 import graphics.opengl.OpenGLUtils;
 import graphics.Sprite;
 import map.Level;
@@ -16,14 +17,15 @@ public abstract class Resource extends StaticEntity {
 
 	public abstract boolean work(Villager worker);
 
-	public void render(Vec2f offset) {
-		super.render(offset);
-		drawSelection(offset);
+	@Override
+	public void render(InstanceData instanceData) {
+		super.render(instanceData);
+		drawSelection();
 	}
 
-	protected void drawSelection(Vec2f offset) {
+	protected void drawSelection() {
 		if (this.isSelected()) {
-			OpenGLUtils.drawOutline(location, new Vec2f(Sprite.SIZE), offset); // render the red square around selected resources
+			OpenGLUtils.addOutline(location.xy(), new Vec2f(Sprite.SIZE)); // render the red square around selected resources
 		}
 	}
 

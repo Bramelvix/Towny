@@ -2,7 +2,8 @@ package entity.dynamic.item;
 
 import entity.dynamic.item.weapon.Weapon;
 import entity.dynamic.mob.Villager;
-import util.vectors.Vec2f;
+import graphics.opengl.InstanceData;
+import util.vectors.Vec3f;
 
 import java.util.Arrays;
 
@@ -18,15 +19,16 @@ public class VillagerInventory {
 		weapons = new Weapon[2]; // 0 = weaponhand, 1 = shieldhand
 	}
 
-	public void render(Vec2f offset) {
+	public void render(float z, InstanceData instanceData) {
 		for (Clothing i : clothes) {
 			if (i != null) {
-				i.sprite.draw(new Vec2f(i.getX(),i.getY()), offset);
+				//TODO Make an actual getZ method in Entity and use it here
+				i.sprite.draw(new Vec3f(i.getX(),i.getY(),z+0.05f), instanceData);
 			}
 		}
 		for (Weapon i : weapons) {
 			if (i != null) {
-				i.sprite.draw(new Vec2f(i.getX(),i.getY()), offset);
+				i.sprite.draw(new Vec3f(i.getX(),i.getY(),z+0.06f), instanceData);
 			}
 		}
 	}

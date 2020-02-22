@@ -38,4 +38,8 @@ public class Vec3f {
 	public Vec3f mul(Vec3f v) {
 		return new Vec3f(x*v.x, y*v.y, z*v.z);
 	}
+
+	public Vec2f xy() {
+		return new Vec2f(x, y);
+	}
 }
