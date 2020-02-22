@@ -31,7 +31,6 @@ public abstract class OpenGLUtils {
 
 
 	private static final int maxInstances = 627; //maximum amount of instances that can be drawn in one frame (per buffer)
-	private static final int bufferSize = (maxInstances*3*4) + (maxInstances*2*4); //bufferSize in bytes, 3 pos and 2 tex
 
 	public static InstanceData tileData;
 	public static InstanceData entityData;
@@ -274,25 +273,26 @@ public abstract class OpenGLUtils {
 		//texShader.use();
 	}
 
+	private static String errorToString(int error) {
+		switch (error) {
+			case GL_INVALID_ENUM: return "GL_INVALID_ENUM";
+			case GL_INVALID_VALUE: return "GL_INVALID_VALUE";
+			case GL_INVALID_OPERATION: return "GL_INVALID_OPERATION";
+			case GL_STACK_OVERFLOW: return "GL_STACK_OVERFLOW";
+			case GL_STACK_UNDERFLOW: return "GL_STACK_UNDERFLOW";
+			case GL_OUT_OF_MEMORY: return "GL_OUT_OF_MEMORY";
+			case GL_INVALID_FRAMEBUFFER_OPERATION: return "GL_INVALID_FRAMEBUFFER_OPERATION";
+			case GL_CONTEXT_LOST: return "GL_CONTEXT_LOST";
+			case GL_TABLE_TOO_LARGE: return "GL_TABLE_TOO_LARGE";
+			default: return "UNKNOWN_ERROR";
+		}
+	}
+
 	public static void checkGLError() {
 		int glError = glGetError();
-		String errorName = null;
 		if(glError != 0) {
-			if(glError == GL_INVALID_ENUM) errorName = "GL_INVALID_ENUM";
-			if(glError == GL_INVALID_VALUE) errorName = "GL_INVALID_VALUE";
-			if(glError == GL_INVALID_OPERATION) errorName = "GL_INVALID_OPERATION";
-			if(glError == GL_STACK_OVERFLOW) errorName = "GL_STACK_OVERFLOW";
-			if(glError == GL_STACK_UNDERFLOW) errorName = "GL_STACK_UNDERFLOW";
-			if(glError == GL_OUT_OF_MEMORY) errorName = "GL_OUT_OF_MEMORY";
-			if(glError == GL_INVALID_FRAMEBUFFER_OPERATION) errorName = "GL_INVALID_FRAMEBUFFER_OPERATION";
-			if(glError == GL_CONTEXT_LOST) errorName = "GL_CONTEXT_LOST";
-			if(glError == GL_TABLE_TOO_LARGE) errorName = "GL_TABLE_TOO_LARGE";
-
-			if(errorName != null) {
-				System.out.println("GL ERROR: " + Integer.toHexString(glError) + " " + errorName);
-			} else {
-				System.out.println("GL UNKNOWN ERROR: " + Integer.toHexString(glError));
-			}
+			String errorName = errorToString(glError);
+			System.out.println("GL ERROR: " + Integer.toHexString(glError) + " " + errorName);
 		}
 	}
 }

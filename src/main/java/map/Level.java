@@ -12,7 +12,6 @@ import entity.nonDynamic.resources.OreType;
 import entity.nonDynamic.resources.Tree;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
-import graphics.SpritesheetHashtable;
 import graphics.opengl.OpenGLUtils;
 import main.Game;
 import util.BiPredicateInteger;
@@ -316,10 +315,12 @@ public class Level {
 		}
 
 		OpenGLUtils.drawInstanced(OpenGLUtils.tileData, new Vec2f(Sprite.SIZE), scroll);
-		if(OpenGLUtils.entityData.getInstances() > 0)
+		if (OpenGLUtils.entityData.getInstances() > 0) {
 			OpenGLUtils.drawInstanced(OpenGLUtils.entityData, new Vec2f(Sprite.SIZE), scroll);
-		if(OpenGLUtils.itemData.getInstances() > 0)
+		}
+		if (OpenGLUtils.itemData.getInstances() > 0) {
 			OpenGLUtils.drawInstanced(OpenGLUtils.itemData, new Vec2f(Sprite.SIZE), scroll);
+		}
 	}
 
 	public void renderHardEntities(Vec2f scroll) {
