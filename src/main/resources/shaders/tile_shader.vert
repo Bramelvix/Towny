@@ -12,8 +12,8 @@ uniform vec2 offset;
 uniform vec2 tex_scale;
 
 void main() {
-    vec3 scaled = vec3(aPos, aInstancePos.z) * vec3(scale, 1f);
-    vec3 translated = scaled + vec3(aInstancePos.xy, 0.f) + vec3(offset, 0.f);
+    vec3 scaled = vec3(aPos, aInstancePos.z) * vec3(scale, 1);
+    vec3 translated = scaled + vec3(aInstancePos.xy, 0.f) + vec3(offset, 0);
     gl_Position = vec4(translated, 1.0);
 
     vec2 scaled_coord = (aTexCoords * tex_scale);
