@@ -6,8 +6,8 @@ import map.Level;
 
 public class PathFinder {
 
-	private static ArrayList<Point> closed = new ArrayList<>();
-	private static ArrayList<Point> open = new ArrayList<>();
+	private static final ArrayList<Point> closed = new ArrayList<>();
+	private static final ArrayList<Point> open = new ArrayList<>();
 	private static Point[][] nodes;
 
 	public static void init(int levelWidth, int levelHeight) {

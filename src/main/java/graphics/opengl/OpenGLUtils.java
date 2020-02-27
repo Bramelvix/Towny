@@ -39,7 +39,7 @@ public abstract class OpenGLUtils {
 	public static InstanceData hardEntityData;
 	public static InstanceData mobData;
 
-	private static ArrayList<Outline> outlines = new ArrayList<>();
+	private static final ArrayList<Outline> outlines = new ArrayList<>();
 
 	public static void init() throws Exception {
 		texShader = new Shader(Game.class.getResource("/shaders/tex_shader.vert"), Game.class.getResource("/shaders/tex_shader.frag"));
@@ -56,21 +56,16 @@ public abstract class OpenGLUtils {
 				pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2 + Tile.SIZE, 'h'),
 				pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2, 'h'),
 				pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2, 'h')
-				/*0f, 0f,
-				0f, pToGL(1, 'h'),
-				pToGL(1, 'w'), pToGL(1, 'h'),
-				pToGL(1, 'w'), pToGL(1, 'h'),
-				pToGL(1, 'w'), 0f,
-				0f, 0f*/
+
 		};
 
 		float[] texCoords = {
-				0f, 0f,
-				0f, 1f,
-				1f, 1f,
-				1f, 1f,
-				1f, 0f,
-				0f, 0f
+			0f, 0f,
+			0f, 1f,
+			1f, 1f,
+			1f, 1f,
+			1f, 0f,
+			0f, 0f
 		};
 
 
@@ -148,8 +143,6 @@ public abstract class OpenGLUtils {
 		filename = System.getProperty("user.dir")+"/src/main/resources"+filename;
 		ByteBuffer buffer = stbi_load(filename, imageWidth, imageHeight, channels, 4);
 
-		//System.out.println(stbi_failure_reason());
-
 		int textureID = glGenTextures();
 		glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -197,7 +190,7 @@ public abstract class OpenGLUtils {
 		instanceData.bindTexture();
 
 		tileShader.setUniform("scale", tileSize.x / Tile.SIZE, tileSize.y / Tile.SIZE);
-		//tileShader.setUniform("offset", pToGL(-offset.x % Tile.SIZE, 'w'), pToGL(-offset.y % Tile.SIZE, 'h'));
+
 		fontShader.setUniform("offset", (2f*-offset.x)/ Game.width, (2f*offset.y)/ Game.height);
 		Vec2f texScale = new Vec2f((float)Tile.SIZE/ instanceData.getSpriteSheet().getWidth(), (float)Tile.SIZE/ instanceData.getSpriteSheet().getHeight());
 		tileShader.setUniform("tex_scale", texScale);
@@ -319,7 +312,7 @@ public abstract class OpenGLUtils {
 		int glError = glGetError();
 		if(glError != 0) {
 			String errorName = errorToString(glError);
-			System.out.println("GL ERROR: " + Integer.toHexString(glError) + " " + errorName);
+			System.err.println("GL ERROR: " + Integer.toHexString(glError) + " " + errorName);
 		}
 	}
 }

@@ -251,7 +251,7 @@ public class Game {
 		}
 
 		OpenGLUtils.drawOutlines(scroll);
-		ui.render(currentLayerNumber, speed);
+		ui.render(currentLayerNumber);
 		glfwSwapBuffers(window);
 		OpenGLUtils.checkGLError();
 	}
@@ -270,6 +270,7 @@ public class Game {
 		ui.getIcons().setShovelOnClick(pointer, this::onClickShovel);
 		ui.getIcons().setPlowOnclick(pointer, this::onClickPlow);
 		ui.getIcons().setSawOnClick(pointer, this::onClickSaw);
+		ui.updateSpeed(speed);
 	}
 
 	private void onClickLayerUp() {
@@ -294,12 +295,14 @@ public class Game {
 			paused = true;
 			speed = 20;
 		}
+		ui.updateSpeed(speed);
 
 	}
 
 	private void onClickupSpeed() {
 		if (speed < 90) {
 			speed+=10;
+			ui.updateSpeed(speed);
 			ns = 1000000000.0 / speed;
 		}
 	}
@@ -307,6 +310,7 @@ public class Game {
 	private void onClickdownSpeed() {
 		if (speed > 30) {
 			speed-=10;
+			ui.updateSpeed(speed);
 			ns = 1000000000.0 / speed;
 		}
 	}
@@ -427,7 +431,7 @@ public class Game {
 
 	private void onClickDrop() {
 		selectedvill.setPath(null);
-		selectedvill.addJob(new MoveItemJob((int) ui.getMenuIngameX()/Tile.SIZE, (int) ui.getMenuIngameY() / Tile.SIZE, currentLayerNumber, selectedvill));
+		selectedvill.addJob(new MoveItemJob((int) ui.getMenu().getX()/Tile.SIZE, (int) ui.getMenu().getY() / Tile.SIZE, currentLayerNumber, selectedvill));
 		ui.deSelectIcons();
 		deselect(selectedvill);
 		ui.getMenu().hide();

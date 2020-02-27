@@ -22,14 +22,14 @@ public class Ui {
 	private final UiIcons icons;
 
 	// rendering the ui
-	public void render(int z, int speed) {
+	public void render(int z) {
 		icons.render(); //texShader
 		selection.render(new Vec2f(0,0)); //colShader
 		menu.render(); //colShader + fontShader
 		map.render();  //texShader + colShader
 		outline.render(new Vec2f(0,0)); //colShader
 		layerLevelChanger.render(z); //colShader + fontShader
-		top.render(speed); //colShader + texShader + fontShader
+		top.render(); //colShader + texShader + fontShader
 	}
 
 	public Ui(Level[] levels, PointerInput pointer) {
@@ -62,6 +62,10 @@ public class Ui {
 		return menu;
 	}
 
+	public void updateSpeed(int speed) {
+		top.updateSpeed(speed);
+	}
+
 	public void deSelectIcons() {
 		icons.deSelect();
 	}
@@ -70,20 +74,12 @@ public class Ui {
 		if (!outline.isVisible()) {
 			showMenu(pointer);
 			menu.addItems(items);
-			menu.show();
+			menu.setVisible(true);
 		}
 	}
 
 	public BuildingRecipe getBuildRecipeOutline() {
 		return outline.getBuildRecipe();
-	}
-
-	public float getMenuIngameY() {
-		return menu.getIngameY();
-	}
-
-	public float getMenuIngameX() {
-		return menu.getIngameX();
 	}
 
 	private void showMenu(PointerInput pointer) {

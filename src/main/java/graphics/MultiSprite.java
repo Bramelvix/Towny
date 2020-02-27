@@ -9,7 +9,7 @@ import util.vectors.Vec3f;
 //A MultiSprite is a Sprite composed of multiple images overlaid on top of each other
 public class MultiSprite extends Sprite{
 
-	private Vec2f[] texCoordList; //array of UV coordinates for every texture used in this MultiSprite
+	private final Vec2f[] texCoordList; //array of UV coordinates for every texture used in this MultiSprite
 
 	public MultiSprite(Vec2f[] texCoordList, Spritesheet sheet) {
 		super(new Vec2i(0,0), sheet);

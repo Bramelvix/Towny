@@ -3,7 +3,6 @@ package entity.dynamic.mob.work;
 import entity.dynamic.item.Item;
 import entity.dynamic.mob.Villager;
 import entity.nonDynamic.building.container.Container;
-import map.Tile;
 
 public class MoveItemJob extends Job {
 

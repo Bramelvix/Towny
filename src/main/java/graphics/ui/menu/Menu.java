@@ -10,7 +10,6 @@ import util.vectors.Vec2f;
 public class Menu { // the menu is the little options menu that shows up when you right click
 
 	private final Vec2f position; // x and y of the top left corner
-	private final Vec2f ingame;
 	private float width = 70; // width and height hardcoded
 	private float height = 20;
 	private List<MenuItem> items; // list of items on the menu
@@ -21,7 +20,7 @@ public class Menu { // the menu is the little options menu that shows up when yo
 	public Menu(PointerInput pointer) {
 		this.pointer = pointer;
 		position = new Vec2f(pointer.getTrueX(), pointer.getTrueY());
-		ingame = new Vec2f(0);
+		//ingame = new Vec2f(0);
 		items = new ArrayList<>();
 		hide();
 	}
@@ -33,12 +32,8 @@ public class Menu { // the menu is the little options menu that shows up when yo
 			items.forEach(MenuItem::render);
 		}
 	}
-
-	// showing the menu
-	public void show() {
-		visible = true;
-		ingame.x = pointer.getX();
-		ingame.y = pointer.getY();
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 
 	// getter
@@ -88,14 +83,6 @@ public class Menu { // the menu is the little options menu that shows up when yo
 
 	float getYLocForMenuItem() {
 		return position.y + (items.size() * 15);
-	}
-
-	public float getIngameX() {
-		return ingame.x;
-	}
-
-	public float getIngameY() {
-		return ingame.y;
 	}
 
 	public float getX() {

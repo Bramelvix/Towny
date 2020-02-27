@@ -109,14 +109,4 @@ public class MenuItem {
 		return (T) recipe;
 	}
 
-	public static boolean isEqualToAnyMaterial(String input) {
-		return (
-			input.equals(MenuItem.WOOD)
-			|| input.equals(MenuItem.IRON)
-			|| input.equals(MenuItem.COPPER)
-			|| input.equals(MenuItem.GOLD)
-			|| input.equals(MenuItem.CRYSTAL)
-		);
-	}
-
 }

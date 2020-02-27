@@ -12,11 +12,6 @@ import java.util.HashMap;
 import static org.lwjgl.opengl.GL20.*;
 
 public class Shader {
-	private static final int VERT_SHADER = 0;
-	private static final int FRAG_SHADER = 1;
-	private static final int SHADER_PROGRAM = 2;
-
-	protected String log = "";
 
 	int ID;
 	HashMap<String, Integer> uniforms = new HashMap<>();
@@ -30,11 +25,11 @@ public class Shader {
 
 		glShaderSource(vert, vertexShaderSource);
 		glCompileShader(vert);
-		checkCompileErrors(vert, VERT_SHADER);
+		checkCompileErrors(vert, ShaderType.VERT_SHADER);
 
 		glShaderSource(frag, fragmentShaderSource);
 		glCompileShader(frag);
-		checkCompileErrors(frag, FRAG_SHADER);
+		checkCompileErrors(frag, ShaderType.FRAG_SHADER);
 
 		ID = glCreateProgram();
 		if(ID == 0) throw new Exception("Couldn't create a shader program");
@@ -42,7 +37,7 @@ public class Shader {
 		glAttachShader(ID, vert);
 		glAttachShader(ID, frag);
 		glLinkProgram(ID);
-		checkCompileErrors(ID, SHADER_PROGRAM);
+		checkCompileErrors(ID, ShaderType.SHADER_PROGRAM);
 
 		glDeleteShader(vert);
 		glDeleteShader(frag);
@@ -110,29 +105,28 @@ public class Shader {
 		glUniform4f(glGetUniformLocation(ID, name), v.x, v.y, v.z, v.w);
 	}
 
-	private void checkCompileErrors(int id, int type) throws Exception {
-		if(type == SHADER_PROGRAM) {
+	private void checkCompileErrors(int id, ShaderType type) throws Exception {
+		String log = "";
+		if (type == ShaderType.SHADER_PROGRAM) {
 			int len = glGetProgrami(id, GL_INFO_LOG_LENGTH);
 			String err = glGetProgramInfoLog(id, len);
-			if (err.length() != 0)
+			if (!err.isEmpty()) {
 				log = err + "\n" + log;
-			if (log != null)
-				log = log.trim();
+			}
+			log = log.trim();
 			if(glGetProgrami(id, GL_LINK_STATUS) == GL_FALSE) {
-				throw new Exception(log.length()!=0 ? log : "Could not link program");
+				throw new Exception(!log.isEmpty() ? log : "Could not link program");
 			}
-		} else {
-			String s_type = "";
-			if(type == VERT_SHADER) s_type = "vertex shader";
-			else if(type == FRAG_SHADER) s_type = "fragment shader";
-
-			int len = glGetShaderi(id, GL_INFO_LOG_LENGTH);
-			String err = glGetShaderInfoLog(id, len);
-			if (err.length() != 0)
-				log += s_type + " compile log:\n" + err + "\n";
-			if(glGetShaderi(id, GL_COMPILE_STATUS) != GL_TRUE) {
-				throw new Exception(log.length()!=0 ? log : "Could not compile "+s_type);
-			}
+			return;
 		}
+		int len = glGetShaderi(id, GL_INFO_LOG_LENGTH);
+		String err = glGetShaderInfoLog(id, len);
+		if (!err.isEmpty()) {
+			log += type.name()+ " compile log:\n" + err + "\n";
+		}
+		if(glGetShaderi(id, GL_COMPILE_STATUS) != GL_TRUE) {
+			throw new Exception(!log.isEmpty() ? log : "Could not compile " + type.name());
+		}
+
 	}
 }

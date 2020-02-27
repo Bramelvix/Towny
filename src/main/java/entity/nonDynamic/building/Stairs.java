@@ -6,7 +6,7 @@ import map.Level;
 
 public class Stairs extends BuildAbleObject {
 
-	private boolean top;
+	private final boolean top;
 
 	public Stairs(boolean top) {
 		super();

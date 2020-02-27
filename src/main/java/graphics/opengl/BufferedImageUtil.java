@@ -44,16 +44,27 @@ class BufferedImageUtil {
 
 		if (useAlpha) {
 			raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, texWidth, texHeight, 4, null);
-			texImage = new BufferedImage(new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB),
-					new int[]{8, 8, 8, 8},
-					true,
-					false,
-					ComponentColorModel.TRANSLUCENT,
-					DataBuffer.TYPE_BYTE), raster, false, new Hashtable());
+			texImage = new BufferedImage(
+				new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB),
+				new int[]{8, 8, 8, 8},
+				true,
+				false,
+				ComponentColorModel.TRANSLUCENT,
+				DataBuffer.TYPE_BYTE), raster, false, new Hashtable()
+			);
 		} else {
 			raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, texWidth, texHeight, 3, null);
-			texImage = new BufferedImage(new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB),
-					new int[]{8, 8, 8, 0}, false, false, ComponentColorModel.OPAQUE, DataBuffer.TYPE_BYTE), raster, false, new Hashtable());
+			texImage = new BufferedImage(
+				new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB),
+				new int[]{8, 8, 8, 0},
+					false,
+					false,
+					ComponentColorModel.OPAQUE, DataBuffer.TYPE_BYTE
+				),
+				raster,
+				false,
+				new Hashtable()
+			);
 		}
 
 		Graphics2D g = (Graphics2D) texImage.getGraphics();

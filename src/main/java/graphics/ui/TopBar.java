@@ -5,12 +5,9 @@ import graphics.ui.icon.Icon;
 import input.PointerInput;
 import util.TextureInfo;
 import util.vectors.Vec2f;
-import util.vectors.Vec4f;
 
-public class TopBar {
+public class TopBar extends UiElement{
 
-	private final Vec2f position;
-	private final Vec2f size;
 	private int vilcount, solcount; // amount of villagers and soldiers
 	private final Icon pause;
 	private final Icon fast;
@@ -19,12 +16,11 @@ public class TopBar {
 	private final Icon vil;
 	private final TextureInfo pauseTexture;
 	private final TextureInfo playTexture;
-	private static final Vec4f colour = new Vec4f(0.3568f, 0.3686f, 0.3882f, 0.43137f); //colour for background
+	private int speed;
 
 	// constructor
 	TopBar(float x, float y, float width, float height, PointerInput pointer) {
-		position = new Vec2f(x, y);
-		size = new Vec2f(width, height);
+		super(new Vec2f(x, y), new Vec2f(width, height), true, pointer);
 		pauseTexture = OpenGLUtils.loadTexture("/icons/pause-button.png");
 		playTexture = OpenGLUtils.loadTexture("/icons/play-button.png");
 		pause = new Icon(x + 120, y + 25, pauseTexture, 0.060f, pointer);
@@ -40,6 +36,10 @@ public class TopBar {
 		this.vilcount = vilcount;
 	}
 
+	void updateSpeed(int speed) {
+		this.speed = speed;
+	}
+
 	void init(PointerInput pointer, Runnable togglePause, Runnable upSpeed, Runnable downSpeed) {
 		this.pause.setOnClick(pointer, () -> {
 			pause.setTexture(pause.getTextureId() == pauseTexture.id ? playTexture : pauseTexture, 0.060f);
@@ -50,7 +50,7 @@ public class TopBar {
 	}
 
 	// render the topbar on the screen
-	public void render(int speed) {
+	public void render() {
 		OpenGLUtils.drawFilledSquare(position, size, new Vec2f(0, 0), colour);
 		vil.render();
 		sol.render();

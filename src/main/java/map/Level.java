@@ -12,7 +12,6 @@ import entity.nonDynamic.resources.OreType;
 import entity.nonDynamic.resources.Tree;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
-import graphics.opengl.OpenGLUtils;
 import main.Game;
 import util.BiPredicateInteger;
 import util.vectors.Vec2f;

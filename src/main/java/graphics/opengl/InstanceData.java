@@ -15,8 +15,8 @@ public class InstanceData {
 	private int maxInstances;
 	private int instances; //amount of instances to render per frame
 
-	private int vbo;
-	private int bufferSize;
+	private final int vbo;
+	private final int bufferSize;
 	public ByteBuffer buffer;
 
 	private Spritesheet spritesheet;

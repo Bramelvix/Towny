@@ -6,7 +6,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
 public class Keyboard implements GLFWKeyCallbackI {
 
-	private static boolean[] keys = new boolean[65536];
+	private static final boolean[] keys = new boolean[65536];
 
 	@Override
 	public void invoke(long window, int keycode, int i1, int i2, int i3) {

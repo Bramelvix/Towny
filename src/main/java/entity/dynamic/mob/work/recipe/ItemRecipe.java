@@ -48,7 +48,7 @@ public class ItemRecipe extends Recipe {
 	private static final ItemRecipe WOOD_DAGGER = new ItemRecipe(ItemHashtable.get(23), Anvil.class, ItemHashtable.get(1));
 	private static final ItemRecipe WOOD_SCIMITAR = new ItemRecipe(ItemHashtable.get(26), Anvil.class, ItemHashtable.get(1));
 
-	private Class<? extends Workstation> workstation;
+	private final Class<? extends Workstation> workstation;
 
 	private <T extends Item> ItemRecipe(T product, Class<? extends Workstation> workstation, Item... resources) {
 		super(product, resources);

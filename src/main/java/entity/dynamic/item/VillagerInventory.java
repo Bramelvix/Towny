@@ -9,9 +9,9 @@ import java.util.Arrays;
 
 public class VillagerInventory {
 
-	private Clothing[] clothes;
-	private Weapon[] weapons;
-	private Villager wearer;
+	private final Clothing[] clothes;
+	private final Weapon[] weapons;
+	private final Villager wearer;
 
 	public VillagerInventory(Villager wearer) {
 		this.wearer = wearer;

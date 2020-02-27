@@ -14,7 +14,7 @@ public class Sprite {
 
 	private final int spriteSheetID;
 	public static final int SIZE = Tile.SIZE; // 48
-	private Vec2f texCoords = new Vec2f(0); //The location of the texture coordinates for this sprite in it's spritesheet
+	private final Vec2f texCoords = new Vec2f(0); //The location of the texture coordinates for this sprite in it's spritesheet
 	Vec2f texSize = new Vec2f(1); //The size of the texture (in uv coordinates)
 
 	//TODO make this the actual average colour, right now its just the first pixel
