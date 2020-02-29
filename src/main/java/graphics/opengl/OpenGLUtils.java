@@ -4,10 +4,11 @@ import graphics.SpritesheetHashtable;
 import main.Game;
 import map.Tile;
 import org.lwjgl.BufferUtils;
+import util.IOUtil;
 import util.TextureInfo;
 import util.vectors.Vec2f;
 import util.vectors.Vec4f;
-
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
@@ -137,20 +138,26 @@ public abstract class OpenGLUtils {
 	}
 
 	public static TextureInfo loadTexture(String filename) {
-		int[] imageWidth = new int[1];
-		int[] imageHeight = new int[1];
-		int[] channels = new int[1];
-		filename = System.getProperty("user.dir")+"/src/main/resources"+filename;
-		ByteBuffer buffer = stbi_load(filename, imageWidth, imageHeight, channels, 4);
+		try {
+			int[] imageWidth = new int[1];
+			int[] imageHeight = new int[1];
+			int[] channels = new int[1];
+			ByteBuffer buf = IOUtil.ioResourceToByteBuffer(filename, 8 * 1024);
 
-		int textureID = glGenTextures();
-		glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, imageWidth[0], imageHeight[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-		return new TextureInfo(textureID, imageWidth[0], imageHeight[0], channels[0], buffer);
+			ByteBuffer buffer = stbi_load_from_memory(buf, imageWidth, imageHeight, channels, 4);
+
+			int textureID = glGenTextures();
+			glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, imageWidth[0], imageHeight[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+			return new TextureInfo(textureID, imageWidth[0], imageHeight[0], channels[0], buffer);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static void deleteTexture(int textId) {
