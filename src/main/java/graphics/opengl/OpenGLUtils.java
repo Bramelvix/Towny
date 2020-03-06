@@ -49,15 +49,14 @@ public abstract class OpenGLUtils {
 		tileShader = new Shader(Game.class.getResource("/shaders/tile_shader.vert"), Game.class.getResource("/shaders/tex_shader.frag"));
 
 		float[] vertices = {
-				// Left bottom triangle
-				pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2, 'h'),
-				pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2 + Tile.SIZE, 'h'),
-				pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2 + Tile.SIZE, 'h'),
-				// Right top triangle
-				pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2 + Tile.SIZE, 'h'),
-				pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2, 'h'),
-				pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2, 'h')
-
+			// Left bottom triangle
+			pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2, 'h'),
+			pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2 + Tile.SIZE, 'h'),
+			pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2 + Tile.SIZE, 'h'),
+			// Right top triangle
+			pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2 + Tile.SIZE, 'h'),
+			pToGL((float)Game.width/2 + Tile.SIZE, 'w'), pToGL((float)Game.height/2, 'h'),
+			pToGL((float)Game.width/2, 'w'), pToGL((float)Game.height/2, 'h')
 		};
 
 		float[] texCoords = {

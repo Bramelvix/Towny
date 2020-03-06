@@ -17,7 +17,7 @@ public class InstanceData {
 
 	private final int vbo;
 	private final int bufferSize;
-	public ByteBuffer buffer;
+	private ByteBuffer buffer;
 
 	private Spritesheet spritesheet;
 
@@ -32,7 +32,8 @@ public class InstanceData {
 		mapBuffer(GL_MAP_WRITE_BIT);
 	}
 
-	public void put(Vec3f pos, Vec2f texCoords) {
+	public void put(Vec3f pos, Vec2f texCoords, int spritesheetId) {
+		checkCorrectSpriteSheet(spritesheetId);
 		buffer.putFloat((instances*5*4), pos.x);
 		buffer.putFloat((instances*5*4)+4, pos.y);
 		buffer.putFloat((instances*5*4)+8, pos.z);
@@ -40,6 +41,17 @@ public class InstanceData {
 		buffer.putFloat((instances*5*4)+12, texCoords.x);
 		buffer.putFloat((instances*5*4)+16, texCoords.y);
 		instances++;
+	}
+
+	private void checkCorrectSpriteSheet(int spritesheetId) {
+		if (spritesheetId != spritesheet.getId()) {
+			System.err.println(
+				"Warning: Adding sprite to instanceData with a different spritesheet." +
+				"This will probably cause graphical glitches! " +
+				"Sprite spritesheet: " + spritesheetId +
+				", Instancedata spritesheet: " + this.spritesheet.getId()
+			);
+		}
 	}
 
 	public void clearInstances() {
@@ -59,7 +71,9 @@ public class InstanceData {
 	public void unmapBuffer() {
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		boolean sucess = glUnmapBuffer(GL_ARRAY_BUFFER);
-		if (!sucess) System.out.println("FAILED TO UNMAP BUFFER");
+		if (!sucess) {
+			System.err.println("FAILED TO UNMAP BUFFER");
+		}
 	}
 
 	public int getVbo() {

@@ -12,7 +12,7 @@ import java.nio.ByteOrder;
 //sprites in the game
 public class Sprite {
 
-	private final int spriteSheetID;
+	private final Spritesheet spritesheet;
 	public static final int SIZE = Tile.SIZE; // 48
 	private final Vec2f texCoords = new Vec2f(0); //The location of the texture coordinates for this sprite in it's spritesheet
 	Vec2f texSize = new Vec2f(1); //The size of the texture (in uv coordinates)
@@ -25,7 +25,7 @@ public class Sprite {
 	}
 
 	protected Sprite(Vec2i pos, Spritesheet sheet) {
-		spriteSheetID = sheet.getId();
+		spritesheet = sheet;
 		texCoords.x = (float) (pos.x*SIZE) / sheet.getWidth();
 		texCoords.y = (float) (pos.y*SIZE) / sheet.getHeight();
 
@@ -37,11 +37,11 @@ public class Sprite {
 	}
 
 	public void draw(Vec3f pos, InstanceData instanceData) {
-		instanceData.put(new Vec3f(OpenGLUtils.pToGL(pos.x, 'w'), OpenGLUtils.pToGL(pos.y, 'h'), pos.z), texCoords);
+		instanceData.put(new Vec3f(OpenGLUtils.pToGL(pos.x, 'w'), OpenGLUtils.pToGL(pos.y, 'h'), pos.z), texCoords, getSheet().getId());
 	}
 
-	public int getSpriteSheetID() {
-		return spriteSheetID;
+	public Spritesheet getSheet() {
+		return spritesheet;
 	}
 
 	public Vec2f getTexCoords() {

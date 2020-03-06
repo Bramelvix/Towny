@@ -26,19 +26,18 @@ public class Tile {
 	}
 
 	// render a tile
-	void render(int xi, int yi) {
-		if(sprite != null) {
-			if (entity == null || entity.isTransparent() || !entity.isVisible()) {
-				sprite.draw(new Vec3f(xi*Tile.SIZE, yi*Tile.SIZE, -1.f), OpenGLUtils.tileData);
-			}
-			if (entity != null) {
-				entity.render(solid ? OpenGLUtils.hardEntityData : OpenGLUtils.entityData);
-			}
-			if (item != null) {
-				item.render(OpenGLUtils.itemData);
-			}
+	void render(int x, int y) {
+		if (entity == null || entity.isTransparent() || !entity.isVisible()) {
+			sprite.draw(new Vec3f(x*Tile.SIZE, y*Tile.SIZE, -1.f), OpenGLUtils.tileData);
+		}
+		if (entity != null) {
+			entity.render(solid ? OpenGLUtils.hardEntityData : OpenGLUtils.entityData);
+		}
+		if (item != null) {
+			item.render(OpenGLUtils.itemData);
 		}
 	}
+
 
 	// setters
 	public void setSolid(boolean solid) {
