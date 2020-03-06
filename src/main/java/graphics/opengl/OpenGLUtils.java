@@ -39,6 +39,7 @@ public abstract class OpenGLUtils {
 	public static InstanceData itemData;
 	public static InstanceData hardEntityData;
 	public static InstanceData mobData;
+	public static InstanceData heldItemData;
 
 	private static final ArrayList<Outline> outlines = new ArrayList<>();
 
@@ -96,6 +97,8 @@ public abstract class OpenGLUtils {
 		hardEntityData.setSpritesheet(SpritesheetHashtable.get(1));
 		mobData = new InstanceData(maxInstances);
 		mobData.setSpritesheet(SpritesheetHashtable.get(2));
+		heldItemData = new InstanceData(maxInstances);
+		heldItemData.setSpritesheet(SpritesheetHashtable.get(1));
 
 		glEnableVertexAttribArray(2);
 		glEnableVertexAttribArray(3);
@@ -189,6 +192,11 @@ public abstract class OpenGLUtils {
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
+	}
+
+
+	public static void drawInstanced(InstanceData instanceData, float tileSize, Vec2f offset) {
+		drawInstanced(instanceData, new Vec2f(tileSize), offset);
 	}
 
 	public static void drawInstanced(InstanceData instanceData, Vec2f tileSize, Vec2f offset) {

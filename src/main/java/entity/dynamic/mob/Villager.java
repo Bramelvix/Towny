@@ -221,7 +221,7 @@ public class Villager extends Humanoid {
 			hair.draw(new Vec3f(pos.x, pos.y,pos.z+0.1f), instanceData);
 			inventory.render(pos.z, instanceData);
 			if (getHolding() != null) {
-				getHolding().sprite.draw(new Vec3f(pos.x, pos.y,pos.z+0.05f), instanceData);// renders the item the villager is holding
+				getHolding().sprite.draw(new Vec3f(pos.x, pos.y,pos.z+0.05f), OpenGLUtils.heldItemData);// renders the item the villager is holding
 			}
 		}
 	}

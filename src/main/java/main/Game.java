@@ -232,22 +232,25 @@ public class Game {
 		map[currentLayerNumber].render(scroll);
 		renderMobs();
 
-		OpenGLUtils.drawInstanced(OpenGLUtils.tileData, new Vec2f(Sprite.SIZE), scroll);
+		OpenGLUtils.drawInstanced(OpenGLUtils.tileData, Sprite.SIZE, scroll);
 
-		if(OpenGLUtils.entityData.getInstances() > 0) {
-			OpenGLUtils.drawInstanced(OpenGLUtils.entityData, new Vec2f(Sprite.SIZE), scroll);
+		if(OpenGLUtils.entityData.notEmpty()) {
+			OpenGLUtils.drawInstanced(OpenGLUtils.entityData, Sprite.SIZE, scroll);
 		}
 
-		if(OpenGLUtils.itemData.getInstances() > 0) {
-			OpenGLUtils.drawInstanced(OpenGLUtils.itemData, new Vec2f(Sprite.SIZE), scroll);
+		if(OpenGLUtils.itemData.notEmpty()) {
+			OpenGLUtils.drawInstanced(OpenGLUtils.itemData, Sprite.SIZE, scroll);
 		}
 
-		if(OpenGLUtils.mobData.getInstances() > 0) {
-			OpenGLUtils.drawInstanced(OpenGLUtils.mobData, new Vec2f(Tile.SIZE), new Vec2f(xScroll, yScroll));
+		if(OpenGLUtils.mobData.notEmpty()) {
+			OpenGLUtils.drawInstanced(OpenGLUtils.mobData, Sprite.SIZE, scroll);
+		}
+		if (OpenGLUtils.heldItemData.notEmpty()) {
+			OpenGLUtils.drawInstanced(OpenGLUtils.heldItemData, Sprite.SIZE, scroll);
 		}
 
-		if(OpenGLUtils.hardEntityData.getInstances() > 0) {
-			OpenGLUtils.drawInstanced(OpenGLUtils.hardEntityData, new Vec2f(Sprite.SIZE), scroll);
+		if(OpenGLUtils.hardEntityData.notEmpty()) {
+			OpenGLUtils.drawInstanced(OpenGLUtils.hardEntityData, Sprite.SIZE, scroll);
 		}
 
 		OpenGLUtils.drawOutlines(scroll);
@@ -666,12 +669,12 @@ public class Game {
 
 		vills.forEach(vil -> vil.renderIf(
 			inBounds(vil.getX(), vil.getY(), vil.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-				OpenGLUtils.mobData
+			OpenGLUtils.mobData
 		));
 
 		sols.forEach(sol -> sol.renderIf(
 			inBounds(sol.getX(), sol.getY(), sol.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-				OpenGLUtils.mobData
+			OpenGLUtils.mobData
 		));
 
 	}

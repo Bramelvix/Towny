@@ -62,6 +62,10 @@ public class InstanceData {
 		return instances;
 	}
 
+	public boolean notEmpty() {
+		return instances > 0;
+	}
+
 	public void mapBuffer(int accessBits) {
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		buffer = glMapBufferRange(GL_ARRAY_BUFFER, 0, bufferSize, accessBits, buffer);
