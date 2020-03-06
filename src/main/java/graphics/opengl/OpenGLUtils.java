@@ -44,10 +44,10 @@ public abstract class OpenGLUtils {
 	private static final ArrayList<Outline> outlines = new ArrayList<>();
 
 	public static void init() throws Exception {
-		texShader = new Shader(Game.class.getResource("/shaders/tex_shader.vert"), Game.class.getResource("/shaders/tex_shader.frag"));
-		colShader = new Shader(Game.class.getResource("/shaders/col_shader.vert"), Game.class.getResource("/shaders/col_shader.frag"));
-		fontShader = new Shader(Game.class.getResource("/shaders/text_shader.vert"), Game.class.getResource("/shaders/tex_shader.frag"));
-		tileShader = new Shader(Game.class.getResource("/shaders/tile_shader.vert"), Game.class.getResource("/shaders/tex_shader.frag"));
+		texShader = new Shader("/shaders/tex_shader.vert", "/shaders/font_shader.frag");
+		colShader = new Shader("/shaders/col_shader.vert", "/shaders/col_shader.frag");
+		fontShader = new Shader("/shaders/font_shader.vert", "/shaders/font_shader.frag");
+		tileShader = new Shader("/shaders/tile_shader.vert", "/shaders/font_shader.frag");
 
 		float[] vertices = {
 			// Left bottom triangle
@@ -80,6 +80,8 @@ public abstract class OpenGLUtils {
 		glEnableVertexAttribArray(0);
 		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
 		glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL);
 
 		int VBO2 = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, VBO2);
@@ -105,7 +107,7 @@ public abstract class OpenGLUtils {
 		glVertexAttribDivisor(2,1); //this sends the vertex attrib to the shader per instance instead of per vertex
 		glVertexAttribDivisor(3,1); //this sends the vertex attrib to the shader per instance instead of per vertex
 
-		glLineWidth(1.f); //mac's don't support more than 1
+		glLineWidth(1f); //mac's don't support more than 1
 		glEnable(GL_LINE_SMOOTH);
 	}
 

@@ -28,7 +28,7 @@ public class Tile {
 	// render a tile
 	void render(int x, int y) {
 		if (entity == null || entity.isTransparent() || !entity.isVisible()) {
-			sprite.draw(new Vec3f(x*Tile.SIZE, y*Tile.SIZE, -1.f), OpenGLUtils.tileData);
+			sprite.draw(new Vec3f(x*Tile.SIZE, y*Tile.SIZE, 0.9f), OpenGLUtils.tileData);
 		}
 		if (entity != null) {
 			entity.render(solid ? OpenGLUtils.hardEntityData : OpenGLUtils.entityData);

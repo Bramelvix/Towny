@@ -17,17 +17,17 @@ public class Shader {
 	HashMap<String, Integer> uniforms = new HashMap<>();
 
 	//TODO make a shader/opengl exception type
-	public Shader(String vertexShaderSource, String fragmentShaderSource) throws Exception {
+	public Shader(URL vertexShaderSource, URL fragmentShaderSource) throws Exception {
 		int vert = glCreateShader(GL_VERTEX_SHADER);
 		int frag = glCreateShader(GL_FRAGMENT_SHADER);
 		if(vert == 0) throw new Exception("Couldn't create a vertex shader");
 		if(frag == 0) throw new Exception("Couldn't create a fragment shader");
 
-		glShaderSource(vert, vertexShaderSource);
+		glShaderSource(vert, readFromFile(vertexShaderSource));
 		glCompileShader(vert);
 		checkCompileErrors(vert, ShaderType.VERT_SHADER);
 
-		glShaderSource(frag, fragmentShaderSource);
+		glShaderSource(frag, readFromFile(fragmentShaderSource));
 		glCompileShader(frag);
 		checkCompileErrors(frag, ShaderType.FRAG_SHADER);
 
@@ -43,8 +43,8 @@ public class Shader {
 		glDeleteShader(frag);
 	}
 
-	public Shader(URL vert, URL frag) throws Exception {
-		this(readFromFile(vert), readFromFile(frag));
+	public Shader(String vert, String frag) throws Exception {
+		this(Shader.class.getResource(vert), Shader.class.getResource(frag));
 	}
 
 	private static String readFromFile(URL file) {

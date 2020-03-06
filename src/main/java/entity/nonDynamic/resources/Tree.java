@@ -23,7 +23,7 @@ public class Tree extends Resource {
 		topsprite = SpriteHashtable.get(13);
 		setVisible(true);
 		setName("tree");
-		location.z = 0.9f;
+		location.z = -0.8f;
 	}
 
 	// render method to render onto the screen

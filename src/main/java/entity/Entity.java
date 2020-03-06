@@ -10,7 +10,7 @@ import util.vectors.Vec3f;
 
 public abstract class Entity {
 
-	protected Vec3f location = new Vec3f(-1);
+	protected Vec3f location = new Vec3f(-1, -1,0.8f);
 	protected int z; // The level number the entity is on
 	public static final Random RANDOM = new Random(); // random needed for various chance calculations
 	public Sprite sprite; // the entity's sprite
