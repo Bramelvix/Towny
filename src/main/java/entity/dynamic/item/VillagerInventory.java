@@ -23,12 +23,12 @@ public class VillagerInventory {
 		for (Clothing i : clothes) {
 			if (i != null) {
 				//TODO Make an actual getZ method in Entity and use it here
-				i.sprite.draw(new Vec3f(i.getX(),i.getY(),z-0.05f), instanceData);
+				i.sprite.draw(new Vec3f(i.getX(),i.getY(),z-0.1f), instanceData);
 			}
 		}
 		for (Weapon i : weapons) {
 			if (i != null) {
-				i.sprite.draw(new Vec3f(i.getX(),i.getY(),z-0.06f), instanceData);
+				i.sprite.draw(new Vec3f(i.getX(),i.getY(),z-0.1f), instanceData);
 			}
 		}
 	}
