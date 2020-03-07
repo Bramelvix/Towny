@@ -4,7 +4,6 @@ import entity.nonDynamic.building.BuildAbleObject;
 import graphics.MultiSprite;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
-import graphics.SpritesheetHashtable;
 import map.Level;
 import util.vectors.Vec2f;
 
@@ -134,7 +133,7 @@ public class Wall extends BuildAbleObject {
 		for (int i = 0; i<sprites.size(); i++) {
 			texCoordList[i] = (sprites.get(i).getTexCoords());
 		}
-		sprite = new MultiSprite(texCoordList, SpritesheetHashtable.get(1));
+		sprite = new MultiSprite(texCoordList, 1);
 
 		/*if (dynamicSpriteList.containsKey(sprites)) { //if a dynamic sprite exists, use it
 			sprite = dynamicSpriteList.get(sprites);

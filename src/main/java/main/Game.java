@@ -1,5 +1,6 @@
 package main;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -138,8 +139,11 @@ public class Game {
 		spawnZombies();
 	}
 
-	private void setIcon() {
+	private void setIcon() throws Exception {
 		TextureInfo textureInfo = OpenGLUtils.loadTexture("/icons/soldier.png");
+		if (textureInfo.buffer == null) {
+			throw new Exception("Error loading window icon");
+		}
 		ByteBuffer buffer = textureInfo.buffer;
 		GLFWImage image = GLFWImage.malloc();
 		image.set(textureInfo.width, textureInfo.height, buffer);
@@ -232,27 +236,7 @@ public class Game {
 		map[currentLayerNumber].render(scroll);
 		renderMobs();
 
-		OpenGLUtils.drawInstanced(OpenGLUtils.tileData, Sprite.SIZE, scroll);
-
-		if(OpenGLUtils.entityData.notEmpty()) {
-			OpenGLUtils.drawInstanced(OpenGLUtils.entityData, Sprite.SIZE, scroll);
-		}
-
-		if(OpenGLUtils.itemData.notEmpty()) {
-			OpenGLUtils.drawInstanced(OpenGLUtils.itemData, Sprite.SIZE, scroll);
-		}
-
-		if(OpenGLUtils.mobData.notEmpty()) {
-			OpenGLUtils.drawInstanced(OpenGLUtils.mobData, Sprite.SIZE, scroll);
-		}
-		if (OpenGLUtils.heldItemData.notEmpty()) {
-			OpenGLUtils.drawInstanced(OpenGLUtils.heldItemData, Sprite.SIZE, scroll);
-		}
-
-		if(OpenGLUtils.hardEntityData.notEmpty()) {
-			OpenGLUtils.drawInstanced(OpenGLUtils.hardEntityData, Sprite.SIZE, scroll);
-		}
-
+		OpenGLUtils.drawInstanced(OpenGLUtils.instanceData, Sprite.SIZE, scroll);
 		OpenGLUtils.drawOutlines(scroll);
 		ui.render(currentLayerNumber);
 		glfwSwapBuffers(window);
@@ -266,7 +250,7 @@ public class Game {
 		pointer.resetLeftAndRight();
 	}
 
-	private void initUi() {
+	private void initUi() throws IOException {
 		ui = new Ui(map, pointer);
 		ui.initLayerLevelChangerActions(pointer, this::onClickLayerUp, this::onClickLayerDown);
 		ui.initTopBarActions(pointer, this::onClickPause, this::onClickupSpeed, this::onClickdownSpeed);
@@ -663,18 +647,15 @@ public class Game {
 		float y1 = (yScroll + height + Sprite.SIZE);
 
 		mobs.forEach(mob -> mob.renderIf(
-			inBounds(mob.getX(), mob.getY(), mob.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-			OpenGLUtils.mobData
+			inBounds(mob.getX(), mob.getY(), mob.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1)
 		));
 
 		vills.forEach(vil -> vil.renderIf(
-			inBounds(vil.getX(), vil.getY(), vil.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-			OpenGLUtils.mobData
+			inBounds(vil.getX(), vil.getY(), vil.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1)
 		));
 
 		sols.forEach(sol -> sol.renderIf(
-			inBounds(sol.getX(), sol.getY(), sol.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1),
-			OpenGLUtils.mobData
+			inBounds(sol.getX(), sol.getY(), sol.getZ(), currentLayerNumber, xScroll, x1, yScroll , y1)
 		));
 
 	}

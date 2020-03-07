@@ -1,6 +1,5 @@
 package graphics;
 
-import graphics.opengl.InstanceData;
 import graphics.opengl.OpenGLUtils;
 import map.Tile;
 import util.vectors.Vec2f;
@@ -12,36 +11,33 @@ import java.nio.ByteOrder;
 //sprites in the game
 public class Sprite {
 
-	private final Spritesheet spritesheet;
 	public static final int SIZE = Tile.SIZE; // 48
 	private final Vec2f texCoords = new Vec2f(0); //The location of the texture coordinates for this sprite in it's spritesheet
-	Vec2f texSize = new Vec2f(1); //The size of the texture (in uv coordinates)
+	private final Vec2f texSize = new Vec2f(1); //The size of the texture (in uv coordinates)
 
 	//TODO make this the actual average colour, right now its just the first pixel
 	int avgColor;
 
-	protected Sprite(int x, int y, Spritesheet sheet) {
-		this(new Vec2i(x,y), sheet);
+	protected Sprite(int x, int y, int sheetIndex) {
+		this(new Vec2i(x,y), sheetIndex);
 	}
 
-	protected Sprite(Vec2i pos, Spritesheet sheet) {
-		spritesheet = sheet;
-		texCoords.x = (float) (pos.x*SIZE) / sheet.getWidth();
-		texCoords.y = (float) (pos.y*SIZE) / sheet.getHeight();
+	protected Sprite(Vec2i pos, int sheetIndex) {
+		pos.y = SpritesheetHashtable.getBaselineY(pos.y, sheetIndex);
+		Spritesheet spritesheet = SpritesheetHashtable.getCombined();
+		texCoords.x = (float) (pos.x*SIZE) / spritesheet.getWidth();
+		texCoords.y = (float) (pos.y*SIZE) / spritesheet.getHeight();
 
-		texSize.x = (float) SIZE / sheet.getWidth();
-		texSize.y = ((float) SIZE / sheet.getHeight());
+		texSize.x = (float) SIZE / spritesheet.getWidth();
+		texSize.y = ((float) SIZE / spritesheet.getHeight());
 
-		avgColor = sheet.getBuffer().order(ByteOrder.BIG_ENDIAN).getInt(((pos.y*SIZE)*sheet.getWidth()*4) + pos.x*SIZE*4 );
+
+		avgColor = spritesheet.getBuffer().order(ByteOrder.BIG_ENDIAN).getInt(((pos.y*SIZE)*spritesheet.getWidth()*4) + pos.x*SIZE*4 );
 
 	}
 
-	public void draw(Vec3f pos, InstanceData instanceData) {
-		instanceData.put(new Vec3f(OpenGLUtils.pToGL(pos.x, 'w'), OpenGLUtils.pToGL(pos.y, 'h'), pos.z), texCoords, getSheet().getId());
-	}
-
-	public Spritesheet getSheet() {
-		return spritesheet;
+	public void draw(Vec3f pos) {
+		OpenGLUtils.instanceData.put(new Vec3f(OpenGLUtils.pToGL(pos.x, 'w'), OpenGLUtils.pToGL(pos.y, 'h'), pos.z), texCoords);
 	}
 
 	public Vec2f getTexCoords() {

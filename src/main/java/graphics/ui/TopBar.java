@@ -6,6 +6,9 @@ import input.PointerInput;
 import util.TextureInfo;
 import util.vectors.Vec2f;
 
+import javax.imageio.ImageIO;
+import java.io.IOException;
+
 public class TopBar extends UiElement{
 
 	private int vilcount, solcount; // amount of villagers and soldiers
@@ -19,10 +22,10 @@ public class TopBar extends UiElement{
 	private int speed;
 
 	// constructor
-	TopBar(float x, float y, float width, float height, PointerInput pointer) {
+	TopBar(float x, float y, float width, float height, PointerInput pointer) throws IOException {
 		super(new Vec2f(x, y), new Vec2f(width, height), true, pointer);
-		pauseTexture = OpenGLUtils.loadTexture("/icons/pause-button.png");
-		playTexture = OpenGLUtils.loadTexture("/icons/play-button.png");
+		pauseTexture = OpenGLUtils.loadTexture(ImageIO.read(TopBar.class.getResource("/icons/pause-button.png")));
+		playTexture = OpenGLUtils.loadTexture(ImageIO.read(TopBar.class.getResource("/icons/play-button.png")));
 		pause = new Icon(x + 120, y + 25, pauseTexture, 0.060f, pointer);
 		fast = new Icon(x + 160, y + 30, "/icons/fast.png", 1.0f, pointer);
 		slow = new Icon(x + 75, y + 30, "/icons/slow.png", 1.0f, pointer);

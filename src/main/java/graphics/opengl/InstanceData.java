@@ -1,6 +1,7 @@
 package graphics.opengl;
 
 import graphics.Spritesheet;
+import graphics.SpritesheetHashtable;
 import util.vectors.Vec2f;
 import util.vectors.Vec3f;
 
@@ -24,6 +25,7 @@ public class InstanceData {
 	public InstanceData(int maxInstances) {
 		this.maxInstances = maxInstances; //maximum amount of instances that can be drawn in one frame (per buffer)
 		bufferSize = (maxInstances*5*4) + (maxInstances*5*4); //bufferSize in bytes, 3 pos and 2 tex
+		setSpritesheet(SpritesheetHashtable.getCombined());
 
 		vbo = glGenBuffers();
 
@@ -32,8 +34,7 @@ public class InstanceData {
 		mapBuffer(GL_MAP_WRITE_BIT);
 	}
 
-	public void put(Vec3f pos, Vec2f texCoords, int spritesheetId) {
-		checkCorrectSpriteSheet(spritesheetId);
+	public void put(Vec3f pos, Vec2f texCoords) {
 		buffer.putFloat((instances*5*4), pos.x);
 		buffer.putFloat((instances*5*4)+4, pos.y);
 		buffer.putFloat((instances*5*4)+8, pos.z);
@@ -41,17 +42,6 @@ public class InstanceData {
 		buffer.putFloat((instances*5*4)+12, texCoords.x);
 		buffer.putFloat((instances*5*4)+16, texCoords.y);
 		instances++;
-	}
-
-	private void checkCorrectSpriteSheet(int spritesheetId) {
-		if (spritesheetId != spritesheet.getId()) {
-			System.err.println(
-				"Warning: Adding sprite to instanceData with a different spritesheet." +
-				"This will probably cause graphical glitches! " +
-				"Sprite spritesheet: " + spritesheetId +
-				", Instancedata spritesheet: " + this.spritesheet.getId()
-			);
-		}
 	}
 
 	public void clearInstances() {

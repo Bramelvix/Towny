@@ -6,6 +6,8 @@ import input.PointerInput;
 import util.vectors.Vec2f;
 import util.vectors.Vec4f;
 
+import java.io.IOException;
+
 
 public class LayerLevelChanger {
 
@@ -17,7 +19,7 @@ public class LayerLevelChanger {
 	private final Icon up;
 	private final Icon down;
 
-	LayerLevelChanger(int x, int y,int width, int height, PointerInput pointer) {
+	LayerLevelChanger(int x, int y,int width, int height, PointerInput pointer) throws IOException {
 		this.width = width;
 		this.height = height;
 		this.x = x;

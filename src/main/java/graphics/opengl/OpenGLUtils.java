@@ -1,13 +1,14 @@
 package graphics.opengl;
 
-import graphics.SpritesheetHashtable;
 import main.Game;
 import map.Tile;
 import org.lwjgl.BufferUtils;
-import util.IOUtil;
 import util.TextureInfo;
 import util.vectors.Vec2f;
 import util.vectors.Vec4f;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -20,7 +21,6 @@ import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
 import static org.lwjgl.opengl.GL33.glVertexAttribDivisor;
 import static org.lwjgl.opengl.GL45.GL_CONTEXT_LOST;
-import static org.lwjgl.stb.STBImage.*;
 
 public abstract class OpenGLUtils {
 
@@ -34,12 +34,7 @@ public abstract class OpenGLUtils {
 
 	private static final int maxInstances = 627; //maximum amount of instances that can be drawn in one frame (per buffer)
 
-	public static InstanceData tileData;
-	public static InstanceData entityData;
-	public static InstanceData itemData;
-	public static InstanceData hardEntityData;
-	public static InstanceData mobData;
-	public static InstanceData heldItemData;
+	public static InstanceData instanceData;
 
 	private static final ArrayList<Outline> outlines = new ArrayList<>();
 
@@ -89,18 +84,7 @@ public abstract class OpenGLUtils {
 		glBufferData(GL_ARRAY_BUFFER, texCoords, GL_STATIC_DRAW);
 		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
 
-		tileData = new InstanceData(maxInstances);
-		tileData.setSpritesheet(SpritesheetHashtable.get(1));
-		entityData = new InstanceData(maxInstances);
-		entityData.setSpritesheet(SpritesheetHashtable.get(1));
-		itemData = new InstanceData(maxInstances);
-		itemData.setSpritesheet(SpritesheetHashtable.get(1));
-		hardEntityData = new InstanceData(maxInstances*10);
-		hardEntityData.setSpritesheet(SpritesheetHashtable.get(1));
-		mobData = new InstanceData(maxInstances);
-		mobData.setSpritesheet(SpritesheetHashtable.get(2));
-		heldItemData = new InstanceData(maxInstances);
-		heldItemData.setSpritesheet(SpritesheetHashtable.get(1));
+		instanceData = new InstanceData(maxInstances);
 
 		glEnableVertexAttribArray(2);
 		glEnableVertexAttribArray(3);
@@ -112,11 +96,7 @@ public abstract class OpenGLUtils {
 	}
 
 	public static void clearAllInstanceData() {
-		tileData.clearInstances();
-		entityData.clearInstances();
-		itemData.clearInstances();
-		hardEntityData.clearInstances();
-		mobData.clearInstances();
+		instanceData.clearInstances();
 	}
 
 	public static float pToGL(float pixel, char o) { //converts between pixels and openGL coordinates
@@ -125,7 +105,7 @@ public abstract class OpenGLUtils {
 		return (2f * pixel + 1f) / orientation - 1f;
 	}
 
-	public static int loadTexture(int[] pixels, int width, int height) {
+	public static TextureInfo loadTexture(int[] pixels, int width, int height) {
 		ByteBuffer buffer = getByteBuffer(pixels,width,height);
 		int textureID = glGenTextures();
 		glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
@@ -138,30 +118,28 @@ public abstract class OpenGLUtils {
 		//Send texel data to OpenGL
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 		//Return the texture ID so we can bind it again later
-		return textureID;
+		return new TextureInfo(textureID, width, height, buffer);
 	}
 
-	public static TextureInfo loadTexture(String filename) {
-		try {
-			int[] imageWidth = new int[1];
-			int[] imageHeight = new int[1];
-			int[] channels = new int[1];
-			ByteBuffer buf = IOUtil.ioResourceToByteBuffer(filename, 8 * 1024);
+	public static TextureInfo loadTexture(BufferedImage image) {
+		ByteBuffer buffer = getByteBuffer(image);
+		int textureID = glGenTextures();
+		glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
+		//Setup wrap mode
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		//Setup texture scaling filtering
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		//Send texel data to OpenGL
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+		//Return the texture ID so we can bind it again later
+		return new TextureInfo(textureID, image.getWidth(), image.getHeight(), buffer);
+	}
 
-			ByteBuffer buffer = stbi_load_from_memory(buf, imageWidth, imageHeight, channels, 4);
 
-			int textureID = glGenTextures();
-			glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, imageWidth[0], imageHeight[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-			return new TextureInfo(textureID, imageWidth[0], imageHeight[0], channels[0], buffer);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+	public static TextureInfo loadTexture(String filename) throws IOException {
+		return loadTexture(ImageIO.read(OpenGLUtils.class.getResource(filename)));
 	}
 
 	public static void deleteTexture(int textId) {
@@ -177,6 +155,21 @@ public abstract class OpenGLUtils {
 				buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
 				buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
 				buffer.put((byte) (pixel & 0xFF));             // Blue component
+			}
+		}
+		buffer.flip();
+		return buffer;
+	}
+
+	public static ByteBuffer getByteBuffer(BufferedImage image) {
+		ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * 4);
+		for (int y = 0; y < image.getHeight(); y++) {
+			for (int x = 0; x < image.getWidth(); x++) {
+				int pixel = image.getRGB(x, y);
+				buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
+				buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
+				buffer.put((byte) (pixel & 0xFF));             // Blue component
+				buffer.put((byte) ((pixel >> 24) & 0xFF));     // Alpha component.
 			}
 		}
 		buffer.flip();
@@ -207,7 +200,7 @@ public abstract class OpenGLUtils {
 
 		tileShader.setUniform("scale", tileSize.x / Tile.SIZE, tileSize.y / Tile.SIZE);
 
-		fontShader.setUniform("offset", (2f*-offset.x)/ Game.width, (2f*offset.y)/ Game.height);
+		tileShader.setUniform("offset", (2f*-offset.x)/ Game.width, (2f*offset.y)/ Game.height);
 		Vec2f texScale = new Vec2f((float)Tile.SIZE/ instanceData.getSpriteSheet().getWidth(), (float)Tile.SIZE/ instanceData.getSpriteSheet().getHeight());
 		tileShader.setUniform("tex_scale", texScale);
 

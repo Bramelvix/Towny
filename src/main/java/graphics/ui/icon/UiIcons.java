@@ -3,6 +3,8 @@ package graphics.ui.icon;
 import input.PointerClickEvent;
 import input.PointerInput;
 
+import java.io.IOException;
+
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class UiIcons {
@@ -10,7 +12,7 @@ public class UiIcons {
 	private final Icon[] icons; // array of the 4 icons
 
 	// initialising the icons
-	public UiIcons (float scale, PointerInput pointer) {
+	public UiIcons (float scale, PointerInput pointer) throws IOException {
 
 		icons = new Icon[7];
 		icons[0] = new Icon(15, 660, "/icons/tools/wood-axe.png", scale, pointer);

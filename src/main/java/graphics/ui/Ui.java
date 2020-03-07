@@ -9,6 +9,8 @@ import main.Game;
 import map.Level;
 import util.vectors.Vec2f;
 
+import java.io.IOException;
+
 //main class used to manage the ui
 public class Ui {
 
@@ -32,7 +34,7 @@ public class Ui {
 		top.render(); //colShader + texShader + fontShader
 	}
 
-	public Ui(Level[] levels, PointerInput pointer) {
+	public Ui(Level[] levels, PointerInput pointer) throws IOException {
 		icons = new UiIcons( 0.176056338028169f, pointer);
 		menu = new Menu(pointer);
 		selection = new SelectionSquare();

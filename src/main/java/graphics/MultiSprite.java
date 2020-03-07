@@ -1,6 +1,5 @@
 package graphics;
 
-import graphics.opengl.InstanceData;
 import graphics.opengl.OpenGLUtils;
 import util.vectors.Vec2f;
 import util.vectors.Vec2i;
@@ -11,8 +10,8 @@ public class MultiSprite extends Sprite{
 
 	private final Vec2f[] texCoordArr; //array of UV coordinates for every texture used in this MultiSprite
 
-	public MultiSprite(Vec2f[] texCoordList, Spritesheet sheet) {
-		super(new Vec2i(0,0), sheet);
+	public MultiSprite(Vec2f[] texCoordList, int sheetIndex) {
+		super(new Vec2i(0,0), sheetIndex);
 		this.texCoordArr = texCoordList;
 	}
 
@@ -21,9 +20,9 @@ public class MultiSprite extends Sprite{
 	}
 
 	@Override
-	public void draw(Vec3f pos, InstanceData instanceData) {
+	public void draw(Vec3f pos) {
 		for (Vec2f texPos : texCoordArr) {
-			instanceData.put(new Vec3f(OpenGLUtils.pToGL(pos.x, 'w'), OpenGLUtils.pToGL(pos.y, 'h'), 0.f), texPos, getSheet().getId());
+			OpenGLUtils.instanceData.put(new Vec3f(OpenGLUtils.pToGL(pos.x, 'w'), OpenGLUtils.pToGL(pos.y, 'h'), 0.f), texPos);
 		}
 	}
 }

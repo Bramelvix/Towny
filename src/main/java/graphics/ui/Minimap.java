@@ -34,7 +34,7 @@ class Minimap {
 			}
 		}
 		OpenGLUtils.deleteTexture(textureId);
-		textureId = OpenGLUtils.loadTexture(pixels, (int)width, (int)height);
+		textureId = OpenGLUtils.loadTexture(pixels, (int)width, (int)height).id;
 	}
 
 	public void update(Level[] map, int z) {

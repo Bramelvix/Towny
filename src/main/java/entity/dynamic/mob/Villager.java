@@ -16,7 +16,6 @@ import entity.dynamic.item.VillagerInventory;
 import entity.dynamic.item.weapon.Weapon;
 import entity.dynamic.mob.work.Job;
 import entity.pathfinding.Path;
-import graphics.opengl.InstanceData;
 import graphics.opengl.OpenGLUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
@@ -208,20 +207,20 @@ public class Villager extends Humanoid {
 
 	// render onto the screen
 	@Override
-	public void render(InstanceData instanceData) {
-		drawVillager(location, instanceData);
+	public void render() {
+		drawVillager(location);
 		if (this.isSelected()) {
 			OpenGLUtils.addOutline(location.xy(), new Vec2f((float)Sprite.SIZE));
 		}
 	}
 
-	private void drawVillager(Vec3f pos, InstanceData instanceData) {
+	private void drawVillager(Vec3f pos) {
 		if (isVisible()) {
-			sprite.draw(pos, instanceData);
-			hair.draw(new Vec3f(pos.x, pos.y,pos.z-0.1f), instanceData);
-			inventory.render(pos.z, instanceData);
+			sprite.draw(pos);
+			hair.draw(new Vec3f(pos.x, pos.y,pos.z-0.1f));
+			inventory.render(pos.z);
 			if (getHolding() != null) {
-				getHolding().sprite.draw(new Vec3f(pos.x, pos.y,pos.z-0.1f), OpenGLUtils.heldItemData);// renders the item the villager is holding
+				getHolding().sprite.draw(new Vec3f(pos.x, pos.y,pos.z-0.1f));// renders the item the villager is holding
 			}
 		}
 	}

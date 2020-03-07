@@ -2,7 +2,6 @@ package entity.nonDynamic.resources;
 
 import entity.dynamic.mob.Villager;
 import entity.nonDynamic.StaticEntity;
-import graphics.opengl.InstanceData;
 import graphics.opengl.OpenGLUtils;
 import graphics.Sprite;
 import map.Level;
@@ -18,8 +17,8 @@ public abstract class Resource extends StaticEntity {
 	public abstract boolean work(Villager worker);
 
 	@Override
-	public void render(InstanceData instanceData) {
-		super.render(instanceData);
+	public void render() {
+		super.render();
 		drawSelection();
 	}
 

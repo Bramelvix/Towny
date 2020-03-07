@@ -4,7 +4,6 @@ import entity.Entity;
 import entity.dynamic.item.Item;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
-import graphics.opengl.OpenGLUtils;
 import util.vectors.Vec3f;
 
 public class Tile {
@@ -28,13 +27,13 @@ public class Tile {
 	// render a tile
 	void render(int x, int y) {
 		if (entity == null || entity.isTransparent() || !entity.isVisible()) {
-			sprite.draw(new Vec3f(x*Tile.SIZE, y*Tile.SIZE, 0.9f), OpenGLUtils.tileData);
+			sprite.draw(new Vec3f(x*Tile.SIZE, y*Tile.SIZE, 0.9f));
 		}
 		if (entity != null) {
-			entity.render(solid ? OpenGLUtils.hardEntityData : OpenGLUtils.entityData);
+			entity.render();
 		}
 		if (item != null) {
-			item.render(OpenGLUtils.itemData);
+			item.render();
 		}
 	}
 

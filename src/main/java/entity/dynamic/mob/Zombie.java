@@ -2,7 +2,6 @@ package entity.dynamic.mob;
 
 import entity.dynamic.item.ItemHashtable;
 import graphics.SpriteHashtable;
-import graphics.opengl.InstanceData;
 import map.Level;
 
 public class Zombie extends Humanoid {
@@ -36,10 +35,10 @@ public class Zombie extends Humanoid {
 	}
 
 	@Override
-	public void render(InstanceData instanceData) {
-		super.render(instanceData);
+	public void render() {
+		super.render();
 		if (getHolding() != null) {
-			getHolding().sprite.draw(location, instanceData);// renders the item the zombie is holding
+			getHolding().sprite.draw(location);// renders the item the zombie is holding
 		}
 	}
 

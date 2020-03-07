@@ -2,7 +2,6 @@ package entity.nonDynamic.resources;
 
 import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.mob.Villager;
-import graphics.opengl.InstanceData;
 import graphics.opengl.OpenGLUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
@@ -22,14 +21,15 @@ public class Tree extends Resource {
 		sprite = SpriteHashtable.get(12);
 		topsprite = SpriteHashtable.get(13);
 		setVisible(true);
+		setTransparent(true);
 		setName("tree");
 		location.z = -0.8f;
 	}
 
 	// render method to render onto the screen
-	public void render(InstanceData instanceData) {
-		super.render(instanceData);
-		topsprite.draw(new Vec3f(location.x, location.y-Sprite.SIZE, location.z), instanceData);
+	public void render() {
+		super.render();
+		topsprite.draw(new Vec3f(location.x, location.y-Sprite.SIZE, location.z));
 	}
 
 	// work method (same as in the Ore class)

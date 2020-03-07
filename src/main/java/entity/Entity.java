@@ -3,7 +3,6 @@ package entity;
 import java.util.Random;
 
 import graphics.Sprite;
-import graphics.opengl.InstanceData;
 import input.PointerInput;
 import map.Tile;
 import util.vectors.Vec3f;
@@ -102,15 +101,15 @@ public abstract class Entity {
 	}
 
 	// render method
-	public void render(InstanceData instanceData) {
+	public void render() {
 	   if (isVisible()) {
-		   sprite.draw(location, instanceData);
+		   sprite.draw(location);
 	   }
 	}
 
-	public void renderIf(boolean ifCondition, InstanceData instanceData) {
+	public void renderIf(boolean ifCondition) {
 		if (ifCondition) {
-			render(instanceData);
+			render();
 		}
 	}
 
