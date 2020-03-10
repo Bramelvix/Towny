@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-
 import entity.Entity;
 import entity.dynamic.mob.work.*;
 import entity.dynamic.mob.work.recipe.BuildingRecipe;
@@ -238,7 +237,7 @@ public class Game {
 
 		OpenGLUtils.drawInstanced(OpenGLUtils.instanceData, Sprite.SIZE, scroll);
 		OpenGLUtils.drawOutlines(scroll);
-		ui.render(currentLayerNumber);
+		ui.render();
 		glfwSwapBuffers(window);
 		OpenGLUtils.checkGLError();
 	}

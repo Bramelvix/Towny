@@ -23,7 +23,7 @@ public class TopBar extends UiElement{
 
 	// constructor
 	TopBar(float x, float y, float width, float height, PointerInput pointer) throws IOException {
-		super(new Vec2f(x, y), new Vec2f(width, height), true, pointer);
+		super(new Vec2f(x, y), new Vec2f(width, height));
 		pauseTexture = OpenGLUtils.loadTexture(ImageIO.read(TopBar.class.getResource("/icons/pause-button.png")));
 		playTexture = OpenGLUtils.loadTexture(ImageIO.read(TopBar.class.getResource("/icons/play-button.png")));
 		pause = new Icon(x + 120, y + 25, pauseTexture, 0.060f, pointer);
@@ -45,7 +45,7 @@ public class TopBar extends UiElement{
 
 	void init(PointerInput pointer, Runnable togglePause, Runnable upSpeed, Runnable downSpeed) {
 		this.pause.setOnClick(pointer, () -> {
-			pause.setTexture(pause.getTextureId() == pauseTexture.id ? playTexture : pauseTexture, 0.060f);
+			pause.setTexture(pause.getTextureId() == pauseTexture.id ? playTexture.id : pauseTexture.id);
 			togglePause.run();
 		});
 		this.fast.setOnClick(pointer, upSpeed);
@@ -53,6 +53,7 @@ public class TopBar extends UiElement{
 	}
 
 	// render the topbar on the screen
+	@Override
 	public void render() {
 		OpenGLUtils.drawFilledSquare(position, size, new Vec2f(0, 0), colour);
 		vil.render();

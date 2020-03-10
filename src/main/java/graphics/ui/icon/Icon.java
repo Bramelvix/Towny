@@ -1,6 +1,7 @@
 package graphics.ui.icon;
 
 import graphics.opengl.OpenGLUtils;
+import graphics.ui.UiElement;
 import input.PointerInput;
 import input.PointerMoveEvent;
 import util.TextureInfo;
@@ -11,13 +12,9 @@ import java.io.IOException;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 //icon on the bottom left of the screen (pickaxe, axe,...)
-public class Icon {
+public class Icon extends UiElement {
 
-	private final float x;
-	private final float y; // x and y of the top left corner
 	private boolean hover; // is the mouse hovering over the icon
-	private float width;
-	private float height; // width and length
 	private boolean selected; // is the icon selected
 	private int id; //OpenGL texture id
 
@@ -27,9 +24,8 @@ public class Icon {
 	}
 
 	public Icon (float x, float y, TextureInfo texture, float scale, PointerInput pointer) {
-		this.x = x;
-		this.y = y;
-		setTexture(texture, scale);
+		super(new Vec2f(x, y), new Vec2f(texture.width*scale, texture.height*scale));
+		setTexture(texture.id);
 		pointer.on(PointerInput.EType.MOVE, this::update);
 	}
 
@@ -39,11 +35,11 @@ public class Icon {
 	}
 
 	public float getX() {
-		return x;
+		return position.x;
 	}
 
 	public float getY() {
-		return y;
+		return position.y;
 	}
 
 	public boolean hoverOn() {
@@ -51,10 +47,10 @@ public class Icon {
 	}
 
 	public float getWidth() {
-		return width;
+		return size.x;
 	}
 	public float getHeight () {
-		return height;
+		return size.y;
 	}
 
 	// setters
@@ -68,11 +64,7 @@ public class Icon {
 
 	//render the icon on the screen
 	public void render() {
-		OpenGLUtils.iconDraw(id, new Vec2f(x, y), new Vec2f(width, height), selected || hover);
-	}
-
-	public void update(PointerInput pointer) {
-		update(pointer.getTrueX(), pointer.getTrueY());
+		OpenGLUtils.iconDraw(id, position, size, selected || hover);
 	}
 
 	public void update (PointerMoveEvent event) {
@@ -91,10 +83,8 @@ public class Icon {
 		});
 	}
 
-	public void setTexture(TextureInfo info, float scale) {
-		this.id = info.id;
-		this.height = info.height * scale;
-		this.width = info.width * scale;
+	public void setTexture(int textureId) {
+		this.id = textureId;
 	}
 
 	public int getTextureId() {

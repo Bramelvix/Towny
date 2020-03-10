@@ -24,13 +24,13 @@ public class Ui {
 	private final UiIcons icons;
 
 	// rendering the ui
-	public void render(int z) {
+	public void render() {
 		icons.render(); //texShader
 		selection.render(new Vec2f(0,0)); //colShader
 		menu.render(); //colShader + fontShader
 		map.render();  //texShader + colShader
 		outline.render(new Vec2f(0,0)); //colShader
-		layerLevelChanger.render(z); //colShader + fontShader
+		layerLevelChanger.render(); //colShader + fontShader
 		top.render(); //colShader + texShader + fontShader
 	}
 
@@ -131,9 +131,12 @@ public class Ui {
 	}
 
 	public void update(PointerInput pointer, int z, float xScroll, float yScroll) {
-		menu.update(outline.isVisible());
+		if (outline.isVisible()) {
+			menu.hide();
+		}
 		outline.update(z, xScroll, yScroll);
 		selection.update(pointer);
+		layerLevelChanger.setZ(z);
 	}
 
 	public void updateCounts(int solcount, int vilcount) {
