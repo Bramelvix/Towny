@@ -51,11 +51,9 @@ public class Level {
 		}
 	}
 
-	// removing an item from the spritesheets
-	public <T extends Item> void removeItem(T e) {
-		if (e != null) {
-			tiles[e.getTileX()][e.getTileY()].setItem(null);
-		}
+	// removing an item from the tile
+	public <T extends Item> void removeItem(int x, int y) {
+		tiles[x][y].removeEntity();
 	}
 
 	// is the tile on X and Y clear (No items or entities or walls blocking it)

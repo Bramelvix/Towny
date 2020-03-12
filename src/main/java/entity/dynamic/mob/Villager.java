@@ -97,22 +97,24 @@ public class Villager extends Humanoid {
 	// work method for the villager to execute his jobs
 	public void work() {
 		PriorityJob priorityJob = jobs.peek();
-		if (priorityJob!= null) {
-			Job job = priorityJob.getJob();
-			if (job.isCompleted()) {
+		if (priorityJob != null) {
+			if (priorityJob.completed()) {
 				jobs.remove(priorityJob);
 				return;
 			}
-			job.execute();
+			priorityJob.getJob().execute();
+			priorityJob.nextJobIfDone();
 
 		}
 	}
 
 	// pickup an item
 	public <T extends Item> boolean pickUp(T e) {
-		if (!onSpot(e.getTileX(), e.getTileY(), e.getZ())) { return false; }
+		if (!onSpot(e.getTileX(), e.getTileY(), e.getZ())) {
+			return false;
+		}
 		e.setReserved(this);
-		levels[z].removeItem(e);
+		levels[z].removeItem(e.getTileX(), e.getTileY());
 		pickUpItem(e);
 		return true;
 	}
@@ -163,11 +165,17 @@ public class Villager extends Humanoid {
 	}
 
 	public void addJob(Job e) {
-		if (e != null) { jobs.add(new PriorityJob(e, 50)); }
+		if (e != null) { addJob(e, 50); }
 	}
 
 	public void addJob(Job e, int priority) {
 		if (e != null) { jobs.add(new PriorityJob(e, priority)); }
+	}
+
+	public void prependJobToChain(Job e) {
+		if (e != null && !jobs.isEmpty()) {
+			jobs.peek().addJob(e, 0);
+		}
 	}
 
 	// add a buildjob

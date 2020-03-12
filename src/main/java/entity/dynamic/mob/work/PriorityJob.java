@@ -1,24 +1,40 @@
 package entity.dynamic.mob.work;
 
+import java.util.ArrayList;
+
 public class PriorityJob implements Comparable<PriorityJob> {
 
-	private final Job job;
+	private final ArrayList<Job> jobs = new ArrayList<>();
 	private int priority;
 
 	public PriorityJob(Job job, int priority) {
 		if (job == null) {
 			throw new NullPointerException("Cannot create PriorityJob with null Job");
 		}
-		this.job = job;
+		jobs.add(job);
 		this.priority = priority;
 	}
 
 	public Job getJob() {
-		return job;
+		return jobs.get(0);
+	}
+
+	public void nextJobIfDone() {
+		if (jobs.get(0).isCompleted()) {
+			jobs.remove(0);
+		}
+	}
+
+	public boolean completed() {
+		return jobs.isEmpty();
 	}
 
 	public void setPriority(int priority) {
 		this.priority = priority;
+	}
+
+	public void addJob(Job job, int index) {
+		jobs.add(index, job);
 	}
 
 	@Override

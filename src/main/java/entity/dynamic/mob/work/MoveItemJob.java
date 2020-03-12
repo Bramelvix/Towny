@@ -44,9 +44,9 @@ public class MoveItemJob extends Job {
 		}
 		if (worker.levels[zloc].getEntityOn( xloc, yloc) instanceof Container) {
 			container = worker.levels[zloc].getEntityOn(xloc, yloc);
-			worker.addJob(new MoveJob(xloc, yloc, zloc, worker, false), 100);
+			worker.prependJobToChain(new MoveJob(xloc, yloc, zloc, worker, false));
 		} else {
-			worker.addJob(new MoveJob(xloc, yloc, zloc, worker), 100);
+			worker.prependJobToChain(new MoveJob(xloc, yloc, zloc, worker));
 		}
 	}
 

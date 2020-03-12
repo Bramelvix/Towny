@@ -21,15 +21,13 @@ public class CraftJob extends Job {
 			completed = true;
 			return;
 		}
-		int prio = 51;
 		for (Item item : this.resources) {
 			if (item == null) {
 				completed = true;
 				return;
 			}
-			worker.addJob(new MoveItemJob(item, worker), prio+1);
-			worker.addJob(new MoveItemJob(station.getTileX(), station.getTileY(), worker.getZ(), worker), prio);
-			prio+=2;
+			worker.prependJobToChain(new MoveItemJob(item, worker));
+			worker.prependJobToChain(new MoveItemJob(station.getTileX(), station.getTileY(), worker.getZ(), worker));
 		}
 	}
 

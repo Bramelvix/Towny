@@ -10,7 +10,6 @@ public class Tile {
 	public Sprite sprite; // tile's sprite
 	private boolean solid; // is the tile solid
 	public static final int SIZE = 48; // fixed size
-	private Item item;
 	private Entity entity;
 
 	// three static tiles voidtile = black, darkgrass is dark green, darkStone has the same function as darkGrass, but is for underground
@@ -32,9 +31,6 @@ public class Tile {
 		if (entity != null) {
 			entity.render();
 		}
-		if (item != null) {
-			item.render();
-		}
 	}
 
 
@@ -44,7 +40,7 @@ public class Tile {
 	}
 
 	public <T extends Item> void setItem(T item) {
-		this.item = item;
+		setEntity(item, false);
 	}
 
 	<T extends Entity> void setEntity(T entity, boolean solid) {
@@ -58,14 +54,12 @@ public class Tile {
 	}
 
 	public Item getItem() {
-		return item;
+		return entity instanceof Item ? (Item) entity : null;
 	}
 
 	<T extends Entity> T getEntity() {
 		return (T) entity;
 	}
-
-	public boolean hasEntity() {return entity != null;}
 
 	//removes the entity from the tile
 	void removeEntity() {
