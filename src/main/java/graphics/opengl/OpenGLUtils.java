@@ -42,7 +42,7 @@ public abstract class OpenGLUtils {
 		texShader = new Shader("/shaders/tex_shader.vert", "/shaders/font_shader.frag");
 		colShader = new Shader("/shaders/col_shader.vert", "/shaders/col_shader.frag");
 		fontShader = new Shader("/shaders/font_shader.vert", "/shaders/font_shader.frag");
-		tileShader = new Shader("/shaders/tile_shader.vert", "/shaders/font_shader.frag");
+		tileShader = new Shader("/shaders/tile_shader.vert", "/shaders/tile_shader.frag");
 
 		float[] vertices = {
 			// Left bottom triangle
@@ -69,6 +69,7 @@ public abstract class OpenGLUtils {
 		glBindVertexArray(VAO);
 
 		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		int VBO = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -77,6 +78,10 @@ public abstract class OpenGLUtils {
 		glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LEQUAL);
+
+		//TODO figure out what this shit even does
+		//glEnable(GL_MULTISAMPLE);
+		//glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
 
 		int VBO2 = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, VBO2);

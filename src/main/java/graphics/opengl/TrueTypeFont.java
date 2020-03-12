@@ -181,8 +181,6 @@ public class TrueTypeFont {
 				c = 9;
 				break;
 		}
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fontTextureID);
 		OpenGLUtils.fontShader.use();
 		glBindTexture(GL_TEXTURE_2D, fontTextureID);
 		while (i >= startIndex && i <= endIndex) {
