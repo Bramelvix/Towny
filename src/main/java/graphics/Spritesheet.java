@@ -21,6 +21,7 @@ public class Spritesheet {
 		this.id = img.id;
 		this.buffer = img.buffer;
 	}
+
 	public Spritesheet(BufferedImage image) {
 		this.image = image;
 		TextureInfo img = OpenGLUtils.loadTexture(image);

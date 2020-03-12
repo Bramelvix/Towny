@@ -12,7 +12,7 @@ public class Item extends Entity {
 
 	// basic constructor
 	protected Item(String name, Sprite sprite, String tooltip, int id) {
-		super(name,sprite);
+		super(name, sprite);
 		this.tooltip = tooltip;
 		this.id = id;
 	}
@@ -22,7 +22,7 @@ public class Item extends Entity {
 	}
 
 	public Item copy(float x, float y, int z) {
-		Item copy = new Item(this.getName(),this.sprite,this.getToolTip(),this.getId());
+		Item copy = new Item(this.getName(), this.sprite, this.getToolTip(), this.getId());
 		copy.setLocation(x,y,z);
 		return copy;
 	}

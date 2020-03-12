@@ -20,7 +20,7 @@ public class BuildOutline {
 	private int buildSquareYSTeken; // y coord of the start on the screen
 	private float buildSquareXE; // x coord of the end in the game world
 	private float buildSquareYE; // y coord of the end in the game world
-	private final int WIDTH = Tile.SIZE; // width of a square
+	private final float WIDTH = Tile.SIZE; // width of a square
 	private int squarewidth; // width of the outline in squares
 	private int squareheight; // height of the outline in squares
 	private boolean visible; // is the outline visible
@@ -77,7 +77,7 @@ public class BuildOutline {
 
 	// is the tile empty
 	private boolean notBuildable(float x, float y, int z) {
-		return !levels[z].tileIsEmpty((int) x/Tile.SIZE, (int) y/Tile.SIZE);
+		return !levels[z].tileIsEmpty((int) (x/Tile.SIZE), (int) (y/Tile.SIZE));
 
 	}
 

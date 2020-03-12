@@ -9,7 +9,7 @@ import util.vectors.Vec3f;
 public class Tile {
 	public Sprite sprite; // tile's sprite
 	private boolean solid; // is the tile solid
-	public static final int SIZE = 48; // fixed size
+	public static final float SIZE = 48; // fixed size
 	private Entity entity;
 
 	// three static tiles voidtile = black, darkgrass is dark green, darkStone has the same function as darkGrass, but is for underground

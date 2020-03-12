@@ -69,11 +69,11 @@ public abstract class Entity {
 	}
 
 	public int getTileX() {
-		return (int) location.x/ Tile.SIZE;
+		return (int) (location.x/ Tile.SIZE);
 	}
 
 	public int getTileY() {
-		return (int) location.y / Tile.SIZE;
+		return (int) (location.y / Tile.SIZE);
 	}
 
 	protected boolean isSelected() {

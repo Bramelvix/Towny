@@ -179,7 +179,11 @@ public class Game {
 	private void spawnZombies() {
 		int teller = Entity.RANDOM.nextInt(5) + 1;
 		for (int i = 0; i < teller; i++) {
-			mobs.add(new Zombie(map, Entity.RANDOM.nextInt(768/ Tile.SIZE)* Tile.SIZE + Tile.SIZE, Entity.RANDOM.nextInt(768/ Tile.SIZE)*Tile.SIZE + Tile.SIZE, 0));
+			mobs.add(new Zombie(map,
+				Entity.RANDOM.nextInt(10) * Tile.SIZE,
+				Entity.RANDOM.nextInt(10) * Tile.SIZE,
+				0
+			));
 		}
 	}
 
@@ -417,7 +421,7 @@ public class Game {
 
 	private void onClickDrop() {
 		selectedvill.setPath(null);
-		selectedvill.addJob(new MoveItemJob((int) ui.getMenu().getX()/Tile.SIZE, (int) ui.getMenu().getY() / Tile.SIZE, currentLayerNumber, selectedvill));
+		selectedvill.addJob(new MoveItemJob((int) (ui.getMenu().getX()/Tile.SIZE), (int) (ui.getMenu().getY() / Tile.SIZE), currentLayerNumber, selectedvill));
 		ui.deSelectIcons();
 		deselect(selectedvill);
 		ui.getMenu().hide();
@@ -527,9 +531,9 @@ public class Game {
 			if (ui.outlineIsVisible() && !ui.menuVisible() && ui.getIcons().hoverOnNoIcons()) {
 				float[][] coords = ui.getOutlineCoords();
 				for (float[] blok : coords) {
-					if (map[currentLayerNumber].tileIsEmpty((int) blok[0] / Tile.SIZE, (int) blok[1] / Tile.SIZE)) {
+					if (map[currentLayerNumber].tileIsEmpty((int) (blok[0] / Tile.SIZE), (int) (blok[1] / Tile.SIZE))) {
 						Villager idle = getIdlestVil();
-						idle.addBuildJob((int) blok[0] / Tile.SIZE, (int) blok[1] / Tile.SIZE, currentLayerNumber, ui.getBuildRecipeOutline().getProduct(),
+						idle.addBuildJob((int) (blok[0] / Tile.SIZE), (int) (blok[1] / Tile.SIZE), currentLayerNumber, ui.getBuildRecipeOutline().getProduct(),
 							ui.getBuildRecipeOutline().getResources()[0]);
 					}
 				}
@@ -554,7 +558,7 @@ public class Game {
 
 				anyMobHoverOn().ifPresent(mob -> options.add(new MenuItem(MenuItem.FIGHT, mob, this::onClickFight, pointer)));
 
-				map[currentLayerNumber].getItemOn(pointer.getX(), pointer.getY()).ifPresent(item -> {
+				map[currentLayerNumber].getItemOn(pointer.getTileX(), pointer.getTileY()).ifPresent(item -> {
 					if (item instanceof Weapon) {
 						options.add(new MenuItem((MenuItem.EQUIP), item, this::onClickPickup, pointer));
 					} else if (item instanceof Clothing) {

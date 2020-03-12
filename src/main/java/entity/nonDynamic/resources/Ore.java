@@ -19,7 +19,7 @@ public class Ore extends Resource {
 	private Item minedItem; // Item dropped when the ore is mined
 
 	// basic constructor
-	public Ore(int x, int y, int z, Level level, OreType type) {
+	public Ore(float x, float y, int z, Level level, OreType type) {
 		super(x, y, z, level);
 		decideSprite(type);
 		setTransparent(false);

@@ -11,12 +11,12 @@ import java.nio.ByteOrder;
 //sprites in the game
 public class Sprite {
 
-	public static final int SIZE = Tile.SIZE; // 48
-	private final Vec2f texCoords = new Vec2f(0); //The location of the texture coordinates for this sprite in it's spritesheet
-	private final Vec2f texSize = new Vec2f(1); //The size of the texture (in uv coordinates)
+	public static final float SIZE = Tile.SIZE; // 48
+	private final Vec2f texCoords; //The location of the texture coordinates for this sprite in it's spritesheet
+	private final Vec2f texSize; //The size of the texture (in uv coordinates)
 
 	//TODO make this the actual average colour, right now its just the first pixel
-	int avgColor;
+	private final int avgColor;
 
 	protected Sprite(int x, int y, int sheetIndex) {
 		this(new Vec2i(x,y), sheetIndex);
@@ -25,14 +25,11 @@ public class Sprite {
 	protected Sprite(Vec2i pos, int sheetIndex) {
 		pos.y = SpritesheetHashtable.getBaselineY(pos.y, sheetIndex);
 		Spritesheet spritesheet = SpritesheetHashtable.getCombined();
-		texCoords.x = (float) (pos.x*SIZE) / spritesheet.getWidth();
-		texCoords.y = (float) (pos.y*SIZE) / spritesheet.getHeight();
+		texCoords = new Vec2f((pos.x * SIZE) / spritesheet.getWidth(), (pos.y * SIZE) / spritesheet.getHeight());
 
-		texSize.x = (float) SIZE / spritesheet.getWidth();
-		texSize.y = ((float) SIZE / spritesheet.getHeight());
+		texSize = new Vec2f(SIZE / spritesheet.getWidth(), SIZE / spritesheet.getHeight());
 
-
-		avgColor = spritesheet.getBuffer().order(ByteOrder.BIG_ENDIAN).getInt(((pos.y*SIZE)*spritesheet.getWidth()*4) + pos.x*SIZE*4 );
+		avgColor = spritesheet.getBuffer().order(ByteOrder.BIG_ENDIAN).getInt((int) (((pos.y*SIZE)*spritesheet.getWidth()*4) + pos.x*SIZE*4));
 
 	}
 

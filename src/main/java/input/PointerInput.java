@@ -65,8 +65,8 @@ public class PointerInput {
 			if (heldDownButton == GLFW_MOUSE_BUTTON_MIDDLE) {
 				int newScrollX = (int)(- xpos + dragOffsetX);
 				int newScrollY = (int)(- ypos + dragOffsetY);
-				int maxScrollX = (game.map[game.currentLayerNumber].width * Tile.SIZE) - (Game.width+1);
-				int maxScrollY = (game.map[game.currentLayerNumber].height * Tile.SIZE) - (Game.height+1);
+				float maxScrollX = (game.map[game.currentLayerNumber].width * Tile.SIZE) - (Game.width+1);
+				float maxScrollY = (game.map[game.currentLayerNumber].height * Tile.SIZE) - (Game.height+1);
 
 				game.xScroll = newScrollX < 0 ? 0 : Math.min(newScrollX, maxScrollX);
 				game.yScroll = newScrollY < 0 ? 0 : Math.min(newScrollY, maxScrollY);
@@ -125,11 +125,11 @@ public class PointerInput {
 
 	// the x and y of the tiles in the game that the mouse is on
 	public int getTileX() {
-		return (int) (xpos + game.xScroll) / Tile.SIZE;
+		return (int) ((xpos + game.xScroll) / Tile.SIZE);
 	}
 
 	public int getTileY() {
-		return (int) (ypos + game.yScroll) / Tile.SIZE;
+		return (int) ((ypos + game.yScroll) / Tile.SIZE);
 	}
 
 	public int getTrueX() {

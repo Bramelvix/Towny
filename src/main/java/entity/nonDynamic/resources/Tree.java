@@ -16,7 +16,7 @@ public class Tree extends Resource {
 	private final Sprite topsprite;
 
 	// basic constructor
-	public Tree(int x, int y, int z, Level level) {
+	public Tree(float x, float y, int z, Level level) {
 		super(x, y, z, level);
 		sprite = SpriteHashtable.get(12);
 		topsprite = SpriteHashtable.get(13);

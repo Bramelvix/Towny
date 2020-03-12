@@ -74,10 +74,6 @@ public class Level {
 		return tiles[x][y].getEntity();
 	}
 
-	public <T extends Entity> T getEntityOn(float x, float y) {
-		return getEntityOn((int) (x / Tile.SIZE), (int) (y / Tile.SIZE));
-	}
-
 	public <T extends Entity> int[] getNearestSpotThatHasX(int xloc, int yloc, Class<T> clazz) {
 		return getNearestSpotThatHasX(xloc, yloc, (x, y) -> has(x, y, clazz));
 	}
@@ -165,9 +161,6 @@ public class Level {
 		return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 && clazz.isInstance(tiles[x][y].getEntity());
 	}
 
-	public Optional<Item> getItemOn(float x, float y) {
-		return getItemOn((int) x / Tile.SIZE, (int) y / Tile.SIZE);
-	}
 	public Optional<Item> getItemOn(int x, int y) {
 		Item item = tiles[x][y].getItem();
 		return item != null ? Optional.of(item) : Optional.empty();
@@ -245,7 +238,7 @@ public class Level {
 
 	// if there is a tree on X and Y (IN PIXELS), return it
 	public Optional<Tree> selectTree(float x, float y) {
-		return selectTree((int) x/ Tile.SIZE, (int) y / Tile.SIZE, true);
+		return selectTree((int) (x/ Tile.SIZE), (int) (y / Tile.SIZE), true);
 	}
 
 	// if there is ore on X and Y, return it
@@ -300,10 +293,10 @@ public class Level {
 
 	// render the tiles
 	public void render(Vec2f scroll) {
-		int x0 = (int)scroll.x / Tile.SIZE;
-		int x1 = (int)(scroll.x + Game.width + Sprite.SIZE) / Tile.SIZE;
-		int y0 = (int)scroll.y / Tile.SIZE;
-		int y1 = (int)(scroll.y + Game.height + Sprite.SIZE) / Tile.SIZE;
+		int x0 = (int) (scroll.x / Tile.SIZE);
+		int x1 = (int) ((scroll.x + Game.width + Sprite.SIZE) / Tile.SIZE);
+		int y0 = (int) (scroll.y / Tile.SIZE);
+		int y1 = (int) ((scroll.y + Game.height + Sprite.SIZE) / Tile.SIZE);
 
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {
