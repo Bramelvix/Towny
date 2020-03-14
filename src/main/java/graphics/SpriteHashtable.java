@@ -1,5 +1,7 @@
 package graphics;
 
+import entity.Entity;
+
 import java.util.Hashtable;
 import java.util.Random;
 
@@ -29,6 +31,12 @@ public class SpriteHashtable {
 		return n == 0 ? get(48) : n == 1 ? get(49) : get(50);
 	}
 
+	public static Sprite getHair(boolean male) {
+		return get(male ? maleHairNrs[Entity.RANDOM.nextInt(maleHairNrs.length)]
+			: femaleHairNrs[Entity.RANDOM.nextInt(femaleHairNrs.length)]
+		);
+	}
+
 	// return random sand sprite
 	public static Sprite getSand() {
 		return rand.nextBoolean() ? get(10) : get(11);
@@ -40,21 +48,14 @@ public class SpriteHashtable {
 		}
 	}
 
-	public static int[] maleHairNrs = new int[] {211, 213, 214, 215, 217, 218, 219, 223, 227, 228,
-			229, 230, 231, 232, 233, 234, 235, 237, 238, 239, 241, 242, 243, 247, 251, 252, 253, 254,
-			255, 256, 257, 258, 259, 261, 262, 263, 267, 268, 269, 270
+	public static int[] maleHairNrs = { 211, 213, 214, 215, 217, 218, 219, 223, 227, 228, 229, 230, 231, 232, 233,
+		234, 235, 237, 238, 239, 241, 242, 243, 247, 251, 252, 253, 254, 255, 256, 257, 258, 259, 261, 262, 263, 267,
+		268, 269, 270
 	};
 
-	public static Sprite[] maleHair = { get(211), get(213), get(214), get(215),
-			get(217), get(218), get(219), get(223), get(227), get(228),
-			get(229), get(230), get(231), get(232), get(233), get(234),
-			get(235), get(237), get(238), get(239), get(241), get(242), get(243),
-			get(247), get(251), get(252), get(253), get(254), get(255), get(256),
-			get(257), get(258), get(259), get(261), get(262), get(263), get(267),
-			get(268), get(269), get(270)
+	public static int[] femaleHairNrs = { 212, 216, 220, 221, 222, 224, 225, 226, 236, 240, 244, 245, 246, 248, 249, 250,
+		260, 264, 265, 266
 	};
-
-	public static int[] femaleHairNrs = new int[] { 212, 216, 220, 221, 222, 224, 225, 226, 236, 240, 244, 245, 246, 248, 249, 250, 260, 264, 265, 266 };
 
 	public static Sprite get(int key) {
 		return table.get(key);

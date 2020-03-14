@@ -3,30 +3,33 @@ package graphics.ui;
 import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
 import util.vectors.Vec2f;
-import util.vectors.Vec4f;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
-public class SelectionSquare {
-
-	private static final Vec4f colour = new Vec4f(0.3568f, 0.3686f, 0.3882f, 0.43137f); //colour of the square
-	private final Vec2f position; // ONSCREEN
-	private final Vec2f ingame; // INGAME
-	private float width, height;
+public class SelectionSquare extends UiElement{
+	private final Vec2f ingame = new Vec2f(0); // INGAME
 	private boolean visible;
+	private final Vec2f offset = new Vec2f(0);
 
-	public SelectionSquare() {
-		position = new Vec2f(0);
-		ingame = new Vec2f(0);
-	}
-
-	public void update(PointerInput pointer) {
-		if (visible) {
-			if (pointer.heldDown(GLFW_MOUSE_BUTTON_LEFT)) {
-				width = pointer.getTrueX() - position.x;
-				height = pointer.getTrueY() - position.y;
+	public SelectionSquare(PointerInput input) {
+		super(new Vec2f(0), new Vec2f(0), false);
+		input.on(PointerInput.EType.DRAG, event -> {
+			if (visible) {
+				if (event.button == GLFW_MOUSE_BUTTON_LEFT) {
+					size.x = (float) event.x - position.x;
+					size.y = (float) event.y - position.y;
+				}
 			}
-		}
+		});
+		input.on(PointerInput.EType.DRAG_START, event -> {
+			if (event.button == GLFW_MOUSE_BUTTON_LEFT) {
+				position.x = (float) event.x;
+				position.y = (float) event.y;
+				ingame.x = position.x + offset.x;
+				ingame.y =  position.y + offset.y;
+			}
+
+		});
 	}
 
 	void reset() {
@@ -35,40 +38,38 @@ public class SelectionSquare {
 		ingame.y = 0;
 		position.x = 0;
 		position.y = 0;
-		width = 0;
-		height = 0;
+		size.x = 0;
+		size.y = 0;
 	}
 
-	public void init(PointerInput pointer) {
-		if (!visible) {
-			position.x = pointer.getTrueX();
-			position.y = pointer.getTrueY();
-			ingame.x = pointer.getX();
-			ingame.y =  pointer.getY();
-			visible = true;
-		}
+	public void show() {
+		visible = true;
 	}
 
-	public void render(Vec2f offset) {
+	public void update(float x, float y) {
+		this.offset.x = x;
+		this.offset.y = y;
+	}
+	public void render() {
 		if (visible) {
-			OpenGLUtils.drawFilledSquare(position, new Vec2f(width, height), offset, colour);
+			OpenGLUtils.drawFilledSquare(position, size, new Vec2f(0), colour);
 		}
 	}
 
 	public float getX() {
-		return (width < 0) ? ingame.x + width : ingame.x;
+		return (size.x < 0) ? ingame.x + size.x : ingame.x;
 	}
 
 	public float getY() {
-		return (height < 0) ? ingame.y += height : ingame.y;
+		return (size.y < 0) ? ingame.y + size.y : ingame.y;
 	}
 
 	public float getWidth() {
-		return (width < 0) ? width = -width : width;
+		return Math.abs(size.x);
 	}
 
 	public float getHeight() {
-		return (height < 0) ? height = -height : height;
+		return Math.abs(size.y);
 	}
 
 }

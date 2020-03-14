@@ -19,7 +19,8 @@ import util.vectors.Vec2f;
 public class Level {
 
 	private final Tile[][] tiles; // array of tiles on the map
-	public int width, height; // map with and height
+	public final int width;
+	public final int height; // map with and height
 	private final int depth;
 
 	// basic constructor
@@ -52,7 +53,7 @@ public class Level {
 	}
 
 	// removing an item from the tile
-	public <T extends Item> void removeItem(int x, int y) {
+	public void removeItem(int x, int y) {
 		tiles[x][y].removeEntity();
 	}
 
@@ -206,16 +207,13 @@ public class Level {
 		}
 		for (int y = 1; y < height - 1; y++) {
 			for (int x = 1; x < width - 1; x++) {
-				Entity e = tiles[x][y].getEntity();
-				if (e instanceof Ore) {
-					((Ore) e).checkSides(this);
-				}
+				tiles[x][y].getEntity(Ore.class).ifPresent(ore -> ore.checkSides(this));
 			}
 		}
 	}
 
 	private boolean outOfMapBounds(int x, int y) {
-		return (x <= 0 || x > (width - 1) * Tile.SIZE || y <= 0 || y > (height - 1) * Tile.SIZE);
+		return (x <= 0 || x > (width - 1) || y <= 0 || y > (height - 1));
 	}
 
 
@@ -223,11 +221,12 @@ public class Level {
 		if (outOfMapBounds(x,y)) {
 			return Optional.empty();
 		}
-		if (tiles[x][y].getEntity() instanceof Tree) {
-			return Optional.of(tiles[x][y].getEntity());
+		Optional<Tree> result = tiles[x][y].getEntity(Tree.class);
+		if (result.isPresent()) {
+			return result;
 		} else {
-			Entity entity = tiles[x][y+1].getEntity();
-			return seperate && entity instanceof Tree ? Optional.of((Tree) entity) : Optional.empty();
+			Optional<Tree> entity = tiles[x][y+1].getEntity(Tree.class);
+			return seperate ? entity : Optional.empty();
 		}
 	}
 
@@ -238,21 +237,17 @@ public class Level {
 
 	// if there is a tree on X and Y (IN PIXELS), return it
 	public Optional<Tree> selectTree(float x, float y) {
-		return selectTree((int) (x/ Tile.SIZE), (int) (y / Tile.SIZE), true);
+		return selectTree((int) (x / Tile.SIZE), (int) (y / Tile.SIZE), true);
 	}
 
 	// if there is ore on X and Y, return it
 	public Optional<Ore> selectOre(int x, int y) {
-		if (outOfMapBounds(x,y)) {
-			return Optional.empty();
-		}
-		Entity entity = tiles[x][y].getEntity();
-		return entity instanceof Ore ? Optional.of((Ore) entity) : Optional.empty();
+		return outOfMapBounds(x, y) ? Optional.empty() : tiles[x][y].getEntity(Ore.class);
 	}
 
 	// 10% chance of there being a tree on each grass tile
 	private void randForest(int x, int y) {
-		if (x <= 0 || x >= width || y <= 0 || y >= height) {
+		if (x <= 0 || x >= width - 1 || y <= 0 || y >= height - 1) {
 			return;
 		}
 		if (Entity.RANDOM.nextInt(10) == 1) {
@@ -285,7 +280,7 @@ public class Level {
 	}
 
 	private void spawnRock(int x, int y) {
-		if (x <= 0 || x >= width - 1 || y <= 0 || y >= height - 1) {
+		if (outOfMapBounds(x, y)) {
 			return;
 		}
 		addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.STONE), true);
@@ -294,9 +289,9 @@ public class Level {
 	// render the tiles
 	public void render(Vec2f scroll) {
 		int x0 = (int) (scroll.x / Tile.SIZE);
-		int x1 = (int) ((scroll.x + Game.width + Sprite.SIZE) / Tile.SIZE);
+		int x1 = (int) ((scroll.x + Game.width + Sprite.SIZE) / Tile.SIZE) + 1;
 		int y0 = (int) (scroll.y / Tile.SIZE);
-		int y1 = (int) ((scroll.y + Game.height + Sprite.SIZE) / Tile.SIZE);
+		int y1 = (int) ((scroll.y + Game.height + Sprite.SIZE) / Tile.SIZE) + 1;
 
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {

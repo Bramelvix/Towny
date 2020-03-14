@@ -17,9 +17,9 @@ public class PointerInput {
 
 	public static class EType<T extends Event> implements EventType<T> {
 		public static final EType<PointerMoveEvent> MOVE = new EType<> ();
-		public static final EType<Event> DRAG = new EType<> ();
-		public static final EType<Event> DRAG_START = new EType<> ();
-		public static final EType<Event> DRAG_END = new EType<> ();
+		public static final EType<PointerDragEvent> DRAG = new EType<> ();
+		public static final EType<PointerDragEvent> DRAG_START = new EType<> ();
+		public static final EType<PointerDragEvent> DRAG_END = new EType<> ();
 		public static final EType<PointerClickEvent> PRESSED = new EType<> ();
 		public static final EType<PointerClickEvent> RELEASED = new EType<> ();
 		private EType () {}
@@ -45,7 +45,6 @@ public class PointerInput {
 	protected boolean[] released = new boolean[3];
 	protected boolean[] pressed = new boolean[3];
 	protected int heldDownButton = -1;
-	protected float dragOffsetX, dragOffsetY;
 
 	public PointerInput (Game game) {
 		this.game = game;
@@ -61,15 +60,8 @@ public class PointerInput {
 
 			this.xpos = xpos;
 			this.ypos = ypos;
-
-			if (heldDownButton == GLFW_MOUSE_BUTTON_MIDDLE) {
-				int newScrollX = (int)(- xpos + dragOffsetX);
-				int newScrollY = (int)(- ypos + dragOffsetY);
-				float maxScrollX = (game.map[game.currentLayerNumber].width * Tile.SIZE) - (Game.width+1);
-				float maxScrollY = (game.map[game.currentLayerNumber].height * Tile.SIZE) - (Game.height+1);
-
-				game.xScroll = newScrollX < 0 ? 0 : Math.min(newScrollX, maxScrollX);
-				game.yScroll = newScrollY < 0 ? 0 : Math.min(newScrollY, maxScrollY);
+			if (heldDownButton != -1) {
+				listeners.fire(EType.DRAG, new PointerDragEvent(xpos, ypos, heldDownButton));
 			}
 		};
 	}
@@ -77,21 +69,20 @@ public class PointerInput {
 	public GLFWMouseButtonCallbackI buttonsCallback () {
 		return (long window, int button, int action, int mods) -> {
 			// stop pesky gaming mice with their fancy buttons from crashing my entire game
-			if (button > 3 || button < 0) { return; }
+			if (button > 2 || button < 0) { return; }
 			if (action == GLFW_RELEASE) {
 				released[button] = true;
 				pressed[button] = false;
 				heldDownButton = -1;
 				listeners.fire(EType.RELEASED, new PointerClickEvent(button, action, this.xpos, this.ypos));
+				listeners.fire(EType.DRAG_END, new PointerDragEvent(this.xpos, this.ypos, button));
+				//TODO drag_start and drag_end can be triggered by 2 different mouse buttons atm so fix that
 			} else if (action == GLFW_PRESS) {
 				pressed[button] = true;
 				released[button] = false;
 				heldDownButton = button;
 				listeners.fire(EType.PRESSED, new PointerClickEvent(button, action, this.xpos, this.ypos) );
-				if (button == GLFW_MOUSE_BUTTON_MIDDLE) {
-					dragOffsetX = getX();
-					dragOffsetY = getY();
-				}
+				listeners.fire(EType.DRAG_START, new PointerDragEvent(this.xpos, this.ypos, button));
 			}
 		};
 	}
@@ -109,18 +100,6 @@ public class PointerInput {
 
 	public boolean wasReleased(int button) {
 		return button <= 3 && button >= 0 && released[button];
-	}
-
-	public boolean heldDown(int button) {
-		return heldDownButton == button;
-	}
-
-	public float getDragOffsetX() {
-		return dragOffsetX;
-	}
-
-	public float getDragOffsetY() {
-		return dragOffsetY;
 	}
 
 	// the x and y of the tiles in the game that the mouse is on

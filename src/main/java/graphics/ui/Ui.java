@@ -7,7 +7,6 @@ import graphics.ui.menu.MenuItem;
 import input.PointerInput;
 import main.Game;
 import map.Level;
-import util.vectors.Vec2f;
 
 import java.io.IOException;
 
@@ -26,10 +25,10 @@ public class Ui {
 	// rendering the ui
 	public void render() {
 		icons.render(); //texShader
-		selection.render(new Vec2f(0,0)); //colShader
+		selection.render(); //colShader
 		menu.render(); //colShader + fontShader
 		map.render();  //texShader + colShader
-		outline.render(new Vec2f(0,0)); //colShader
+		outline.render(); //colShader
 		layerLevelChanger.render(); //colShader + fontShader
 		top.render(); //colShader + texShader + fontShader
 	}
@@ -37,7 +36,7 @@ public class Ui {
 	public Ui(Level[] levels, PointerInput pointer) throws IOException {
 		icons = new UiIcons( 0.176056338028169f, pointer);
 		menu = new Menu(pointer);
-		selection = new SelectionSquare();
+		selection = new SelectionSquare(pointer);
 		map = new Minimap(1290, 8, levels[0]);
 		top = new TopBar((Game.width - 270) / 2f,5,270,85, pointer);
 		outline = new BuildOutline(levels, pointer);
@@ -98,8 +97,8 @@ public class Ui {
 		map.setOffset(x, y);
 	}
 
-	public void showSelectionSquare(PointerInput pointer) {
-		selection.init(pointer);
+	public void showSelectionSquare() {
+		selection.show();
 	}
 
 	public void resetSelection() {
@@ -130,12 +129,12 @@ public class Ui {
 		outline.remove();
 	}
 
-	public void update(PointerInput pointer, int z, float xScroll, float yScroll) {
+	public void update(int z, float xScroll, float yScroll) {
 		if (outline.isVisible()) {
 			menu.hide();
 		}
+		selection.update(xScroll, yScroll);
 		outline.update(z, xScroll, yScroll);
-		selection.update(pointer);
 		layerLevelChanger.setZ(z);
 	}
 

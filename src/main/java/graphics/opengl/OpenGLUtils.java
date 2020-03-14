@@ -32,7 +32,7 @@ public abstract class OpenGLUtils {
 	private static final Vec4f outlineColour = new Vec4f(1,0,0,1);
 
 
-	private static final int maxInstances = 627; //maximum amount of instances that can be drawn in one frame (per buffer)
+	private static final int maxInstances = 6270; //maximum amount of instances that can be drawn in one frame (per buffer)
 
 	public static InstanceData instanceData;
 
@@ -276,8 +276,8 @@ public abstract class OpenGLUtils {
 
 	}
 
-	public static void buildOutlineDraw(Vec2f pos, float size, Vec2f offset, Vec4f color) {
-		drawFilledSquare(pos, new Vec2f(size), offset, color);
+	public static void buildOutlineDraw(Vec2f pos, float size, Vec4f color) {
+		drawFilledSquare(pos, new Vec2f(size), new Vec2f(0), color);
 	}
 
 	public static void drawText(String text, float x, float y) {

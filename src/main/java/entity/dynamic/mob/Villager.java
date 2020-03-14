@@ -26,19 +26,25 @@ import util.vectors.Vec3f;
 public class Villager extends Humanoid {
 
 	private final VillagerInventory inventory; // clothing item list
-	private boolean male; // is the villager male (true = male, false = female)
-	private Sprite hair; // hair sprite
-	private int hairnr; // hair number (needed for the hair sprite to be decided)
-	private final PriorityQueue<PriorityJob> jobs; // jobs the villager needs to do
+	private final boolean male; // is the villager male (true = male, false = female)
+	private final Sprite hair; // hair sprite
+	private final PriorityQueue<PriorityJob> jobs = new PriorityQueue<>(); // jobs the villager needs to do
 
 	// basic constructors
 	public Villager(float x, float y, int z, Level[] levels) {
+		this(x, y, z, levels, Entity.RANDOM.nextBoolean(), SpriteHashtable.getPerson());
+	}
+
+	public Villager(float x, float y, int z, Level[] levels, boolean male, Sprite body) {
+		this(x, y, z, levels, male, body, SpriteHashtable.getHair(male));
+	}
+
+	public Villager(float x, float y, int z, Level[] levels, boolean male, Sprite body, Sprite hair) {
 		super(levels, x, y, z);
-		sprite = SpriteHashtable.getPerson();
+		sprite = body;
 		inventory = new VillagerInventory(this);
-		jobs = new PriorityQueue<>();
-		male = Entity.RANDOM.nextBoolean();
-		hair = SpriteHashtable.get(generateHairNr());
+		this.male = male;
+		this.hair = hair;
 		setName("villager");
 		location.z = 0.1f;
 	}
@@ -53,22 +59,12 @@ public class Villager extends Humanoid {
 	}
 
 	public Villager(int x, int y, int z, Level[] levels, int hairnr, Item holding, boolean male) {
-		this(x, y, z, levels);
-		this.hairnr = hairnr;
-		this.male = male;
-		hair = SpriteHashtable.get(hairnr);
+		this(x, y, z, levels, male, SpriteHashtable.getPerson(), SpriteHashtable.get(hairnr));
 		this.setHolding(holding);
 	}
 
 	public int getJobSize() {
 		return jobs.size();
-	}
-
-   //generate a random number to use for the hairsprite
-	private int generateHairNr() {
-		return male ?
-			SpriteHashtable.maleHairNrs[Entity.RANDOM.nextInt(SpriteHashtable.maleHairNrs.length)]
-			: SpriteHashtable.femaleHairNrs[Entity.RANDOM.nextInt(SpriteHashtable.femaleHairNrs.length)];
 	}
 
 	// gets the item nearest to the villager(of the same kind and unreserved)
@@ -218,7 +214,7 @@ public class Villager extends Humanoid {
 	public void render() {
 		drawVillager(location);
 		if (this.isSelected()) {
-			OpenGLUtils.addOutline(location.xy(), new Vec2f((float)Sprite.SIZE));
+			OpenGLUtils.addOutline(location.xy(), new Vec2f(Sprite.SIZE));
 		}
 	}
 

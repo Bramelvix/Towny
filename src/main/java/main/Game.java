@@ -51,7 +51,7 @@ public class Game {
 
 	public static final int width = 1500;
 	public static final int height = (int)(width / 16f * 9f); //843.75
-	public Level[] map;
+	private Level[] map;
 	private ArrayList<Villager> vills;
 	private ArrayList<Villager> sols;
 	private ArrayList<Mob> mobs;
@@ -62,7 +62,9 @@ public class Game {
 	private Villager selectedvill;
 	public float xScroll = 0;
 	public float yScroll = 0;
-	public int currentLayerNumber = 0;
+	private float dragOffsetX;
+	private float dragOffsetY;
+	private int currentLayerNumber = 0;
 	private long window;
 	private PointerInput pointer;
 
@@ -130,6 +132,23 @@ public class Game {
 		mobs = new ArrayList<>();
 		vills = new ArrayList<>();
 		sols = new ArrayList<>();
+		pointer.on(PointerInput.EType.DRAG_START, event -> {
+			if (event.button == GLFW_MOUSE_BUTTON_MIDDLE) {
+				dragOffsetX = (float) event.x + xScroll;
+				dragOffsetY = (float) event.y + yScroll;
+			}
+		});
+
+		pointer.on(PointerInput.EType.DRAG, event -> {
+			if (event.button == GLFW_MOUSE_BUTTON_MIDDLE) {
+				int newScrollX = (int)(- event.x + dragOffsetX);
+				int newScrollY = (int)(- event.y + dragOffsetY);
+				float maxScrollX = (map[currentLayerNumber].width * Tile.SIZE) - (width+1);
+				float maxScrollY = (map[currentLayerNumber].height * Tile.SIZE) - (height+1);
+				xScroll = newScrollX < 0 ? 0 : Math.min(newScrollX, maxScrollX);
+				yScroll = newScrollY < 0 ? 0 : Math.min(newScrollY, maxScrollY);
+			}
+		});
 
 		initUi();
 
@@ -247,7 +266,7 @@ public class Game {
 	}
 
 	private void updateUI() {
-		ui.update(pointer, currentLayerNumber, xScroll, yScroll);
+		ui.update(currentLayerNumber, xScroll, yScroll);
 		updateMouse();
 		moveCamera();
 		pointer.resetLeftAndRight();
@@ -485,17 +504,17 @@ public class Game {
 	private void updateMouse() {
 		if ((ui.getIcons().isAxeSelected()) && ui.getIcons().hoverOnNoIcons()) {
 			if (pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
-				ui.showSelectionSquare(pointer);
+				ui.showSelectionSquare();
 				return;
 			}
 			if (pointer.wasReleased(GLFW_MOUSE_BUTTON_LEFT)) {
 				int x = (int) (ui.getSelectionX() / Tile.SIZE);
 				int y = (int) (ui.getSelectionY() / Tile.SIZE);
-				int width = (int) (ui.getSelectionWidth() / Tile.SIZE);
-				int height = (int) (ui.getSelectionHeight() / Tile.SIZE);
+				int width = Math.round(ui.getSelectionWidth() / Tile.SIZE);
+				int height = Math.round(ui.getSelectionHeight() / Tile.SIZE);
 				for (int xs = x; xs < (x + width); xs ++) {
 					for (int ys = y; ys < (y + height); ys++) {
-						map[currentLayerNumber].selectTree(xs, ys, false).ifPresent(tree -> getIdlestVil().addJob(tree));
+						map[currentLayerNumber].selectTree(xs, ys).ifPresent(tree -> getIdlestVil().addJob(tree));
 					}
 				}
 				ui.resetSelection();

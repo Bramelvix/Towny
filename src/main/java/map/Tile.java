@@ -6,16 +6,18 @@ import graphics.Sprite;
 import graphics.SpriteHashtable;
 import util.vectors.Vec3f;
 
+import java.util.Optional;
+
 public class Tile {
-	public Sprite sprite; // tile's sprite
+	public final Sprite sprite; // tile's sprite
 	private boolean solid; // is the tile solid
 	public static final float SIZE = 48; // fixed size
 	private Entity entity;
 
 	// three static tiles voidtile = black, darkgrass is dark green, darkStone has the same function as darkGrass, but is for underground
-	static Tile darkGrass = new Tile(SpriteHashtable.get(4), true);
-	static Tile darkStone = new Tile(SpriteHashtable.get(140),true);
-	static Tile voidTile = new Tile(SpriteHashtable.get(3), true);
+	static final Tile darkGrass = new Tile(SpriteHashtable.get(4), true);
+	static final Tile darkStone = new Tile(SpriteHashtable.get(140),true);
+	static final Tile voidTile = new Tile(SpriteHashtable.get(3), true);
 
 	// constructors
 	Tile(Sprite sprite, boolean solid) {
@@ -59,6 +61,10 @@ public class Tile {
 
 	<T extends Entity> T getEntity() {
 		return (T) entity;
+	}
+
+	<T extends Entity> Optional<T> getEntity(Class<T> type) {
+		return type.isInstance(entity) ? Optional.of(type.cast(entity)) : Optional.empty();
 	}
 
 	//removes the entity from the tile
