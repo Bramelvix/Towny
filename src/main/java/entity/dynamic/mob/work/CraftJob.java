@@ -73,7 +73,7 @@ public class CraftJob extends Job {
 
 	@Override
 	protected void start() {
-		worker.setPath(worker.getPathAround(station.getTileX() , station.getTileY()));
+		worker.setPath(worker.getPathAround(station.getTileX() , station.getTileY()).orElse(null));
 		started = true;
 	}
 

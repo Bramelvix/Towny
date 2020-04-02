@@ -10,13 +10,13 @@ Running the game on mac requires you to put `-XstartOnFirstThread -Djava.awt.hea
 
   **Bugs**
  - Combat system is very buggy
+ - Pathfinding with stairs is shitty.
  
  **Planned improvements**
 
  - Selectionsquare for mining orders
  - Better building and crafting UI
  - Villager management UI
- - General performance improvement
  - Improving the minimap
  - World generator rework
  

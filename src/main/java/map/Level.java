@@ -207,7 +207,7 @@ public class Level {
 		}
 		for (int y = 1; y < height - 1; y++) {
 			for (int x = 1; x < width - 1; x++) {
-				tiles[x][y].getEntity(Ore.class).ifPresent(ore -> ore.checkSides(this));
+				tiles[x][y].getEntity(Ore.class).ifPresent(Ore::checkSides);
 			}
 		}
 	}

@@ -32,13 +32,12 @@ public class MoveJob extends Job {
 			return;
 		}
 		if (zloc == worker.getZ()) {
-			Path path = exactLocation ? worker.getPath(xloc, yloc) : worker.getPathAround(xloc, yloc);
-			if (path != null) {
-				paths.add(path);
-			} else { //no path
+			Optional<Path> path = exactLocation ? worker.getPath(xloc, yloc) : worker.getPathAround(xloc, yloc);
+			if (!path.isPresent()) {
 				completed = true;
 				return;
 			}
+			paths.add(path.get());
 		} else {
 			int stairsX = -1;
 			int stairsY = -1;
@@ -50,26 +49,24 @@ public class MoveJob extends Job {
 					int starty = stairsY == -1 ? worker.getTileY() : stairsY;
 					stairsX = optional.get().getTileX();
 					stairsY = optional.get().getTileY();
-					Path path = PathFinder.findPath(startx, starty, stairsX, stairsY, worker.levels[worker.getZ() + (up ? i : -i)]);
-					if (path != null) {
-						paths.add(path);
-					} else { //no path
+					Optional<Path> path = PathFinder.findPath(startx, starty, stairsX, stairsY, worker.levels[worker.getZ() + (up ? i : -i)]);
+					if (!path.isPresent()) {
 						completed = true;
 						return;
 					}
+					paths.add(path.get());
 				} else { //no stairs
 					completed = true;
 					return;
 				}
 			}
-			Path path = exactLocation ? PathFinder.findPath(stairsX, stairsY, xloc, yloc, worker.levels[zloc]) : PathFinder.findPathAround(stairsX , stairsY ,  xloc, yloc , worker.levels[zloc]);
+			Optional<Path> path = exactLocation ? PathFinder.findPath(stairsX, stairsY, xloc, yloc, worker.levels[zloc]) : PathFinder.findPathAround(stairsX , stairsY ,  xloc, yloc , worker.levels[zloc]);
 			if (!((exactLocation && xloc == stairsX && yloc == stairsY) || (!exactLocation && (stairsX <= ((xloc + 1))) && (stairsX >= ((xloc - 1)) && ((stairsY >= ((yloc - 1))) && (stairsY <= ((yloc + 1)))))))) {
-				if (path == null) { //no path
+				if (!path.isPresent()) { //no path
 					completed = true;
 					return;
-				} else {
-					paths.add(path);
 				}
+				paths.add(path.get());
 			}
 		}
 		worker.setPath(paths.get(counter));

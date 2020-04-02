@@ -17,6 +17,7 @@ public class Ore extends Resource {
 
 	private byte mined = 100; // mined percentage (100 = unfinished / 0 = finished)
 	private Item minedItem; // Item dropped when the ore is mined
+	private Sprite originalSprite;
 
 	// basic constructor
 	public Ore(float x, float y, int z, Level level, OreType type) {
@@ -34,7 +35,7 @@ public class Ore extends Resource {
 
 	private void setOre(String name, Sprite oreSprite, Item item) {
 		setName(name);
-		this.sprite = oreSprite;
+		this.originalSprite = oreSprite;
 		this.minedItem = item;
 	}
 
@@ -47,83 +48,76 @@ public class Ore extends Resource {
 			return false;
 		} else {
 			level.removeEntity(this);
+			resetSpritesAroundThis();
 			level.addItem(minedItem.copy());
 			return true;
 		}
 	}
 
-	public void checkSides(Level level) {
-		boolean leftHasWall = level.selectOre(getTileX() - 1, getTileY()).isPresent();
-		boolean rightHasWall = level.selectOre(getTileX() + 1, getTileY()).isPresent();
-		boolean topHasWall = level.selectOre(getTileX(), getTileY() - 1).isPresent();
-		boolean bottomHasWall = level.selectOre(getTileX(), getTileY() + 1).isPresent();
-
-		boolean topRightHasWall = level.selectOre(getTileX() + 1, getTileY() - 1).isPresent();
-		boolean bottomRightHasWall = level.selectOre(getTileX() + 1, getTileY() + 1).isPresent();
-		boolean bottomLeftHasWall = level.selectOre(getTileX() - 1, getTileY() + 1).isPresent();
-		boolean topLeftHasWall = level.selectOre(getTileX() - 1, getTileY() - 1).isPresent();
-		decideSprite(leftHasWall, rightHasWall, topHasWall, bottomHasWall, topRightHasWall, bottomRightHasWall, bottomLeftHasWall, topLeftHasWall);
+	private void resetSpritesAroundThis() {
+		level.selectOre(getTileX() - 1, getTileY()).ifPresent(Ore::checkSides);
+		level.selectOre(getTileX() + 1, getTileY()).ifPresent(Ore::checkSides);
+		level.selectOre(getTileX(), getTileY() - 1).ifPresent(Ore::checkSides);
+		level.selectOre(getTileX(), getTileY() + 1).ifPresent(Ore::checkSides);
+		level.selectOre(getTileX() + 1, getTileY() - 1).ifPresent(Ore::checkSides);
+		level.selectOre(getTileX() + 1, getTileY() + 1).ifPresent(Ore::checkSides);
+		level.selectOre(getTileX() - 1, getTileY() + 1).ifPresent(Ore::checkSides);
+		level.selectOre(getTileX() - 1, getTileY() - 1).ifPresent(Ore::checkSides);
 	}
 
-	private void decideSprite(boolean leftHasWall, boolean rightHasWall, boolean topHasWall, boolean bottomHasWall, boolean topRightHasWall, boolean bottomRightHasWall, boolean bottomLeftHasWall, boolean topLeftHasWall) {
+	public void checkSides() {
+		boolean leftHasOre = level.selectOre(getTileX() - 1, getTileY()).isPresent();
+		boolean rightHasOre = level.selectOre(getTileX() + 1, getTileY()).isPresent();
+		boolean topHasOre = level.selectOre(getTileX(), getTileY() - 1).isPresent();
+		boolean bottomHasOre = level.selectOre(getTileX(), getTileY() + 1).isPresent();
+
+		boolean topRightHasOre = level.selectOre(getTileX() + 1, getTileY() - 1).isPresent();
+		boolean bottomRightHasOre = level.selectOre(getTileX() + 1, getTileY() + 1).isPresent();
+		boolean bottomLeftHasOre = level.selectOre(getTileX() - 1, getTileY() + 1).isPresent();
+		boolean topLeftHasOre = level.selectOre(getTileX() - 1, getTileY() - 1).isPresent();
+		decideSprite(leftHasOre, rightHasOre, topHasOre, bottomHasOre, topRightHasOre, bottomRightHasOre, bottomLeftHasOre, topLeftHasOre);
+	}
+
+	private void decideSprite(boolean leftHasOre, boolean rightHasOre, boolean topHasOre, boolean bottomHasOre, boolean topRightHasOre, boolean bottomRightHasOre, boolean bottomLeftHasOre, boolean topLeftHasOre) {
 		List<Sprite> sprites = new ArrayList<>();
-		sprites.add(sprite);
+		sprites.add(originalSprite);
 
 		//check if places are empty
-		if (!topHasWall) sprites.add(SpriteHashtable.get(164)); //3
-		if (!rightHasWall) sprites.add(SpriteHashtable.get(163)); //2
-		if (!bottomHasWall) sprites.add(SpriteHashtable.get(165)); //4
-		if (!leftHasWall) sprites.add(SpriteHashtable.get(162)); //1
+		if (!topHasOre) sprites.add(SpriteHashtable.get(164)); //3
+		if (!rightHasOre) sprites.add(SpriteHashtable.get(163)); //2
+		if (!bottomHasOre) sprites.add(SpriteHashtable.get(165)); //4
+		if (!leftHasOre) sprites.add(SpriteHashtable.get(162)); //1
 
 		// top right corner
-		if (!topHasWall && !rightHasWall) sprites.add(SpriteHashtable.get(167)); //6
-		else if (!rightHasWall) sprites.add(SpriteHashtable.get(172)); //11
-		else if (!topHasWall) sprites.add(SpriteHashtable.get(174)); //13
-		else if (!topRightHasWall) sprites.add(SpriteHashtable.get(181)); //20
+		if (!topHasOre && !rightHasOre) sprites.add(SpriteHashtable.get(167)); //6
+		else if (!rightHasOre) sprites.add(SpriteHashtable.get(172)); //11
+		else if (!topHasOre) sprites.add(SpriteHashtable.get(174)); //13
+		else if (!topRightHasOre) sprites.add(SpriteHashtable.get(181)); //20
 
 		// bottom right corner
-		if (!bottomHasWall && !rightHasWall) sprites.add(SpriteHashtable.get(169)); //8
-		else if (!rightHasWall) sprites.add(SpriteHashtable.get(173)); //12
-		else if (!bottomHasWall) sprites.add(SpriteHashtable.get(177)); //16
-		else if (!bottomRightHasWall) sprites.add(SpriteHashtable.get(179)); //18
+		if (!bottomHasOre && !rightHasOre) sprites.add(SpriteHashtable.get(169)); //8
+		else if (!rightHasOre) sprites.add(SpriteHashtable.get(173)); //12
+		else if (!bottomHasOre) sprites.add(SpriteHashtable.get(177)); //16
+		else if (!bottomRightHasOre) sprites.add(SpriteHashtable.get(179)); //18
 
 		// bottom left corner
-		if (!bottomHasWall && !leftHasWall) sprites.add(SpriteHashtable.get(168)); //7
-		else if (!leftHasWall) sprites.add(SpriteHashtable.get(170)); //9
-		else if (!bottomHasWall) sprites.add(SpriteHashtable.get(176)); //15
-		else if (!bottomLeftHasWall) sprites.add(SpriteHashtable.get(178)); //17
+		if (!bottomHasOre && !leftHasOre) sprites.add(SpriteHashtable.get(168)); //7
+		else if (!leftHasOre) sprites.add(SpriteHashtable.get(170)); //9
+		else if (!bottomHasOre) sprites.add(SpriteHashtable.get(176)); //15
+		else if (!bottomLeftHasOre) sprites.add(SpriteHashtable.get(178)); //17
 
 		// top left corner
-		if (!topHasWall && !leftHasWall) sprites.add(SpriteHashtable.get(166)); //5
-		else if (!leftHasWall) sprites.add(SpriteHashtable.get(171)); //10
-		else if (!topHasWall) sprites.add(SpriteHashtable.get(175)); //14
-		else if (!topLeftHasWall) sprites.add(SpriteHashtable.get(180)); //19
+		if (!topHasOre && !leftHasOre) sprites.add(SpriteHashtable.get(166)); //5
+		else if (!leftHasOre) sprites.add(SpriteHashtable.get(171)); //10
+		else if (!topHasOre) sprites.add(SpriteHashtable.get(175)); //14
+		else if (!topLeftHasOre) sprites.add(SpriteHashtable.get(180)); //19
 
 		Vec2f[] texCoordList = new Vec2f[sprites.size()];
 
-		for (int i = 0; i<sprites.size(); i++) {
+		for (int i = 0; i < sprites.size(); i++) {
 			texCoordList[i] = (sprites.get(i).getTexCoords());
 		}
 		sprite = new MultiSprite(texCoordList, 1);
-
-		/*if(dynamicSpriteList.containsKey(sprites)) { //if a dynamic sprite exists, use it
-			sprite = dynamicSpriteList.get(sprites);
-		} else { //otherwise make it
-			final int SIZE = Tile.SIZE;
-			int[] pixels = new int[SIZE*SIZE];
-			for (Sprite sprite : sprites) {
-				for (int y = 0; y < SIZE; y++) {
-					for (int x = 0; x < SIZE; x++) {
-						int pixel = sprite.pixels[x+y*SIZE];
-						if (!(pixel == 0x00FFFFFF)) {
-							pixels[x + y * SIZE] = pixel;
-						}
-					}
-				}
-			}
-			sprite = new Sprite(pixels);
-			dynamicSpriteList.put(sprites, new Sprite(pixels));
-		}*/
 	}
 
 }

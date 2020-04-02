@@ -8,6 +8,8 @@ import entity.pathfinding.Point;
 import map.Level;
 import map.Tile;
 
+import java.util.Optional;
+
 //abstract mob class for villagers and monsters/animals to extend
 public abstract class Mob extends Entity {
 
@@ -47,7 +49,10 @@ public abstract class Mob extends Entity {
 
 	void idle() {
 		while (movement == null) {
-			movement = getPath(getTileX() + Entity.RANDOM.nextInt(4) - 2, getTileY() + Entity.RANDOM.nextInt(4) - 2);
+			getPath(
+				getTileX() + Entity.RANDOM.nextInt(4) - 2,
+				getTileY() + Entity.RANDOM.nextInt(4) - 2
+			).ifPresent(path -> movement = path);
 		}
 	}
 
@@ -71,6 +76,8 @@ public abstract class Mob extends Entity {
 		arrived = false;
 	}
 
+
+
 	// method to move the villager
 	public void move() {
 		if (movement == null) {
@@ -92,7 +99,7 @@ public abstract class Mob extends Entity {
 					if (!levels[z].isWalkAbleTile(step.x, step.y)) {
 						int destx = movement.getXdest();
 						int desty = movement.getYdest();
-						movement = getPathAround(destx, desty);
+						getPathAround(destx, desty).ifPresent(path -> movement = path);
 						return;
 					}
 					moveTo(step.x, step.y);
@@ -117,7 +124,7 @@ public abstract class Mob extends Entity {
 		return (this.z == z && this.location.x == x * Tile.SIZE && this.location.y == y * Tile.SIZE);
 	}
 
-	public Path getPathAround(int x, int y) {
+	public Optional<Path> getPathAround(int x, int y) {
 		return PathFinder.findPathAround(getTileX(), getTileY(), x, y, levels[z]);
 	}
 
@@ -138,7 +145,7 @@ public abstract class Mob extends Entity {
 	public abstract void update();
 
 	// pathfinder method
-	public Path getPath(int tx, int ty) {
+	public Optional<Path> getPath(int tx, int ty) {
 		return PathFinder.findPath(getTileX(), getTileY(), tx, ty, levels[z]);
 	}
 

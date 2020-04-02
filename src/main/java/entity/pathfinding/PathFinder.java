@@ -1,6 +1,8 @@
 package entity.pathfinding;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import map.Level;
 
@@ -19,38 +21,44 @@ public class PathFinder {
 		}
 	}
 
-	private static Path getShortest(Path[] paths) {
-		if (paths != null) {
-			Path shortest = null;
-			for (Path path : paths) {
-				if (path != null) {
-					shortest = path;
-					break;
-				}
-			}
-			for (Path p : paths) {
-				if (p != null && shortest != null && p.getLength() < shortest.getLength()) {
-					shortest = p;
-				}
-			}
-			return shortest;
+	private static Optional<Path> getShortest(Path[] paths) {
+		if (paths == null || paths.length < 1) {
+			return Optional.empty();
 		}
-		return null;
+		Path shortest = null;
+		for (Path path : paths) {
+			if (path != null) {
+				shortest = path;
+				break;
+			}
+		}
+		for (Path p : paths) {
+			if (p != null && shortest != null && p.getLength() < shortest.getLength()) {
+				shortest = p;
+			}
+		}
+		return shortest != null ? Optional.of(shortest) : Optional.empty();
 	}
 
-	public static Path findPathAround(int sx, int sy, int tx, int ty, Level level) {
-		return getShortest(new Path[]{findPath(sx, sy, tx - 1, ty, level), findPath(sx, sy, tx + 1, ty, level),
-				findPath(sx, sy, tx, ty - 1, level), findPath(sx, sy, tx, ty + 1, level), findPath(sx, sy, tx - 1, ty - 1, level),
-				findPath(sx, sy, tx + 1, ty + 1, level), findPath(sx, sy, tx + 1, ty - 1, level), findPath(sx, sy, tx - 1, ty + 1, level)});
+	public static Optional<Path> findPathAround(int sx, int sy, int tx, int ty, Level level) {
+		List<Path> checked = new ArrayList<>();
+		findPath(sx, sy, tx - 1, ty, level).ifPresent(checked::add);
+		findPath(sx, sy, tx + 1, ty, level).ifPresent(checked::add);
+		findPath(sx, sy, tx, ty - 1, level).ifPresent(checked::add);
+		findPath(sx, sy, tx, ty + 1, level).ifPresent(checked::add);
+		findPath(sx, sy, tx - 1, ty - 1, level).ifPresent(checked::add);
+		findPath(sx, sy, tx + 1, ty + 1, level).ifPresent(checked::add);
+		findPath(sx, sy, tx + 1, ty - 1, level).ifPresent(checked::add);
+		findPath(sx, sy, tx - 1, ty + 1, level).ifPresent(checked::add);
+		return getShortest(checked.toArray(new Path[0]));
 	}
 
-	public static Path findPath(int sx, int sy, int tx, int ty, Level level) {
+	public static Optional<Path> findPath(int sx, int sy, int tx, int ty, Level level) {
 		if (sx < 0 || sx > level.width || sy < 0 || sy > level.height || tx < 0 || tx > level.width || ty < 0 || ty > level.height) {
-			return null;
+			return Optional.empty();
 		}
 		if (!level.isWalkAbleTile(tx, ty)) {
-			return null;
-
+			return Optional.empty();
 		}
 		nodes[tx][ty].setParent(null);
 		closed.clear();
@@ -59,9 +67,7 @@ public class PathFinder {
 		nodes[tx][ty].setParent(null);
 		while (open.size() != 0) {
 			Point current = open.get(0);
-			if (current.equals(nodes[tx][ty])) {
-				break;
-			}
+			if (current.equals(nodes[tx][ty])) { break; }
 			open.remove(current);
 			closed.add(current);
 			for (int x = -1; x < 2; x++) {
@@ -92,7 +98,7 @@ public class PathFinder {
 			}
 		}
 		if (nodes[tx][ty].getParent() == null) {
-			return null;
+			return Optional.empty();
 		}
 		Path path = new Path(tx, ty);
 		Point target = nodes[tx][ty];
@@ -101,7 +107,7 @@ public class PathFinder {
 			target = target.getParent();
 		}
 		path.prependStep(sx, sy);
-		return path;
+		return Optional.of(path);
 	}
 
 	private static boolean isValidLocation(int xp, int yp, Level level) {
