@@ -1,24 +1,19 @@
 package util.vectors;
 
-public class Vec4f {
-	public float x;
-	public float y;
-	public float z;
+public class Vec4f extends Vec3f{
 	public float w;
 
 	public Vec4f(float x, float y, float z, float w) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		super(x, y, z);
 		this.w = w;
 	}
 
 	public Vec4f(float n) {
-		this(n,n,n,n);
+		this(n, n, n, n);
 	}
 
 	public Vec4f add(float n) {
-		return new Vec4f(x+n, y+n, z+n, w+n);
+		return add (new Vec4f(n));
 	}
 
 	public Vec4f add(Vec4f v) {
@@ -26,7 +21,7 @@ public class Vec4f {
 	}
 
 	public Vec4f sub(float n) {
-		return new Vec4f(x-n, y-n, z-n, w-n);
+		return sub(new Vec4f(n));
 	}
 
 	public Vec4f sub(Vec4f v) {
@@ -34,7 +29,7 @@ public class Vec4f {
 	}
 
 	public Vec4f mul(float n) {
-		return new Vec4f(x*n, y*n, z*n, w*n);
+		return mul(new Vec4f(n));
 	}
 
 	public Vec4f mul(Vec4f v) {

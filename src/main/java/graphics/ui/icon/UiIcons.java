@@ -69,10 +69,7 @@ public class UiIcons {
 	// checks if all icons (other than the one provided in num) are unselected
 	private boolean allOtherIconsNotSelected(int num) {
 		for (int i = 0; i < icons.length; i++) {
-			if (i == num) {
-				continue;
-			}
-			if (icons[i].isSelected()) {
+			if (icons[i].isSelected() && i != num) {
 				return false;
 			}
 		}

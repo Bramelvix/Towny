@@ -4,9 +4,9 @@ import util.vectors.Vec2f;
 import util.vectors.Vec4f;
 
 public class Outline {
-	Vec2f pos;
-	Vec2f size;
-	Vec4f color;
+	final Vec2f pos;
+	final Vec2f size;
+	final Vec4f color;
 
 	public Outline(Vec2f pos, Vec2f size, Vec4f color) {
 		this.pos = pos;

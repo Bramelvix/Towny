@@ -1,24 +1,19 @@
 package util.vectors;
 
-public class Vec4i {
-	public int x;
-	public int y;
-	public int z;
+public class Vec4i extends Vec3i {
 	public int w;
 
 	public Vec4i(int x, int y, int z, int w) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
+		super(x, y, z);
 		this.w = w;
 	}
 
 	public Vec4i(int n) {
-		this(n,n,n,n);
+		this(n, n, n, n);
 	}
 
 	public Vec4i add(int n) {
-		return new Vec4i(x+n, y+n, z+n, w+n);
+		return add(new Vec4i(n));
 	}
 
 	public Vec4i add(Vec4i v) {
@@ -26,7 +21,7 @@ public class Vec4i {
 	}
 
 	public Vec4i sub(int n) {
-		return new Vec4i(x-n, y-n, z-n, w-n);
+		return sub(new Vec4i(n));
 	}
 
 	public Vec4i sub(Vec4i v) {
@@ -34,7 +29,7 @@ public class Vec4i {
 	}
 
 	public Vec4i mul(int n) {
-		return new Vec4i(x*n, y*n, z*n, w*n);
+		return mul(new Vec4i(n));
 	}
 
 	public Vec4i mul(Vec4i v) {

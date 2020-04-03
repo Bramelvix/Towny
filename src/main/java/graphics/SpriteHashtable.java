@@ -5,10 +5,11 @@ import entity.Entity;
 import java.util.Hashtable;
 import java.util.Random;
 
-public class SpriteHashtable {
+public final class SpriteHashtable {
+	private SpriteHashtable() {}
 
 	private static final Hashtable<Integer, Sprite> table = new Hashtable<>();
-	private static final Random rand = new Random(); // random object used for random distributionof sprites
+	private static final Random rand = new Random(); // random object used for random distribution of sprites
 
 	// return random grass sprite
 	public static Sprite getGrass() {

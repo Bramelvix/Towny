@@ -1,13 +1,10 @@
 package util.vectors;
 
-public class Vec3f {
-	public float x;
-	public float y;
+public class Vec3f extends Vec2f{
 	public float z;
 
 	public Vec3f(float x, float y, float z) {
-		this.x = x;
-		this.y = y;
+		super(x, y);
 		this.z = z;
 	}
 
@@ -16,7 +13,7 @@ public class Vec3f {
 	}
 
 	public Vec3f add(float n) {
-		return new Vec3f(x+n, y+n, z+n);
+		return add(new Vec3f(n));
 	}
 
 	public Vec3f add(Vec3f v) {
@@ -24,7 +21,7 @@ public class Vec3f {
 	}
 
 	public Vec3f sub(float n) {
-		return new Vec3f(x-n, y-n, z-n);
+		return sub(new Vec3f(n));
 	}
 
 	public Vec3f sub(Vec3f v) {
@@ -32,7 +29,7 @@ public class Vec3f {
 	}
 
 	public Vec3f mul(float n) {
-		return new Vec3f(x*n, y*n, z*n);
+		return mul(new Vec3f(n));
 	}
 
 	public Vec3f mul(Vec3f v) {

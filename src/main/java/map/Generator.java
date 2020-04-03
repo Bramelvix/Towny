@@ -69,8 +69,7 @@ class Generator {
 		if (x0 > y0) {
 			i1 = 1;
 			j1 = 0;
-		}
-		else {
+		} else {
 			i1 = 0;
 			j1 = 1;
 		}
@@ -84,23 +83,23 @@ class Generator {
 		int gi1 = perm[ii + i1 + perm[jj + j1]] % 12;
 		int gi2 = perm[ii + 1 + perm[jj + 1]] % 12;
 		double t0 = 0.5 - x0 * x0 - y0 * y0;
-		if (t0 < 0)
+		if (t0 < 0) {
 			n0 = 0.0;
-		else {
+		} else {
 			t0 *= t0;
 			n0 = t0 * t0 * dot(grad3[gi0], x0, y0);
 		}
 		double t1 = 0.5 - x1 * x1 - y1 * y1;
-		if (t1 < 0)
+		if (t1 < 0) {
 			n1 = 0.0;
-		else {
+		} else {
 			t1 *= t1;
 			n1 = t1 * t1 * dot(grad3[gi1], x1, y1);
 		}
 		double t2 = 0.5 - x2 * x2 - y2 * y2;
-		if (t2 < 0)
+		if (t2 < 0) {
 			n2 = 0.0;
-		else {
+		} else {
 			t2 *= t2;
 			n2 = t2 * t2 * dot(grad3[gi2], x2, y2);
 		}

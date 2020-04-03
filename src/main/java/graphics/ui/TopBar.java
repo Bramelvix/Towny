@@ -3,7 +3,7 @@ package graphics.ui;
 import graphics.opengl.OpenGLUtils;
 import graphics.ui.icon.Icon;
 import input.PointerInput;
-import util.TextureInfo;
+import graphics.TextureInfo;
 import util.vectors.Vec2f;
 
 import javax.imageio.ImageIO;

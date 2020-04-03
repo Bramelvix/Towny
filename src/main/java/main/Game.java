@@ -38,7 +38,7 @@ import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import util.StringUtils;
-import util.TextureInfo;
+import graphics.TextureInfo;
 import util.vectors.Vec2f;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
@@ -413,7 +413,7 @@ public class Game {
 	private void onClickSmith() {
 		MenuItem[] craftingOptions = new MenuItem[WeaponMaterial.values().length + 1];
 		for (int i = 0; i < WeaponMaterial.values().length; i++) {
-			craftingOptions[i] = new MenuItem(StringUtils.capitalize(WeaponMaterial.values()[i].toString().toLowerCase()), this::showMaterials, pointer);
+			craftingOptions[i] = new MenuItem(StringUtils.capitalise(WeaponMaterial.values()[i].toString().toLowerCase()), this::showMaterials, pointer);
 		}
 		craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer);
 		ui.showMenu(pointer, craftingOptions);

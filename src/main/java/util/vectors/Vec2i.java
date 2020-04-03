@@ -14,7 +14,7 @@ public class Vec2i {
 	}
 
 	public Vec2i add(int n) {
-		return new Vec2i(x+n, y+n);
+		return add(new Vec2i(n));
 	}
 
 	public Vec2i add(Vec2i v) {
@@ -22,7 +22,7 @@ public class Vec2i {
 	}
 
 	public Vec2i sub(int n) {
-		return new Vec2i(x-n, y-n);
+		return sub(new Vec2i(n));
 	}
 
 	public Vec2i sub(Vec2i v) {
@@ -30,7 +30,7 @@ public class Vec2i {
 	}
 
 	public Vec2i mul(int n) {
-		return new Vec2i(x*n, y*n);
+		return mul(new Vec2i(n));
 	}
 
 	public Vec2i mul(Vec2i v) {

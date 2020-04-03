@@ -1,4 +1,4 @@
-package graphics.opengl;
+package util;
 
 import java.awt.*;
 import java.awt.color.ColorSpace;
@@ -10,9 +10,10 @@ import java.util.Hashtable;
 import static org.lwjgl.opengl.EXTTextureMirrorClamp.GL_MIRROR_CLAMP_TO_EDGE_EXT;
 import static org.lwjgl.opengl.GL11.*;
 
-class BufferedImageUtil {
+public final class BufferedImageUtil {
+	private BufferedImageUtil() {}
 
-	static int getTexture(BufferedImage resourceimage) {
+	public static int getTexture(BufferedImage resourceimage) {
 		int textureID = glGenTextures();
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, textureID);

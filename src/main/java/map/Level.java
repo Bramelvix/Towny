@@ -15,6 +15,7 @@ import graphics.SpriteHashtable;
 import main.Game;
 import util.BiPredicateInteger;
 import util.vectors.Vec2f;
+import util.vectors.Vec2i;
 
 public class Level {
 
@@ -75,14 +76,13 @@ public class Level {
 		return tiles[x][y].getEntity();
 	}
 
-	public <T extends Entity> int[] getNearestSpotThatHasX(int xloc, int yloc, Class<T> clazz) {
+	public <T extends Entity> Vec2i getNearestSpotThatHasX(int xloc, int yloc, Class<T> clazz) {
 		return getNearestSpotThatHasX(xloc, yloc, (x, y) -> has(x, y, clazz));
 	}
 
-	private int[] getNearestSpotThatHasX(int xloc, int yloc, BiPredicateInteger p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
-		// index 0 in array is X, index 1 is Y
+	private Vec2i getNearestSpotThatHasX(int xloc, int yloc, BiPredicateInteger p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
 		if (p.test(xloc, yloc)) {
-			return new int[] { xloc, yloc };
+			return new Vec2i(xloc, yloc);
 		} else {
 			for (int layer = 1; layer < 100; layer++) {
 				int x = layer - 1;
@@ -92,28 +92,28 @@ public class Level {
 				int err = dx - (layer << 1);
 				while (x >= y) {
 					if (p.test(xloc + x, yloc + y)) {
-						return new int[] { xloc + x, yloc + y };
+						return new Vec2i( xloc + x, yloc + y);
 					}
 					if (p.test(xloc + y, yloc + x)) {
-						return new int[] { xloc + y, yloc + x };
+						return new Vec2i( xloc + y, yloc + x );
 					}
 					if (p.test(xloc - y, yloc + x)) {
-						return new int[] { xloc - y, yloc + x};
+						return new Vec2i( xloc - y, yloc + x);
 					}
 					if (p.test(xloc - x, yloc + y)) {
-						return new int[] { xloc - x, yloc + y};
+						return new Vec2i( xloc - x, yloc + y);
 					}
 					if (p.test(xloc - x, yloc - y)) {
-						return new int[] { xloc - x, yloc - y };
+						return new Vec2i( xloc - x, yloc - y);
 					}
 					if (p.test(xloc - y, yloc - x)) {
-						return new int[] { xloc - y, yloc - x};
+						return new Vec2i( xloc - y, yloc - x);
 					}
 					if (p.test(xloc + y, yloc - x)) {
-						return new int[] { xloc + y, yloc - x };
+						return new Vec2i( xloc + y, yloc - x);
 					}
 					if (p.test(xloc + x, yloc - y)) {
-						return new int[] { xloc + x, yloc - y };
+						return new Vec2i( xloc + x, yloc - y);
 					}
 
 					if (err <= 0) {
@@ -137,13 +137,13 @@ public class Level {
 	}
 
 	public <T extends Workstation> Optional<T> getNearestWorkstation(Class<T> workstation, int x, int y) {
-		int[] point = getNearestSpotThatHasX(x, y, workstation);
-		return point != null ?  Optional.of(workstation.cast(tiles[point[0]][point[1]].getEntity())) : Optional.empty();
+		Vec2i point = getNearestSpotThatHasX(x, y, workstation);
+		return point != null ?  Optional.of(workstation.cast(tiles[point.x][point.y].getEntity())) : Optional.empty();
 	}
 
 	public Optional<Stairs> getNearestStairs(int x, int y, boolean top) { //gets the nearest stairs object on the map
-		int[] point = top ? getNearestSpotThatHasX(x, y, this::hasTopStairs) : getNearestSpotThatHasX(x, y, this::hasBottomStairs);
-		return point != null ?  Optional.of((Stairs) tiles[point[0]][point[1]].getEntity()): Optional.empty();
+		Vec2i point = top ? getNearestSpotThatHasX(x, y, this::hasTopStairs) : getNearestSpotThatHasX(x, y, this::hasBottomStairs);
+		return point != null ?  Optional.of((Stairs) tiles[point.x][point.y].getEntity()): Optional.empty();
 	}
 
 	private boolean hasBottomStairs(int x, int y) {
@@ -189,17 +189,17 @@ public class Level {
 		for (int y = 1; y < height - 1; y++) {
 			for (int x = 1; x < width - 1; x++) {
 				if (noise[x + y * width] > 0.5) {
-					tiles[x][y] = new Tile(SpriteHashtable.getDirt(), false);
+					tiles[x][y] = new Tile(SpriteHashtable.getDirt());
 					if (elevation > 0) {
-						tiles[x][y] = new Tile(SpriteHashtable.getStone(), false);
+						tiles[x][y] = new Tile(SpriteHashtable.getStone());
 					}
 				} else {
 					if (elevation > 0) {
-						tiles[x][y] = new Tile(SpriteHashtable.getStone(), false);
+						tiles[x][y] = new Tile(SpriteHashtable.getStone());
 						randOre(x, y);
 
 					} else {
-						tiles[x][y] = new Tile(SpriteHashtable.getGrass(), false);
+						tiles[x][y] = new Tile(SpriteHashtable.getGrass());
 						randForest(x, y);
 					}
 				}
@@ -207,7 +207,7 @@ public class Level {
 		}
 		for (int y = 1; y < height - 1; y++) {
 			for (int x = 1; x < width - 1; x++) {
-				tiles[x][y].getEntity(Ore.class).ifPresent(Ore::checkSides);
+				selectOre(x, y).ifPresent(Ore::checkSides);
 			}
 		}
 	}

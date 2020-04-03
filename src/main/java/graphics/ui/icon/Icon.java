@@ -4,7 +4,7 @@ import graphics.opengl.OpenGLUtils;
 import graphics.ui.UiElement;
 import input.PointerInput;
 import input.PointerMoveEvent;
-import util.TextureInfo;
+import graphics.TextureInfo;
 import util.vectors.Vec2f;
 
 import java.io.IOException;

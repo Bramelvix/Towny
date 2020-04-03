@@ -1,4 +1,4 @@
-package util;
+package graphics;
 
 import java.nio.ByteBuffer;
 

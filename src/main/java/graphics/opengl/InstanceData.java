@@ -13,7 +13,6 @@ import static org.lwjgl.opengl.GL30.GL_MAP_WRITE_BIT;
 import static org.lwjgl.opengl.GL30.glMapBufferRange;
 
 public class InstanceData {
-	private int maxInstances;
 	private int instances; //amount of instances to render per frame
 
 	private final int vbo;
@@ -23,7 +22,6 @@ public class InstanceData {
 	private Spritesheet spritesheet;
 
 	public InstanceData(int maxInstances) {
-		this.maxInstances = maxInstances; //maximum amount of instances that can be drawn in one frame (per buffer)
 		bufferSize = (maxInstances*5*4) + (maxInstances*5*4); //bufferSize in bytes, 3 pos and 2 tex
 		setSpritesheet(SpritesheetHashtable.getCombined());
 

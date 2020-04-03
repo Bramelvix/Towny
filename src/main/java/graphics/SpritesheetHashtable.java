@@ -7,7 +7,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Hashtable;
 
-public class SpritesheetHashtable  {
+public final class SpritesheetHashtable  {
+	private SpritesheetHashtable() {}
 
 	private static Spritesheet combined;
 	private static final Hashtable<Integer, BufferedImage> table = new Hashtable<>();
@@ -19,9 +20,7 @@ public class SpritesheetHashtable  {
 	}
 
 	public static void registerSpritesheet(int key, String path) throws Exception {
-		if (table.put(key, ImageIO.read(Spritesheet.class.getResource(path))) != null) {
-			throw new Exception("Duplicate key while registering spritesheet: " + key);
-		}
+		registerSpritesheet(key, ImageIO.read(Spritesheet.class.getResource(path)));
 	}
 
 	private static BufferedImage get(int key) {

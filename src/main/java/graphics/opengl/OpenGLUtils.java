@@ -2,8 +2,8 @@ package graphics.opengl;
 
 import main.Game;
 import map.Tile;
-import org.lwjgl.BufferUtils;
-import util.TextureInfo;
+import graphics.TextureInfo;
+import util.ByteBufferUtil;
 import util.vectors.Vec2f;
 import util.vectors.Vec4f;
 
@@ -32,6 +32,7 @@ public abstract class OpenGLUtils {
 	private static final Vec4f outlineColour = new Vec4f(1,0,0,1);
 
 
+	//TODO how is this number decided? I literally added a 0 to it because the limit would sometimes be reached while changing layers.
 	private static final int maxInstances = 6270; //maximum amount of instances that can be drawn in one frame (per buffer)
 
 	public static InstanceData instanceData;
@@ -111,7 +112,11 @@ public abstract class OpenGLUtils {
 	}
 
 	public static TextureInfo loadTexture(int[] pixels, int width, int height) {
-		ByteBuffer buffer = getByteBuffer(pixels,width,height);
+		ByteBuffer buffer = ByteBufferUtil.getByteBuffer(pixels,width,height);
+		return loadTexture(buffer, width, height);
+	}
+
+	public static TextureInfo loadTexture(ByteBuffer buffer, int width, int height) {
 		int textureID = glGenTextures();
 		glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
 		//Setup wrap mode
@@ -127,21 +132,9 @@ public abstract class OpenGLUtils {
 	}
 
 	public static TextureInfo loadTexture(BufferedImage image) {
-		ByteBuffer buffer = getByteBuffer(image);
-		int textureID = glGenTextures();
-		glBindTexture(GL_TEXTURE_2D, textureID); //Bind texture ID
-		//Setup wrap mode
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		//Setup texture scaling filtering
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		//Send texel data to OpenGL
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-		//Return the texture ID so we can bind it again later
-		return new TextureInfo(textureID, image.getWidth(), image.getHeight(), buffer);
+		ByteBuffer buffer = ByteBufferUtil.getByteBuffer(image);
+		return loadTexture(buffer, image.getWidth(), image.getHeight());
 	}
-
 
 	public static TextureInfo loadTexture(String filename) throws IOException {
 		return loadTexture(ImageIO.read(OpenGLUtils.class.getResource(filename)));
@@ -149,36 +142,6 @@ public abstract class OpenGLUtils {
 
 	public static void deleteTexture(int textId) {
 		glDeleteTextures(textId);
-	}
-
-	public static ByteBuffer getByteBuffer(int[] pixels, int width, int height) {
-		ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				int pixel = pixels[y * width + x];
-				buffer.put((byte) ((pixel >> 24) & 0xFF));     // Alpha component.
-				buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
-				buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
-				buffer.put((byte) (pixel & 0xFF));             // Blue component
-			}
-		}
-		buffer.flip();
-		return buffer;
-	}
-
-	public static ByteBuffer getByteBuffer(BufferedImage image) {
-		ByteBuffer buffer = BufferUtils.createByteBuffer(image.getWidth() * image.getHeight() * 4);
-		for (int y = 0; y < image.getHeight(); y++) {
-			for (int x = 0; x < image.getWidth(); x++) {
-				int pixel = image.getRGB(x, y);
-				buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
-				buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
-				buffer.put((byte) (pixel & 0xFF));             // Blue component
-				buffer.put((byte) ((pixel >> 24) & 0xFF));     // Alpha component.
-			}
-		}
-		buffer.flip();
-		return buffer;
 	}
 
 	public static void drawTexturedQuad(Vec2f pos, Vec2f size, Vec2f offset, Vec2f texPos, Vec2f texSize, int texture) {
@@ -206,7 +169,7 @@ public abstract class OpenGLUtils {
 		tileShader.setUniform("scale", tileSize.x / Tile.SIZE, tileSize.y / Tile.SIZE);
 
 		tileShader.setUniform("offset", (2f*-offset.x)/ Game.width, (2f*offset.y)/ Game.height);
-		Vec2f texScale = new Vec2f((float)Tile.SIZE/ instanceData.getSpriteSheet().getWidth(), (float)Tile.SIZE/ instanceData.getSpriteSheet().getHeight());
+		Vec2f texScale = new Vec2f(Tile.SIZE / instanceData.getSpriteSheet().getWidth(), Tile.SIZE / instanceData.getSpriteSheet().getHeight());
 		tileShader.setUniform("tex_scale", texScale);
 
 		instanceData.unmapBuffer();

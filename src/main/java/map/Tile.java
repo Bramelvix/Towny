@@ -25,6 +25,10 @@ public class Tile {
 		this.sprite = sprite;
 	}
 
+	Tile(Sprite sprite) {
+		this(sprite, false);
+	}
+
 	// render a tile
 	void render(int x, int y) {
 		if (entity == null || entity.isTransparent() || !entity.isVisible()) {

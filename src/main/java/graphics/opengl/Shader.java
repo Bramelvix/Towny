@@ -7,14 +7,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.HashMap;
 
 import static org.lwjgl.opengl.GL20.*;
 
 public class Shader {
 
-	int ID;
-	HashMap<String, Integer> uniforms = new HashMap<>();
+	private final int ID;
 
 	//TODO make a shader/opengl exception type
 	public Shader(URL vertexShaderSource, URL fragmentShaderSource) throws Exception {
@@ -69,7 +67,7 @@ public class Shader {
 	}
 
 	public void setUniform(String name, boolean value) {
-		glUniform1i(uniforms.get(name), value ? 1 : 0);
+		glUniform1i(glGetUniformLocation(ID, name), value ? 1 : 0);
 	}
 
 	public void setUniform(String name, int n) {
@@ -79,23 +77,23 @@ public class Shader {
 		glUniform2i(glGetUniformLocation(ID, name), n1, n2);
 	}
 	public void setUniform(String name, int n1, int n2, int n3) {
-		glUniform3i(uniforms.get(name), n1, n2, n3);
+		glUniform3i(glGetUniformLocation(ID, name), n1, n2, n3);
 	}
 	public void setUniform(String name, int n1, int n2, int n3, int n4) {
-		glUniform4i(uniforms.get(name), n1, n2, n3, n4);
+		glUniform4i(glGetUniformLocation(ID, name), n1, n2, n3, n4);
 	}
 
 	public void setUniform(String name, float n) {
-		glUniform1f(uniforms.get(name), n);
+		glUniform1f(glGetUniformLocation(ID, name), n);
 	}
 	public void setUniform(String name, float n1, float n2) {
 		glUniform2f(glGetUniformLocation(ID, name), n1, n2);
 	}
 	public void setUniform(String name, float n1, float n2, float n3) {
-		glUniform3f(uniforms.get(name), n1, n2, n3);
+		glUniform3f(glGetUniformLocation(ID, name), n1, n2, n3);
 	}
 	public void setUniform(String name, float n1, float n2, float n3, float n4) {
-		glUniform4f(uniforms.get(name), n1, n2, n3, n4);
+		glUniform4f(glGetUniformLocation(ID, name), n1, n2, n3, n4);
 	}
 	public void setUniform(String name, Vec2f v) {
 		glUniform2f(glGetUniformLocation(ID, name), v.x, v.y);

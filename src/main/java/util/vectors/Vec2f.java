@@ -9,17 +9,12 @@ public class Vec2f {
 		this.y = y;
 	}
 
-	public Vec2f(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-
 	public Vec2f(float n) {
-		this(n,n);
+		this(n, n);
 	}
 
 	public Vec2f add(float n) {
-		return new Vec2f(x+n, y+n);
+		return add (new Vec2f(n));
 	}
 
 	public Vec2f add(Vec2f v) {
@@ -27,7 +22,7 @@ public class Vec2f {
 	}
 
 	public Vec2f sub(float n) {
-		return new Vec2f(x-n, y-n);
+		return sub(new Vec2f(n));
 	}
 
 	public Vec2f sub(Vec2f v) {
@@ -35,10 +30,11 @@ public class Vec2f {
 	}
 
 	public Vec2f mul(float n) {
-		return new Vec2f(x*n, y*n);
+		return mul(new Vec2f(n));
 	}
 
 	public Vec2f mul(Vec2f v) {
 		return new Vec2f(x*v.x, y*v.y);
 	}
+
 }

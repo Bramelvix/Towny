@@ -6,6 +6,7 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import util.BufferedImageUtil;
 import util.vectors.Vec2f;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
