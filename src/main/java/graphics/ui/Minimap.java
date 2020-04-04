@@ -18,12 +18,16 @@ class Minimap extends UiElement{
 		init(map);
 	}
 
-	// intialise the image
-	private void init(Level map) { //TODO fix entities rendering on the minimap
+	// initialise the image
+	private void init(Level map) {
 		int[] pixels = new int[(int)size.x * (int)size.y];
-		for (int x = 0; x < size.x; x++) {
-			for (int y = 0; y < size.y; y++) {
-				pixels[x + y * (int)size.x] = map.getTile(y / 2, x / 2).sprite.getAvgColor();
+		for (int x = 0; x < size.x; x+=2) {
+			for (int y = 0; y < size.y; y+=2) {
+				int colour = map.getTile(x/2, y/2).getAvgColour();
+				pixels[x + y * (int)size.x] = colour;
+				pixels[(x + 1) + y * (int)size.x] = colour;
+				pixels[x + (y + 1) * (int)size.x] = colour;
+				pixels[(x + 1) + (y + 1) * (int)size.x] = colour;
 			}
 		}
 		OpenGLUtils.deleteTexture(textureId);
