@@ -24,6 +24,9 @@ public abstract class ItemHashtable {
 	}
 
 	public static Item get(int key) {
+		if (!table.containsKey(key)) {
+			System.err.println("No such Item in table! Id: " + key);
+		}
 		return table.get(key).copy();
 	}
 

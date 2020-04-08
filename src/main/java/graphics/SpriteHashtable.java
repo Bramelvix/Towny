@@ -59,6 +59,9 @@ public final class SpriteHashtable {
 	};
 
 	public static Sprite get(int key) {
+		if (!table.containsKey(key)) {
+			System.err.println("No such sprite in table! Id: " + key);
+		}
 		return table.get(key);
 	}
 
