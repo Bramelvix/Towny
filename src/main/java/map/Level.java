@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import entity.*;
 import entity.nonDynamic.building.Stairs;
+import entity.nonDynamic.building.farming.TilledSoil;
 import entity.nonDynamic.building.wall.Wall;
 import entity.dynamic.item.Item;
 import entity.nonDynamic.building.container.workstations.Workstation;
@@ -238,6 +239,14 @@ public class Level {
 	// if there is a tree on X and Y (IN PIXELS), return it
 	public Optional<Tree> selectTree(float x, float y) {
 		return selectTree((int) (x / Tile.SIZE), (int) (y / Tile.SIZE), true);
+	}
+
+	public Optional<TilledSoil> selectTilledSoil(float x, float y) {
+		return selectTilledSoil((int) (x / Tile.SIZE), (int) (y / Tile.SIZE));
+	}
+
+	public Optional<TilledSoil> selectTilledSoil(int x, int y) {
+		return tiles[x][y].getEntity(TilledSoil.class);
 	}
 
 	// if there is ore on X and Y, return it

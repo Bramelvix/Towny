@@ -1,20 +1,18 @@
 package entity.nonDynamic.resources;
 
-import entity.dynamic.mob.Villager;
 import entity.nonDynamic.StaticEntity;
+import entity.nonDynamic.Workable;
 import graphics.opengl.OpenGLUtils;
 import graphics.Sprite;
 import map.Level;
 import util.vectors.Vec2f;
 
 //superclass of gatherable resources such as trees and ore
-public abstract class Resource extends StaticEntity {
+public abstract class Resource extends StaticEntity implements Workable {
 
 	Resource(float x, float y, int z, Level level) {
 		super(x, y, z, level);
 	}
-
-	public abstract boolean work(Villager worker);
 
 	@Override
 	public void render() {

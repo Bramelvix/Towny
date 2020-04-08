@@ -12,6 +12,7 @@ import entity.dynamic.mob.work.recipe.BuildingRecipe;
 import entity.dynamic.mob.work.recipe.ItemRecipe;
 import entity.nonDynamic.building.container.Chest;
 import entity.nonDynamic.building.container.Container;
+import entity.nonDynamic.building.farming.TilledSoil;
 import entity.nonDynamic.resources.Ore;
 import entity.nonDynamic.resources.Tree;
 import entity.dynamic.item.Clothing;
@@ -383,6 +384,14 @@ public class Game {
 		ui.getMenu().hide();
 	}
 
+	private void onClickFarm(MenuItem item) {
+		selectedvill.setPath(null);
+		selectedvill.addJob((TilledSoil) item.getEntity());
+		deselect(selectedvill);
+		ui.deSelectIcons();
+		ui.getMenu().hide();
+	}
+
 	private void onClickSmelt() {
 		MenuItem[] craftingOptions = new MenuItem[ItemRecipe.FURNACE_RECIPES.length + 1];
 		for (int i = 0; i < ItemRecipe.FURNACE_RECIPES.length; i++) {
@@ -563,12 +572,22 @@ public class Game {
 		} else if (pointer.wasPressed(GLFW_MOUSE_BUTTON_RIGHT)) {
 			if (selectedvill != null) {
 				List<MenuItem> options = new ArrayList<>();
-				if (selectedvill.getHolding() != null&&(map[currentLayerNumber].tileIsEmpty(pointer.getTileX(), pointer.getTileY()) || map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY()) instanceof Chest)) {
+				if (selectedvill.getHolding() != null && (map[currentLayerNumber].tileIsEmpty(pointer.getTileX(), pointer.getTileY()) || map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY()) instanceof Chest)) {
 					options.add(new MenuItem((MenuItem.DROP + " " + selectedvill.getHolding().getName()), in -> onClickDrop(), pointer));
 				}
 
 				map[currentLayerNumber].selectTree(pointer.getX(), pointer.getY()).ifPresent(
 					tree -> options.add(new MenuItem((MenuItem.CHOP), tree, this::onClickChop, pointer))
+				);
+
+				map[currentLayerNumber].selectTilledSoil(pointer.getTileX(), pointer.getTileY()).ifPresent(
+					plot -> {
+						if (!plot.isPlanted()) {
+							options.add(new MenuItem((MenuItem.SOW), plot, this::onClickFarm, pointer));
+						} else if (plot.isReadyToHarvest()) {
+							options.add(new MenuItem((MenuItem.HARVEST), plot, this::onClickFarm, pointer));
+						}
+					}
 				);
 
 				map[currentLayerNumber].selectOre(pointer.getTileX(), pointer.getTileY()).ifPresent(

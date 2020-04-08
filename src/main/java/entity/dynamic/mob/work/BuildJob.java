@@ -23,6 +23,7 @@ public class BuildJob extends Job {
 	public BuildJob(int xloc, int yloc, int zloc, BuildAbleObject object, Villager worker) { //construction job that requires no building materials
 		super(xloc, yloc, zloc, worker);
 		buildJobObj = object;
+		work = buildJobObj::work;
 		material = null;
 		needsMaterial = false;
 	}
@@ -63,7 +64,7 @@ public class BuildJob extends Job {
 						if (!buildJobObj.initialised) {
 							buildJobObj.initialise(xloc, yloc, worker.levels, zloc);
 						}
-						completed = buildJobObj.build();
+						completed = work.getAsBoolean();
 						if (material != null) {
 							worker.setHolding(null);
 						}

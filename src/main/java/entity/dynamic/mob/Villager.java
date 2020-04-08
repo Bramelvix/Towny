@@ -3,18 +3,16 @@ package entity.dynamic.mob;
 import java.util.Optional;
 import java.util.PriorityQueue;
 
-import entity.dynamic.mob.work.BuildJob;
-import entity.dynamic.mob.work.GatherJob;
-import entity.dynamic.mob.work.PriorityJob;
+import entity.dynamic.mob.work.*;
 import entity.nonDynamic.building.BuildAbleObject;
 import entity.Entity;
 import entity.nonDynamic.building.container.Container;
+import entity.nonDynamic.building.farming.TilledSoil;
 import entity.nonDynamic.resources.Resource;
 import entity.dynamic.item.Clothing;
 import entity.dynamic.item.Item;
 import entity.dynamic.item.VillagerInventory;
 import entity.dynamic.item.weapon.Weapon;
-import entity.dynamic.mob.work.Job;
 import entity.pathfinding.Path;
 import graphics.opengl.OpenGLUtils;
 import graphics.Sprite;
@@ -157,9 +155,13 @@ public class Villager extends Humanoid {
 		return false;
 	}
 
-	// add a job to the jobs spritesheets for the villager to do
+	// add a job to the jobs list for the villager to do
 	public void addJob(Resource e) {
 		if (e != null) { addJob(new GatherJob(e, this)); }
+	}
+
+	public void addJob(TilledSoil e) {
+		if (e != null) { addJob(new FarmJob(e, this)); }
 	}
 
 	public void addJob(Job e) {

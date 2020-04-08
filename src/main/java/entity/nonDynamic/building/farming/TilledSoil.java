@@ -3,12 +3,50 @@ package entity.nonDynamic.building.farming;
 import entity.nonDynamic.building.BuildAbleObject;
 import graphics.SpriteHashtable;
 
+import java.time.Instant;
+
 public class TilledSoil extends BuildAbleObject {
+	private Instant plantTime;
+	private byte worked = 100;
+	private long growTimeSeconds;
 
 	public TilledSoil() {
 		super();
 		this.setOpened(true);
+		this.setName("fertile soil");
 		sprite = SpriteHashtable.get(141);
+	}
+
+	public boolean sow() {
+		if (worked > 0) {
+			worked--;
+			return false;
+		}
+		sprite = SpriteHashtable.get(142);
+		plantTime = Instant.now();
+		worked = 100;
+		return true;
+
+	}
+
+	public boolean harvest() { //TODO finish implementing
+		if (worked > 0) {
+			worked--;
+			return false;
+		}
+		sprite = SpriteHashtable.get(141);
+		//drop plant product
+		worked = 100;
+		plantTime = null;
+		return false;
+	}
+
+	public boolean isPlanted() {
+		return plantTime != null;
+	}
+
+	public boolean isReadyToHarvest() {
+		return plantTime != null && plantTime.isBefore(Instant.now().plusSeconds(growTimeSeconds));
 	}
 
 	@Override

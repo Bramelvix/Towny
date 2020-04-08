@@ -40,6 +40,8 @@ public class MenuItem {
 	public static final String GOLD = "Gold";
 	public static final String CRYSTAL = "Crystal";
 	public static final String WOOD = "Wood";
+	public static final String SOW = "Sow seed on";
+	public static final String HARVEST = "Harvest from";
 	private Recipe recipe;
 	private Entity entity;
 	private final Subscription subscriptionMove;

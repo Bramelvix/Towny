@@ -4,24 +4,9 @@ import entity.dynamic.mob.Villager;
 import entity.nonDynamic.resources.Resource;
 
 public class GatherJob extends Job {
-
-	private final Resource jobObj; // the resource the worker needs to gather
-
 	public <T extends Resource> GatherJob(T jobObj, Villager worker) {
 		super(jobObj.getTileX(), jobObj.getTileY(), jobObj.getZ(), worker);
-		this.jobObj = jobObj;
-		this.jobObj.setSelected(true);
+		jobObj.setSelected(true);
+		work = jobObj::work;
 	}
-
-	@Override
-	public void execute() {
-		if (!completed && started) {
-			if (!worker.aroundTile(xloc, yloc, zloc)) {
-				worker.prependJobToChain(new MoveJob(xloc, yloc, zloc, worker,false));
-			} else if (jobObj.work(worker)) { completed = true; }
-		} else {
-			start();
-		}
-	}
-
 }

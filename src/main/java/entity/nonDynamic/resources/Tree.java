@@ -1,7 +1,6 @@
 package entity.nonDynamic.resources;
 
 import entity.dynamic.item.ItemHashtable;
-import entity.dynamic.mob.Villager;
 import graphics.opengl.OpenGLUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
@@ -33,18 +32,16 @@ public class Tree extends Resource {
 	}
 
 	// work method (same as in the Ore class)
-	public boolean work(Villager worker) {
+	public boolean work() {
 		if (chopped > 0) {
-			if (chopped % 20 == 0) {
-				Sound.playSound(Sound.woodChopping);
-			}
+			if (chopped % 20 == 0) { Sound.playSound(Sound.woodChopping); }
 			chopped--;
 			return false;
-		} else {
-			level.removeEntity(this);
-			level.addItem(ItemHashtable.get(1, location.x, location.y, this.z));
-			return true;
 		}
+		level.removeEntity(this);
+		level.addItem(ItemHashtable.get(1, location.x, location.y, this.z));
+		return true;
+
 	}
 
 	@Override

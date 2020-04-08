@@ -2,7 +2,6 @@ package entity.nonDynamic.resources;
 
 import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
-import entity.dynamic.mob.Villager;
 import graphics.MultiSprite;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
@@ -40,18 +39,17 @@ public class Ore extends Resource {
 	}
 
 	// work method executed by the villager when mining
-	public boolean work(Villager worker) {
+	public boolean work() {
 		if (mined > 0) {
-			if (mined % 20 == 0)
-				Sound.playSound(Sound.stoneMining);
+			if (mined % 20 == 0) { Sound.playSound(Sound.stoneMining); }
 			mined--;
 			return false;
-		} else {
-			level.removeEntity(this);
-			resetSpritesAroundThis();
-			level.addItem(minedItem.copy());
-			return true;
 		}
+		level.removeEntity(this);
+		resetSpritesAroundThis();
+		level.addItem(minedItem.copy());
+		return true;
+
 	}
 
 	private void resetSpritesAroundThis() {

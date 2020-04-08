@@ -65,6 +65,7 @@ public final class SpriteHashtable {
 	public static void registerSprites() throws Exception { //registers all sprites by id
 		registerSprite(1, new Sprite(0, 0, 1)); //water
 		registerSprite(2, new Sprite(5, 0, 1)); //grass
+		registerSprite(3, new Sprite(0, 8, 1)); //void tile
 		registerSprite(4, new Sprite(0, 5, 1)); //darkGrass
 		registerSprite(5, new Sprite(5, 1, 1)); //grass2
 		registerSprite(6, new Sprite(6, 0, 1)); //dirt
@@ -195,7 +196,7 @@ public final class SpriteHashtable {
 		registerSprite(139, new Sprite(44, 1, 2));//copperspear
 		registerSprite(140, new Sprite(1, 5, 1)); //darkStone
 		registerSprite(141, new Sprite(5, 6, 1));
-		registerSprite(142, new Sprite(6, 6, 1)); //nothing, transparent
+		registerSprite(142, new Sprite(6, 6, 1));
 		//GAP
 
 		registerSprite(161, new Sprite(9, 0, 1)); //HardStoneNoSides
