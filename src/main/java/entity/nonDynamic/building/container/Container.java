@@ -29,8 +29,12 @@ public abstract class Container extends BuildAbleObject {
 		return result;
 	}
 
-	public Item[] getItems() {
-		return items.toArray(new Item[0]);
+	public Item[] getItemArray() {
+		return getItemList().toArray(new Item[0]);
+	}
+
+	public ArrayList<Item> getItemList() {
+		return items;
 	}
 
 	private boolean isFull() {

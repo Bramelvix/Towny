@@ -62,4 +62,8 @@ class Minimap extends UiElement{
 		yoff = y;
 	}
 
+	void destroy() {
+		OpenGLUtils.deleteTexture(textureId);
+	}
+
 }

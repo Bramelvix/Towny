@@ -87,4 +87,8 @@ public class InstanceData {
 	public void bindTexture() {
 		glBindTexture(GL_TEXTURE_2D, spritesheet.getId());
 	}
+
+	void destroy() {
+		glDeleteBuffers(vbo);
+	}
 }

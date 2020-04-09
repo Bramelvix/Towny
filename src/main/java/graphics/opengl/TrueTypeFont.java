@@ -227,4 +227,9 @@ public class TrueTypeFont {
 		GL11.glDeleteTextures(scratch);
 	}
 
+	public static void release() {
+		black.destroy();
+		red.destroy();
+	}
+
 }

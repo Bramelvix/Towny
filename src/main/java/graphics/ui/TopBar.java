@@ -68,4 +68,14 @@ public class TopBar extends UiElement{
 		OpenGLUtils.drawText(solcount + "", position.x + 225, position.y + 65);
 	}
 
+	void destroy() {
+		vil.destroy();
+		sol.destroy();
+		slow.destroy();
+		fast.destroy();
+		pause.destroy();
+		OpenGLUtils.deleteTexture(pauseTexture.id);
+		OpenGLUtils.deleteTexture(playTexture.id);
+	}
+
 }

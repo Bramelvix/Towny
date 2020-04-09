@@ -94,10 +94,7 @@ public class MoveJob extends Job {
 	}
 
 	private void goOnStairs() {
-		Stairs stairs = worker.levels[worker.getZ()].getEntityOn(worker.getTileX(), worker.getTileY());
-		if (stairs != null) {
-			stairs.goOnStairs(worker);
-		}
+		worker.levels[worker.getZ()].getEntityOn(worker.getTileX(), worker.getTileY(), Stairs.class).ifPresent(stairs -> stairs.goOnStairs(worker));
 	}
 
 }

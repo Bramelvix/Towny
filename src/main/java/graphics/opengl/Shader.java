@@ -125,6 +125,9 @@ public class Shader {
 		if(glGetShaderi(id, GL_COMPILE_STATUS) != GL_TRUE) {
 			throw new Exception(!log.isEmpty() ? log : "Could not compile " + type.name());
 		}
+	}
 
+	void destroy() {
+		glDeleteShader(ID);
 	}
 }

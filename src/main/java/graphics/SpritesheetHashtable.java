@@ -1,5 +1,6 @@
 package graphics;
 
+import graphics.opengl.OpenGLUtils;
 import map.Tile;
 
 import javax.imageio.ImageIO;
@@ -67,6 +68,12 @@ public final class SpritesheetHashtable  {
 			y+= get(i).getHeight()/ Tile.SIZE;
 		}
 		return y;
+	}
+
+	public static void destroy() {
+		if (combined != null) {
+			OpenGLUtils.deleteTexture(combined.getId());
+		}
 	}
 
 }

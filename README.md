@@ -17,8 +17,9 @@ Running the game on mac requires you to put `-XstartOnFirstThread -Djava.awt.hea
  - Selectionsquare for mining orders
  - Better building and crafting UI
  - Villager management UI
- - Improving the minimap
  - World generator rework
+ - Redo animation system
+ - Finish farming implementation
  
  **Planned features**
  - Monster attacks

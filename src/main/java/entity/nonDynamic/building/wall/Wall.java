@@ -14,33 +14,33 @@ import java.util.Optional;
 public class Wall extends BuildAbleObject {
 
 	private final boolean door;
-	private WallType type;
+	private final WallType type;
 
 	// basic constructor
 	public Wall(WallType type) {
 		this(type, false);
 	}
 
-	private void decideSprites(WallType type, boolean door) {
-		this.type = type;
-		String name = "";
+	private void decideSprites(boolean door) {
+		StringBuilder name = new StringBuilder();
 		switch (type) {
 			case WOOD:
-				name = name.concat("wooden ");
+				name.append("wooden ");
 				break;
 			case STONE:
-				name = name.concat("stone ");
+				name.append("stone ");
 				break;
 		}
-		name = name.concat(door ? "door" : "wall");
-		setName(name);
+		name.append(door ? "door" : "wall");
+		setName(name.toString());
 	}
 
 	public Wall(WallType type, boolean door) {
 		super();
+		this.type = type;
 		setTransparent(door);
 		this.door = door;
-		decideSprites(type, door);
+		decideSprites(door);
 	}
 
 	// checks the 4 sides of this wall to see if there are walls next to it. The sprite is decided based on this.
@@ -66,8 +66,8 @@ public class Wall extends BuildAbleObject {
 		}
 
 		decideSprite(
-				left.isPresent(), right.isPresent(), up.isPresent(), down.isPresent(), upRight.isPresent(),
-				downRight.isPresent(), upLeft.isPresent(), downLeft.isPresent()
+			left.isPresent(), right.isPresent(), up.isPresent(), down.isPresent(), upRight.isPresent(),
+			downRight.isPresent(), upLeft.isPresent(), downLeft.isPresent()
 		);
 	}
 
@@ -80,9 +80,7 @@ public class Wall extends BuildAbleObject {
 	public void initialise(int x, int y, Level[] levels, int depth) {
 		super.initialise(x, y, levels, depth);
 		checkSides(true);
-		if (door) {
-			setOpened(true);
-		}
+		if (door) { setOpened(true); }
 	}
 
 	// decide the sprite for the wall, depending on the other 4 sides next to the wall
@@ -134,25 +132,6 @@ public class Wall extends BuildAbleObject {
 			texCoordList[i] = (sprites.get(i).getTexCoords());
 		}
 		sprite = new MultiSprite(texCoordList, 1);
-
-		/*if (dynamicSpriteList.containsKey(sprites)) { //if a dynamic sprite exists, use it
-			sprite = dynamicSpriteList.get(sprites);
-		} else { //otherwise make it
-			final int SIZE = Tile.SIZE;
-			int[] pixels = new int[SIZE * SIZE];
-			for (Sprite sprite : sprites) {
-				for (int y = 0; y < SIZE; y++) {
-					for (int x = 0; x < SIZE; x++) {
-						int pixel = sprite.pixels[x + y * SIZE];
-						if (!(pixel == 0x00FFFFFF)) {
-							pixels[x + y * SIZE] = pixel;
-						}
-					}
-				}
-			}
-			sprite = new Sprite(pixels);
-			dynamicSpriteList.put(sprites, new Sprite(pixels));
-		}*/
 	}
 
 	@Override

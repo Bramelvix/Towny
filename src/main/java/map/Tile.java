@@ -59,16 +59,20 @@ public class Tile {
 		return solid;
 	}
 
-	public Item getItem() {
-		return entity instanceof Item ? (Item) entity : null;
-	}
-
-	<T extends Entity> T getEntity() {
-		return (T) entity;
+	public Optional<Item> getItem() {
+		return getEntity(Item.class);
 	}
 
 	<T extends Entity> Optional<T> getEntity(Class<T> type) {
 		return type.isInstance(entity) ? Optional.of(type.cast(entity)) : Optional.empty();
+	}
+
+	<T extends Entity> boolean has(Class<T> type) {
+		return getEntity(type).isPresent();
+	}
+
+	boolean entityIsNull() {
+		return entity == null;
 	}
 
 	//removes the entity from the tile

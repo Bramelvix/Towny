@@ -39,9 +39,7 @@ public class Level {
 		ArrayList<Item> items = new ArrayList<>();
 		for (Tile[] row : tiles) {
 			for (Tile tile : row) {
-				if (tile.getItem() != null) {
-					items.add(tile.getItem());
-				}
+				tile.getItem().ifPresent(items::add);
 			}
 		}
 		return items;
@@ -61,7 +59,7 @@ public class Level {
 
 	// is the tile on X and Y clear (No items or entities or walls blocking it)
 	public boolean isClearTile(int x, int y) {
-		return tiles[x][y].getItem() == null && isWalkAbleTile(x, y);
+		return !tiles[x][y].getItem().isPresent() && isWalkAbleTile(x, y);
 	}
 
 	// is the tile on X and Y walkable (items can still be there)
@@ -70,11 +68,11 @@ public class Level {
 	}
 
 	public boolean tileIsEmpty(int x, int y) {//no mobs, no items, no buildings,...
-		return isWalkAbleTile(x, y) && isClearTile(x, y) && tiles[x][y].getEntity() == null;
+		return isWalkAbleTile(x, y) && isClearTile(x, y) && tiles[x][y].entityIsNull();
 	}
 
-	public <T extends Entity> T getEntityOn(int x, int y) {
-		return tiles[x][y].getEntity();
+	public <T extends Entity> Optional<T> getEntityOn(int x, int y, Class<T> type) {
+		return tiles[x][y].getEntity(type);
 	}
 
 	public <T extends Entity> Vec2i getNearestSpotThatHasX(int xloc, int yloc, Class<T> clazz) {
@@ -134,17 +132,17 @@ public class Level {
 	}
 
 	public Optional<Wall> getWallOn(int x, int y) {
-		return getEntityOn(x, y) instanceof Wall ? Optional.of((Wall) getEntityOn(x, y)) : Optional.empty();
+		return getEntityOn(x, y, Wall.class);
 	}
 
 	public <T extends Workstation> Optional<T> getNearestWorkstation(Class<T> workstation, int x, int y) {
 		Vec2i point = getNearestSpotThatHasX(x, y, workstation);
-		return point != null ?  Optional.of(workstation.cast(tiles[point.x][point.y].getEntity())) : Optional.empty();
+		return point != null ? tiles[point.x][point.y].getEntity(workstation) : Optional.empty();
 	}
 
 	public Optional<Stairs> getNearestStairs(int x, int y, boolean top) { //gets the nearest stairs object on the map
 		Vec2i point = top ? getNearestSpotThatHasX(x, y, this::hasTopStairs) : getNearestSpotThatHasX(x, y, this::hasBottomStairs);
-		return point != null ?  Optional.of((Stairs) tiles[point.x][point.y].getEntity()): Optional.empty();
+		return point != null ? tiles[point.x][point.y].getEntity(Stairs.class) : Optional.empty();
 	}
 
 	private boolean hasBottomStairs(int x, int y) {
@@ -152,7 +150,8 @@ public class Level {
 	}
 
 	private boolean hasStairs(int x, int y, boolean top) {
-		return has(x, y, Stairs.class) && (!top || ((Stairs) (tiles[x][y].getEntity())).isTop());
+		Optional<Stairs> stairs = tiles[x][y].getEntity(Stairs.class);
+		return stairs.isPresent() && (!top || stairs.get().isTop());
 	}
 
 	private boolean hasTopStairs(int x, int y) {
@@ -160,12 +159,11 @@ public class Level {
 	}
 
 	private <T extends Entity> boolean has(int x, int y, Class<T> clazz) {
-		return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 && clazz.isInstance(tiles[x][y].getEntity());
+		return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 && tiles[x][y].has(clazz);
 	}
 
 	public Optional<Item> getItemOn(int x, int y) {
-		Item item = tiles[x][y].getItem();
-		return item != null ? Optional.of(item) : Optional.empty();
+		return tiles[x][y].getItem();
 	}
 
 	// generate the green border around the map
@@ -236,15 +234,6 @@ public class Level {
 		return selectTree(x, y, true);
 	}
 
-	// if there is a tree on X and Y (IN PIXELS), return it
-	public Optional<Tree> selectTree(float x, float y) {
-		return selectTree((int) (x / Tile.SIZE), (int) (y / Tile.SIZE), true);
-	}
-
-	public Optional<TilledSoil> selectTilledSoil(float x, float y) {
-		return selectTilledSoil((int) (x / Tile.SIZE), (int) (y / Tile.SIZE));
-	}
-
 	public Optional<TilledSoil> selectTilledSoil(int x, int y) {
 		return tiles[x][y].getEntity(TilledSoil.class);
 	}
@@ -289,9 +278,7 @@ public class Level {
 	}
 
 	private void spawnRock(int x, int y) {
-		if (outOfMapBounds(x, y)) {
-			return;
-		}
+		if (outOfMapBounds(x, y)) { return; }
 		addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.STONE), true);
 	}
 

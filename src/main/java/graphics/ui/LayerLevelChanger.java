@@ -37,4 +37,9 @@ public class LayerLevelChanger extends UiElement {
 		down.render();
 	}
 
+	void destroy() {
+		up.destroy();
+		down.destroy();
+	}
+
 }

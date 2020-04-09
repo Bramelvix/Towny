@@ -4,6 +4,8 @@ import entity.dynamic.item.Item;
 import entity.dynamic.mob.Villager;
 import entity.nonDynamic.building.container.Container;
 
+import java.util.Optional;
+
 public class MoveItemJob extends Job {
 
 	private final boolean pickUpJob; // is the job a pickup or drop job
@@ -38,16 +40,13 @@ public class MoveItemJob extends Job {
 	@Override
 	protected void start() {
 		started = true;
-		if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[zloc].isClearTile(xloc, yloc) && !(worker.levels[zloc].getEntityOn(xloc, yloc) instanceof Container)))) {
+		if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[zloc].isClearTile(xloc, yloc) && !(worker.levels[zloc].getEntityOn(xloc, yloc, Container.class).isPresent())))) {
 			completed = true;
 			return;
 		}
-		if (worker.levels[zloc].getEntityOn( xloc, yloc) instanceof Container) {
-			container = worker.levels[zloc].getEntityOn(xloc, yloc);
-			worker.prependJobToChain(new MoveJob(xloc, yloc, zloc, worker, false));
-		} else {
-			worker.prependJobToChain(new MoveJob(xloc, yloc, zloc, worker));
-		}
+		Optional<Container> possibleContainer = worker.levels[zloc].getEntityOn( xloc, yloc, Container.class);
+		possibleContainer.ifPresent(value -> container = value);
+		worker.prependJobToChain(new MoveJob(xloc, yloc, zloc, worker, container == null));
 	}
 
 	public void execute() {

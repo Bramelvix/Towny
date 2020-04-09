@@ -25,6 +25,8 @@ import static org.lwjgl.opengl.GL45.GL_CONTEXT_LOST;
 public abstract class OpenGLUtils {
 
 	private static int VAO;
+	private static int VBO;
+	private static int VBO2;
 	public static Shader texShader;
 	public static Shader colShader;
 	public static Shader fontShader;
@@ -72,7 +74,7 @@ public abstract class OpenGLUtils {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		int VBO = glGenBuffers();
+		VBO = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
 		glEnableVertexAttribArray(0);
 		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
@@ -84,7 +86,7 @@ public abstract class OpenGLUtils {
 		//glEnable(GL_MULTISAMPLE);
 		//glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
 
-		int VBO2 = glGenBuffers();
+		VBO2 = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, VBO2);
 		glEnableVertexAttribArray(1);
 		glBufferData(GL_ARRAY_BUFFER, texCoords, GL_STATIC_DRAW);
@@ -291,5 +293,17 @@ public abstract class OpenGLUtils {
 			String errorName = errorToString(glError);
 			System.err.println("GL ERROR: " + Integer.toHexString(glError) + " " + errorName);
 		}
+	}
+
+	public static void destroy() {
+		outlines.clear();
+		texShader.destroy();
+		colShader.destroy();
+		fontShader.destroy();
+		tileShader.destroy();
+		glDeleteVertexArrays(VAO);
+		glDeleteBuffers(VBO);
+		glDeleteBuffers(VBO2);
+		instanceData.destroy();
 	}
 }

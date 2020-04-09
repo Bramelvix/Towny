@@ -246,6 +246,10 @@ public class Game {
 		}
 		glfwFreeCallbacks(window);
 		glfwDestroyWindow(window);
+		TrueTypeFont.release();
+		SpritesheetHashtable.destroy();
+		ui.destroy();
+		OpenGLUtils.destroy();
 		glfwTerminate();
 	}
 
@@ -326,7 +330,7 @@ public class Game {
 	}
 
 	private void onClickShovel() {
-		if (!ui.menuVisible()) {
+		if (ui.menuInvisible()) {
 			deselectAllVills();
 			ui.showBuildSquare( true, BuildingRecipe.STAIRSDOWN, currentLayerNumber, xScroll, yScroll);
 			ui.deSelectIcons();
@@ -334,7 +338,7 @@ public class Game {
 	}
 
 	private void onClickPlow() {
-		if (!ui.menuVisible()){
+		if (ui.menuInvisible()){
 			ui.showBuildSquare( false, BuildingRecipe.TILLED_SOIL, currentLayerNumber, xScroll, yScroll);
 			ui.deSelectIcons();
 		}
@@ -347,7 +351,7 @@ public class Game {
 	}
 
 	private void onClickSaw() {
-		if (!ui.menuVisible()) {
+		if (ui.menuInvisible()) {
 			deselectAllVills();
 			MenuItem[] items = new MenuItem[BuildingRecipe.RECIPES.length + 1];
 			for (int i = 0; i < BuildingRecipe.RECIPES.length; i++) {
@@ -404,19 +408,18 @@ public class Game {
 
 	private void onClickCraft(MenuItem item) {
 		Villager idle = getIdlestVil();
-		ItemRecipe recipe = item.getRecipe();
-		if (recipe != null) {
+		item.getRecipe(ItemRecipe.class).ifPresent(recipe -> {
 			idle.setPath(null);
 			Item[] res = new Item[recipe.getResources().length];
 			for (int i = 0; i < res.length; i++) {
 				res[i] = idle.getNearestItemOfType(recipe.getResources()[i]).orElse(null);
 			}
 			map[currentLayerNumber].getNearestWorkstation(
-				recipe.getWorkstationClass(), idle.getTileX(), idle.getTileY()
+					recipe.getWorkstationClass(), idle.getTileX(), idle.getTileY()
 			).ifPresent(station -> idle.addJob(new CraftJob(idle, res, recipe.getProduct(), station)));
 			ui.deSelectIcons();
 			ui.getMenu().hide();
-		}
+		});
 	}
 
 	private void onClickSmith() {
@@ -429,13 +432,13 @@ public class Game {
 	}
 
 	private void showMaterials(MenuItem item) {
-			ItemRecipe[] recipes = ItemRecipe.smithingRecipesFromWeaponMaterial(WeaponMaterial.valueOf(item.getText().toUpperCase()));
-			MenuItem[] craftingOptions = new MenuItem[recipes.length + 1];
-			for (int i = 0; i < WeaponMaterial.values().length; i++) {
-				craftingOptions[i] = new MenuItem(recipes[i], this::onClickCraft, pointer);
-			}
-			craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer);
-			ui.showMenu(pointer, craftingOptions);
+		ItemRecipe[] recipes = ItemRecipe.smithingRecipesFromWeaponMaterial(WeaponMaterial.valueOf(item.getText().toUpperCase()));
+		MenuItem[] craftingOptions = new MenuItem[recipes.length + 1];
+		for (int i = 0; i < WeaponMaterial.values().length; i++) {
+			craftingOptions[i] = new MenuItem(recipes[i], this::onClickCraft, pointer);
+		}
+		craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer);
+		ui.showMenu(pointer, craftingOptions);
 
 	}
 
@@ -449,7 +452,12 @@ public class Game {
 
 	private void onClickDrop() {
 		selectedvill.setPath(null);
-		selectedvill.addJob(new MoveItemJob((int) (ui.getMenu().getX()/Tile.SIZE), (int) (ui.getMenu().getY() / Tile.SIZE), currentLayerNumber, selectedvill));
+		selectedvill.addJob(new MoveItemJob(
+			(int) ((ui.getMenu().getX() + xScroll) / Tile.SIZE),
+			(int) ((ui.getMenu().getY() + yScroll) / Tile.SIZE),
+			currentLayerNumber,
+			selectedvill
+		));
 		ui.deSelectIcons();
 		deselect(selectedvill);
 		ui.getMenu().hide();
@@ -458,6 +466,7 @@ public class Game {
 	private void onClickCancel() {
 		ui.getMenu().hide();
 		ui.deSelectIcons();
+		ui.removeBuildSquare();
 		if (selectedvill != null) {
 			deselect(selectedvill);
 		}
@@ -556,7 +565,7 @@ public class Game {
 					ui.deSelectIcons();
 				});
 			}
-			if (ui.outlineIsVisible() && !ui.menuVisible() && ui.getIcons().hoverOnNoIcons()) {
+			if (ui.outlineIsVisible() && ui.menuInvisible() && ui.getIcons().hoverOnNoIcons()) {
 				float[][] coords = ui.getOutlineCoords();
 				for (float[] blok : coords) {
 					if (map[currentLayerNumber].tileIsEmpty((int) (blok[0] / Tile.SIZE), (int) (blok[1] / Tile.SIZE))) {
@@ -572,12 +581,12 @@ public class Game {
 		} else if (pointer.wasPressed(GLFW_MOUSE_BUTTON_RIGHT)) {
 			if (selectedvill != null) {
 				List<MenuItem> options = new ArrayList<>();
-				if (selectedvill.getHolding() != null && (map[currentLayerNumber].tileIsEmpty(pointer.getTileX(), pointer.getTileY()) || map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY()) instanceof Chest)) {
-					options.add(new MenuItem((MenuItem.DROP + " " + selectedvill.getHolding().getName()), in -> onClickDrop(), pointer));
+				if (selectedvill.getHolding() != null && (map[currentLayerNumber].tileIsEmpty(pointer.getTileX(), pointer.getTileY()) || map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY(), Chest.class).isPresent())) {
+					options.add(new MenuItem(MenuItem.defaultText(MenuItem.DROP, selectedvill.getHolding()), in -> onClickDrop(), pointer));
 				}
 
-				map[currentLayerNumber].selectTree(pointer.getX(), pointer.getY()).ifPresent(
-					tree -> options.add(new MenuItem((MenuItem.CHOP), tree, this::onClickChop, pointer))
+				map[currentLayerNumber].selectTree(pointer.getTileX(), pointer.getTileY()).ifPresent(
+					tree -> options.add(new MenuItem(MenuItem.defaultText(MenuItem.CHOP, tree), tree, this::onClickChop, pointer))
 				);
 
 				map[currentLayerNumber].selectTilledSoil(pointer.getTileX(), pointer.getTileY()).ifPresent(
@@ -591,39 +600,39 @@ public class Game {
 				);
 
 				map[currentLayerNumber].selectOre(pointer.getTileX(), pointer.getTileY()).ifPresent(
-					ore ->  options.add(new MenuItem((MenuItem.MINE), ore, this::onClickMine, pointer))
+					ore ->  options.add(new MenuItem(MenuItem.defaultText(MenuItem.MINE, ore), ore, this::onClickMine, pointer))
 				);
 
-				anyMobHoverOn().ifPresent(mob -> options.add(new MenuItem(MenuItem.FIGHT, mob, this::onClickFight, pointer)));
+				anyMobHoverOn().ifPresent(mob -> options.add(new MenuItem(MenuItem.defaultText(MenuItem.FIGHT, mob), mob, this::onClickFight, pointer)));
 
 				map[currentLayerNumber].getItemOn(pointer.getTileX(), pointer.getTileY()).ifPresent(item -> {
 					if (item instanceof Weapon) {
-						options.add(new MenuItem((MenuItem.EQUIP), item, this::onClickPickup, pointer));
+						options.add(new MenuItem(MenuItem.defaultText(MenuItem.EQUIP, item), item, this::onClickPickup, pointer));
 					} else if (item instanceof Clothing) {
-						options.add(new MenuItem((MenuItem.WEAR), item, this::onClickPickup, pointer));
+						options.add(new MenuItem(MenuItem.defaultText(MenuItem.WEAR, item), item, this::onClickPickup, pointer));
 					} else {
-						options.add(new MenuItem((MenuItem.PICKUP), item, this::onClickPickup, pointer));
+						options.add(new MenuItem(MenuItem.defaultText(MenuItem.PICKUP, item), item, this::onClickPickup, pointer));
 					}
 				});
 
-				if (map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY()) instanceof Container) {
-					Container container = map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY());
-					for (Item i : container.getItems()) {
-						options.add(new MenuItem((MenuItem.PICKUP), i, this::onClickPickup, pointer));
-					}
+				Optional<Container> container = map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY(), Container.class);
+				if (container.isPresent()) {
+					container.get().getItemList().forEach(item ->
+						options.add(new MenuItem(MenuItem.defaultText(MenuItem.PICKUP, item), item, this::onClickPickup, pointer))
+					);
 				} else {
 					options.add(new MenuItem(MenuItem.MOVE, in -> onClickMove(), pointer));
 				}
 				options.add(new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer));
 				ui.showMenu(pointer, options.toArray(new MenuItem[0]));
 			} else {
-				if (map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY()) instanceof Furnace) {
+				if (map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY(), Furnace.class).isPresent()) {
 					ui.showMenu(
 						pointer,
 						new MenuItem(MenuItem.SMELT, in -> onClickSmelt(), pointer),
 						new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer)
 					);
-				} else if (map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY()) instanceof Anvil) {
+				} else if (map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY(), Anvil.class).isPresent()) {
 					ui.showMenu(
 						pointer,
 						new MenuItem(MenuItem.SMITH, in -> onClickSmith(), pointer),

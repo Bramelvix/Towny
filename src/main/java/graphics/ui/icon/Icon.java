@@ -91,4 +91,8 @@ public class Icon extends UiElement {
 		return id;
 	}
 
+	public void destroy() {
+		OpenGLUtils.deleteTexture(id);
+	}
+
 }

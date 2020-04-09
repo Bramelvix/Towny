@@ -92,4 +92,10 @@ public class UiIcons {
 		}
 	}
 
+	public void destroy() {
+		for (Icon i : icons) {
+			i.destroy();
+		}
+	}
+
 }

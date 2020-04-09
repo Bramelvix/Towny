@@ -3,32 +3,30 @@ package graphics;
 import entity.Entity;
 
 import java.util.Hashtable;
-import java.util.Random;
 
 public final class SpriteHashtable {
 	private SpriteHashtable() {}
 
 	private static final Hashtable<Integer, Sprite> table = new Hashtable<>();
-	private static final Random rand = new Random(); // random object used for random distribution of sprites
 
 	// return random grass sprite
 	public static Sprite getGrass() {
-		return rand.nextBoolean() ? get(2) : get(5);
+		return Entity.RANDOM.nextBoolean() ? get(2) : get(5);
 	}
 
 	// return random stone sprite
 	public static Sprite getStone() {
-		return rand.nextBoolean() ? get(8) : get(9);
+		return Entity.RANDOM.nextBoolean() ? get(8) : get(9);
 	}
 
 	// return random dirt sprite
 	public static Sprite getDirt() {
-		return rand.nextBoolean() ? get(6) : get(7);
+		return Entity.RANDOM.nextBoolean() ? get(6) : get(7);
 	}
 
 	// returns random skin color sprite
 	public static Sprite getPerson() {
-		byte n = (byte) rand.nextInt(3);
+		byte n = (byte) Entity.RANDOM.nextInt(3);
 		return n == 0 ? get(48) : n == 1 ? get(49) : get(50);
 	}
 
@@ -40,7 +38,7 @@ public final class SpriteHashtable {
 
 	// return random sand sprite
 	public static Sprite getSand() {
-		return rand.nextBoolean() ? get(10) : get(11);
+		return Entity.RANDOM.nextBoolean() ? get(10) : get(11);
 	}
 
 	public static void registerSprite(int key, Sprite sprite) throws Exception {
@@ -49,18 +47,18 @@ public final class SpriteHashtable {
 		}
 	}
 
-	public static int[] maleHairNrs = { 211, 213, 214, 215, 217, 218, 219, 223, 227, 228, 229, 230, 231, 232, 233,
-		234, 235, 237, 238, 239, 241, 242, 243, 247, 251, 252, 253, 254, 255, 256, 257, 258, 259, 261, 262, 263, 267,
-		268, 269, 270
+	public static int[] maleHairNrs = { 211, 213, 214, 215, 217, 218, 219, 223, 227, 228, 229, 230, 231, 232, 233, 234,
+		235, 237, 238, 239, 241, 242, 243, 247, 251, 252, 253, 254, 255, 256, 257, 258, 259, 261, 262, 263, 267, 268,
+		269, 270
 	};
 
-	public static int[] femaleHairNrs = { 212, 216, 220, 221, 222, 224, 225, 226, 236, 240, 244, 245, 246, 248, 249, 250,
-		260, 264, 265, 266
+	public static int[] femaleHairNrs = { 212, 216, 220, 221, 222, 224, 225, 226, 236, 240, 244, 245, 246, 248, 249,
+		250, 260, 264, 265, 266
 	};
 
 	public static Sprite get(int key) {
 		if (!table.containsKey(key)) {
-			System.err.println("No such sprite in table! Id: " + key);
+			System.err.println("NullPointer imminent!!! Trying to get Sprite with id: " + key + ", but no sprite with this key is present!");
 		}
 		return table.get(key);
 	}

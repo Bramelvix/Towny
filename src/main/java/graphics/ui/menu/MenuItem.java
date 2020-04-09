@@ -10,6 +10,7 @@ import input.PointerInput;
 import input.PointerMoveEvent;
 import util.vectors.Vec2f;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
@@ -40,8 +41,8 @@ public class MenuItem {
 	public static final String GOLD = "Gold";
 	public static final String CRYSTAL = "Crystal";
 	public static final String WOOD = "Wood";
-	public static final String SOW = "Sow seed on";
-	public static final String HARVEST = "Harvest from";
+	public static final String SOW = "Sow seeds";
+	public static final String HARVEST = "Harvest";
 	private Recipe recipe;
 	private Entity entity;
 	private final Subscription subscriptionMove;
@@ -58,9 +59,10 @@ public class MenuItem {
 	}
 
 	public MenuItem(String text, Entity e, Consumer<MenuItem> onClick, PointerInput pointer) {
-		this(text + " " + e.getName(), onClick, pointer);
+		this(text, onClick, pointer);
 		this.entity = e;
 	}
+
 
 	public MenuItem(ItemRecipe recipe, Consumer<MenuItem> onClick, PointerInput pointer) {
 		this(CRAFT + " " + recipe.getRecipeName(), onClick, pointer);
@@ -106,9 +108,17 @@ public class MenuItem {
 		return text;
 	}
 
+	public static String defaultText(String text, Entity e) {
+		return text + " " + e.getName();
+	}
+
 	@SuppressWarnings("unchecked") // again, shouldnt ever be a problem
 	public <T extends Recipe> T getRecipe() {
 		return (T) recipe;
+	}
+
+	public <T extends Recipe> Optional<T> getRecipe(Class<T> clazz) {
+		return clazz.isInstance(recipe) ? Optional.of(clazz.cast(recipe)) : Optional.empty();
 	}
 
 }

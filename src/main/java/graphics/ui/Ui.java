@@ -16,7 +16,7 @@ public class Ui {
 	// different ui elements
 	private Menu menu;
 	private final TopBar top;
-	private final Minimap map;
+	private final Minimap minimap;
 	private final BuildOutline outline;
 	private final SelectionSquare selection;
 	private final LayerLevelChanger layerLevelChanger;
@@ -26,9 +26,9 @@ public class Ui {
 	public void render() {
 		icons.render(); //texShader
 		selection.render(); //colShader
-		menu.render(); //colShader + fontShader
-		map.render();  //texShader + colShader
+		minimap.render();  //texShader + colShader
 		outline.render(); //colShader
+		menu.render(); //colShader + fontShader
 		layerLevelChanger.render(); //colShader + fontShader
 		top.render(); //colShader + texShader + fontShader
 	}
@@ -37,7 +37,7 @@ public class Ui {
 		icons = new UiIcons( 0.176056338028169f, pointer);
 		menu = new Menu(pointer);
 		selection = new SelectionSquare(pointer);
-		map = new Minimap(1290, 8, levels[0]);
+		minimap = new Minimap(1290, 8, levels[0]);
 		top = new TopBar((Game.width - 270) / 2f,5,270,85, pointer);
 		outline = new BuildOutline(levels, pointer);
 		layerLevelChanger = new LayerLevelChanger(1320, 210,140,40, pointer);
@@ -72,11 +72,9 @@ public class Ui {
 	}
 
 	public void showMenu(PointerInput pointer, MenuItem... items) {
-		if (!outline.isVisible()) {
-			showMenu(pointer);
-			menu.addItems(items);
-			menu.setVisible(true);
-		}
+		showMenu(pointer);
+		menu.addItems(items);
+		menu.setVisible(true);
 	}
 
 	public BuildingRecipe getBuildRecipeOutline() {
@@ -84,17 +82,15 @@ public class Ui {
 	}
 
 	private void showMenu(PointerInput pointer) {
-		if (!outline.isVisible()) {
-			menu = new Menu(pointer);
-		}
+		menu = new Menu(pointer);
 	}
 
-	public boolean menuVisible() {
-		return menu.isVisible();
+	public boolean menuInvisible() {
+		return !menu.isVisible();
 	}
 
 	public void setOffset(float x, float y) {
-		map.setOffset(x, y);
+		minimap.setOffset(x, y);
 	}
 
 	public void showSelectionSquare() {
@@ -130,9 +126,6 @@ public class Ui {
 	}
 
 	public void update(int z, float xScroll, float yScroll) {
-		if (outline.isVisible()) {
-			menu.hide();
-		}
 		selection.update(xScroll, yScroll);
 		outline.update(z, xScroll, yScroll);
 		layerLevelChanger.setZ(z);
@@ -143,11 +136,19 @@ public class Ui {
 	}
 
 	public void updateMinimap(Level[] level, int z) {
-		map.update(level, z);
+		minimap.update(level, z);
 	}
 
 	public UiIcons getIcons () {
 		return icons;
+	}
+
+	public void destroy() {
+		icons.destroy();
+		layerLevelChanger.destroy();
+		minimap.destroy();
+		top.destroy();
+
 	}
 
 }
