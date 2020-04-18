@@ -33,7 +33,7 @@ public class MoveJob extends Job {
 		}
 		if (zloc == worker.getZ()) {
 			Optional<Path> path = exactLocation ? worker.getPath(xloc, yloc) : worker.getPathAround(xloc, yloc);
-			if (!path.isPresent()) {
+			if (path.isEmpty()) {
 				completed = true;
 				return;
 			}
@@ -50,7 +50,7 @@ public class MoveJob extends Job {
 					stairsX = optional.get().getTileX();
 					stairsY = optional.get().getTileY();
 					Optional<Path> path = PathFinder.findPath(startx, starty, stairsX, stairsY, worker.levels[worker.getZ() + (up ? i : -i)]);
-					if (!path.isPresent()) {
+					if (path.isEmpty()) {
 						completed = true;
 						return;
 					}
@@ -62,7 +62,7 @@ public class MoveJob extends Job {
 			}
 			Optional<Path> path = exactLocation ? PathFinder.findPath(stairsX, stairsY, xloc, yloc, worker.levels[zloc]) : PathFinder.findPathAround(stairsX , stairsY ,  xloc, yloc , worker.levels[zloc]);
 			if (!((exactLocation && xloc == stairsX && yloc == stairsY) || (!exactLocation && (stairsX <= ((xloc + 1))) && (stairsX >= ((xloc - 1)) && ((stairsY >= ((yloc - 1))) && (stairsY <= ((yloc + 1)))))))) {
-				if (!path.isPresent()) { //no path
+				if (path.isEmpty()) { //no path
 					completed = true;
 					return;
 				}

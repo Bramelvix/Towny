@@ -8,6 +8,7 @@ import entity.nonDynamic.building.container.workstations.Furnace;
 import entity.nonDynamic.building.container.workstations.Workstation;
 
 public class ItemRecipe extends Recipe {
+	//TODO Maybe put these in a hashtable or file too
 
 	public static final ItemRecipe IRON_BAR = new ItemRecipe(ItemHashtable.get(2), Furnace.class, ItemHashtable.get(5), ItemHashtable.get(8));
 	public static final ItemRecipe GOLD_BAR = new ItemRecipe(ItemHashtable.get(3), Furnace.class, ItemHashtable.get(7), ItemHashtable.get(8));
@@ -60,25 +61,13 @@ public class ItemRecipe extends Recipe {
 	}
 
 	public static ItemRecipe[] smithingRecipesFromWeaponMaterial(WeaponMaterial type) {
-		ItemRecipe[] recipes = null;
-		switch (type) {
-			case COPPER:
-				recipes = new ItemRecipe[]{COPPER_SWORD, COPPER_SPEAR, COPPER_HALBERT, COPPER_AXE, COPPER_DAGGER, COPPER_SCIMITAR};
-				break;
-			case IRON:
-				recipes = new ItemRecipe[]{IRON_SWORD, IRON_SPEAR, IRON_HALBERT, IRON_AXE, IRON_DAGGER, IRON_SCIMITAR};
-				break;
-			case GOLD:
-				recipes = new ItemRecipe[]{GOLD_SWORD, GOLD_SPEAR, GOLD_HALBERT, GOLD_AXE, GOLD_DAGGER, GOLD_SCIMITAR};
-				break;
-			case WOOD:
-				recipes = new ItemRecipe[]{WOOD_SWORD, WOOD_SPEAR, WOOD_HALBERT, WOOD_AXE, WOOD_DAGGER, WOOD_SCIMITAR};
-				break;
-			case CRYSTAL:
-				recipes = new ItemRecipe[]{CRYSTAL_SWORD, CRYSTAL_SPEAR, CRYSTAL_HALBERT, CRYSTAL_AXE, CRYSTAL_DAGGER, CRYSTAL_SCIMITAR};
-				break;
-		}
-		return recipes;
+		return switch (type) {
+			case COPPER -> new ItemRecipe[]{COPPER_SWORD, COPPER_SPEAR, COPPER_HALBERT, COPPER_AXE, COPPER_DAGGER, COPPER_SCIMITAR};
+			case IRON -> new ItemRecipe[]{IRON_SWORD, IRON_SPEAR, IRON_HALBERT, IRON_AXE, IRON_DAGGER, IRON_SCIMITAR};
+			case GOLD -> new ItemRecipe[]{GOLD_SWORD, GOLD_SPEAR, GOLD_HALBERT, GOLD_AXE, GOLD_DAGGER, GOLD_SCIMITAR};
+			case WOOD -> new ItemRecipe[]{WOOD_SWORD, WOOD_SPEAR, WOOD_HALBERT, WOOD_AXE, WOOD_DAGGER, WOOD_SCIMITAR};
+			case CRYSTAL -> new ItemRecipe[]{CRYSTAL_SWORD, CRYSTAL_SPEAR, CRYSTAL_HALBERT, CRYSTAL_AXE, CRYSTAL_DAGGER, CRYSTAL_SCIMITAR};
+		};
 	}
 
 	public Class<? extends Workstation> getWorkstationClass() {

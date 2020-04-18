@@ -12,8 +12,8 @@ class Minimap extends UiElement{
 	private int z;
 	private float xoff, yoff; // offset
 	private int textureId;
-	private Vec2f filledRectSize;
-	private Vec2f filledRectLoc;
+	private final Vec2f filledRectSize;
+	private final Vec2f filledRectLoc;
 
 	// constructor
 	Minimap(int x, int y, Level map) {

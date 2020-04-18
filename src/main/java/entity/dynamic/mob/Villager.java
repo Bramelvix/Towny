@@ -76,7 +76,7 @@ public class Villager extends Humanoid {
 			if (item.isSameType(level_item) && level_item.isReserved(this)) {
 				Optional<Path> foundPath = getPath(level_item.getTileX(), level_item.getTileY());
 				if (closest == null
-					|| !path.isPresent()
+					|| path.isEmpty()
 					|| (foundPath.isPresent() && path.get().getStepsSize() > foundPath.get().getStepsSize())
 				) {
 					closest = level_item;
@@ -84,7 +84,7 @@ public class Villager extends Humanoid {
 				}
 			}
 		}
-		if (closest == null || !path.isPresent()) {
+		if (closest == null || path.isEmpty()) {
 			return Optional.empty();
 		}
 		return Optional.of(closest);

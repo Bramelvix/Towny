@@ -34,33 +34,15 @@ public class Weapon extends Item {
 
 	private void calcDam(WeaponType type) {
 		switch (type) {
-			case AXE:
-				setStats(0.25f, 0f, 3f, 0f, 3f, 3);
-				break;
-			case BOW:
-				setStats(0f, 3f, 0f, 0f, 2f, 10);
-				break;
-			case BUCKLER:
-				setStats(0.75f, 0f, 0f, 4f, -0.75f, 1);
-				break;
-			case DAGGER:
-				setStats(0f, 2f, 1f, 0f, 5f, 1);
-				break;
-			case HALBERD:
-				setStats(0.5f, 1f, 5f, 0.5f, 1f, 5);
-				break;
-			case HEATER:
-				setStats(1f, 0f, 0f, 5f, -1.5f, 1);
-				break;
-			case SCIMITAR:
-				setStats(0f, 1f, 5f, 0.5f, 4f, 3);
-				break;
-			case SPEAR:
-				setStats(0.25f, 5f, 0.25f, 2f, 2.5f, 5);
-				break;
-			case SWORD:
-				setStats(0.5f, 4f, 4f, 2.5f, 3f, 4);
-				break;
+			case AXE -> setStats(0.25f, 0f, 3f, 0f, 3f, 3);
+			case BOW -> setStats(0f, 3f, 0f, 0f, 2f, 10);
+			case BUCKLER -> setStats(0.75f, 0f, 0f, 4f, -0.75f, 1);
+			case DAGGER -> setStats(0f, 2f, 1f, 0f, 5f, 1);
+			case HALBERD -> setStats(0.5f, 1f, 5f, 0.5f, 1f, 5);
+			case HEATER -> setStats(1f, 0f, 0f, 5f, -1.5f, 1);
+			case SCIMITAR -> setStats(0f, 1f, 5f, 0.5f, 4f, 3);
+			case SPEAR -> setStats(0.25f, 5f, 0.25f, 2f, 2.5f, 5);
+			case SWORD -> setStats(0.5f, 4f, 4f, 2.5f, 3f, 4);
 		}
 	}
 
@@ -74,25 +56,13 @@ public class Weapon extends Item {
 	}
 
 	private float calcMatStrong(WeaponMaterial mat) {
-		float strong = 0;
-		switch (mat) {
-			case WOOD:
-				strong = 0.5f;
-				break;
-			case GOLD:
-				strong = 1.25f;
-				break;
-			case IRON:
-				strong = 1f;
-				break;
-			case COPPER:
-				strong = 0.75f;
-				break;
-			case CRYSTAL:
-				strong = 1.5f;
-				break;
-		}
-		return strong;
+		return switch (mat) {
+			case WOOD -> 0.5f;
+			case GOLD -> 1.25f;
+			case IRON -> 1f;
+			case COPPER -> 0.75f;
+			case CRYSTAL -> 1.5f;
+		};
 	}
 
 	public boolean isShield() {

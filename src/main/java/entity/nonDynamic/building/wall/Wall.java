@@ -24,12 +24,8 @@ public class Wall extends BuildAbleObject {
 	private void decideSprites(boolean door) {
 		StringBuilder name = new StringBuilder();
 		switch (type) {
-			case WOOD:
-				name.append("wooden ");
-				break;
-			case STONE:
-				name.append("stone ");
-				break;
+			case WOOD -> name.append("wooden ");
+			case STONE -> name.append("stone ");
 		}
 		name.append(door ? "door" : "wall");
 		setName(name.toString());

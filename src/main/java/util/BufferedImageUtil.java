@@ -5,7 +5,6 @@ import java.awt.color.ColorSpace;
 import java.awt.image.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.Hashtable;
 
 import static org.lwjgl.opengl.EXTTextureMirrorClamp.GL_MIRROR_CLAMP_TO_EDGE_EXT;
 import static org.lwjgl.opengl.GL11.*;
@@ -51,7 +50,7 @@ public final class BufferedImageUtil {
 				true,
 				false,
 				ComponentColorModel.TRANSLUCENT,
-				DataBuffer.TYPE_BYTE), raster, false, new Hashtable()
+				DataBuffer.TYPE_BYTE), raster, false, null
 			);
 		} else {
 			raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, texWidth, texHeight, 3, null);
@@ -64,7 +63,7 @@ public final class BufferedImageUtil {
 				),
 				raster,
 				false,
-				new Hashtable()
+				null
 			);
 		}
 

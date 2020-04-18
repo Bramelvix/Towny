@@ -40,7 +40,7 @@ public class MoveItemJob extends Job {
 	@Override
 	protected void start() {
 		started = true;
-		if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[zloc].isClearTile(xloc, yloc) && !(worker.levels[zloc].getEntityOn(xloc, yloc, Container.class).isPresent())))) {
+		if (!pickUpJob && (worker.getHolding() == null || (!worker.levels[zloc].isClearTile(xloc, yloc) && worker.levels[zloc].getEntityOn(xloc, yloc, Container.class).isEmpty()))) {
 			completed = true;
 			return;
 		}

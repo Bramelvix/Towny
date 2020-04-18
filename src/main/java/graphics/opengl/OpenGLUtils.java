@@ -273,18 +273,18 @@ public abstract class OpenGLUtils {
 	}
 
 	private static String errorToString(int error) {
-		switch (error) {
-			case GL_INVALID_ENUM: return "GL_INVALID_ENUM";
-			case GL_INVALID_VALUE: return "GL_INVALID_VALUE";
-			case GL_INVALID_OPERATION: return "GL_INVALID_OPERATION";
-			case GL_STACK_OVERFLOW: return "GL_STACK_OVERFLOW";
-			case GL_STACK_UNDERFLOW: return "GL_STACK_UNDERFLOW";
-			case GL_OUT_OF_MEMORY: return "GL_OUT_OF_MEMORY";
-			case GL_INVALID_FRAMEBUFFER_OPERATION: return "GL_INVALID_FRAMEBUFFER_OPERATION";
-			case GL_CONTEXT_LOST: return "GL_CONTEXT_LOST";
-			case GL_TABLE_TOO_LARGE: return "GL_TABLE_TOO_LARGE";
-			default: return "UNKNOWN_ERROR";
-		}
+		return switch (error) {
+			case GL_INVALID_ENUM -> "GL_INVALID_ENUM";
+			case GL_INVALID_VALUE -> "GL_INVALID_VALUE";
+			case GL_INVALID_OPERATION -> "GL_INVALID_OPERATION";
+			case GL_STACK_OVERFLOW -> "GL_STACK_OVERFLOW";
+			case GL_STACK_UNDERFLOW -> "GL_STACK_UNDERFLOW";
+			case GL_OUT_OF_MEMORY -> "GL_OUT_OF_MEMORY";
+			case GL_INVALID_FRAMEBUFFER_OPERATION -> "GL_INVALID_FRAMEBUFFER_OPERATION";
+			case GL_CONTEXT_LOST -> "GL_CONTEXT_LOST";
+			case GL_TABLE_TOO_LARGE -> "GL_TABLE_TOO_LARGE";
+			default -> "UNKNOWN_ERROR";
+		};
 	}
 
 	public static void checkGLError() {

@@ -59,7 +59,7 @@ public class Level {
 
 	// is the tile on X and Y clear (No items or entities or walls blocking it)
 	public boolean isClearTile(int x, int y) {
-		return !tiles[x][y].getItem().isPresent() && isWalkAbleTile(x, y);
+		return tiles[x][y].getItem().isEmpty() && isWalkAbleTile(x, y);
 	}
 
 	// is the tile on X and Y walkable (items can still be there)
@@ -267,14 +267,14 @@ public class Level {
 	}
 
 	private OreType decideOreType (int nr) {
-		switch (nr) {
-			case 0: return OreType.GOLD;
-			case 1: return OreType.IRON;
-			case 2: return OreType.COAL;
-			case 3: return OreType.COPPER;
-			case 4: return OreType.CRYSTAL;
-			default: return OreType.STONE;
-		}
+		return switch (nr) {
+			case 0 -> OreType.GOLD;
+			case 1 -> OreType.IRON;
+			case 2 -> OreType.COAL;
+			case 3 -> OreType.COPPER;
+			case 4 -> OreType.CRYSTAL;
+			default -> OreType.STONE;
+		};
 	}
 
 	private void spawnRock(int x, int y) {
