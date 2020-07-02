@@ -38,6 +38,8 @@ import map.Tile;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.StringUtils;
 import graphics.TextureInfo;
 import util.vectors.Vec2f;
@@ -50,6 +52,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Game {
 
+	private final Logger logger = LoggerFactory.getLogger(Game.class);
 	public static final int width = 1500;
 	public static final int height = (int)(width / 16f * 9f); //843.75
 	private Level[] map;
@@ -84,7 +87,7 @@ public class Game {
 
 	private void init() throws Exception {
 		if (!glfwInit()) {
-			System.err.println("GLFW failed to initialize");
+			logger.error("GLFW failed to initialize");
 			return;
 		}
 
@@ -97,12 +100,12 @@ public class Game {
 		window = glfwCreateWindow(width, height, "Towny by Bramelvix", 0, 0);
 
 		if (window == 0) {
-			System.err.println("Window failed to be created");
+			logger.error("Window failed to be created");
 			return;
 		}
 		GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		if (vidmode == null) {
-			System.err.println("Vidmode is null");
+			logger.error("Vidmode is null");
 			return;
 		}
 		glfwSetWindowPos(window, (vidmode.width() - (width)) / 2, (vidmode.height() - (height )) / 2);

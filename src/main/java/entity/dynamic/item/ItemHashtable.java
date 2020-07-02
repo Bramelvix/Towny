@@ -6,12 +6,15 @@ import entity.dynamic.item.weapon.Weapon;
 import entity.dynamic.item.weapon.WeaponMaterial;
 import entity.dynamic.item.weapon.WeaponType;
 import graphics.SpriteHashtable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Hashtable;
 
 public abstract class ItemHashtable {
 
 	private static final Hashtable<Integer, Item> table = new Hashtable<>();
+	private static final Logger logger = LoggerFactory.getLogger(ItemHashtable.class);
 
 	public static <T extends Item> void registerItem(T item) throws Exception {
 		if (table.put(item.getId(), item) != null) {
@@ -25,9 +28,14 @@ public abstract class ItemHashtable {
 
 	public static Item get(int key) {
 		if (!table.containsKey(key)) {
-			System.err.println("NullPointer imminent!!! Trying to get Item with id: " + key + ", but no item with this key is present!");
+			logger.warn("NullPointer imminent!!! Trying to get Item with id: " + key + ", but no item with this key is present!");
 		}
 		return table.get(key).copy();
+	}
+
+	//testing purposes only
+	public static Item getTestItem() {
+		return new Item("test", null, "test item tooltip", 0);
 	}
 
 	public static Item get(int key, float x, float y, int z) {

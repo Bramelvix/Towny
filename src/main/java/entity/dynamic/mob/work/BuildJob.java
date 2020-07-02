@@ -4,8 +4,12 @@ import entity.dynamic.item.Item;
 import entity.dynamic.mob.Villager;
 import entity.nonDynamic.building.BuildAbleObject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class BuildJob extends Job {
 
+	final Logger logger = LoggerFactory.getLogger(BuildJob.class);
 	private final BuildAbleObject buildJobObj; // the buildable entity the worker needs to build
 	private boolean needsMaterial; // does the worker still need the materials
 	private boolean goingToPickUpItem = false;
@@ -58,7 +62,7 @@ public class BuildJob extends Job {
 					if (buildJobObj != null) {
 						if (!worker.levels[zloc].tileIsEmpty(xloc, yloc) && !buildJobObj.initialised) {
 							// wait if the buildLocation is blocked by an item or entity
-							System.out.println("Postponing Construction of: " + buildJobObj.toString());
+							logger.debug("Postponing Construction of: " + buildJobObj.toString());
 							return;
 						}
 						if (!buildJobObj.initialised) {

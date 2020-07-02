@@ -1,12 +1,19 @@
 package entity.dynamic.mob;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import entity.dynamic.item.Item;
+import entity.dynamic.item.ItemHashtable;
+import entity.dynamic.mob.work.MoveItemJob;
+import entity.nonDynamic.resources.Tree;
+import entity.pathfinding.PathFinder;
 import map.Level;
 import map.Tile;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class VillagerTests {
 	private Level[] level;
@@ -15,6 +22,7 @@ public class VillagerTests {
 	@BeforeEach
 	void setUp() {
 		level = new Level[] { new Level(10, 10, 1, false) };
+		PathFinder.init(10, 10);
 	}
 
 	@ParameterizedTest
@@ -22,10 +30,10 @@ public class VillagerTests {
 		"48, 96, 144, 192, 240",
 		"240, 192, 144, 48, 96"
 	})
-	void villagerOnSpotWhenCreated(float x, float y) {
+	void onSpotWhenCreated(float x, float y) {
 		villager = new Villager(x, y, 0, level);
-		assertEquals(villager.getX(), x);
-		assertEquals(villager.getY(), y);
+		assertEquals(x, villager.getX());
+		assertEquals(y, villager.getY());
 	}
 
 	@ParameterizedTest
@@ -33,9 +41,54 @@ public class VillagerTests {
 		"48, 96, 144, 192, 240",
 		"240, 192, 144, 48, 96"
 	})
-	void villagerOnTileWhenCreated(float x, float y) {
+	void onTileWhenCreated(float x, float y) {
 		villager = new Villager(x, y, 0, level);
-		assertEquals(villager.getTileX(), (int) (x/ Tile.SIZE));
-		assertEquals(villager.getTileY(), (int) (y/ Tile.SIZE));
+		assertEquals( (int) (x/ Tile.SIZE), villager.getTileX());
+		assertEquals( (int) (y/ Tile.SIZE), villager.getTileY());
 	}
+
+	@ParameterizedTest
+	@ValueSource(floats = {48, 96, 144})
+	void nextToSpotWhenOccupied(float num) {
+		level[0].addEntity(new Tree(num, num, 0, level[0]), true);
+		villager = new Villager(num, num, 0, level);
+		assertEquals(num + 48, villager.getX());
+		assertEquals(num + 48, villager.getY());
+	}
+
+	@Test
+	void shouldPickUpItem() {
+		Item item = ItemHashtable.getTestItem();
+		item.setLocation(48, 48, 0);
+		level[0].addItem(item);
+		villager = new Villager(48, 48, 0, level);
+		villager.pickUp(item);
+		villager.update();
+		assertTrue(villager.isHolding(item));
+	}
+
+	@Test
+	void shouldDropItem() {
+		Item item = ItemHashtable.getTestItem();
+		item.setLocation(48, 48, 0);
+		level[0].addItem(item);
+		villager = new Villager(48, 48, 0, level);
+		villager.pickUp(item);
+		villager.update();
+		assertTrue(villager.isHolding(item));
+		villager.drop();
+		villager.update();
+		assertFalse(villager.isHolding(item));
+	}
+
+	@Test
+	void shouldfindNearbyItem() {
+		villager = new Villager(48, 48, 0, level);
+		Item item = ItemHashtable.getTestItem();
+		item.setLocation(96, 96, 0);
+		level[0].addItem(item);
+		assertTrue(villager.getNearestItemOfType(item).isPresent());
+	}
+
+
 }

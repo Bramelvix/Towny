@@ -1,5 +1,7 @@
 package graphics.opengl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.vectors.Vec2f;
 import util.vectors.Vec4f;
 
@@ -13,6 +15,7 @@ import static org.lwjgl.opengl.GL20.*;
 public class Shader {
 
 	private final int ID;
+	private static final Logger logger = LoggerFactory.getLogger(Shader.class);
 
 	//TODO make a shader/opengl exception type
 	public Shader(URL vertexShaderSource, URL fragmentShaderSource) throws Exception {
@@ -56,7 +59,7 @@ public class Shader {
 				outputStream.write(chunk, 0, bytesRead);
 			}
 		} catch (IOException e) {
-			System.err.printf("Failed reading bytes from file: %s", file.toExternalForm());
+			logger.error("Failed reading bytes from file: %s", file.toExternalForm());
 			e.printStackTrace();
 		}
 		return new String(outputStream.toByteArray());

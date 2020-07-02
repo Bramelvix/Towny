@@ -3,6 +3,8 @@ package graphics.opengl;
 import main.Game;
 import map.Tile;
 import graphics.TextureInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.ByteBufferUtil;
 import util.vectors.Vec2f;
 import util.vectors.Vec4f;
@@ -32,6 +34,7 @@ public abstract class OpenGLUtils {
 	public static Shader fontShader;
 	public static Shader tileShader;
 	private static final Vec4f outlineColour = new Vec4f(1,0,0,1);
+	private static final Logger logger = LoggerFactory.getLogger(OpenGLUtils.class);
 
 
 	//TODO how is this number decided? I literally added a 0 to it because the limit would sometimes be reached while changing layers.
@@ -291,7 +294,7 @@ public abstract class OpenGLUtils {
 		int glError = glGetError();
 		if(glError != 0) {
 			String errorName = errorToString(glError);
-			System.err.println("GL ERROR: " + Integer.toHexString(glError) + " " + errorName);
+			logger.error("GL ERROR: " + Integer.toHexString(glError) + " " + errorName);
 		}
 	}
 

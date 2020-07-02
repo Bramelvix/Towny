@@ -2,6 +2,8 @@ package graphics;
 
 import graphics.opengl.OpenGLUtils;
 import map.Tile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,9 +15,11 @@ public final class SpritesheetHashtable  {
 
 	private static Spritesheet combined;
 	private static final Hashtable<Integer, BufferedImage> table = new Hashtable<>();
+	private static final Logger logger = LoggerFactory.getLogger(SpritesheetHashtable.class);
 
 	public static void registerSpritesheet(int key, BufferedImage sheet) throws Exception {
 		if (table.put(key, sheet) != null) {
+			logger.warn("Duplicate key while registering spritesheet: " + key);
 			throw new Exception("Duplicate key while registering spritesheet: " + key);
 		}
 	}
@@ -30,7 +34,7 @@ public final class SpritesheetHashtable  {
 
 	public static Spritesheet getCombined() {
 		if (combined == null) {
-			System.err.println("Combined spritesheet has not yet been loaded!");
+			logger.error("Combined spritesheet has not yet been loaded!");
 		}
 		return combined;
 	}

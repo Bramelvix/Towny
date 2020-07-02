@@ -1,11 +1,14 @@
 package graphics;
 
 import entity.Entity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Hashtable;
 
 public final class SpriteHashtable {
 	private SpriteHashtable() {}
+	private static final Logger logger = LoggerFactory.getLogger(SpriteHashtable.class);
 
 	private static final Hashtable<Integer, Sprite> table = new Hashtable<>();
 
@@ -58,7 +61,7 @@ public final class SpriteHashtable {
 
 	public static Sprite get(int key) {
 		if (!table.containsKey(key)) {
-			System.err.println("NullPointer imminent!!! Trying to get Sprite with id: " + key + ", but no sprite with this key is present!");
+			logger.warn("NullPointer imminent!!! Trying to get Sprite with id: " + key + ", but no sprite with this key is present!");
 		}
 		return table.get(key);
 	}

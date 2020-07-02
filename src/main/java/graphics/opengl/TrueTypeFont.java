@@ -6,6 +6,8 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.BufferedImageUtil;
 import util.vectors.Vec2f;
 
@@ -15,6 +17,7 @@ import static org.lwjgl.opengl.GL11.glBindTexture;
 public class TrueTypeFont {
 
 	static TrueTypeFont black, red;
+	private final Logger logger = LoggerFactory.getLogger(TrueTypeFont.class);
 
 	private final static int ALIGN_LEFT = 0, ALIGN_RIGHT = 1, ALIGN_CENTER = 2;
 	private final IntObject[] charArray = new IntObject[256];
@@ -118,7 +121,7 @@ public class TrueTypeFont {
 			fontTextureID = BufferedImageUtil.getTexture(imgTemp);
 
 		} catch (Exception e) {
-			System.err.println("Failed to create font.");
+			logger.error("Failed to create font.");
 			e.printStackTrace();
 		}
 	}
