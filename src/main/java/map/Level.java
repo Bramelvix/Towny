@@ -27,12 +27,15 @@ public class Level {
 
 	// basic constructor
 	public Level(int height, int width, int elevation) {
+		this(height, width, elevation, true);
+	}
+
+	public Level(int height, int width, int elevation, boolean hardObjects) {
 		this.width = width;
 		this.height = height;
 		depth = elevation;
 		tiles = new Tile[width][height];
-		generateLevel(elevation);
-
+		generateLevel(elevation, hardObjects);
 	}
 
 	public ArrayList<Item> getItems() {
@@ -178,7 +181,7 @@ public class Level {
 	}
 
 	// generates a (slighty less) shitty random level
-	private void generateLevel(int elevation) {
+	private void generateLevel(int elevation, boolean hardObjects) {
 		generateBorder(elevation);
 		float[] noise = Generator.generateSimplexNoise(
 			width, height, 11,
@@ -195,18 +198,24 @@ public class Level {
 				} else {
 					if (elevation > 0) {
 						tiles[x][y] = new Tile(SpriteHashtable.getStone());
-						randOre(x, y);
+						if (hardObjects) {
+							randOre(x, y);
+						}
 
 					} else {
 						tiles[x][y] = new Tile(SpriteHashtable.getGrass());
-						randForest(x, y);
+						if (hardObjects) {
+							randForest(x, y);
+						}
 					}
 				}
 			}
 		}
-		for (int y = 1; y < height - 1; y++) {
-			for (int x = 1; x < width - 1; x++) {
-				selectOre(x, y).ifPresent(Ore::checkSides);
+		if (hardObjects) {
+			for (int y = 1; y < height - 1; y++) {
+				for (int x = 1; x < width - 1; x++) {
+					selectOre(x, y).ifPresent(Ore::checkSides);
+				}
 			}
 		}
 	}
