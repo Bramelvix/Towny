@@ -39,7 +39,7 @@ public abstract class Humanoid extends Mob {
 		}
 	}
 
-	// DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()!! DO NOT USE!!!
+	// DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()! DO NOT USE!
 	@Override
 	protected final void moveTo(int x, int y) {
 		super.moveTo(x, y);

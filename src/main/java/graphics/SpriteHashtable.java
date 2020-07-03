@@ -61,7 +61,7 @@ public final class SpriteHashtable {
 
 	public static Sprite get(int key) {
 		if (!table.containsKey(key)) {
-			logger.warn("NullPointer imminent!!! Trying to get Sprite with id: " + key + ", but no sprite with this key is present!");
+			logger.warn("NullPointer imminent! Trying to get Sprite with id: " + key + ", but no sprite with this key is present!");
 		}
 		return table.get(key);
 	}

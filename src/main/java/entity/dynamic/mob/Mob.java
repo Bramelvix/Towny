@@ -187,7 +187,7 @@ public abstract class Mob extends Entity {
 		);
 	}
 
-	// DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()!! DO NOT USE!!!
+	// DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()! DO NOT USE!
 	protected void moveTo(int x, int y) {
 		int xmov = Integer.compare((int) (x*Tile.SIZE), (int) this.location.x);
 		int ymov = Integer.compare((int) (y*Tile.SIZE), (int) this.location.y);

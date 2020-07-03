@@ -2,7 +2,6 @@ package entity.dynamic.mob;
 
 import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
-import entity.dynamic.mob.work.MoveItemJob;
 import entity.nonDynamic.resources.Tree;
 import entity.pathfinding.PathFinder;
 import map.Level;
