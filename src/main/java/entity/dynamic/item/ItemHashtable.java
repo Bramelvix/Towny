@@ -29,17 +29,18 @@ public abstract class ItemHashtable {
 	public static Item get(int key) {
 		if (!table.containsKey(key)) {
 			logger.warn("NullPointer imminent! Trying to get Item with id: " + key + ", but no item with this key is present!");
+			return getTestItem();
 		}
 		return table.get(key).copy();
 	}
 
 	//testing purposes only
 	public static Item getTestItem() {
-		return new Item("test", null, "test item tooltip", 0);
+		return new Item("null item", null, "If you find this item in the game, please tell a developer.", 0);
 	}
 
 	public static Item get(int key, float x, float y, int z) {
-		return table.get(key).copy(x, y, z);
+		return get(key).copy(x, y, z);
 	}
 
 	public static void registerItems() throws Exception {

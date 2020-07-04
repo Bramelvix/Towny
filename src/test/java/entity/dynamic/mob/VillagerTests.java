@@ -81,7 +81,7 @@ public class VillagerTests {
 	}
 
 	@Test
-	void shouldfindNearbyItem() {
+	void shouldFindNearbyItem() {
 		villager = new Villager(48, 48, 0, level);
 		Item item = ItemHashtable.getTestItem();
 		item.setLocation(96, 96, 0);
