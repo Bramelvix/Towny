@@ -74,7 +74,7 @@ public class Menu extends UiElement { // the menu is the little options menu tha
 	}
 
 	float getYLocForMenuItem() {
-		return position.y + (items.size() * 15);
+		return position.y + (items.size() * 24);
 	}
 
 	public float getX() {
@@ -87,16 +87,14 @@ public class Menu extends UiElement { // the menu is the little options menu tha
 
 	// adding an item to the menu
 	private void addItem(MenuItem o) {
-		if (o != null) {
-			if (!(items.contains(o))) {
-				o.init(this);
-				items.add(o);
-				if (o.getText().length() > size.x / 10) {
-					size.x += ((o.getText().length() * 10) - size.x);
-				}
-				size.y += 15;
-			}
+		if (o == null || items.contains(o)) { return; }
+		o.init(this);
+		items.add(o);
+		if (o.getText().length() > size.x / 10) {
+			size.x += ((o.getText().length() * 10) - size.x);
 		}
+		size.y += 24;
+
 	}
 
 }

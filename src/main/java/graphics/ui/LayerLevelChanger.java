@@ -5,15 +5,13 @@ import graphics.ui.icon.Icon;
 import input.PointerInput;
 import util.vectors.Vec2f;
 
-import java.io.IOException;
-
 
 public class LayerLevelChanger extends UiElement {
 	private final Icon up;
 	private final Icon down;
 	private int z;
 
-	LayerLevelChanger(int x, int y,int width, int height, PointerInput pointer) throws IOException {
+	LayerLevelChanger(int x, int y,int width, int height, PointerInput pointer) {
 		super(new Vec2f(x, y), new Vec2f(width, height));
 		up = new Icon(x + 10, y + 5, "/icons/plain-arrow-up.png", 0.065f, pointer);
 		down = new Icon(x + 100, y + 5, "/icons/plain-arrow-down.png", 0.065f, pointer);

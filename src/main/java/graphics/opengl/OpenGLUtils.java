@@ -44,11 +44,16 @@ public abstract class OpenGLUtils {
 
 	private static final ArrayList<Outline> outlines = new ArrayList<>();
 
-	public static void init() throws Exception {
-		texShader = new Shader("/shaders/tex_shader.vert", "/shaders/font_shader.frag");
-		colShader = new Shader("/shaders/col_shader.vert", "/shaders/col_shader.frag");
-		fontShader = new Shader("/shaders/font_shader.vert", "/shaders/font_shader.frag");
-		tileShader = new Shader("/shaders/tile_shader.vert", "/shaders/tile_shader.frag");
+	public static void init() {
+		try {
+			texShader = new Shader("/shaders/tex_shader.vert", "/shaders/font_shader.frag");
+			colShader = new Shader("/shaders/col_shader.vert", "/shaders/col_shader.frag");
+			fontShader = new Shader("/shaders/font_shader.vert", "/shaders/font_shader.frag");
+			tileShader = new Shader("/shaders/tile_shader.vert", "/shaders/tile_shader.frag");
+		} catch (Exception e) {
+			logger.error("Error creating shader", e);
+			System.exit(1);
+		}
 
 		float[] vertices = {
 			// Left bottom triangle
@@ -141,8 +146,14 @@ public abstract class OpenGLUtils {
 		return loadTexture(buffer, image.getWidth(), image.getHeight());
 	}
 
-	public static TextureInfo loadTexture(String filename) throws IOException {
-		return loadTexture(ImageIO.read(OpenGLUtils.class.getResource(filename)));
+	public static TextureInfo loadTexture(String filename) {
+		try {
+			return loadTexture(ImageIO.read(OpenGLUtils.class.getResource(filename)));
+		} catch (IOException e){
+			logger.error("Error reading Image: " + filename, e);
+			System.exit(1);
+			return null;
+		}
 	}
 
 	public static void deleteTexture(int textId) {
@@ -211,6 +222,7 @@ public abstract class OpenGLUtils {
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_LINE_LOOP, 0, 6);
 	}
+
 	public static void drawOutline(Vec2f pos, Vec2f size, Vec2f offset) {
 		drawOutline(pos, size, offset, outlineColour);
 	}
@@ -236,11 +248,7 @@ public abstract class OpenGLUtils {
 	}
 
 	public static void menuItemDraw(Vec2f pos, String text, boolean selected) {
-		if (selected) {
-			drawTextRed(text, pos.x, pos.y - 5);
-		} else {
-			drawText(text, pos.x,pos.y - 5);
-		}
+		FontUtils.drawString(selected ? FontUtils.red : FontUtils.black, pos.x, pos.y, text,1,1);
 
 	}
 
@@ -249,11 +257,11 @@ public abstract class OpenGLUtils {
 	}
 
 	public static void drawText(String text, float x, float y) {
-		TrueTypeFont.black.drawString(x,y,text,1,1);
+		FontUtils.drawString(FontUtils.black,x,y,text,1,1);
 	}
 
 	public static void drawTextRed(String text, float x, float y) {
-		TrueTypeFont.red.drawString(x,y,text,1,1);
+		FontUtils.drawString(FontUtils.red, x,y,text,1,1);
 	}
 
 	public static void clearOutlines() {

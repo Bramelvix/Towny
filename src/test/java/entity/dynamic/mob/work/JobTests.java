@@ -3,6 +3,7 @@ package entity.dynamic.mob.work;
 import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.mob.Villager;
+import entity.nonDynamic.building.container.Chest;
 import entity.nonDynamic.resources.Ore;
 import entity.nonDynamic.resources.OreType;
 import entity.nonDynamic.resources.Tree;
@@ -78,5 +79,17 @@ public class JobTests {
 		}
 		assertTrue(level[0].getEntityOn(4, 1, Ore.class).isEmpty());
 		assertTrue(level[0].getItemOn(4, 1).isPresent());
+	}
+
+	@Test
+	void shouldBuildObject() {
+		Item item = ItemHashtable.getTestItem();
+		item.setLocation(96, 96, 0);
+		level[0].addItem(item);
+		villager.addBuildJob(4, 2, 0, new Chest(), item);
+		for (int i = 0; i < 75; i++) {
+			villager.update();
+		}
+		assertTrue(level[0].getEntityOn(4, 2, Chest.class).isPresent());
 	}
 }

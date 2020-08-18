@@ -148,7 +148,6 @@ public class Ui {
 		layerLevelChanger.destroy();
 		minimap.destroy();
 		top.destroy();
-
 	}
 
 }

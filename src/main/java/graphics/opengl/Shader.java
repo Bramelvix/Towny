@@ -1,7 +1,5 @@
 package graphics.opengl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import util.vectors.Vec2f;
 import util.vectors.Vec4f;
 
@@ -15,14 +13,16 @@ import static org.lwjgl.opengl.GL20.*;
 public class Shader {
 
 	private final int ID;
-	private static final Logger logger = LoggerFactory.getLogger(Shader.class);
 
-	//TODO make a shader/opengl exception type
 	public Shader(URL vertexShaderSource, URL fragmentShaderSource) throws Exception {
 		int vert = glCreateShader(GL_VERTEX_SHADER);
 		int frag = glCreateShader(GL_FRAGMENT_SHADER);
-		if(vert == 0) throw new Exception("Couldn't create a vertex shader");
-		if(frag == 0) throw new Exception("Couldn't create a fragment shader");
+		if(vert == 0) {
+			throw new Exception("Couldn't create a vertex shader");
+		}
+		if(frag == 0) {
+			throw new Exception("Couldn't create a fragment shader");
+		}
 
 		glShaderSource(vert, readFromFile(vertexShaderSource));
 		glCompileShader(vert);
@@ -33,7 +33,9 @@ public class Shader {
 		checkCompileErrors(frag, ShaderType.FRAG_SHADER);
 
 		ID = glCreateProgram();
-		if(ID == 0) throw new Exception("Couldn't create a shader program");
+		if(ID == 0) {
+			throw new Exception("Couldn't create a shader program");
+		}
 
 		glAttachShader(ID, vert);
 		glAttachShader(ID, frag);
@@ -48,19 +50,13 @@ public class Shader {
 		this(Shader.class.getResource(vert), Shader.class.getResource(frag));
 	}
 
-	private static String readFromFile(URL file) {
+	private static String readFromFile(URL file) throws IOException {
+		byte[] chunk = new byte[4096];
+		int bytesRead;
+		InputStream stream = file.openStream();
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		try {
-			byte[] chunk = new byte[4096];
-			int bytesRead;
-			InputStream stream = file.openStream();
-
-			while ((bytesRead = stream.read(chunk)) > 0) {
-				outputStream.write(chunk, 0, bytesRead);
-			}
-		} catch (IOException e) {
-			logger.error("Failed reading bytes from file: %s", file.toExternalForm());
-			e.printStackTrace();
+		while ((bytesRead = stream.read(chunk)) > 0) {
+			outputStream.write(chunk, 0, bytesRead);
 		}
 		return new String(outputStream.toByteArray());
 	}

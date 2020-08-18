@@ -1,7 +1,6 @@
 package main;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -28,7 +27,7 @@ import entity.nonDynamic.building.container.workstations.Furnace;
 import entity.pathfinding.PathFinder;
 import graphics.*;
 import graphics.opengl.OpenGLUtils;
-import graphics.opengl.TrueTypeFont;
+import graphics.opengl.FontUtils;
 import graphics.ui.Ui;
 import graphics.ui.menu.MenuItem;
 import input.Keyboard;
@@ -131,7 +130,7 @@ public class Game {
 		OpenGLUtils.init();
 
 		//Sound.initSound();
-		TrueTypeFont.init();
+		FontUtils.init();
 		generateLevel();
 		mobs = new ArrayList<>();
 		vills = new ArrayList<>();
@@ -161,14 +160,10 @@ public class Game {
 		spawnZombies();
 	}
 
-	private void setIcon() throws Exception {
+	private void setIcon() {
 		TextureInfo textureInfo = OpenGLUtils.loadTexture("/icons/soldier.png");
-		if (textureInfo.buffer == null) {
-			throw new Exception("Error loading window icon");
-		}
-		ByteBuffer buffer = textureInfo.buffer;
 		GLFWImage image = GLFWImage.malloc();
-		image.set(textureInfo.width, textureInfo.height, buffer);
+		image.set(textureInfo.width, textureInfo.height, textureInfo.buffer);
 		GLFWImage.Buffer images = GLFWImage.malloc(1);
 		images.put(0, image);
 		glfwSetWindowIcon(window, images);
@@ -200,8 +195,7 @@ public class Game {
 	}
 
 	private void spawnZombies() {
-		int teller = Entity.RANDOM.nextInt(5) + 1;
-		for (int i = 0; i < teller; i++) {
+		for (int i = 0; i < Entity.RANDOM.nextInt(5) + 1; i++) {
 			mobs.add(new Zombie(map,
 				Entity.RANDOM.nextInt(10) * Tile.SIZE,
 				Entity.RANDOM.nextInt(10) * Tile.SIZE,
@@ -211,19 +205,19 @@ public class Game {
 	}
 
 	private void addVillager(Villager vil) {
-		if (!vills.contains(vil)) {
-			sols.remove(vil);
-			vills.add(vil);
-			ui.updateCounts(sols.size(), vills.size());
-		}
+		if (vills.contains(vil)) { return; }
+		sols.remove(vil);
+		vills.add(vil);
+		ui.updateCounts(sols.size(), vills.size());
+
 	}
 
 	private void addSoldier(Villager vil) {
-		if (!sols.contains(vil)) {
-			vills.remove(vil);
-			sols.add(vil);
-			ui.updateCounts(sols.size(), vills.size());
-		}
+		if (sols.contains(vil)) { return; }
+		vills.remove(vil);
+		sols.add(vil);
+		ui.updateCounts(sols.size(), vills.size());
+
 	}
 
 	private void loop() {
@@ -249,7 +243,7 @@ public class Game {
 		}
 		glfwFreeCallbacks(window);
 		glfwDestroyWindow(window);
-		TrueTypeFont.release();
+		FontUtils.release();
 		SpritesheetHashtable.destroy();
 		ui.destroy();
 		OpenGLUtils.destroy();

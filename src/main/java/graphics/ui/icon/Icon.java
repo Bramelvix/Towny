@@ -7,8 +7,6 @@ import input.PointerMoveEvent;
 import graphics.TextureInfo;
 import util.vectors.Vec2f;
 
-import java.io.IOException;
-
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 //icon on the bottom left of the screen (pickaxe, axe,...)
@@ -19,7 +17,7 @@ public class Icon extends UiElement {
 	private int id; //OpenGL texture id
 
 	// constructor
-	public Icon(float x, float y, String path, float scale, PointerInput pointer) throws IOException {
+	public Icon(float x, float y, String path, float scale, PointerInput pointer) {
 		this(x, y, OpenGLUtils.loadTexture(path), scale, pointer);
 	}
 
