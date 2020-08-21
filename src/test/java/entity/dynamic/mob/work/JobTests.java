@@ -4,6 +4,7 @@ import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.mob.Villager;
 import entity.nonDynamic.building.container.Chest;
+import entity.nonDynamic.building.farming.TilledSoil;
 import entity.nonDynamic.resources.Ore;
 import entity.nonDynamic.resources.OreType;
 import entity.nonDynamic.resources.Tree;
@@ -91,5 +92,38 @@ public class JobTests {
 			villager.update();
 		}
 		assertTrue(level[0].getEntityOn(4, 2, Chest.class).isPresent());
+	}
+
+	@Test
+	void shouldTillSoil() {
+		villager.addBuildJob(4, 2, 0, new TilledSoil(), null);
+		for (int i = 0; i < 75; i++) {
+			villager.update();
+		}
+		assertTrue(level[0].selectTilledSoil(4, 2).isPresent());
+	}
+
+	@Test
+	void shouldSowSeeds() {
+		TilledSoil soil = new TilledSoil();
+		soil.initialise(4, 2, level, 0);
+		villager.addJob(soil);
+		for (int i = 0; i < 150; i++) {
+			villager.update();
+		}
+		assertTrue(soil.isPlanted());
+	}
+
+	@Test
+	void shouldHarvest() {
+		TilledSoil soil = new TilledSoil();
+		soil.initialise(4, 2, level, 0);
+		for (int i = 0; i < 100; i++) {
+			soil.sow();
+		}
+		for (int i = 0; i < 150; i++) {
+			villager.update();
+		}
+		assertFalse(soil.isPlanted());
 	}
 }
