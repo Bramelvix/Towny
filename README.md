@@ -1,10 +1,18 @@
 # Towny
 
 Towny is a java dwarf fortress-style game, where you manage a group of villagers stranded in the wilderness.
+Your villagers will struggle to survive with their limited food and resources. Orcs, bandits and monsters will
+periodically attack your village, or ambush villagers in underground caves. Slowly but surely you and your villagers
+tame the land. With you help they build a community and thrive.
+
 Feel free to contribute to the game by fixing my terrible code, or adding new features.
 
-## Mac os
-Running the game on mac requires you to put `-XstartOnFirstThread -Djava.awt.headless=true` in the VM options in your launch config.
+## Running the game
+Use gradle to build te project. The build script will detect your operating system and package the correct binaries into
+a runnable JAR.
+### Mac OS
+Running the game on Mac requires you to put `-XstartOnFirstThread -Djava.awt.headless=true` in the VM options in your
+launch config.
 
 ## TODO
 
@@ -21,7 +29,7 @@ Running the game on mac requires you to put `-XstartOnFirstThread -Djava.awt.hea
  - Redo animation system
  - Finish farming implementation
  
- **Planned features**
+ **Planned features / ideas**
  - Monster attacks
  - More crafting recipes
  - Farming, food and hunger system
