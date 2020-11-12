@@ -35,4 +35,9 @@ public class Vec4f extends Vec3f{
 	public Vec4f mul(Vec4f v) {
 		return new Vec4f(x*v.x, y*v.y, z*v.z, w*v.w);
 	}
+
+	@Override
+	public String toString() {
+		return "Vec4f: x=" + x + ", y=" + y + ", z=" + z + ", w=" + w;
+	}
 }

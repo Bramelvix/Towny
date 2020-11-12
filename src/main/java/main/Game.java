@@ -52,8 +52,8 @@ import static org.lwjgl.opengl.GL11.*;
 public class Game {
 
 	private final Logger logger = LoggerFactory.getLogger(Game.class);
-	public static final int width = 1500;
-	public static final int height = (int)(width / 16f * 9f); //843.75
+	public static final int width = 1536;
+	public static final int height = (int)(width / 16f * 9f); //864
 	private Level[] map;
 	private ArrayList<Villager> vills;
 	private ArrayList<Villager> sols;

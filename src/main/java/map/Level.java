@@ -153,6 +153,9 @@ public class Level {
 	}
 
 	private boolean hasStairs(int x, int y, boolean top) {
+		if (!has(x, y, Stairs.class)) {
+			return false;
+		}
 		Optional<Stairs> stairs = tiles[x][y].getEntity(Stairs.class);
 		return stairs.isPresent() && (!top || stairs.get().isTop());
 	}

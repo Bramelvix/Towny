@@ -39,4 +39,9 @@ public class Vec3f extends Vec2f{
 	public Vec2f xy() {
 		return new Vec2f(x, y);
 	}
+
+	@Override
+	public String toString() {
+		return "Vec3f: x=" + x + ", y=" + y + ", z=" + z;
+	}
 }

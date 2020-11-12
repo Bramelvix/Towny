@@ -36,4 +36,9 @@ public class Vec2i {
 	public Vec2i mul(Vec2i v) {
 		return new Vec2i(x*v.x, y*v.y);
 	}
+
+	@Override
+	public String toString() {
+		return "Vec2i: x=" + x + ", y=" + y;
+	}
 }

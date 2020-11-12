@@ -35,4 +35,9 @@ public class Vec3i extends Vec2i{
 	public Vec3i mul(Vec3i v) {
 		return new Vec3i(x*v.x, y*v.y, z*v.z);
 	}
+
+	@Override
+	public String toString() {
+		return "Vec3i: x=" + x + ", y=" + y + ", z=" + z;
+	}
 }

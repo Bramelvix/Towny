@@ -4,6 +4,7 @@ import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.mob.Villager;
 import entity.nonDynamic.building.container.Chest;
+import entity.nonDynamic.building.container.workstations.Anvil;
 import entity.nonDynamic.building.farming.TilledSoil;
 import entity.nonDynamic.resources.Ore;
 import entity.nonDynamic.resources.OreType;
@@ -125,5 +126,21 @@ public class JobTests {
 			villager.update();
 		}
 		assertFalse(soil.isPlanted());
+	}
+
+	@Test
+	void shouldCraftItem() {
+		Anvil anvil = new Anvil();
+		anvil.setLocation(48,96,0);
+		level[0].addEntity(anvil, true);
+		Item[] resources = new Item[] { ItemHashtable.getTestItem() };
+		Item result = ItemHashtable.getTestItem();
+		result.setName("This item was crafted");
+		villager.addJob(new CraftJob(villager, resources, result, anvil));
+		for (int i = 0; i < 150; i++) {
+			villager.update();
+		}
+		assertEquals(0, villager.getJobSize());
+		assertEquals("This item was crafted", level[0].getItems().get(0).getName());
 	}
 }

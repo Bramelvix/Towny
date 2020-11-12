@@ -37,4 +37,9 @@ public class Vec2f {
 		return new Vec2f(x*v.x, y*v.y);
 	}
 
+	@Override
+	public String toString() {
+		return "Vec2f: x=" + x + ", y=" + y;
+	}
+
 }
