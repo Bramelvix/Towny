@@ -5,8 +5,6 @@ Your villagers will struggle to survive with their limited food and resources. O
 periodically attack your village, or ambush villagers in underground caves. Slowly but surely you and your villagers
 tame the land. With you help they build a community and thrive.
 
-Feel free to contribute to the game by fixing my terrible code, or adding new features.
-
 ## Running the game
 Use gradle to build te project. The build script will detect your operating system and package the correct binaries into
 a runnable JAR.
@@ -18,7 +16,7 @@ launch config.
 
   **Bugs**
  - Combat system is very buggy
- - Pathfinding with stairs is shitty.
+ - Pathfinding with stairs is inconsistent.
  
  **Planned improvements**
 
