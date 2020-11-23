@@ -14,22 +14,17 @@ public class SelectionSquare extends UiElement{
 	public SelectionSquare(PointerInput input) {
 		super(new Vec2f(0), new Vec2f(0), false);
 		input.on(PointerInput.EType.DRAG, event -> {
-			if (visible) {
-				if (event.button == GLFW_MOUSE_BUTTON_LEFT) {
-					size.x = (float) event.x - position.x;
-					size.y = (float) event.y - position.y;
-				}
-			}
-		});
-		input.on(PointerInput.EType.DRAG_START, event -> {
 			if (event.button == GLFW_MOUSE_BUTTON_LEFT) {
-				position.x = (float) event.x;
-				position.y = (float) event.y;
-				ingame.x = position.x + offset.x;
-				ingame.y =  position.y + offset.y;
+				size.x = (float) event.x - position.x;
+				size.y = (float) event.y - position.y;
 			}
-
-		});
+		}, event -> visible);
+		input.on(PointerInput.EType.DRAG_START, event -> {
+			position.x = (float) event.x;
+			position.y = (float) event.y;
+			ingame.x = position.x + offset.x;
+			ingame.y =  position.y + offset.y;
+		}, event -> event.button == GLFW_MOUSE_BUTTON_LEFT);
 	}
 
 	void reset() {

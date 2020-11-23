@@ -52,9 +52,10 @@ public class MenuItem {
 	public MenuItem(String text, Consumer<MenuItem> onClick, PointerInput pointer) {
 		this.text = text;
 		position = new Vec2f(0);
-		subscriptionClick = pointer.on(PointerInput.EType.PRESSED, event -> {
-			if (event.button == GLFW_MOUSE_BUTTON_LEFT && hover) { onClick.accept(this); }
-		});
+		subscriptionClick = pointer.on(
+			PointerInput.EType.PRESSED,
+			event -> onClick.accept(this),
+			event -> event.button == GLFW_MOUSE_BUTTON_LEFT && hover);
 		subscriptionMove = pointer.on(PointerInput.EType.MOVE, this::update);
 	}
 

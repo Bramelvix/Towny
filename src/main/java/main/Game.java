@@ -136,22 +136,18 @@ public class Game {
 		vills = new ArrayList<>();
 		sols = new ArrayList<>();
 		pointer.on(PointerInput.EType.DRAG_START, event -> {
-			if (event.button == GLFW_MOUSE_BUTTON_MIDDLE) {
-				dragOffsetX = (float) event.x + xScroll;
-				dragOffsetY = (float) event.y + yScroll;
-			}
-		});
+			dragOffsetX = (float) event.x + xScroll;
+			dragOffsetY = (float) event.y + yScroll;
+		}, event -> event.button == GLFW_MOUSE_BUTTON_MIDDLE);
 
 		pointer.on(PointerInput.EType.DRAG, event -> {
-			if (event.button == GLFW_MOUSE_BUTTON_MIDDLE) {
-				int newScrollX = (int)(- event.x + dragOffsetX);
-				int newScrollY = (int)(- event.y + dragOffsetY);
-				float maxScrollX = (map[currentLayerNumber].width * Tile.SIZE) - (width+1);
-				float maxScrollY = (map[currentLayerNumber].height * Tile.SIZE) - (height+1);
-				xScroll = newScrollX < 0 ? 0 : Math.min(newScrollX, maxScrollX);
-				yScroll = newScrollY < 0 ? 0 : Math.min(newScrollY, maxScrollY);
-			}
-		});
+			int newScrollX = (int)(- event.x + dragOffsetX);
+			int newScrollY = (int)(- event.y + dragOffsetY);
+			float maxScrollX = (map[currentLayerNumber].width * Tile.SIZE) - (width+1);
+			float maxScrollY = (map[currentLayerNumber].height * Tile.SIZE) - (height+1);
+			xScroll = newScrollX < 0 ? 0 : Math.min(newScrollX, maxScrollX);
+			yScroll = newScrollY < 0 ? 0 : Math.min(newScrollY, maxScrollY);
+		}, event -> event.button == GLFW_MOUSE_BUTTON_MIDDLE);
 
 		initUi();
 

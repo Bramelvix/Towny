@@ -74,11 +74,11 @@ public class Icon extends UiElement {
 	}
 
 	public void setOnClick(PointerInput pointer, Runnable action) {
-		pointer.on(PointerInput.EType.RELEASED, event -> {
-			if (event.button == GLFW_MOUSE_BUTTON_LEFT && hoverOn()) {
-				action.run();
-			}
-		});
+		pointer.on(
+			PointerInput.EType.RELEASED,
+			event -> action.run(),
+			event -> event.button == GLFW_MOUSE_BUTTON_LEFT && hoverOn()
+		);
 	}
 
 	public void setTexture(int textureId) {
