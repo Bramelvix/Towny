@@ -5,6 +5,7 @@ import input.PointerInput;
 import util.vectors.Vec2f;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
+import static events.EventListener.onlyWhen;
 
 public class SelectionSquare extends UiElement{
 	private final Vec2f ingame = new Vec2f(0); // INGAME
@@ -13,18 +14,22 @@ public class SelectionSquare extends UiElement{
 
 	public SelectionSquare(PointerInput input) {
 		super(new Vec2f(0), new Vec2f(0), false);
-		input.on(PointerInput.EType.DRAG, event -> {
-			if (event.button == GLFW_MOUSE_BUTTON_LEFT) {
+		input.on(PointerInput.EType.DRAG, onlyWhen(
+			event -> visible && event.button == GLFW_MOUSE_BUTTON_LEFT,
+			event -> {
 				size.x = (float) event.x - position.x;
 				size.y = (float) event.y - position.y;
 			}
-		}, event -> visible);
-		input.on(PointerInput.EType.DRAG_START, event -> {
-			position.x = (float) event.x;
-			position.y = (float) event.y;
-			ingame.x = position.x + offset.x;
-			ingame.y =  position.y + offset.y;
-		}, event -> event.button == GLFW_MOUSE_BUTTON_LEFT);
+		));
+		input.on(PointerInput.EType.DRAG_START, onlyWhen(
+			event -> event.button == GLFW_MOUSE_BUTTON_LEFT,
+			event -> {
+				position.x = (float) event.x;
+				position.y = (float) event.y;
+				ingame.x = position.x + offset.x;
+				ingame.y =  position.y + offset.y;
+			}
+		));
 	}
 
 	void reset() {

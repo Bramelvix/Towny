@@ -48,6 +48,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.glfw.GLFW.glfwShowWindow;
 import static org.lwjgl.opengl.GL11.*;
+import static events.EventListener.onlyWhen;
 
 public class Game {
 
@@ -135,19 +136,25 @@ public class Game {
 		mobs = new ArrayList<>();
 		vills = new ArrayList<>();
 		sols = new ArrayList<>();
-		pointer.on(PointerInput.EType.DRAG_START, event -> {
-			dragOffsetX = (float) event.x + xScroll;
-			dragOffsetY = (float) event.y + yScroll;
-		}, event -> event.button == GLFW_MOUSE_BUTTON_MIDDLE);
+		pointer.on(PointerInput.EType.DRAG_START, onlyWhen(
+			event -> event.button == GLFW_MOUSE_BUTTON_MIDDLE,
+			event -> {
+				dragOffsetX = (float) event.x + xScroll;
+				dragOffsetY = (float) event.y + yScroll;
+			}
+		));
 
-		pointer.on(PointerInput.EType.DRAG, event -> {
-			int newScrollX = (int)(- event.x + dragOffsetX);
-			int newScrollY = (int)(- event.y + dragOffsetY);
-			float maxScrollX = (map[currentLayerNumber].width * Tile.SIZE) - (width+1);
-			float maxScrollY = (map[currentLayerNumber].height * Tile.SIZE) - (height+1);
-			xScroll = newScrollX < 0 ? 0 : Math.min(newScrollX, maxScrollX);
-			yScroll = newScrollY < 0 ? 0 : Math.min(newScrollY, maxScrollY);
-		}, event -> event.button == GLFW_MOUSE_BUTTON_MIDDLE);
+		pointer.on(PointerInput.EType.DRAG, onlyWhen(
+			event -> event.button == GLFW_MOUSE_BUTTON_MIDDLE,
+			event -> {
+				int newScrollX = (int)(- event.x + dragOffsetX);
+				int newScrollY = (int)(- event.y + dragOffsetY);
+				float maxScrollX = (map[currentLayerNumber].width * Tile.SIZE) - (width+1);
+				float maxScrollY = (map[currentLayerNumber].height * Tile.SIZE) - (height+1);
+				xScroll = newScrollX < 0 ? 0 : Math.min(newScrollX, maxScrollX);
+				yScroll = newScrollY < 0 ? 0 : Math.min(newScrollY, maxScrollY);
+			}
+		));
 
 		initUi();
 

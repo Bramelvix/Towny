@@ -8,6 +8,7 @@ import graphics.TextureInfo;
 import util.vectors.Vec2f;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
+import static events.EventListener.onlyWhen;
 
 //icon on the bottom left of the screen (pickaxe, axe,...)
 public class Icon extends UiElement {
@@ -74,11 +75,10 @@ public class Icon extends UiElement {
 	}
 
 	public void setOnClick(PointerInput pointer, Runnable action) {
-		pointer.on(
-			PointerInput.EType.RELEASED,
-			event -> action.run(),
-			event -> event.button == GLFW_MOUSE_BUTTON_LEFT && hoverOn()
-		);
+		pointer.on(PointerInput.EType.RELEASED, onlyWhen(
+			event -> event.button == GLFW_MOUSE_BUTTON_LEFT && hoverOn(),
+			event -> action.run()
+		));
 	}
 
 	public void setTexture(int textureId) {

@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
+import static events.EventListener.onlyWhen;
 
 public class MenuItem {
 
@@ -52,10 +53,10 @@ public class MenuItem {
 	public MenuItem(String text, Consumer<MenuItem> onClick, PointerInput pointer) {
 		this.text = text;
 		position = new Vec2f(0);
-		subscriptionClick = pointer.on(
-			PointerInput.EType.PRESSED,
-			event -> onClick.accept(this),
-			event -> event.button == GLFW_MOUSE_BUTTON_LEFT && hover);
+		subscriptionClick = pointer.on(PointerInput.EType.PRESSED, onlyWhen(
+			event -> event.button == GLFW_MOUSE_BUTTON_LEFT && hover,
+			event -> onClick.accept(this)
+		));
 		subscriptionMove = pointer.on(PointerInput.EType.MOVE, this::update);
 	}
 

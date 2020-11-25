@@ -12,8 +12,6 @@ import map.Tile;
 import org.lwjgl.glfw.GLFWCursorPosCallbackI;
 import org.lwjgl.glfw.GLFWMouseButtonCallbackI;
 
-import java.util.function.Predicate;
-
 
 public class PointerInput {
 
@@ -54,10 +52,6 @@ public class PointerInput {
 
 	public <T extends Event> Subscription on (EType<T> type, EventListener<T> listener) {
 		return listeners.register (type, listener);
-	}
-
-	public <T extends Event> Subscription on(EType<T> type, EventListener<T> listener, Predicate<T> condition) {
-		return listeners.register(type, listener, condition);
 	}
 
 	public GLFWCursorPosCallbackI positionCallback () {
