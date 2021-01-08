@@ -11,6 +11,7 @@ import entity.dynamic.mob.work.recipe.BuildingRecipe;
 import entity.dynamic.mob.work.recipe.ItemRecipe;
 import entity.nonDynamic.building.container.Chest;
 import entity.nonDynamic.building.container.Container;
+import entity.nonDynamic.building.container.Workstation;
 import entity.nonDynamic.building.farming.TilledSoil;
 import entity.nonDynamic.resources.Ore;
 import entity.nonDynamic.resources.Tree;
@@ -22,8 +23,6 @@ import entity.dynamic.item.weapon.WeaponMaterial;
 import entity.dynamic.mob.Mob;
 import entity.dynamic.mob.Villager;
 import entity.dynamic.mob.Zombie;
-import entity.nonDynamic.building.container.workstations.Anvil;
-import entity.nonDynamic.building.container.workstations.Furnace;
 import entity.pathfinding.PathFinder;
 import graphics.*;
 import graphics.opengl.OpenGLUtils;
@@ -332,20 +331,29 @@ public class Game {
 	private void onClickShovel() {
 		if (ui.menuInvisible()) {
 			deselectAllVills();
-			ui.showBuildSquare( true, BuildingRecipe.STAIRSDOWN, currentLayerNumber, xScroll, yScroll);
+			ui.showBuildSquare(
+				true, currentLayerNumber, xScroll, yScroll, pointer,
+				pos -> onClickBuildOutline(pos, BuildingRecipe.STAIRSDOWN)
+			);
 			ui.deSelectIcons();
 		}
 	}
 
 	private void onClickPlow() {
 		if (ui.menuInvisible()){
-			ui.showBuildSquare( false, BuildingRecipe.TILLED_SOIL, currentLayerNumber, xScroll, yScroll);
+			ui.showBuildSquare(
+				false, currentLayerNumber, xScroll, yScroll, pointer,
+				pos -> onClickBuildOutline(pos, BuildingRecipe.TILLED_SOIL)
+			);
 			ui.deSelectIcons();
 		}
 	}
 
 	private void onClickBuild(MenuItem item) {
-		ui.showBuildSquare(false, item.getRecipe(), currentLayerNumber, xScroll, yScroll);
+		ui.showBuildSquare(
+			false, currentLayerNumber, xScroll, yScroll, pointer,
+			pos -> onClickBuildOutline(pos, item.getRecipe())
+		);
 		ui.deSelectIcons();
 		ui.getMenu().hide();
 	}
@@ -415,7 +423,7 @@ public class Game {
 				res[i] = idle.getNearestItemOfType(recipe.getResources()[i]).orElse(null);
 			}
 			map[currentLayerNumber].getNearestWorkstation(
-					recipe.getWorkstationClass(), idle.getTileX(), idle.getTileY()
+					recipe.getWorkstationType(), idle.getTileX(), idle.getTileY()
 			).ifPresent(station -> idle.addJob(new CraftJob(idle, res, recipe.getProduct(), station)));
 			ui.deSelectIcons();
 			ui.getMenu().hide();
@@ -478,6 +486,26 @@ public class Game {
 		deselect(selectedvill);
 		ui.deSelectIcons();
 		ui.getMenu().hide();
+	}
+
+	private void onClickBuildOutline(float[][] coords, BuildingRecipe recipe) {
+		if (ui.getIcons().hoverOnNoIcons()) {
+			for (float[] blok : coords) {
+				if (map[currentLayerNumber].tileIsEmpty((int) (blok[0] / Tile.SIZE), (int) (blok[1] / Tile.SIZE))) {
+					Villager idle = getIdlestVil();
+					idle.addBuildJob(
+						(int) (blok[0] / Tile.SIZE),
+						(int) (blok[1] / Tile.SIZE),
+						currentLayerNumber,
+						recipe.getProduct(),
+						recipe.getResources()[0]
+					);
+				}
+			}
+			ui.removeBuildSquare();
+			deselectAllVills();
+			ui.deSelectIcons();
+		}
 	}
 
 	private void scroll(long window, double v, double v1) {
@@ -565,19 +593,6 @@ public class Game {
 					ui.deSelectIcons();
 				});
 			}
-			if (ui.outlineIsVisible() && ui.menuInvisible() && ui.getIcons().hoverOnNoIcons()) {
-				float[][] coords = ui.getOutlineCoords();
-				for (float[] blok : coords) {
-					if (map[currentLayerNumber].tileIsEmpty((int) (blok[0] / Tile.SIZE), (int) (blok[1] / Tile.SIZE))) {
-						Villager idle = getIdlestVil();
-						idle.addBuildJob((int) (blok[0] / Tile.SIZE), (int) (blok[1] / Tile.SIZE), currentLayerNumber, ui.getBuildRecipeOutline().getProduct(),
-							ui.getBuildRecipeOutline().getResources()[0]);
-					}
-				}
-				ui.removeBuildSquare();
-				deselectAllVills();
-				ui.deSelectIcons();
-			}
 		} else if (pointer.wasPressed(GLFW_MOUSE_BUTTON_RIGHT)) {
 			if (selectedvill != null) {
 				List<MenuItem> options = new ArrayList<>();
@@ -626,13 +641,13 @@ public class Game {
 				options.add(new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer));
 				ui.showMenu(pointer, options.toArray(new MenuItem[0]));
 			} else {
-				if (map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY(), Furnace.class).isPresent()) {
+				if (map[currentLayerNumber].getWorkstationOn(pointer.getTileX(), pointer.getTileY(), Workstation.Type.FURNACE).isPresent()) {
 					ui.showMenu(
 						pointer,
 						new MenuItem(MenuItem.SMELT, in -> onClickSmelt(), pointer),
 						new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer)
 					);
-				} else if (map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY(), Anvil.class).isPresent()) {
+				} else if (map[currentLayerNumber].getWorkstationOn(pointer.getTileX(), pointer.getTileY(), Workstation.Type.ANVIL).isPresent()) {
 					ui.showMenu(
 						pointer,
 						new MenuItem(MenuItem.SMITH, in -> onClickSmith(), pointer),

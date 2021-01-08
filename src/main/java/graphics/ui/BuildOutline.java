@@ -1,6 +1,6 @@
 package graphics.ui;
 
-import entity.dynamic.mob.work.recipe.BuildingRecipe;
+import events.Subscription;
 import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
 import input.PointerMoveEvent;
@@ -8,6 +8,8 @@ import map.Level;
 import map.Tile;
 import util.vectors.Vec2f;
 import util.vectors.Vec4f;
+
+import java.util.function.Consumer;
 
 //the green or red outline used to select where to build things
 public class BuildOutline {
@@ -26,10 +28,10 @@ public class BuildOutline {
 	private boolean visible; // is the outline visible
 	private final Level[] levels; // the map is needed to decide if a square is empty
 	private boolean lockedSize = false;
-	private BuildingRecipe build;
 	private int z = 0;
 	private float xScroll;
 	private float yScroll;
+	private Subscription onClick;
 
 	// rendering the outline
 	public void render() {
@@ -146,30 +148,27 @@ public class BuildOutline {
 		this.yScroll = yScroll;
 	}
 
-	BuildingRecipe getBuildRecipe() {
-		return build;
-	}
-
 	// constructor
 	BuildOutline(Level[] levels, PointerInput pointer) {
 		this.levels = levels;
 		pointer.on(PointerInput.EType.MOVE, this::update);
 	}
 	// show the outline
-	void show(int z,  float xScroll, float yScroll, boolean lockedSize, BuildingRecipe build) {
+	void show(int z, float xScroll, float yScroll, boolean lockedSize, PointerInput pointer, Consumer<float[][]> consumer) {
 		if (!visible) {
 			visible = true;
 			update(z, xScroll, yScroll);
 			squarewidth = 1;
 			squareheight = 1;
-			this.build = build;
 			this.lockedSize = lockedSize;
+			onClick = pointer.on(PointerInput.EType.PRESSED, event -> consumer.accept(getSquareCoords()));
 		}
 	}
 
 	// hide the outline
 	void remove() {
 		visible = false;
+		onClick.unsubscribe();
 	}
 
 }

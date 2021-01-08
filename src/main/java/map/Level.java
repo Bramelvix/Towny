@@ -7,7 +7,7 @@ import entity.nonDynamic.building.Stairs;
 import entity.nonDynamic.building.farming.TilledSoil;
 import entity.nonDynamic.building.wall.Wall;
 import entity.dynamic.item.Item;
-import entity.nonDynamic.building.container.workstations.Workstation;
+import entity.nonDynamic.building.container.Workstation;
 import entity.nonDynamic.resources.Ore;
 import entity.nonDynamic.resources.OreType;
 import entity.nonDynamic.resources.Tree;
@@ -75,7 +75,12 @@ public class Level {
 	}
 
 	public <T extends Entity> Optional<T> getEntityOn(int x, int y, Class<T> type) {
-		return tiles[x][y].getEntity(type);
+		return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 ? tiles[x][y].getEntity(type) : Optional.empty();
+	}
+
+	public Optional<Workstation> getWorkstationOn(int x, int y, Workstation.Type type) {
+		Optional<Workstation> optional = getEntityOn(x, y, Workstation.class);
+		return optional.isPresent() && optional.get().getType() == type ? optional : Optional.empty();
 	}
 
 	public <T extends Entity> Vec2i getNearestSpotThatHasX(int xloc, int yloc, Class<T> clazz) {
@@ -138,9 +143,9 @@ public class Level {
 		return getEntityOn(x, y, Wall.class);
 	}
 
-	public <T extends Workstation> Optional<T> getNearestWorkstation(Class<T> workstation, int x, int y) {
-		Vec2i point = getNearestSpotThatHasX(x, y, workstation);
-		return point != null ? tiles[point.x][point.y].getEntity(workstation) : Optional.empty();
+	public Optional<Workstation> getNearestWorkstation(Workstation.Type type, int xloc, int yloc) {
+		Vec2i point = getNearestSpotThatHasX(xloc, yloc, (x, y) -> getWorkstationOn(x, y, type).isPresent());
+		return point != null ? tiles[point.x][point.y].getEntity(Workstation.class) : Optional.empty();
 	}
 
 	public Optional<Stairs> getNearestStairs(int x, int y, boolean top) { //gets the nearest stairs object on the map

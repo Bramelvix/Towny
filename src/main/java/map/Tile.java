@@ -83,7 +83,7 @@ public class Tile {
 
 	public int getAvgColour() {
 		//TODO multisprites getavg is broken right now
-		return (entity != null) ? entity.sprite.getAvgColour() : sprite.getAvgColour();
+		return (entity != null && entity.sprite != null) ? entity.sprite.getAvgColour() : sprite.getAvgColour();
 
 	}
 

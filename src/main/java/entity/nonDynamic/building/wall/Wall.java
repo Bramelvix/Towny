@@ -124,7 +124,7 @@ public class Wall extends BuildAbleObject {
 		}
 
 		Vec2f[] texCoordList = new Vec2f[sprites.size()];
-		for (int i = 0; i<sprites.size(); i++) {
+		for (int i = 0; i < sprites.size(); i++) {
 			texCoordList[i] = (sprites.get(i).getTexCoords());
 		}
 		sprite = new MultiSprite(texCoordList, 1);

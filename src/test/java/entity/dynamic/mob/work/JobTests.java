@@ -4,7 +4,7 @@ import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.mob.Villager;
 import entity.nonDynamic.building.container.Chest;
-import entity.nonDynamic.building.container.workstations.Anvil;
+import entity.nonDynamic.building.container.Workstation;
 import entity.nonDynamic.building.farming.TilledSoil;
 import entity.nonDynamic.resources.Ore;
 import entity.nonDynamic.resources.OreType;
@@ -130,7 +130,7 @@ public class JobTests {
 
 	@Test
 	void shouldCraftItem() {
-		Anvil anvil = new Anvil();
+		Workstation anvil = Workstation.anvil();
 		anvil.setLocation(48,96,0);
 		level[0].addEntity(anvil, true);
 		Item[] resources = new Item[] { ItemHashtable.getTestItem() };

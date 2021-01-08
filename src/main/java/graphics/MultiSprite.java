@@ -6,7 +6,7 @@ import util.vectors.Vec2i;
 import util.vectors.Vec3f;
 
 //A MultiSprite is a Sprite composed of multiple images overlaid on top of each other
-public class MultiSprite extends Sprite {
+public class MultiSprite extends StaticSprite {
 
 	private final Vec2f[] texCoordArr; //array of UV coordinates for every texture used in this MultiSprite
 

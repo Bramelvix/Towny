@@ -2,7 +2,7 @@ package entity.dynamic.mob.work;
 
 import entity.dynamic.item.Item;
 import entity.dynamic.mob.Villager;
-import entity.nonDynamic.building.container.workstations.Workstation;
+import entity.nonDynamic.building.container.Workstation;
 
 public class CraftJob extends Job {
 
@@ -11,6 +11,7 @@ public class CraftJob extends Job {
 	private final Workstation station;
 	private byte craftTimer = 100;
 	private boolean itemsUpdated = false;
+	private boolean prereqsDone = false;
 
 	public <T extends Item> CraftJob(Villager worker, T[] resources, T product, Workstation station) {
 		super(worker);
@@ -19,21 +20,15 @@ public class CraftJob extends Job {
 		this.resources = resources;
 		if (this.station == null) {
 			completed = true;
-			return;
-		}
-		for (Item item : this.resources) {
-			if (item == null) {
-				completed = true;
-				return;
-			}
-			worker.prependJobToChain(new MoveItemJob(item, worker));
-			worker.prependJobToChain(new MoveItemJob(station.getTileX(), station.getTileY(), worker.getZ(), worker));
 		}
 	}
 
 	@Override
 	public void execute() {
-		if (started && !completed) {
+		if (!prereqsDone) {
+			prerequisites();
+		}
+		else if (started && !completed) {
 			if (!worker.aroundTile(station.getTileX(), station.getTileY(), station.getZ())) {
 				if (worker.isMovementNull()) {
 					completed = true;
@@ -69,6 +64,18 @@ public class CraftJob extends Job {
 			return true;
 		}
 		return false;
+	}
+
+	private void prerequisites() {
+		for (Item item : this.resources) {
+			if (item == null) {
+				completed = true;
+				return;
+			}
+			worker.prependJobToChain(new MoveItemJob(item, worker));
+			worker.prependJobToChain(new MoveItemJob(station.getTileX(), station.getTileY(), worker.getZ(), worker));
+		}
+		prereqsDone = true;
 	}
 
 	@Override

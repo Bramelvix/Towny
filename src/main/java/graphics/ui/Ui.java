@@ -1,6 +1,5 @@
 package graphics.ui;
 
-import entity.dynamic.mob.work.recipe.BuildingRecipe;
 import graphics.ui.icon.UiIcons;
 import graphics.ui.menu.Menu;
 import graphics.ui.menu.MenuItem;
@@ -9,6 +8,7 @@ import main.Game;
 import map.Level;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 
 //main class used to manage the ui
 public class Ui {
@@ -77,10 +77,6 @@ public class Ui {
 		menu.setVisible(true);
 	}
 
-	public BuildingRecipe getBuildRecipeOutline() {
-		return outline.getBuildRecipe();
-	}
-
 	private void showMenu(PointerInput pointer) {
 		menu = new Menu(pointer);
 	}
@@ -117,8 +113,8 @@ public class Ui {
 		return selection.getHeight();
 	}
 
-	public void showBuildSquare(boolean lockedSize, BuildingRecipe build, int z, float xScroll, float yScroll) {
-		outline.show(z, xScroll, yScroll, lockedSize, build);
+	public void showBuildSquare(boolean lockedSize, int z, float xScroll, float yScroll, PointerInput pointer, Consumer<float[][]> consumer) {
+		outline.show(z, xScroll, yScroll, lockedSize, pointer, consumer);
 	}
 
 	public void removeBuildSquare() {
