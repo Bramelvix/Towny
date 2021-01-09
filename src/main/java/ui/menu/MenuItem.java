@@ -1,4 +1,4 @@
-package graphics.ui.menu;
+package ui.menu;
 
 import entity.Entity;
 import entity.dynamic.mob.work.recipe.BuildingRecipe;
@@ -7,7 +7,7 @@ import entity.dynamic.mob.work.recipe.Recipe;
 import events.Subscription;
 import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
-import input.PointerMoveEvent;
+import events.PointerMoveEvent;
 import util.vectors.Vec2f;
 
 import java.util.Optional;

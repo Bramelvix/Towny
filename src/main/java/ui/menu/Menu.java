@@ -1,13 +1,13 @@
-package graphics.ui.menu;
+package ui.menu;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import events.Subscription;
 import graphics.opengl.OpenGLUtils;
-import graphics.ui.UiElement;
+import ui.UiElement;
 import input.PointerInput;
-import input.PointerMoveEvent;
+import events.PointerMoveEvent;
 import util.vectors.Vec2f;
 
 public class Menu extends UiElement { // the menu is the little options menu that shows up when you right click

@@ -17,6 +17,7 @@ launch config.
   **Bugs**
  - Combat system is very buggy
  - Pathfinding with stairs is inconsistent.
+ - Selecting an icon when the buildsquare is visible selects the icon, but does not remove the old buildsquare.
  
  **Planned improvements**
 

@@ -2,11 +2,7 @@ package input;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import events.Event;
-import events.EventListener;
-import events.EventListenerCatalog;
-import events.EventType;
-import events.Subscription;
+import events.*;
 import main.Game;
 import map.Tile;
 import org.lwjgl.glfw.GLFWCursorPosCallbackI;

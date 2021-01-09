@@ -1,8 +1,8 @@
-package graphics.ui;
+package ui;
 
-import graphics.ui.icon.UiIcons;
-import graphics.ui.menu.Menu;
-import graphics.ui.menu.MenuItem;
+import ui.icon.UiIcons;
+import ui.menu.Menu;
+import ui.menu.MenuItem;
 import input.PointerInput;
 import main.Game;
 import map.Level;
@@ -49,10 +49,6 @@ public class Ui {
 
 	public void initTopBarActions(PointerInput pointer, Runnable toggle, Runnable upSpeed, Runnable downSpeed) {
 		top.init(pointer, toggle, upSpeed, downSpeed);
-	}
-
-	public float[][] getOutlineCoords() {
-		return outline.getSquareCoords();
 	}
 
 	public boolean outlineIsVisible() {
@@ -114,7 +110,7 @@ public class Ui {
 	}
 
 	public void showBuildSquare(boolean lockedSize, int z, float xScroll, float yScroll, PointerInput pointer, Consumer<float[][]> consumer) {
-		outline.show(z, xScroll, yScroll, lockedSize, pointer, consumer);
+		outline.show(z, xScroll, yScroll, lockedSize, pointer, consumer, event -> icons.hoverOnNoIcons());
 	}
 
 	public void removeBuildSquare() {

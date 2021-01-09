@@ -27,8 +27,8 @@ import entity.pathfinding.PathFinder;
 import graphics.*;
 import graphics.opengl.OpenGLUtils;
 import graphics.opengl.FontUtils;
-import graphics.ui.Ui;
-import graphics.ui.menu.MenuItem;
+import ui.Ui;
+import ui.menu.MenuItem;
 import input.Keyboard;
 import input.PointerInput;
 import map.Level;
@@ -335,7 +335,6 @@ public class Game {
 				true, currentLayerNumber, xScroll, yScroll, pointer,
 				pos -> onClickBuildOutline(pos, BuildingRecipe.STAIRSDOWN)
 			);
-			ui.deSelectIcons();
 		}
 	}
 
@@ -345,7 +344,6 @@ public class Game {
 				false, currentLayerNumber, xScroll, yScroll, pointer,
 				pos -> onClickBuildOutline(pos, BuildingRecipe.TILLED_SOIL)
 			);
-			ui.deSelectIcons();
 		}
 	}
 
@@ -354,7 +352,6 @@ public class Game {
 			false, currentLayerNumber, xScroll, yScroll, pointer,
 			pos -> onClickBuildOutline(pos, item.getRecipe())
 		);
-		ui.deSelectIcons();
 		ui.getMenu().hide();
 	}
 
@@ -489,23 +486,21 @@ public class Game {
 	}
 
 	private void onClickBuildOutline(float[][] coords, BuildingRecipe recipe) {
-		if (ui.getIcons().hoverOnNoIcons()) {
-			for (float[] blok : coords) {
-				if (map[currentLayerNumber].tileIsEmpty((int) (blok[0] / Tile.SIZE), (int) (blok[1] / Tile.SIZE))) {
-					Villager idle = getIdlestVil();
-					idle.addBuildJob(
-						(int) (blok[0] / Tile.SIZE),
-						(int) (blok[1] / Tile.SIZE),
-						currentLayerNumber,
-						recipe.getProduct(),
-						recipe.getResources()[0]
-					);
-				}
+		for (float[] blok : coords) {
+			if (map[currentLayerNumber].tileIsEmpty((int) (blok[0] / Tile.SIZE), (int) (blok[1] / Tile.SIZE))) {
+				Villager idle = getIdlestVil();
+				idle.addBuildJob(
+					(int) (blok[0] / Tile.SIZE),
+					(int) (blok[1] / Tile.SIZE),
+					currentLayerNumber,
+					recipe.getProduct(),
+					recipe.getResources()[0]
+				);
 			}
-			ui.removeBuildSquare();
-			deselectAllVills();
-			ui.deSelectIcons();
 		}
+		ui.removeBuildSquare();
+		deselectAllVills();
+		ui.deSelectIcons();
 	}
 
 	private void scroll(long window, double v, double v1) {

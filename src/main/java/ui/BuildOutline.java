@@ -1,15 +1,19 @@
-package graphics.ui;
+package ui;
 
 import events.Subscription;
 import graphics.opengl.OpenGLUtils;
+import events.PointerClickEvent;
 import input.PointerInput;
-import input.PointerMoveEvent;
+import events.PointerMoveEvent;
 import map.Level;
 import map.Tile;
 import util.vectors.Vec2f;
 import util.vectors.Vec4f;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import static events.EventListener.onlyWhen;
 
 //the green or red outline used to select where to build things
 public class BuildOutline {
@@ -154,14 +158,14 @@ public class BuildOutline {
 		pointer.on(PointerInput.EType.MOVE, this::update);
 	}
 	// show the outline
-	void show(int z, float xScroll, float yScroll, boolean lockedSize, PointerInput pointer, Consumer<float[][]> consumer) {
+	void show(int z, float xScroll, float yScroll, boolean lockedSize, PointerInput pointer, Consumer<float[][]> consumer, Predicate<PointerClickEvent> preReq) {
 		if (!visible) {
 			visible = true;
 			update(z, xScroll, yScroll);
 			squarewidth = 1;
 			squareheight = 1;
 			this.lockedSize = lockedSize;
-			onClick = pointer.on(PointerInput.EType.PRESSED, event -> consumer.accept(getSquareCoords()));
+			onClick = pointer.on(PointerInput.EType.PRESSED, onlyWhen(preReq, event -> consumer.accept(getSquareCoords())));
 		}
 	}
 

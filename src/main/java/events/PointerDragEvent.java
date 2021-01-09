@@ -1,4 +1,4 @@
-package input;
+package events;
 
 public class PointerDragEvent extends PointerMoveEvent {
 	public final int button;

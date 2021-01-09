@@ -1,7 +1,7 @@
-package graphics.ui;
+package ui;
 
 import graphics.opengl.OpenGLUtils;
-import graphics.ui.icon.Icon;
+import ui.icon.Icon;
 import input.PointerInput;
 import graphics.TextureInfo;
 import util.vectors.Vec2f;

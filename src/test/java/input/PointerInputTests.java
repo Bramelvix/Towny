@@ -2,6 +2,7 @@ package input;
 
 import entity.Entity;
 import events.EventListenerCatalog;
+import events.PointerMoveEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,7 +1,4 @@
-package input;
-
-import events.Event;
-
+package events;
 
 public class PointerMoveEvent implements Event {
 	public final double x;

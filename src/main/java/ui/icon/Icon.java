@@ -1,9 +1,9 @@
-package graphics.ui.icon;
+package ui.icon;
 
 import graphics.opengl.OpenGLUtils;
-import graphics.ui.UiElement;
+import ui.UiElement;
 import input.PointerInput;
-import input.PointerMoveEvent;
+import events.PointerMoveEvent;
 import graphics.TextureInfo;
 import util.vectors.Vec2f;
 
@@ -16,16 +16,32 @@ public class Icon extends UiElement {
 	private boolean hover; // is the mouse hovering over the icon
 	private boolean selected; // is the icon selected
 	private int id; //OpenGL texture id
+	private final Runnable deselect;
 
 	// constructor
+	public Icon(float x, float y, String path, float scale, PointerInput pointer, Runnable deselect) {
+		this(x, y, OpenGLUtils.loadTexture(path), scale, pointer, deselect);
+	}
+
+	public Icon (float x, float y, TextureInfo texture, float scale, PointerInput pointer, Runnable deselect) {
+		super(new Vec2f(x, y), new Vec2f(texture.width*scale, texture.height*scale));
+		setTexture(texture.id);
+		pointer.on(PointerInput.EType.MOVE, this::update); //TODO THIS SUCKS
+		this.deselect = deselect;
+		if (deselect != null) {
+			setOnClick(pointer, () -> {
+				deselect.run();
+				setSelect(true);
+			});
+		}
+	}
+
 	public Icon(float x, float y, String path, float scale, PointerInput pointer) {
-		this(x, y, OpenGLUtils.loadTexture(path), scale, pointer);
+		this(x, y, OpenGLUtils.loadTexture(path), scale, pointer, null);
 	}
 
 	public Icon (float x, float y, TextureInfo texture, float scale, PointerInput pointer) {
-		super(new Vec2f(x, y), new Vec2f(texture.width*scale, texture.height*scale));
-		setTexture(texture.id);
-		pointer.on(PointerInput.EType.MOVE, this::update);
+		this(x, y, texture, scale, pointer, null);
 	}
 
 	// getters
@@ -77,8 +93,8 @@ public class Icon extends UiElement {
 	public void setOnClick(PointerInput pointer, Runnable action) {
 		pointer.on(PointerInput.EType.RELEASED, onlyWhen(
 			event -> event.button == GLFW_MOUSE_BUTTON_LEFT && hoverOn(),
-			event -> action.run()
-		));
+			event -> action.run())
+		);
 	}
 
 	public void setTexture(int textureId) {

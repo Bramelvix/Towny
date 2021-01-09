@@ -1,4 +1,4 @@
-package graphics.ui;
+package ui;
 
 import util.vectors.Vec2f;
 import util.vectors.Vec4f;

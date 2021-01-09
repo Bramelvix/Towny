@@ -1,6 +1,4 @@
-package input;
-
-import events.Event;
+package events;
 
 public class PointerClickEvent implements Event {
 	public final int button;
