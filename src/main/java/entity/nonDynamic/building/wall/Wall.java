@@ -5,7 +5,6 @@ import graphics.MultiSprite;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;
-import util.vectors.Vec2f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,11 +122,7 @@ public class Wall extends BuildAbleObject {
 			else if (!topLeftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 35 : 207));
 		}
 
-		Vec2f[] texCoordList = new Vec2f[sprites.size()];
-		for (int i = 0; i < sprites.size(); i++) {
-			texCoordList[i] = (sprites.get(i).getTexCoords());
-		}
-		sprite = new MultiSprite(texCoordList, 1);
+		sprite = new MultiSprite(sprites.toArray(new Sprite[0]), 1);
 	}
 
 	@Override

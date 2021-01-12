@@ -7,7 +7,6 @@ import graphics.Sprite;
 import graphics.SpriteHashtable;
 import map.Level;
 import sound.Sound;
-import util.vectors.Vec2f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,12 +109,7 @@ public class Ore extends Resource {
 		else if (!topHasOre) sprites.add(SpriteHashtable.get(175)); //14
 		else if (!topLeftHasOre) sprites.add(SpriteHashtable.get(180)); //19
 
-		Vec2f[] texCoordList = new Vec2f[sprites.size()];
-
-		for (int i = 0; i < sprites.size(); i++) {
-			texCoordList[i] = (sprites.get(i).getTexCoords());
-		}
-		sprite = new MultiSprite(texCoordList, 1);
+		sprite = new MultiSprite(sprites.toArray(new Sprite[0]), 1);
 	}
 
 }

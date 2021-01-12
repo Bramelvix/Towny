@@ -9,9 +9,9 @@ import java.nio.ByteOrder;
 public class StaticSprite implements Sprite {
 	private final Vec2f texCoords; //The location of the texture coordinates for this sprite in it's spritesheet
 	private final Vec2f texSize; //The size of the texture (in uv coordinates)
-	private int avgColor;
-	private final Spritesheet spritesheet;
-	private final Vec2i pos;
+	protected int avgColor;
+	protected final Spritesheet spritesheet;
+	protected final Vec2i pos;
 
 	protected StaticSprite(int x, int y, int sheetIndex) {
 		this(new Vec2i(x,y), sheetIndex);
