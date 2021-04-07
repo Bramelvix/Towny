@@ -377,7 +377,7 @@ public class Game {
 
 	private void onClickPickup(MenuItem item) {
 		selectedvill.setPath(null);
-		Item e = (Item) item.getEntity();
+		Item e = item.getEntity(Item.class);
 		selectedvill.addJob(new MoveItemJob(e, selectedvill));
 		ui.deSelectIcons();
 		deselect(selectedvill);
@@ -387,7 +387,7 @@ public class Game {
 
 	private void onClickChop(MenuItem item) {
 		selectedvill.setPath(null);
-		selectedvill.addJob((Tree) item.getEntity());
+		selectedvill.addJob(item.getEntity(Tree.class));
 		deselect(selectedvill);
 		ui.deSelectIcons();
 		ui.getMenu().hide();
@@ -395,7 +395,7 @@ public class Game {
 
 	private void onClickFarm(MenuItem item) {
 		selectedvill.setPath(null);
-		selectedvill.addJob((TilledSoil) item.getEntity());
+		selectedvill.addJob(item.getEntity(TilledSoil.class));
 		deselect(selectedvill);
 		ui.deSelectIcons();
 		ui.getMenu().hide();
@@ -449,7 +449,7 @@ public class Game {
 
 	private void onClickMine(MenuItem item) {
 		selectedvill.setPath(null);
-		selectedvill.addJob((Ore) item.getEntity());
+		selectedvill.addJob(item.getEntity(Ore.class));
 		deselect(selectedvill);
 		ui.deSelectIcons();
 		ui.getMenu().hide();
@@ -479,7 +479,7 @@ public class Game {
 
 	private void onClickFight(MenuItem item) {
 		selectedvill.setPath(null);
-		selectedvill.addJob(new FightJob(selectedvill, (Mob) item.getEntity()));
+		selectedvill.addJob(new FightJob(selectedvill, item.getEntity(Mob.class)));
 		deselect(selectedvill);
 		ui.deSelectIcons();
 		ui.getMenu().hide();
@@ -679,9 +679,10 @@ public class Game {
 		moveCamera(_xScroll, _yScroll);
 	}
 
-	private <T extends Mob> void update(T mob, Iterator<T> iterator) {
+	private <T extends Mob> void update(Iterator<T> iterator) {
+		T mob = iterator.next();
 		mob.update();
-		if (mob.getHealth() == 0) {
+		if (mob.getHealth() <= 0) {
 			mob.die();
 			iterator.remove();
 		}
@@ -690,15 +691,15 @@ public class Game {
 	private void updateMobs() {
 		Iterator<Mob> iMob = mobs.iterator();
 		while (iMob.hasNext()) {
-			update(iMob.next(), iMob);
+			update(iMob);
 		}
 		Iterator<Villager> iVill = vills.iterator();
 		while (iVill.hasNext()) {
-			update(iVill.next(), iVill);
+			update(iVill);
 		}
 		Iterator<Villager> iSoll = sols.iterator();
 		while (iSoll.hasNext()) {
-			update(iSoll.next(), iSoll);
+			update(iSoll);
 		}
 	}
 

@@ -87,8 +87,8 @@ public class MenuItem {
 		if (subscriptionMove != null) { subscriptionMove.unsubscribe(); }
 	}
 
-	public Entity getEntity() {
-		return entity;
+	public <T extends Entity> T getEntity(Class<T> clazz) {
+		return clazz.cast(entity);
 	}
 
 	// rendering the menuitem's text

@@ -65,8 +65,8 @@ public class InstanceData {
 
 	public void unmapBuffer() {
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		boolean sucess = glUnmapBuffer(GL_ARRAY_BUFFER);
-		if (!sucess) {
+		boolean success = glUnmapBuffer(GL_ARRAY_BUFFER);
+		if (!success) {
 			logger.error("FAILED TO UNMAP BUFFER");
 		}
 	}
