@@ -30,7 +30,7 @@ public class Icon extends UiElement {
 		this.deselect = deselect;
 		if (deselect != null) {
 			setOnClick(pointer, () -> {
-				deselect.run();
+				this.deselect.run();
 				setSelect(true);
 			});
 		}

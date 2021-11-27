@@ -13,7 +13,7 @@ public class CraftJob extends Job {
 	private boolean itemsUpdated = false;
 	private boolean prereqsDone = false;
 
-	public <T extends Item> CraftJob(Villager worker, T[] resources, T product, Workstation station) {
+	public <T extends Item> CraftJob(Villager worker, Item[] resources, T product, Workstation station) {
 		super(worker);
 		this.product = product;
 		this.station = station;
