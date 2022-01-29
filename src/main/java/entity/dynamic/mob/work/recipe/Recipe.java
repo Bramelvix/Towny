@@ -3,17 +3,17 @@ package entity.dynamic.mob.work.recipe;
 import entity.Entity;
 import entity.dynamic.item.Item;
 
-public class Recipe {
+public class Recipe<T extends Entity> {
 
 	private final Item[] resources;
-	final Entity product;
+	final T product;
 
-	<T extends Entity> Recipe(T product, Item[] res) {
+	Recipe(T product, Item[] res) {
 		this.product = product;
 		this.resources = res;
 	}
 
-	<T extends Entity> Recipe(T product) {
+	Recipe(T product) {
 		this(product, new Item[1]);
 	}
 

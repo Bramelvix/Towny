@@ -5,7 +5,7 @@ import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.item.weapon.WeaponMaterial;
 import entity.nonDynamic.building.container.Workstation;
 
-public class ItemRecipe extends Recipe {
+public class ItemRecipe extends Recipe<Item> {
 	//TODO Maybe put these in a hashtable or file too
 
 	public static final ItemRecipe IRON_BAR = new ItemRecipe(ItemHashtable.get(2), Workstation.Type.FURNACE, ItemHashtable.get(5), ItemHashtable.get(8));
@@ -54,8 +54,8 @@ public class ItemRecipe extends Recipe {
 		this.type = type;
 	}
 
-	public <T extends Item> T getProduct() {
-		return (T) ((T)product).copy(); //TODO yeahhhhh
+	public Item getProduct() {
+		return product.copy();
 	}
 
 	public static ItemRecipe[] smithingRecipesFromWeaponMaterial(WeaponMaterial type) {

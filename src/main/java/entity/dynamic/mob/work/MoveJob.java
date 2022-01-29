@@ -39,29 +39,29 @@ public class MoveJob extends Job {
 			}
 			paths.add(path.get());
 		} else {
-			int stairsX = -1;
-			int stairsY = -1;
-			boolean up = worker.getZ() < zloc;
+			int startx = worker.getTileX();
+			int starty = worker.getTileY();
+			boolean goingDown = worker.getZ() < zloc;
 			for (int i = 0; i < Math.abs(zloc - worker.getZ()); i++) {
-				Optional<Stairs> optional = worker.levels[worker.getZ() + (up ? i : -i)].getNearestStairs(worker.getTileX(), worker.getTileY(), zloc > worker.getZ());
-				if (optional.isPresent()) {
-					int startx = stairsX == -1 ? worker.getTileX() : stairsX;
-					int starty = stairsY == -1 ? worker.getTileY() : stairsY;
-					stairsX = optional.get().getTileX();
-					stairsY = optional.get().getTileY();
-					Optional<Path> path = PathFinder.findPath(startx, starty, stairsX, stairsY, worker.levels[worker.getZ() + (up ? i : -i)]);
-					if (path.isEmpty()) {
-						completed = true;
-						return;
-					}
-					paths.add(path.get());
-				} else { //no stairs
+				int z = worker.getZ() + (goingDown ? i : -i);
+				Optional<Stairs> optional = worker.levels[z].getNearestStairs(startx, starty, goingDown);
+				if (optional.isEmpty()) { // no stairs found
 					completed = true;
 					return;
 				}
+				int stairsX = optional.get().getTileX();
+				int stairsY = optional.get().getTileY();
+				Optional<Path> path = PathFinder.findPath(startx, starty, stairsX, stairsY, worker.levels[z]);
+				if (path.isEmpty()) {
+					completed = true;
+					return;
+				}
+				paths.add(path.get());
+				startx = stairsX;
+				starty = stairsY;
 			}
-			Optional<Path> path = exactLocation ? PathFinder.findPath(stairsX, stairsY, xloc, yloc, worker.levels[zloc]) : PathFinder.findPathAround(stairsX , stairsY ,  xloc, yloc , worker.levels[zloc]);
-			if (!((exactLocation && xloc == stairsX && yloc == stairsY) || (!exactLocation && (stairsX <= ((xloc + 1))) && (stairsX >= ((xloc - 1)) && ((stairsY >= ((yloc - 1))) && (stairsY <= ((yloc + 1)))))))) {
+			Optional<Path> path = exactLocation ? PathFinder.findPath(startx, starty, xloc, yloc, worker.levels[zloc]) : PathFinder.findPathAround(startx , starty ,  xloc, yloc , worker.levels[zloc]);
+			if (!((exactLocation && xloc == startx && yloc == starty) || (!exactLocation && (startx <= ((xloc + 1))) && (startx >= ((xloc - 1)) && ((starty >= ((yloc - 1))) && (starty <= ((yloc + 1)))))))) {
 				if (path.isEmpty()) { //no path
 					completed = true;
 					return;

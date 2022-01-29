@@ -14,7 +14,7 @@ import entity.nonDynamic.resources.Tree;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import main.Game;
-import util.BiPredicateInteger;
+import util.BiPredicate;
 import util.vectors.Vec2f;
 import util.vectors.Vec2i;
 
@@ -87,7 +87,7 @@ public class Level {
 		return getNearestSpotThatHasX(xloc, yloc, (x, y) -> has(x, y, clazz));
 	}
 
-	private Vec2i getNearestSpotThatHasX(int xloc, int yloc, BiPredicateInteger p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
+	private Vec2i getNearestSpotThatHasX(int xloc, int yloc, BiPredicate<Integer, Integer> p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
 		if (p.test(xloc, yloc)) {
 			return new Vec2i(xloc, yloc);
 		} else {
@@ -162,7 +162,7 @@ public class Level {
 			return false;
 		}
 		Optional<Stairs> stairs = tiles[x][y].getEntity(Stairs.class);
-		return stairs.isPresent() && (!top || stairs.get().isTop());
+		return stairs.isPresent() && top == stairs.get().isTop();
 	}
 
 	private boolean hasTopStairs(int x, int y) {
