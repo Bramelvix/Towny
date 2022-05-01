@@ -2,8 +2,7 @@ package entity.dynamic.mob.work;
 
 import entity.dynamic.item.Item;
 import entity.dynamic.mob.Villager;
-import entity.nonDynamic.building.BuildAbleObject;
-
+import entity.non_dynamic.building.BuildAbleObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,8 +14,8 @@ public class BuildJob extends Job {
 	private boolean goingToPickUpItem = false;
 	private Item material; // what materials are needed for the job (like logs for a wall)
 
-	public BuildJob(int xloc, int yloc, int zloc, Item mat, BuildAbleObject object, Villager worker) {
-		this(xloc, yloc, zloc, object, worker);
+	public BuildJob(Villager worker, int xloc, int yloc, int zloc, Item mat, BuildAbleObject object) {
+		this(worker, xloc, yloc, zloc, object);
 		needsMaterial = true;
 		material = mat;
 		if (material == null) {
@@ -24,17 +23,16 @@ public class BuildJob extends Job {
 		}
 	}
 
-	public BuildJob(int xloc, int yloc, int zloc, BuildAbleObject object, Villager worker) { //construction job that requires no building materials
-		super(xloc, yloc, zloc, worker);
+	public BuildJob(Villager worker, int xloc, int yloc, int zloc, BuildAbleObject object) { //construction job that requires no building materials
+		super(worker, xloc, yloc, zloc, object::work);
 		buildJobObj = object;
-		work = buildJobObj::work;
 		material = null;
 		needsMaterial = false;
 	}
 
 	private void goPickupItem() {
 		if (!goingToPickUpItem) {
-			worker.prependJobToChain(new MoveItemJob(material, worker));
+			worker.prependJobToChain(new MoveItemJob(worker, material));
 			goingToPickUpItem = true;
 		}
 	}
@@ -50,34 +48,39 @@ public class BuildJob extends Job {
 		}
 	}
 
+	@Override
 	public void execute() {
 		checkItem();
 		if (needsMaterial) {
 			goPickupItem();
-		} else {
-			if (!completed && started) {
-				if (!worker.aroundTile(xloc, yloc, zloc)) {
-					worker.move();
-				} else {
-					if (buildJobObj != null) {
-						if (!worker.levels[zloc].tileIsEmpty(xloc, yloc) && !buildJobObj.initialised) {
-							// wait if the buildLocation is blocked by an item or entity
-							logger.debug("Postponing Construction of: " + buildJobObj.toString());
-							return;
-						}
-						if (!buildJobObj.initialised) {
-							buildJobObj.initialise(xloc, yloc, worker.levels, zloc);
-						}
-						completed = work.getAsBoolean();
-						if (material != null) {
-							worker.setHolding(null);
-						}
-					}
-				}
-			} else {
-				start();
+			return;
+		}
+
+		if (completed || !started) {
+			start();
+			return;
+		}
+
+		if (!worker.aroundTile(xloc, yloc, zloc)) {
+			worker.move();
+			return;
+		}
+
+		if (buildJobObj != null) {
+			if (!worker.levels[zloc].tileIsEmpty(xloc, yloc) && !buildJobObj.isInitialised()) {
+				// wait if the buildLocation is blocked by an item or entity
+				logger.debug("Postponing Construction of: {}", buildJobObj);
+				return;
+			}
+			if (!buildJobObj.isInitialised()) {
+				buildJobObj.initialise(xloc, yloc, worker.levels, zloc);
+			}
+			completed = work.getAsBoolean();
+			if (material != null) {
+				worker.setHolding(null);
 			}
 		}
+
 	}
 
 }

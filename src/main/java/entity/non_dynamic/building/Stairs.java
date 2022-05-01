@@ -1,4 +1,4 @@
-package entity.nonDynamic.building;
+package entity.non_dynamic.building;
 
 import entity.dynamic.mob.Villager;
 import graphics.SpriteHashtable;
@@ -17,6 +17,7 @@ public class Stairs extends BuildAbleObject {
 		setName("stairs");
 	}
 
+	@Override
 	public void initialise(int x, int y, Level[] levels, int depth) {
 		initialise(x, y, levels, depth, true);
 	}

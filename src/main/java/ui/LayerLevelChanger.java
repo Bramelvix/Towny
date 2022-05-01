@@ -1,8 +1,8 @@
 package ui;
 
 import graphics.opengl.OpenGLUtils;
-import ui.icon.Icon;
 import input.PointerInput;
+import ui.icon.Icon;
 import util.vectors.Vec2f;
 
 
@@ -11,10 +11,10 @@ public class LayerLevelChanger extends UiElement {
 	private final Icon down;
 	private int z;
 
-	LayerLevelChanger(int x, int y,int width, int height, PointerInput pointer) {
+	LayerLevelChanger(int x, int y, int width, int height, PointerInput pointer) {
 		super(new Vec2f(x, y), new Vec2f(width, height));
-		up = new Icon(x + 10, y + 5, "/icons/plain-arrow-up.png", 0.065f, pointer);
-		down = new Icon(x + 100, y + 5, "/icons/plain-arrow-down.png", 0.065f, pointer);
+		up = new Icon(x + 10f, y + 5f, "/icons/plain-arrow-up.png", 0.065f, pointer);
+		down = new Icon(x + 100f, y + 5f, "/icons/plain-arrow-down.png", 0.065f, pointer);
 	}
 
 	public void init(PointerInput pointer, Runnable actionUp, Runnable actionDown) {

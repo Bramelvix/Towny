@@ -1,7 +1,8 @@
 package util;
 
 public final class StringUtils {
-	private StringUtils() {}
+	private StringUtils() {
+	}
 
 	public static String capitalise(String name) {
 		if (name == null || name.isEmpty()) {

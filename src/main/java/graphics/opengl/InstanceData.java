@@ -10,7 +10,6 @@ import util.vectors.Vec3f;
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
 import static org.lwjgl.opengl.GL30.GL_MAP_WRITE_BIT;
 import static org.lwjgl.opengl.GL30.glMapBufferRange;
 
@@ -25,7 +24,7 @@ public class InstanceData {
 	private Spritesheet spritesheet;
 
 	public InstanceData(int maxInstances) {
-		bufferSize = (maxInstances*5*4) + (maxInstances*5*4); //bufferSize in bytes, 3 pos and 2 tex
+		bufferSize = (maxInstances * 5 * 4) + (maxInstances * 5 * 4); //bufferSize in bytes, 3 pos and 2 tex
 		setSpritesheet(SpritesheetHashtable.getCombined());
 
 		vbo = glGenBuffers();
@@ -36,12 +35,12 @@ public class InstanceData {
 	}
 
 	public void put(Vec3f pos, Vec2f texCoords) {
-		buffer.putFloat((instances*5*4), pos.x);
-		buffer.putFloat((instances*5*4)+4, pos.y);
-		buffer.putFloat((instances*5*4)+8, pos.z);
+		buffer.putFloat((instances * 5 * 4), pos.x);
+		buffer.putFloat((instances * 5 * 4) + 4, pos.y);
+		buffer.putFloat((instances * 5 * 4) + 8, pos.z);
 
-		buffer.putFloat((instances*5*4)+12, texCoords.x);
-		buffer.putFloat((instances*5*4)+16, texCoords.y);
+		buffer.putFloat((instances * 5 * 4) + 12, texCoords.x);
+		buffer.putFloat((instances * 5 * 4) + 16, texCoords.y);
 		instances++;
 	}
 
@@ -51,10 +50,6 @@ public class InstanceData {
 
 	public int getInstances() {
 		return instances;
-	}
-
-	public boolean notEmpty() {
-		return instances > 0;
 	}
 
 	public void mapBuffer(int accessBits) {

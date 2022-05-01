@@ -1,16 +1,16 @@
 package entity.dynamic.mob.work.recipe;
 
-import entity.nonDynamic.building.BuildAbleObject;
-import entity.nonDynamic.building.Stairs;
-import entity.nonDynamic.building.container.Chest;
-import entity.nonDynamic.building.container.Workstation;
-import entity.nonDynamic.building.farming.TilledSoil;
-import entity.nonDynamic.building.wall.Wall;
-import entity.nonDynamic.building.wall.WallType;
 import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
+import entity.non_dynamic.building.BuildAbleObject;
+import entity.non_dynamic.building.Stairs;
+import entity.non_dynamic.building.container.Chest;
+import entity.non_dynamic.building.container.Workstation;
+import entity.non_dynamic.building.farming.TilledSoil;
+import entity.non_dynamic.building.wall.Wall;
+import entity.non_dynamic.building.wall.WallType;
 
-public class BuildingRecipe extends Recipe {
+public class BuildingRecipe extends Recipe<BuildAbleObject> {
 
 	private static final BuildingRecipe WOOD_WALL = new BuildingRecipe(new Wall(WallType.WOOD), ItemHashtable.get(1));
 	private static final BuildingRecipe STONE_WALL = new BuildingRecipe(new Wall(WallType.STONE), ItemHashtable.get(10));
@@ -34,7 +34,7 @@ public class BuildingRecipe extends Recipe {
 	}
 
 	public BuildAbleObject getProduct() {
-		return ((BuildAbleObject) product).instance();
+		return product.instance();
 	}
 
 }

@@ -1,4 +1,4 @@
-package entity.nonDynamic.building.container;
+package entity.non_dynamic.building.container;
 
 import graphics.Sprite;
 import graphics.SpriteHashtable;
@@ -30,7 +30,7 @@ public abstract class Workstation extends Container {
 		return type;
 	}
 
-	public static Workstation furnace () {
+	public static Workstation furnace() {
 		return new Workstation(Type.FURNACE, SpriteHashtable.get(82), SpriteHashtable.get(271)) {
 			@Override
 			public Workstation instance() {

@@ -23,12 +23,12 @@ public class Item extends Entity {
 
 	public Item copy(float x, float y, int z) {
 		Item copy = new Item(this.getName(), this.sprite, this.getToolTip(), this.getId());
-		copy.setLocation(x,y,z);
+		copy.setLocation(x, y, z);
 		return copy;
 	}
 
 	public boolean isSameType(Item item) {
-		return item!=null && item.getId() == getId();
+		return item != null && item.getId() == getId();
 	}
 
 	// getters and setters

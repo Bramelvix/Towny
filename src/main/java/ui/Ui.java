@@ -1,11 +1,11 @@
 package ui;
 
-import ui.icon.UiIcons;
-import ui.menu.Menu;
-import ui.menu.MenuItem;
 import input.PointerInput;
 import main.Game;
 import map.Level;
+import ui.icon.UiIcons;
+import ui.menu.Menu;
+import ui.menu.MenuItem;
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -34,13 +34,13 @@ public class Ui {
 	}
 
 	public Ui(Level[] levels, PointerInput pointer) throws IOException {
-		icons = new UiIcons( 0.176056338028169f, pointer);
+		icons = new UiIcons(0.176056338028169f, pointer);
 		menu = new Menu(pointer);
 		selection = new SelectionSquare(pointer);
 		minimap = new Minimap(1290, 8, levels[0]);
-		top = new TopBar((Game.width - 270) / 2f,5,270,85, pointer);
+		top = new TopBar((Game.WIDTH - 270) / 2f, 5, 270, 85, pointer);
 		outline = new BuildOutline(levels, pointer);
-		layerLevelChanger = new LayerLevelChanger(1320, 210,140,40, pointer);
+		layerLevelChanger = new LayerLevelChanger(1320, 210, 140, 40, pointer);
 	}
 
 	public void initLayerLevelChangerActions(PointerInput pointer, Runnable actionup, Runnable actionDown) {
@@ -131,7 +131,7 @@ public class Ui {
 		minimap.update(level, z);
 	}
 
-	public UiIcons getIcons () {
+	public UiIcons getIcons() {
 		return icons;
 	}
 

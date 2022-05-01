@@ -4,17 +4,17 @@ import entity.Entity;
 import entity.dynamic.mob.work.recipe.BuildingRecipe;
 import entity.dynamic.mob.work.recipe.ItemRecipe;
 import entity.dynamic.mob.work.recipe.Recipe;
+import events.PointerMoveEvent;
 import events.Subscription;
 import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
-import events.PointerMoveEvent;
 import util.vectors.Vec2f;
 
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 import static events.EventListener.onlyWhen;
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class MenuItem {
 
@@ -44,7 +44,7 @@ public class MenuItem {
 	public static final String WOOD = "Wood";
 	public static final String SOW = "Sow seeds";
 	public static final String HARVEST = "Harvest";
-	private Recipe recipe;
+	private Recipe<?> recipe;
 	private Entity entity;
 	private final Subscription subscriptionMove;
 	private final Subscription subscriptionClick;
@@ -54,8 +54,8 @@ public class MenuItem {
 		this.text = text;
 		position = new Vec2f(0);
 		subscriptionClick = pointer.on(PointerInput.EType.PRESSED, onlyWhen(
-			event -> event.button == GLFW_MOUSE_BUTTON_LEFT && hover,
-			event -> onClick.accept(this)
+				event -> event.button == GLFW_MOUSE_BUTTON_LEFT && hover,
+				event -> onClick.accept(this)
 		));
 		subscriptionMove = pointer.on(PointerInput.EType.MOVE, this::update);
 	}
@@ -83,8 +83,12 @@ public class MenuItem {
 	}
 
 	public void destroy() {
-		if (subscriptionClick != null) { subscriptionClick.unsubscribe(); }
-		if (subscriptionMove != null) { subscriptionMove.unsubscribe(); }
+		if (subscriptionClick != null) {
+			subscriptionClick.unsubscribe();
+		}
+		if (subscriptionMove != null) {
+			subscriptionMove.unsubscribe();
+		}
 	}
 
 	public <T extends Entity> T getEntity(Class<T> clazz) {
@@ -115,11 +119,11 @@ public class MenuItem {
 	}
 
 	@SuppressWarnings("unchecked") // again, shouldnt ever be a problem
-	public <T extends Recipe> T getRecipe() {
+	public <T extends Recipe<?>> T getRecipe() {
 		return (T) recipe;
 	}
 
-	public <T extends Recipe> Optional<T> getRecipe(Class<T> clazz) {
+	public <T extends Recipe<?>> Optional<T> getRecipe(Class<T> clazz) {
 		return clazz.isInstance(recipe) ? Optional.of(clazz.cast(recipe)) : Optional.empty();
 	}
 

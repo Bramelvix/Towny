@@ -1,12 +1,16 @@
 package entity.pathfinding;
 
+import map.Level;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import map.Level;
-
 public class PathFinder {
+
+	private PathFinder() {
+
+	}
 
 	private static final ArrayList<Point> closed = new ArrayList<>();
 	private static final ArrayList<Point> open = new ArrayList<>();
@@ -65,9 +69,11 @@ public class PathFinder {
 		open.clear();
 		open.add(nodes[sx][sy]);
 		nodes[tx][ty].setParent(null);
-		while (open.size() != 0) {
+		while (!open.isEmpty()) {
 			Point current = open.get(0);
-			if (current.equals(nodes[tx][ty])) { break; }
+			if (current.equals(nodes[tx][ty])) {
+				break;
+			}
 			open.remove(current);
 			closed.add(current);
 			for (int x = -1; x < 2; x++) {
@@ -115,8 +121,8 @@ public class PathFinder {
 	}
 
 	private static float getCost(int x, int y, int tx, int ty) {
-		float dx = tx - x;
-		float dy = ty - y;
+		int dx = tx - x;
+		int dy = ty - y;
 		return (float) (Math.sqrt((dx * dx) + (dy * dy)));
 	}
 

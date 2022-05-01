@@ -1,14 +1,14 @@
 package ui.icon;
 
-import graphics.opengl.OpenGLUtils;
-import ui.UiElement;
-import input.PointerInput;
 import events.PointerMoveEvent;
 import graphics.TextureInfo;
+import graphics.opengl.OpenGLUtils;
+import input.PointerInput;
+import ui.UiElement;
 import util.vectors.Vec2f;
 
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 import static events.EventListener.onlyWhen;
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 //icon on the bottom left of the screen (pickaxe, axe,...)
 public class Icon extends UiElement {
@@ -23,9 +23,9 @@ public class Icon extends UiElement {
 		this(x, y, OpenGLUtils.loadTexture(path), scale, pointer, deselect);
 	}
 
-	public Icon (float x, float y, TextureInfo texture, float scale, PointerInput pointer, Runnable deselect) {
-		super(new Vec2f(x, y), new Vec2f(texture.width*scale, texture.height*scale));
-		setTexture(texture.id);
+	public Icon(float x, float y, TextureInfo texture, float scale, PointerInput pointer, Runnable deselect) {
+		super(new Vec2f(x, y), new Vec2f(texture.width() * scale, texture.height() * scale));
+		setTexture(texture.id());
 		pointer.on(PointerInput.EType.MOVE, this::update); //TODO THIS SUCKS
 		this.deselect = deselect;
 		if (deselect != null) {
@@ -40,7 +40,7 @@ public class Icon extends UiElement {
 		this(x, y, OpenGLUtils.loadTexture(path), scale, pointer, null);
 	}
 
-	public Icon (float x, float y, TextureInfo texture, float scale, PointerInput pointer) {
+	public Icon(float x, float y, TextureInfo texture, float scale, PointerInput pointer) {
 		this(x, y, texture, scale, pointer, null);
 	}
 
@@ -64,7 +64,8 @@ public class Icon extends UiElement {
 	public float getWidth() {
 		return size.x;
 	}
-	public float getHeight () {
+
+	public float getHeight() {
 		return size.y;
 	}
 
@@ -82,7 +83,7 @@ public class Icon extends UiElement {
 		OpenGLUtils.iconDraw(id, position, size, selected || hover);
 	}
 
-	public void update (PointerMoveEvent event) {
+	public void update(PointerMoveEvent event) {
 		update(event.x, event.y);
 	}
 
@@ -92,8 +93,8 @@ public class Icon extends UiElement {
 
 	public void setOnClick(PointerInput pointer, Runnable action) {
 		pointer.on(PointerInput.EType.RELEASED, onlyWhen(
-			event -> event.button == GLFW_MOUSE_BUTTON_LEFT && hoverOn(),
-			event -> action.run())
+				event -> event.button == GLFW_MOUSE_BUTTON_LEFT && hoverOn(),
+				event -> action.run())
 		);
 	}
 

@@ -1,6 +1,6 @@
 package util.vectors;
 
-public class Vec3f extends Vec2f{
+public class Vec3f extends Vec2f {
 	public float z;
 
 	public Vec3f(float x, float y, float z) {
@@ -9,7 +9,7 @@ public class Vec3f extends Vec2f{
 	}
 
 	public Vec3f(float n) {
-		this(n,n,n);
+		this(n, n, n);
 	}
 
 	public Vec3f add(float n) {
@@ -17,7 +17,7 @@ public class Vec3f extends Vec2f{
 	}
 
 	public Vec3f add(Vec3f v) {
-		return new Vec3f(x+v.x, y+v.y, z+v.z);
+		return new Vec3f(x + v.x, y + v.y, z + v.z);
 	}
 
 	public Vec3f sub(float n) {
@@ -25,7 +25,7 @@ public class Vec3f extends Vec2f{
 	}
 
 	public Vec3f sub(Vec3f v) {
-		return new Vec3f(x-v.x, y-v.y, z-v.z);
+		return new Vec3f(x - v.x, y - v.y, z - v.z);
 	}
 
 	public Vec3f mul(float n) {
@@ -33,7 +33,7 @@ public class Vec3f extends Vec2f{
 	}
 
 	public Vec3f mul(Vec3f v) {
-		return new Vec3f(x*v.x, y*v.y, z*v.z);
+		return new Vec3f(x * v.x, y * v.y, z * v.z);
 	}
 
 	public Vec2f xy() {

@@ -2,7 +2,7 @@ package entity.dynamic.mob;
 
 import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
-import entity.nonDynamic.resources.Tree;
+import entity.non_dynamic.resources.Tree;
 import entity.pathfinding.PathFinder;
 import map.Level;
 import map.Tile;
@@ -14,20 +14,20 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class VillagerTests {
+class VillagerTests {
 	private Level[] level;
 	private Villager villager;
 
 	@BeforeEach
 	void setUp() {
-		level = new Level[] { new Level(10, 10, 1, false) };
+		level = new Level[]{new Level(10, 10, 1, false)};
 		PathFinder.init(10, 10);
 	}
 
 	@ParameterizedTest
 	@CsvSource({
-		"48, 96, 144, 192, 240",
-		"240, 192, 144, 48, 96"
+			"48, 96, 144, 192, 240",
+			"240, 192, 144, 48, 96"
 	})
 	void onSpotWhenCreated(float x, float y) {
 		villager = new Villager(x, y, 0, level);
@@ -37,13 +37,13 @@ public class VillagerTests {
 
 	@ParameterizedTest
 	@CsvSource({
-		"48, 96, 144, 192, 240",
-		"240, 192, 144, 48, 96"
+			"48, 96, 144, 192, 240",
+			"240, 192, 144, 48, 96"
 	})
 	void onTileWhenCreated(float x, float y) {
 		villager = new Villager(x, y, 0, level);
-		assertEquals( (int) (x/ Tile.SIZE), villager.getTileX());
-		assertEquals( (int) (y/ Tile.SIZE), villager.getTileY());
+		assertEquals((int) (x / Tile.SIZE), villager.getTileX());
+		assertEquals((int) (y / Tile.SIZE), villager.getTileY());
 	}
 
 	@ParameterizedTest

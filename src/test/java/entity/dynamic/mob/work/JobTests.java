@@ -3,12 +3,12 @@ package entity.dynamic.mob.work;
 import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.mob.Villager;
-import entity.nonDynamic.building.container.Chest;
-import entity.nonDynamic.building.container.Workstation;
-import entity.nonDynamic.building.farming.TilledSoil;
-import entity.nonDynamic.resources.Ore;
-import entity.nonDynamic.resources.OreType;
-import entity.nonDynamic.resources.Tree;
+import entity.non_dynamic.building.container.Chest;
+import entity.non_dynamic.building.container.Workstation;
+import entity.non_dynamic.building.farming.TilledSoil;
+import entity.non_dynamic.resources.Ore;
+import entity.non_dynamic.resources.OreType;
+import entity.non_dynamic.resources.Tree;
 import entity.pathfinding.PathFinder;
 import map.Level;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,14 +18,14 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class JobTests {
+class JobTests {
 
 	private Level[] level;
 	private Villager villager;
 
 	@BeforeEach
 	void setUp() {
-		level = new Level[] { new Level(10, 10, 1, false) };
+		level = new Level[]{new Level(10, 10, 1, false)};
 		villager = new Villager(48, 48, 0, level);
 		PathFinder.init(10, 10);
 	}
@@ -36,7 +36,7 @@ public class JobTests {
 		item.setLocation(96, 96, 0);
 		level[0].addItem(item);
 		assertTrue(villager.getNearestItemOfType(item).isPresent());
-		villager.addJob(new MoveItemJob(item, villager));
+		villager.addJob(new MoveItemJob(villager, item));
 		for (int i = 0; i < 50; i++) {
 			villager.update();
 		}
@@ -48,7 +48,7 @@ public class JobTests {
 		Item item = ItemHashtable.getTestItem();
 		villager.setHolding(item);
 		assertTrue(villager.isHolding(item));
-		villager.addJob(new MoveItemJob(2, 2, 0, villager));
+		villager.addJob(new MoveItemJob(villager, 2, 2, 0));
 		for (int i = 0; i < 50; i++) {
 			villager.update();
 		}
@@ -59,8 +59,8 @@ public class JobTests {
 
 	@Test
 	void shouldChopTree() {
-		level[0].addEntity( new Tree(192, 48, 0, level[0]), true);
-		Optional<Tree> tree = level[0].getEntityOn(4, 1,  Tree.class);
+		level[0].addEntity(new Tree(192, 48, 0, level[0]), true);
+		Optional<Tree> tree = level[0].getEntityOn(4, 1, Tree.class);
 		assertTrue(tree.isPresent());
 		villager.addJob(tree.get());
 		for (int i = 0; i < 150; i++) {
@@ -72,8 +72,8 @@ public class JobTests {
 
 	@Test
 	void shouldMineOre() {
-		level[0].addEntity( new Ore(192, 48, 0, level[0], OreType.GOLD), true);
-		Optional<Ore> ore = level[0].getEntityOn(4, 1,  Ore.class);
+		level[0].addEntity(new Ore(192, 48, 0, level[0], OreType.GOLD), true);
+		Optional<Ore> ore = level[0].getEntityOn(4, 1, Ore.class);
 		assertTrue(ore.isPresent());
 		villager.addJob(ore.get());
 		for (int i = 0; i < 150; i++) {
@@ -131,9 +131,9 @@ public class JobTests {
 	@Test
 	void shouldCraftItem() {
 		Workstation anvil = Workstation.anvil();
-		anvil.setLocation(48,96,0);
+		anvil.setLocation(48, 96, 0);
 		level[0].addEntity(anvil, true);
-		Item[] resources = new Item[] { ItemHashtable.getTestItem() };
+		Item[] resources = new Item[]{ItemHashtable.getTestItem()};
 		Item result = ItemHashtable.getTestItem();
 		result.setName("This item was crafted");
 		villager.addJob(new CraftJob(villager, resources, result, anvil));

@@ -33,9 +33,8 @@ public class Path {
 	public Point getStep(int index) {
 		if (index < steps.size()) {
 			return steps.get(index);
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	Path(int x, int y) {

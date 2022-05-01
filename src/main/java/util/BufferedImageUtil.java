@@ -10,13 +10,14 @@ import static org.lwjgl.opengl.EXTTextureMirrorClamp.GL_MIRROR_CLAMP_TO_EDGE_EXT
 import static org.lwjgl.opengl.GL11.*;
 
 public final class BufferedImageUtil {
-	private BufferedImageUtil() {}
+	private BufferedImageUtil() {
+	}
 
 	public static int getTexture(BufferedImage resourceimage) {
 		int textureID = glGenTextures();
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, textureID);
-		int srcPixelFormat = resourceimage.getColorModel ().hasAlpha () ? GL_RGBA : GL_RGB;
+		int srcPixelFormat = resourceimage.getColorModel().hasAlpha() ? GL_RGBA : GL_RGB;
 
 		ByteBuffer textureBuffer = imageToByteBuffer(resourceimage);
 		int textHeight = resourceimage.getHeight();
@@ -45,25 +46,25 @@ public final class BufferedImageUtil {
 		if (useAlpha) {
 			raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, texWidth, texHeight, 4, null);
 			texImage = new BufferedImage(
-				new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB),
-				new int[]{8, 8, 8, 8},
-				true,
-				false,
-				ComponentColorModel.TRANSLUCENT,
-				DataBuffer.TYPE_BYTE), raster, false, null
+					new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB),
+							new int[]{8, 8, 8, 8},
+							true,
+							false,
+							Transparency.TRANSLUCENT,
+							DataBuffer.TYPE_BYTE), raster, false, null
 			);
 		} else {
 			raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, texWidth, texHeight, 3, null);
 			texImage = new BufferedImage(
-				new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB),
-				new int[]{8, 8, 8, 0},
+					new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB),
+							new int[]{8, 8, 8, 0},
+							false,
+							false,
+							Transparency.OPAQUE, DataBuffer.TYPE_BYTE
+					),
+					raster,
 					false,
-					false,
-					ComponentColorModel.OPAQUE, DataBuffer.TYPE_BYTE
-				),
-				raster,
-				false,
-				null
+					null
 			);
 		}
 

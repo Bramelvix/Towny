@@ -16,7 +16,7 @@ public class Tile {
 
 	// three static tiles voidtile = black, darkgrass is dark green, darkStone has the same function as darkGrass, but is for underground
 	static final Tile darkGrass = new Tile(SpriteHashtable.get(4), true);
-	static final Tile darkStone = new Tile(SpriteHashtable.get(140),true);
+	static final Tile darkStone = new Tile(SpriteHashtable.get(140), true);
 	static final Tile voidTile = new Tile(SpriteHashtable.get(3), true);
 
 	// constructors
@@ -32,7 +32,7 @@ public class Tile {
 	// render a tile
 	void render(int x, int y) {
 		if ((entity == null || entity.isTransparent() || !entity.isVisible())) {
-			sprite.draw(new Vec3f(x*Tile.SIZE, y*Tile.SIZE, 0.9f));
+			sprite.draw(new Vec3f(x * Tile.SIZE, y * Tile.SIZE, 0.9f));
 		}
 		if (entity != null) {
 			entity.render();
@@ -83,7 +83,7 @@ public class Tile {
 
 	public int getAvgColour() {
 		//TODO multisprites getavg is broken right now
-		return (entity != null && entity.sprite != null) ? entity.sprite.getAvgColour() : sprite.getAvgColour();
+		return (entity != null && entity.getSprite() != null) ? entity.getSprite().getAvgColour() : sprite.getAvgColour();
 
 	}
 

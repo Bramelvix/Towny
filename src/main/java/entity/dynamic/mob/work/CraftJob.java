@@ -2,7 +2,7 @@ package entity.dynamic.mob.work;
 
 import entity.dynamic.item.Item;
 import entity.dynamic.mob.Villager;
-import entity.nonDynamic.building.container.Workstation;
+import entity.non_dynamic.building.container.Workstation;
 
 public class CraftJob extends Job {
 
@@ -27,34 +27,39 @@ public class CraftJob extends Job {
 	public void execute() {
 		if (!prereqsDone) {
 			prerequisites();
+			return;
 		}
-		else if (started && !completed) {
-			if (!worker.aroundTile(station.getTileX(), station.getTileY(), station.getZ())) {
-				if (worker.isMovementNull()) {
-					completed = true;
-				} else {
-					worker.move();
-				}
-			} else {
-				if (!itemsUpdated) {
-					station.setRunning(true);
-					for (Item i : resources) {
-						station.takeItem(i);
-					}
-					itemsUpdated = true;
-				}
-				if (craft()) {
-					worker.setHolding(product);
-					product.setVisible(true);
-					if (worker.levels[worker.getZ()].isClearTile(worker.getTileX(), worker.getTileY())) {
-						worker.drop();
-					}
-					completed = true;
-				}
-			}
-		} else {
+
+		if (!started || completed) {
 			start();
+			return;
 		}
+
+		if (!worker.aroundTile(station.getTileX(), station.getTileY(), station.getZ())) {
+			if (worker.isMovementNull()) {
+				completed = true;
+			} else {
+				worker.move();
+			}
+			return;
+		}
+
+		if (!itemsUpdated) {
+			station.setRunning(true);
+			for (Item i : resources) {
+				station.takeItem(i);
+			}
+			itemsUpdated = true;
+		}
+		if (craft()) {
+			worker.setHolding(product);
+			product.setVisible(true);
+			if (worker.levels[worker.getZ()].isClearTile(worker.getTileX(), worker.getTileY())) {
+				worker.drop();
+			}
+			completed = true;
+		}
+
 	}
 
 	private boolean craft() {
@@ -72,15 +77,15 @@ public class CraftJob extends Job {
 				completed = true;
 				return;
 			}
-			worker.prependJobToChain(new MoveItemJob(item, worker));
-			worker.prependJobToChain(new MoveItemJob(station.getTileX(), station.getTileY(), worker.getZ(), worker));
+			worker.prependJobToChain(new MoveItemJob(worker, item));
+			worker.prependJobToChain(new MoveItemJob(worker, station.getTileX(), station.getTileY(), worker.getZ()));
 		}
 		prereqsDone = true;
 	}
 
 	@Override
 	protected void start() {
-		worker.setPath(worker.getPathAround(station.getTileX() , station.getTileY()).orElse(null));
+		worker.setPath(worker.getPathAround(station.getTileX(), station.getTileY()).orElse(null));
 		started = true;
 	}
 

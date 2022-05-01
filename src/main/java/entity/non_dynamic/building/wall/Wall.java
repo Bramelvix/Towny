@@ -1,6 +1,6 @@
-package entity.nonDynamic.building.wall;
+package entity.non_dynamic.building.wall;
 
-import entity.nonDynamic.building.BuildAbleObject;
+import entity.non_dynamic.building.BuildAbleObject;
 import graphics.MultiSprite;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
@@ -61,8 +61,8 @@ public class Wall extends BuildAbleObject {
 		}
 
 		decideSprite(
-			left.isPresent(), right.isPresent(), up.isPresent(), down.isPresent(), upRight.isPresent(),
-			downRight.isPresent(), upLeft.isPresent(), downLeft.isPresent()
+				left.isPresent(), right.isPresent(), up.isPresent(), down.isPresent(), upRight.isPresent(),
+				downRight.isPresent(), upLeft.isPresent(), downLeft.isPresent()
 		);
 	}
 
@@ -72,10 +72,13 @@ public class Wall extends BuildAbleObject {
 	}
 
 	// called by villagers when they start building the wall.
+	@Override
 	public void initialise(int x, int y, Level[] levels, int depth) {
 		super.initialise(x, y, levels, depth);
 		checkSides(true);
-		if (door) { setOpened(true); }
+		if (door) {
+			setOpened(true);
+		}
 	}
 
 	// decide the sprite for the wall, depending on the other 4 sides next to the wall

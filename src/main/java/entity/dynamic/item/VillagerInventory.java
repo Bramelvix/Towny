@@ -22,12 +22,12 @@ public class VillagerInventory {
 		for (Clothing i : clothes) {
 			if (i != null) {
 				//TODO Make an actual getZ method in Entity and use it here
-				i.sprite.draw(new Vec3f(i.getX(),i.getY(),z-0.1f));
+				i.getSprite().draw(new Vec3f(i.getX(), i.getY(), z - 0.1f));
 			}
 		}
 		for (Weapon i : weapons) {
 			if (i != null) {
-				i.sprite.draw(new Vec3f(i.getX(),i.getY(),z-0.1f));
+				i.getSprite().draw(new Vec3f(i.getX(), i.getY(), z - 0.1f));
 			}
 		}
 	}
@@ -54,7 +54,7 @@ public class VillagerInventory {
 		removeWeapon(item.isShield() ? 1 : 0);
 	}
 
-	public void removeWeapon(int num ) {
+	public void removeWeapon(int num) {
 		wearer.levels[wearer.getZ()].addItem(weapons[num]);
 		weapons[num].removeReserved();
 		weapons[num] = null;

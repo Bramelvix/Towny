@@ -1,15 +1,15 @@
 package events;
 
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import entity.Entity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-public class EventTests {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class EventTests {
 
 	private EventListenerCatalog catalog;
 	private int testNumber;
@@ -34,7 +34,7 @@ public class EventTests {
 	}
 
 	void eventFire(TestEvent event) {
-		assertEquals(testNumber, event.intData);
-		assertEquals(testString, event.stringData);
+		assertEquals(testNumber, event.intData());
+		assertEquals(testString, event.stringData());
 	}
 }

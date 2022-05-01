@@ -1,22 +1,24 @@
 package map;
 
-import java.util.ArrayList;
-import java.util.Optional;
-import entity.*;
-import entity.nonDynamic.building.Stairs;
-import entity.nonDynamic.building.farming.TilledSoil;
-import entity.nonDynamic.building.wall.Wall;
+import entity.Entity;
 import entity.dynamic.item.Item;
-import entity.nonDynamic.building.container.Workstation;
-import entity.nonDynamic.resources.Ore;
-import entity.nonDynamic.resources.OreType;
-import entity.nonDynamic.resources.Tree;
+import entity.non_dynamic.building.Stairs;
+import entity.non_dynamic.building.container.Workstation;
+import entity.non_dynamic.building.farming.TilledSoil;
+import entity.non_dynamic.building.wall.Wall;
+import entity.non_dynamic.resources.Ore;
+import entity.non_dynamic.resources.OreType;
+import entity.non_dynamic.resources.Tree;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import main.Game;
 import util.BiPredicate;
 import util.vectors.Vec2f;
 import util.vectors.Vec2i;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class Level {
 
@@ -38,7 +40,7 @@ public class Level {
 		generateLevel(elevation, hardObjects);
 	}
 
-	public ArrayList<Item> getItems() {
+	public List<Item> getItems() {
 		ArrayList<Item> items = new ArrayList<>();
 		for (Tile[] row : tiles) {
 			for (Tile tile : row) {
@@ -99,28 +101,28 @@ public class Level {
 				int err = dx - (layer << 1);
 				while (x >= y) {
 					if (p.test(xloc + x, yloc + y)) {
-						return new Vec2i( xloc + x, yloc + y);
+						return new Vec2i(xloc + x, yloc + y);
 					}
 					if (p.test(xloc + y, yloc + x)) {
-						return new Vec2i( xloc + y, yloc + x );
+						return new Vec2i(xloc + y, yloc + x);
 					}
 					if (p.test(xloc - y, yloc + x)) {
-						return new Vec2i( xloc - y, yloc + x);
+						return new Vec2i(xloc - y, yloc + x);
 					}
 					if (p.test(xloc - x, yloc + y)) {
-						return new Vec2i( xloc - x, yloc + y);
+						return new Vec2i(xloc - x, yloc + y);
 					}
 					if (p.test(xloc - x, yloc - y)) {
-						return new Vec2i( xloc - x, yloc - y);
+						return new Vec2i(xloc - x, yloc - y);
 					}
 					if (p.test(xloc - y, yloc - x)) {
-						return new Vec2i( xloc - y, yloc - x);
+						return new Vec2i(xloc - y, yloc - x);
 					}
 					if (p.test(xloc + y, yloc - x)) {
-						return new Vec2i( xloc + y, yloc - x);
+						return new Vec2i(xloc + y, yloc - x);
 					}
 					if (p.test(xloc + x, yloc - y)) {
-						return new Vec2i( xloc + x, yloc - y);
+						return new Vec2i(xloc + x, yloc - y);
 					}
 
 					if (err <= 0) {
@@ -192,9 +194,9 @@ public class Level {
 	private void generateLevel(int elevation, boolean hardObjects) {
 		generateBorder(elevation);
 		float[] noise = Generator.generateSimplexNoise(
-			width, height, 11,
-			Entity.RANDOM.nextInt(1000),
-			Entity.RANDOM.nextBoolean()
+				width, height, 11,
+				Entity.RANDOM.nextInt(1000),
+				Entity.RANDOM.nextBoolean()
 		);
 		for (int y = 1; y < height - 1; y++) {
 			for (int x = 1; x < width - 1; x++) {
@@ -234,14 +236,14 @@ public class Level {
 
 
 	public Optional<Tree> selectTree(int x, int y, boolean seperate) {
-		if (outOfMapBounds(x,y)) {
+		if (outOfMapBounds(x, y)) {
 			return Optional.empty();
 		}
 		Optional<Tree> result = tiles[x][y].getEntity(Tree.class);
 		if (result.isPresent()) {
 			return result;
 		} else {
-			Optional<Tree> entity = tiles[x][y+1].getEntity(Tree.class);
+			Optional<Tree> entity = tiles[x][y + 1].getEntity(Tree.class);
 			return seperate ? entity : Optional.empty();
 		}
 	}
@@ -283,7 +285,7 @@ public class Level {
 		spawnRock(x, y);
 	}
 
-	private OreType decideOreType (int nr) {
+	private OreType decideOreType(int nr) {
 		return switch (nr) {
 			case 0 -> OreType.GOLD;
 			case 1 -> OreType.IRON;
@@ -295,16 +297,18 @@ public class Level {
 	}
 
 	private void spawnRock(int x, int y) {
-		if (outOfMapBounds(x, y)) { return; }
+		if (outOfMapBounds(x, y)) {
+			return;
+		}
 		addEntity(new Ore(x * Tile.SIZE, y * Tile.SIZE, depth, this, OreType.STONE), true);
 	}
 
 	// render the tiles
 	public void render(Vec2f scroll) {
 		int x0 = (int) (scroll.x / Tile.SIZE);
-		int x1 = (int) ((scroll.x + Game.width + Sprite.SIZE) / Tile.SIZE) + 1;
+		int x1 = (int) ((scroll.x + Game.WIDTH + Sprite.SIZE) / Tile.SIZE) + 1;
 		int y0 = (int) (scroll.y / Tile.SIZE);
-		int y1 = (int) ((scroll.y + Game.height + Sprite.SIZE) / Tile.SIZE) + 1;
+		int y1 = (int) ((scroll.y + Game.HEIGHT + Sprite.SIZE) / Tile.SIZE) + 1;
 
 		for (int y = y0; y < y1; y++) {
 			for (int x = x0; x < x1; x++) {

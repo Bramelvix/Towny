@@ -70,7 +70,7 @@ public class Weapon extends Item {
 	}
 
 	public Weapon copy() {
-		return this.copy(this.location.x,this.location.y,this.z);
+		return this.copy(this.location.x, this.location.y, this.z);
 	}
 
 	public Weapon copy(float x, float y, int z) {

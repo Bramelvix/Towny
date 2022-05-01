@@ -12,19 +12,15 @@ public class MultiSprite extends StaticSprite {
 	private final Sprite bottomSprite;
 
 	public MultiSprite(Sprite[] sprites, int sheetIndex) {
-		super(new Vec2i(0,0), sheetIndex);
+		super(new Vec2i(0, 0), sheetIndex);
 		this.bottomSprite = sprites[0];
 		this.texCoordArr = spriteToCoords(sprites);
-	}
-
-	public Vec2f[] getTexArr() {
-		return texCoordArr;
 	}
 
 	@Override
 	public void draw(Vec3f pos) {
 		for (Vec2f texPos : texCoordArr) {
-			OpenGLUtils.instanceData.put(new Vec3f(OpenGLUtils.pToGL(pos.x, 'w'), OpenGLUtils.pToGL(pos.y, 'h'), 0.f), texPos);
+			OpenGLUtils.getInstanceData().put(new Vec3f(OpenGLUtils.pToGL(pos.x, 'w'), OpenGLUtils.pToGL(pos.y, 'h'), 0.f), texPos);
 		}
 	}
 

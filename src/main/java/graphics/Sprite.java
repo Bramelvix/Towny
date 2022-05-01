@@ -36,10 +36,10 @@ public interface Sprite {
 			}
 		}
 		return new Color(
-			(float) Math.sqrt(r / (SIZE*SIZE)) / 255f,
-			(float) Math.sqrt(g / (SIZE*SIZE)) / 255f,
-			(float) Math.sqrt(b / (SIZE*SIZE)) / 255f,
-			(float) Math.sqrt(a / (SIZE*SIZE)) / 255f
+				(float) Math.sqrt(r / (SIZE * SIZE)) / 255f,
+				(float) Math.sqrt(g / (SIZE * SIZE)) / 255f,
+				(float) Math.sqrt(b / (SIZE * SIZE)) / 255f,
+				(float) Math.sqrt(a / (SIZE * SIZE)) / 255f
 		).getRGB();
 	}
 

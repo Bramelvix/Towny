@@ -1,4 +1,4 @@
-package entity.nonDynamic.resources;
+package entity.non_dynamic.resources;
 
 import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
@@ -28,7 +28,7 @@ public class Ore extends Resource {
 	// decide the sprite for the ore
 	private void decideSprite(OreType type) {
 		String name = type == OreType.STONE ? type.toString().toLowerCase() : type.toString().toLowerCase() + " ore";
-		setOre(name, SpriteHashtable.get(type.getSpriteId()), ItemHashtable.get(type.getItemSpriteId(), getX(), getY(), this.z));
+		setOre(name, SpriteHashtable.get(type.getSpriteId()), ItemHashtable.get(type.getItemId(), getX(), getY(), this.z));
 	}
 
 	private void setOre(String name, Sprite oreSprite, Item item) {
@@ -38,9 +38,12 @@ public class Ore extends Resource {
 	}
 
 	// work method executed by the villager when mining
+	@Override
 	public boolean work() {
 		if (mined > 0) {
-			if (mined % 20 == 0) { Sound.playSound(Sound.stoneMining); }
+			if (mined % 20 == 0) {
+				Sound.playSound(Sound.stoneMining);
+			}
 			mined--;
 			return false;
 		}

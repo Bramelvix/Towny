@@ -23,7 +23,9 @@ public class Zombie extends Humanoid {
 				sprite = SpriteHashtable.get(51);
 			}
 		}
-		if (idleTime()) { idle(); }
+		if (idleTime()) {
+			idle();
+		}
 		move();
 	}
 
@@ -38,7 +40,7 @@ public class Zombie extends Humanoid {
 	public void render() {
 		super.render();
 		if (getHolding() != null) {
-			getHolding().sprite.draw(location);// renders the item the zombie is holding
+			getHolding().getSprite().draw(location);// renders the item the zombie is holding
 		}
 	}
 

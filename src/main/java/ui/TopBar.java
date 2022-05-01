@@ -1,17 +1,18 @@
 package ui;
 
-import graphics.opengl.OpenGLUtils;
-import ui.icon.Icon;
-import input.PointerInput;
 import graphics.TextureInfo;
+import graphics.opengl.OpenGLUtils;
+import input.PointerInput;
+import ui.icon.Icon;
 import util.vectors.Vec2f;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class TopBar extends UiElement{
+public class TopBar extends UiElement {
 
-	private int vilcount, solcount; // amount of villagers and soldiers
+	private int vilcount;
+	private int solcount; // amount of villagers and soldiers
 	private final Icon pause;
 	private final Icon fast;
 	private final Icon slow;
@@ -45,7 +46,7 @@ public class TopBar extends UiElement{
 
 	void init(PointerInput pointer, Runnable togglePause, Runnable upSpeed, Runnable downSpeed) {
 		this.pause.setOnClick(pointer, () -> {
-			pause.setTexture(pause.getTextureId() == pauseTexture.id ? playTexture.id : pauseTexture.id);
+			pause.setTexture(pause.getTextureId() == pauseTexture.id() ? playTexture.id() : pauseTexture.id());
 			togglePause.run();
 		});
 		this.fast.setOnClick(pointer, upSpeed);
@@ -63,7 +64,7 @@ public class TopBar extends UiElement{
 		pause.render();
 		OpenGLUtils.drawText("Villagers", position.x + 5, position.y - 5);
 		OpenGLUtils.drawText(vilcount + "", position.x + 25, position.y + 65);
-		OpenGLUtils.drawText("Speed: " + (speed/10-2), position.x + 95, position.y + 60);
+		OpenGLUtils.drawText("Speed: " + (speed / 10 - 2), position.x + 95, position.y + 60);
 		OpenGLUtils.drawText("Soldiers", position.x + 200, position.y - 5);
 		OpenGLUtils.drawText(solcount + "", position.x + 225, position.y + 65);
 	}
@@ -74,8 +75,8 @@ public class TopBar extends UiElement{
 		slow.destroy();
 		fast.destroy();
 		pause.destroy();
-		OpenGLUtils.deleteTexture(pauseTexture.id);
-		OpenGLUtils.deleteTexture(playTexture.id);
+		OpenGLUtils.deleteTexture(pauseTexture.id());
+		OpenGLUtils.deleteTexture(playTexture.id());
 	}
 
 }

@@ -10,7 +10,7 @@ public class Vec2i {
 	}
 
 	public Vec2i(int n) {
-		this(n,n);
+		this(n, n);
 	}
 
 	public Vec2i add(int n) {
@@ -18,7 +18,7 @@ public class Vec2i {
 	}
 
 	public Vec2i add(Vec2i v) {
-		return new Vec2i(x+v.x, y+v.y);
+		return new Vec2i(x + v.x, y + v.y);
 	}
 
 	public Vec2i sub(int n) {
@@ -26,7 +26,7 @@ public class Vec2i {
 	}
 
 	public Vec2i sub(Vec2i v) {
-		return new Vec2i(x-v.x, y-v.y);
+		return new Vec2i(x - v.x, y - v.y);
 	}
 
 	public Vec2i mul(int n) {
@@ -34,7 +34,7 @@ public class Vec2i {
 	}
 
 	public Vec2i mul(Vec2i v) {
-		return new Vec2i(x*v.x, y*v.y);
+		return new Vec2i(x * v.x, y * v.y);
 	}
 
 	@Override

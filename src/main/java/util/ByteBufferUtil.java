@@ -6,7 +6,8 @@ import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 
 public final class ByteBufferUtil {
-	private ByteBufferUtil() { }
+	private ByteBufferUtil() {
+	}
 
 	public static ByteBuffer getByteBuffer(int[] pixels, int width, int height) {
 		ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * 4);

@@ -1,7 +1,7 @@
-package entity.nonDynamic.building;
+package entity.non_dynamic.building;
 
-import entity.nonDynamic.StaticEntity;
-import entity.nonDynamic.Workable;
+import entity.non_dynamic.StaticEntity;
+import entity.non_dynamic.Workable;
 import map.Level;
 import map.Tile;
 import sound.Sound;
@@ -9,10 +9,10 @@ import sound.Sound;
 public abstract class BuildAbleObject extends StaticEntity implements Workable {
 
 	private boolean open; // can a villager walk over the object
-	public boolean initialised = false; // has the building been initialised
+	private boolean initialised = false; // has the building been initialised
 	private byte condition = 0; // condition of the building (0=not built ,100= done)
 
-	public BuildAbleObject() {
+	protected BuildAbleObject() {
 		setVisible(false);
 	}
 
@@ -31,6 +31,7 @@ public abstract class BuildAbleObject extends StaticEntity implements Workable {
 	}
 
 	// method called by villagers when building
+	@Override
 	public boolean work() {
 		if (!initialised) {
 			return false;
@@ -48,4 +49,7 @@ public abstract class BuildAbleObject extends StaticEntity implements Workable {
 
 	public abstract BuildAbleObject instance();
 
+	public boolean isInitialised() {
+		return initialised;
+	}
 }

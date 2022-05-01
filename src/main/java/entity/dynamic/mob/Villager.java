@@ -1,25 +1,25 @@
 package entity.dynamic.mob;
 
-import java.util.Optional;
-import java.util.PriorityQueue;
-
-import entity.dynamic.mob.work.*;
-import entity.nonDynamic.building.BuildAbleObject;
 import entity.Entity;
-import entity.nonDynamic.building.container.Container;
-import entity.nonDynamic.building.farming.TilledSoil;
-import entity.nonDynamic.resources.Resource;
 import entity.dynamic.item.Clothing;
 import entity.dynamic.item.Item;
 import entity.dynamic.item.VillagerInventory;
 import entity.dynamic.item.weapon.Weapon;
+import entity.dynamic.mob.work.*;
+import entity.non_dynamic.building.BuildAbleObject;
+import entity.non_dynamic.building.container.Container;
+import entity.non_dynamic.building.farming.TilledSoil;
+import entity.non_dynamic.resources.Resource;
 import entity.pathfinding.Path;
-import graphics.opengl.OpenGLUtils;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
+import graphics.opengl.OpenGLUtils;
 import map.Level;
 import util.vectors.Vec2f;
 import util.vectors.Vec3f;
+
+import java.util.Optional;
+import java.util.PriorityQueue;
 
 public class Villager extends Humanoid {
 
@@ -27,6 +27,8 @@ public class Villager extends Humanoid {
 	private final boolean male; // is the villager male (true = male, false = female)
 	private final Sprite hair; // hair sprite
 	private final PriorityQueue<PriorityJob> jobs = new PriorityQueue<>(); // jobs the villager needs to do
+
+	private static final int DEFAULT_DAMAGE = 10;
 
 	// basic constructors
 	public Villager(float x, float y, int z, Level[] levels) {
@@ -53,7 +55,7 @@ public class Villager extends Humanoid {
 	}
 
 	public int getMeleeDamage() {
-		return 10;
+		return DEFAULT_DAMAGE;
 	}
 
 	public Villager(int x, int y, int z, Level[] levels, int hairnr, Item holding, boolean male) {
@@ -76,8 +78,8 @@ public class Villager extends Humanoid {
 			if (item.isSameType(level_item) && level_item.isReserved(this)) {
 				Optional<Path> foundPath = getPath(level_item.getTileX(), level_item.getTileY());
 				if (closest == null
-					|| path.isEmpty()
-					|| (foundPath.isPresent() && path.get().getStepsSize() > foundPath.get().getStepsSize())
+						|| path.isEmpty()
+						|| (foundPath.isPresent() && path.get().getStepsSize() > foundPath.get().getStepsSize())
 				) {
 					closest = level_item;
 					path = getPath(closest.getTileX(), closest.getTileY());
@@ -116,12 +118,12 @@ public class Villager extends Humanoid {
 	}
 
 	private <T extends Item> void pickUpItem(T e) {
-		if (e instanceof Weapon) {
-			addWeapon((Weapon) e);
+		if (e instanceof Weapon weapon) {
+			addWeapon(weapon);
 			return;
 		} else {
-			if (e instanceof Clothing) {
-				addClothing((Clothing) e);
+			if (e instanceof Clothing clothing) {
+				addClothing(clothing);
 				return;
 			}
 		}
@@ -157,19 +159,27 @@ public class Villager extends Humanoid {
 
 	// add a job to the jobs list for the villager to do
 	public void addJob(Resource e) {
-		if (e != null) { addJob(new GatherJob(e, this)); }
+		if (e != null) {
+			addJob(new GatherJob(this, e));
+		}
 	}
 
 	public void addJob(TilledSoil e) {
-		if (e != null) { addJob(new FarmJob(e, this)); }
+		if (e != null) {
+			addJob(new FarmJob(this, e));
+		}
 	}
 
 	public void addJob(Job e) {
-		if (e != null) { addJob(e, 50); }
+		if (e != null) {
+			addJob(e, 50);
+		}
 	}
 
 	public void addJob(Job e, int priority) {
-		if (e != null) { jobs.add(new PriorityJob(e, priority)); }
+		if (e != null) {
+			jobs.add(new PriorityJob(e, priority));
+		}
 	}
 
 	public void prependJobToChain(Job e) {
@@ -181,19 +191,22 @@ public class Villager extends Humanoid {
 	// add a buildjob
 	public void addBuildJob(int x, int y, int z, BuildAbleObject object, Item resource) {
 		if (resource == null) {
-			addJob(new BuildJob(x, y, z, object, this));
+			addJob(new BuildJob(this, x, y, z, object));
 		} else {
-			getNearestItemOfType(resource).ifPresent(item ->  addJob(new BuildJob(x, y, z, item, object, this)));
+			getNearestItemOfType(resource).ifPresent(item -> addJob(new BuildJob(this, x, y, z, item, object)));
 		}
 	}
 
 	// updates the villager in the game logic
+	@Override
 	public void update() {
 		if (!jobs.isEmpty()) {
 			work();
 		} else {
 			// IDLE
-			if (idleTime()) { idle(); }
+			if (idleTime()) {
+				idle();
+			}
 			move();
 		}
 		inventory.update(location.x, location.y, z);
@@ -225,10 +238,10 @@ public class Villager extends Humanoid {
 	private void drawVillager(Vec3f pos) {
 		if (isVisible()) {
 			sprite.draw(pos);
-			hair.draw(new Vec3f(pos.x, pos.y,pos.z-0.1f));
+			hair.draw(new Vec3f(pos.x, pos.y, pos.z - 0.1f));
 			inventory.render(pos.z);
 			if (getHolding() != null) {
-				getHolding().sprite.draw(new Vec3f(pos.x, pos.y,pos.z-0.1f));// renders the item the villager is holding
+				getHolding().getSprite().draw(new Vec3f(pos.x, pos.y, pos.z - 0.1f));// renders the item the villager is holding
 			}
 		}
 	}

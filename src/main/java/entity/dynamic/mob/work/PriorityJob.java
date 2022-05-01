@@ -39,6 +39,6 @@ public class PriorityJob implements Comparable<PriorityJob> {
 
 	@Override
 	public int compareTo(PriorityJob o) {
-		return Integer.compare(priority, o.priority)*-1;
+		return Integer.compare(priority, o.priority) * -1;
 	}
 }

@@ -5,20 +5,24 @@ import entity.Entity;
 import entity.dynamic.item.weapon.Weapon;
 import entity.dynamic.item.weapon.WeaponMaterial;
 import entity.dynamic.item.weapon.WeaponType;
+import entity.non_dynamic.resources.OreType;
 import graphics.SpriteHashtable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 public abstract class ItemHashtable {
+	private ItemHashtable() {
 
-	private static final Hashtable<Integer, Item> table = new Hashtable<>();
+	}
+
+	private static final HashMap<Integer, Item> table = new HashMap<>();
 	private static final Logger logger = LoggerFactory.getLogger(ItemHashtable.class);
 
-	public static <T extends Item> void registerItem(T item) throws Exception {
+	public static <T extends Item> void registerItem(T item) throws IllegalArgumentException {
 		if (table.put(item.getId(), item) != null) {
-			throw new Exception("Duplicate key while registering item: " + item.getId());
+			throw new IllegalArgumentException("Duplicate key while registering item: " + item.getId());
 		}
 	}
 
@@ -28,7 +32,7 @@ public abstract class ItemHashtable {
 
 	public static Item get(int key) {
 		if (!table.containsKey(key)) {
-			logger.warn("NullPointer imminent! Trying to get Item with id: " + key + ", but no item with this key is present!");
+			logger.warn("NullPointer imminent! Trying to get Item with id: {}, but no item with this key is present!", key);
 			return getTestItem();
 		}
 		return table.get(key).copy();
@@ -43,17 +47,17 @@ public abstract class ItemHashtable {
 		return get(key).copy(x, y, z);
 	}
 
-	public static void registerItems() throws Exception {
+	public static void registerItems() throws IllegalArgumentException {
 		registerItem(new Item("logs", SpriteHashtable.get(58), "Wooden logs", 1)); //logs
 		registerItem(new Item("iron bar", SpriteHashtable.get(59), "a bar of solid iron", 2));//iron bar
 		registerItem(new Item("gold bar", SpriteHashtable.get(60), "a bar of solid gold", 3));//gold bar
 		registerItem(new Item("copper bar", SpriteHashtable.get(61), "a bar of solid copper", 4));//copper bar
-		registerItem(new Item("iron ore", SpriteHashtable.get(62), "iron ore", 5));// iron ore
-		registerItem(new Item("copper ore", SpriteHashtable.get(66), "copper ore", 6)); // copper ore
-		registerItem(new Item("gold ore", SpriteHashtable.get(63), "gold ore", 7)); // gold ore
-		registerItem(new Item("coal ore", SpriteHashtable.get(65), "coal ore", 8)); // coal ore
-		registerItem(new Item("uncut crystal", SpriteHashtable.get(67), "an uncut crystal", 9)); // uncut crystal
-		registerItem(new Item("stone", SpriteHashtable.get(64), "some stones", 10)); // stone
+		registerItem(new Item("iron ore", SpriteHashtable.get(62), "iron ore", OreType.IRON.getItemId()));// iron ore
+		registerItem(new Item("copper ore", SpriteHashtable.get(66), "copper ore", OreType.COPPER.getItemId())); // copper ore
+		registerItem(new Item("gold ore", SpriteHashtable.get(63), "gold ore", OreType.GOLD.getItemId())); // gold ore
+		registerItem(new Item("coal ore", SpriteHashtable.get(65), "coal ore", OreType.COAL.getItemId())); // coal ore
+		registerItem(new Item("uncut crystal", SpriteHashtable.get(67), "an uncut crystal", OreType.CRYSTAL.getItemId())); // uncut crystal
+		registerItem(new Item("stone", SpriteHashtable.get(64), "some stones", OreType.STONE.getItemId())); // stone
 		registerItem(new Item("cut crystal", SpriteHashtable.get(68), "a cut crystal", 11)); // cut crystal
 
 		registerItem(new Weapon("wooden axe", SpriteHashtable.get(91), "a wooden axe", WeaponType.AXE, WeaponMaterial.WOOD, 20));
@@ -102,21 +106,21 @@ public abstract class ItemHashtable {
 		registerItem(new Weapon("crystal spear", SpriteHashtable.get(109), "a crystal spear", WeaponType.SPEAR, WeaponMaterial.CRYSTAL, 59));
 		registerItem(new Weapon("crystal sword", SpriteHashtable.get(118), "a crystal sword", WeaponType.SWORD, WeaponMaterial.CRYSTAL, 60));
 
-		registerItem(new Clothing("Orange shirt",SpriteHashtable.get(70),"a brown shirt",ClothingType.SHIRT,0.1f,61));
-		registerItem(new Clothing("Orange shirt",SpriteHashtable.get(71),"a brown shirt",ClothingType.SHIRT,0.1f,62));
-		registerItem(new Clothing("Orange shirt",SpriteHashtable.get(72),"a brown shirt",ClothingType.SHIRT,0.1f,63));
-		registerItem(new Clothing("Orange shirt",SpriteHashtable.get(73),"a brown shirt",ClothingType.SHIRT,0.1f,64));
-		registerItem(new Clothing("Green shirt",SpriteHashtable.get(74),"a green shirt",ClothingType.SHIRT,0.1f,65));
-		registerItem(new Clothing("Green shirt",SpriteHashtable.get(75),"a green shirt",ClothingType.SHIRT,0.1f,66));
-		registerItem(new Clothing("Green shirt",SpriteHashtable.get(76),"a green shirt",ClothingType.SHIRT,0.1f,67));
-		registerItem(new Clothing("Green shirt",SpriteHashtable.get(77),"a green shirt",ClothingType.SHIRT,0.1f,68));
-		registerItem(new Clothing("Grey shirt",SpriteHashtable.get(78),"a grey shirt",ClothingType.SHIRT,0.1f,69));
-		registerItem(new Clothing("Grey shirt",SpriteHashtable.get(79),"a grey shirt",ClothingType.SHIRT,0.1f,70));
-		registerItem(new Clothing("Grey shirt",SpriteHashtable.get(80),"a grey shirt",ClothingType.SHIRT,0.1f,71));
-		registerItem(new Clothing("Grey shirt",SpriteHashtable.get(81),"a grey shirt",ClothingType.SHIRT,0.1f,72));
-		registerItem(new Clothing("Black trousers",SpriteHashtable.get(69),"a pair of black trousers",ClothingType.TROUSERS,0.1f,73));
-		registerItem(new Clothing("Brown trousers",SpriteHashtable.get(88),"a pair of brown trousers",ClothingType.TROUSERS,0.1f,74));
-		registerItem(new Clothing("Orange trousers",SpriteHashtable.get(89),"a pair of orange trousers",ClothingType.TROUSERS,0.1f,75));
+		registerItem(new Clothing("Orange shirt", SpriteHashtable.get(70), "a brown shirt", ClothingType.SHIRT, 0.1f, 61));
+		registerItem(new Clothing("Orange shirt", SpriteHashtable.get(71), "a brown shirt", ClothingType.SHIRT, 0.1f, 62));
+		registerItem(new Clothing("Orange shirt", SpriteHashtable.get(72), "a brown shirt", ClothingType.SHIRT, 0.1f, 63));
+		registerItem(new Clothing("Orange shirt", SpriteHashtable.get(73), "a brown shirt", ClothingType.SHIRT, 0.1f, 64));
+		registerItem(new Clothing("Green shirt", SpriteHashtable.get(74), "a green shirt", ClothingType.SHIRT, 0.1f, 65));
+		registerItem(new Clothing("Green shirt", SpriteHashtable.get(75), "a green shirt", ClothingType.SHIRT, 0.1f, 66));
+		registerItem(new Clothing("Green shirt", SpriteHashtable.get(76), "a green shirt", ClothingType.SHIRT, 0.1f, 67));
+		registerItem(new Clothing("Green shirt", SpriteHashtable.get(77), "a green shirt", ClothingType.SHIRT, 0.1f, 68));
+		registerItem(new Clothing("Grey shirt", SpriteHashtable.get(78), "a grey shirt", ClothingType.SHIRT, 0.1f, 69));
+		registerItem(new Clothing("Grey shirt", SpriteHashtable.get(79), "a grey shirt", ClothingType.SHIRT, 0.1f, 70));
+		registerItem(new Clothing("Grey shirt", SpriteHashtable.get(80), "a grey shirt", ClothingType.SHIRT, 0.1f, 71));
+		registerItem(new Clothing("Grey shirt", SpriteHashtable.get(81), "a grey shirt", ClothingType.SHIRT, 0.1f, 72));
+		registerItem(new Clothing("Black trousers", SpriteHashtable.get(69), "a pair of black trousers", ClothingType.TROUSERS, 0.1f, 73));
+		registerItem(new Clothing("Brown trousers", SpriteHashtable.get(88), "a pair of brown trousers", ClothingType.TROUSERS, 0.1f, 74));
+		registerItem(new Clothing("Orange trousers", SpriteHashtable.get(89), "a pair of orange trousers", ClothingType.TROUSERS, 0.1f, 75));
 	}
 
 }

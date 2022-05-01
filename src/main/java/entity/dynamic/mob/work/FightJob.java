@@ -38,32 +38,34 @@ public class FightJob extends Job {
 		if (target == null) {
 			completed = true;
 			return;
-		} else {
-			xloc = target.getTileX();
-			yloc = target.getTileY();
 		}
-		if (!completed && started) {
-			if (worker.aroundTile(xloc, yloc, zloc)) {
-				fight();
-				if (target.getHealth() <= 0) {
-					completed = true;
-				}
-			} else {
-				if (worker.isMovementNull()) {
-					Optional<Path> found = worker.getPath(xloc, yloc);
-					if (found.isPresent()) {
-						worker.setPath(found.get());
-					} else {
-						worker.drop();
-						completed = true;
-					}
-				} else {
-					worker.move();
-				}
-			}
-		} else {
+
+		xloc = target.getTileX();
+		yloc = target.getTileY();
+
+		if (completed || !started) {
 			start();
 		}
-	}
 
+		if (worker.aroundTile(xloc, yloc, zloc)) {
+			fight();
+			if (target.getHealth() <= 0) {
+				completed = true;
+			}
+			return;
+		}
+
+		if (worker.isMovementNull()) {
+			Optional<Path> found = worker.getPath(xloc, yloc);
+			if (found.isPresent()) {
+				worker.setPath(found.get());
+			} else {
+				worker.drop();
+				completed = true;
+			}
+			return;
+		}
+
+		worker.move();
+	}
 }

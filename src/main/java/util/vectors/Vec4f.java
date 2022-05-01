@@ -1,6 +1,6 @@
 package util.vectors;
 
-public class Vec4f extends Vec3f{
+public class Vec4f extends Vec3f {
 	public float w;
 
 	public Vec4f(float x, float y, float z, float w) {
@@ -13,11 +13,11 @@ public class Vec4f extends Vec3f{
 	}
 
 	public Vec4f add(float n) {
-		return add (new Vec4f(n));
+		return add(new Vec4f(n));
 	}
 
 	public Vec4f add(Vec4f v) {
-		return new Vec4f(x+v.x, y+v.y, z+v.z, w+v.w);
+		return new Vec4f(x + v.x, y + v.y, z + v.z, w + v.w);
 	}
 
 	public Vec4f sub(float n) {
@@ -25,7 +25,7 @@ public class Vec4f extends Vec3f{
 	}
 
 	public Vec4f sub(Vec4f v) {
-		return new Vec4f(x-v.x, y-v.y, z-v.z, w-v.w);
+		return new Vec4f(x - v.x, y - v.y, z - v.z, w - v.w);
 	}
 
 	public Vec4f mul(float n) {
@@ -33,7 +33,7 @@ public class Vec4f extends Vec3f{
 	}
 
 	public Vec4f mul(Vec4f v) {
-		return new Vec4f(x*v.x, y*v.y, z*v.z, w*v.w);
+		return new Vec4f(x * v.x, y * v.y, z * v.z, w * v.w);
 	}
 
 	@Override

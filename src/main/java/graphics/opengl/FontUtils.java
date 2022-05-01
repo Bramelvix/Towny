@@ -6,11 +6,15 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 
 public class FontUtils {
+	private FontUtils() {
 
-	static TrueTypeFont black, red;
+	}
 
-	public final static int ALIGN_LEFT = 0;
-	public final static int ALIGN_RIGHT = 1;
+	static TrueTypeFont black;
+	static TrueTypeFont red;
+
+	public static final int ALIGN_LEFT = 0;
+	public static final int ALIGN_RIGHT = 1;
 	public static final int ALIGN_CENTER = 2;
 
 	public static void init() {
@@ -32,8 +36,8 @@ public class FontUtils {
 		int charCurrent;
 		int totalwidth = 0;
 		int i = 0;
-		int d;
-		int c;
+		int d = 1;
+		int c = 9;
 		float startY = 0;
 
 		switch (format) {
@@ -44,6 +48,7 @@ public class FontUtils {
 					}
 					i++;
 				}
+				break;
 			}
 			case ALIGN_CENTER: {
 				for (int l = 0; l <= endIndex; l++) {
@@ -52,17 +57,13 @@ public class FontUtils {
 						break;
 					}
 					intObject = font.charArray[charCurrent];
-					totalwidth += intObject.width - 9;
+					totalwidth += intObject.getWidth() - 9;
 				}
 				totalwidth /= -2;
-			}
-			case ALIGN_LEFT:
-			default:
-				d = 1;
-				c = 9;
 				break;
+			}
 		}
-		OpenGLUtils.fontShader.use();
+		OpenGLUtils.getFontShader().use();
 		glBindTexture(GL_TEXTURE_2D, font.fontTextureID);
 		while (i >= 0 && i <= endIndex) {
 			charCurrent = whatchars.charAt(i);
@@ -77,22 +78,22 @@ public class FontUtils {
 							if (charCurrent == '\n')
 								break;
 							intObject = font.charArray[charCurrent];
-							totalwidth += intObject.width - 9;
+							totalwidth += intObject.getWidth() - 9;
 						}
 						totalwidth /= -2;
 					}
 					// if center get next lines total width/2;
 				} else {
-					font.drawQuad((totalwidth + intObject.width) * scaleX + x,
-						startY * scaleY + y,
-						totalwidth * scaleX + x,
-						(startY + intObject.height) * scaleY + y,
-						intObject.storedX + intObject.width,
-						intObject.storedY + intObject.height,
-						intObject.storedX,
-						intObject.storedY
+					font.drawQuad((totalwidth + intObject.getWidth()) * scaleX + x,
+							startY * scaleY + y,
+							totalwidth * scaleX + x,
+							(startY + intObject.getHeight()) * scaleY + y,
+							intObject.storedX + intObject.getWidth(),
+							intObject.storedY + intObject.getHeight(),
+							intObject.storedX,
+							intObject.storedY
 					);
-					totalwidth += (intObject.width - c) * d;
+					totalwidth += (intObject.getWidth() - c) * d;
 				}
 				i += d;
 

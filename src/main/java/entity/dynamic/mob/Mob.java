@@ -21,6 +21,8 @@ public abstract class Mob extends Entity {
 	private int counter; // counter of steps along the path
 	private boolean arrived = false; // has the mob arrived at the path's destination
 
+	private static final int DEFAULT_SPEED = 1;
+
 	// move a mob with a combination of x direction and y direction (both between -1 and 1).
 	public void move(int xa, int ya) {
 		Direction dir;
@@ -50,8 +52,8 @@ public abstract class Mob extends Entity {
 	void idle() {
 		while (movement == null) {
 			getPath(
-				getTileX() + Entity.RANDOM.nextInt(4) - 2,
-				getTileY() + Entity.RANDOM.nextInt(4) - 2
+					getTileX() + Entity.RANDOM.nextInt(4) - 2,
+					getTileY() + Entity.RANDOM.nextInt(4) - 2
 			).ifPresent(path -> movement = path);
 		}
 	}
@@ -77,7 +79,6 @@ public abstract class Mob extends Entity {
 	}
 
 
-
 	// method to move the villager
 	public void move() {
 		if (movement == null) {
@@ -93,20 +94,20 @@ public abstract class Mob extends Entity {
 			movement = null;
 			arrived = false;
 		} else {
-			if (!arrived) {
-				Point step = movement.getStep(counter);
-				if (step != null) {
-					if (!levels[z].isWalkAbleTile(step.x, step.y)) {
-						int destx = movement.getXdest();
-						int desty = movement.getYdest();
-						getPathAround(destx, desty).ifPresent(path -> movement = path);
-						return;
-					}
-					moveTo(step.x, step.y);
-					if (onSpot(step.x, step.y, this.z)) {
-						arrived = true;
-					}
-				}
+			Point step = movement.getStep(counter);
+			if (step == null) {
+				return;
+			}
+
+			if (!levels[z].isWalkAbleTile(step.x, step.y)) {
+				int destx = movement.getXdest();
+				int desty = movement.getYdest();
+				getPathAround(destx, desty).ifPresent(path -> movement = path);
+				return;
+			}
+			moveTo(step.x, step.y);
+			if (onSpot(step.x, step.y, this.z)) {
+				arrived = true;
 			}
 		}
 	}
@@ -115,8 +116,8 @@ public abstract class Mob extends Entity {
 	public boolean aroundTile(int x, int y, int z) {
 		return (
 				this.z == z
-				&& (getTileX() <= (x + 1)) && (getTileX() >= (x - 1))
-				&& (getTileY() >= (y - 1)) && (getTileY() <= (y + 1))
+						&& (getTileX() <= (x + 1)) && (getTileX() >= (x - 1))
+						&& (getTileY() >= (y - 1)) && (getTileY() <= (y + 1))
 		);
 	}
 
@@ -154,7 +155,7 @@ public abstract class Mob extends Entity {
 	}
 
 	public int getSpeed() {
-		return 1;
+		return DEFAULT_SPEED;
 	}
 
 	public abstract float getDamage();
@@ -166,32 +167,32 @@ public abstract class Mob extends Entity {
 	// calculates collision
 	private boolean collision(Direction dir) {
 		return (
-			(
-				dir == Direction.DOWN
-				|| dir == Direction.DOWN_LEFT
-				|| dir == Direction.DOWN_RIGHT
-				|| levels[z].getTile(getTileX(), getTileY() + 1).isSolid()
-			) && (
-				dir == Direction.UP || dir == Direction.UP_LEFT || dir == Direction.UP_RIGHT
-				|| levels[z].getTile(getTileY(), getTileY() - 1).isSolid()
-			) && (
-				dir == Direction.LEFT || dir == Direction.UP_LEFT || dir == Direction.DOWN_LEFT
-				|| levels[z].getTile(getTileX() - 1, getTileY()).isSolid()
-			) && (
-				dir == Direction.RIGHT || dir == Direction.UP_RIGHT || dir == Direction.DOWN_RIGHT
-				|| levels[z].getTile(getTileX() + 1, getTileY()).isSolid()
-			) && (
-				levels[z].getTile(getTileX(), getTileY()).isSolid()
-				|| levels[z].getTile(getTileX() + 1, getTileY() + 1).isSolid()
-			)
+				(
+						dir == Direction.DOWN
+								|| dir == Direction.DOWN_LEFT
+								|| dir == Direction.DOWN_RIGHT
+								|| levels[z].getTile(getTileX(), getTileY() + 1).isSolid()
+				) && (
+						dir == Direction.UP || dir == Direction.UP_LEFT || dir == Direction.UP_RIGHT
+								|| levels[z].getTile(getTileY(), getTileY() - 1).isSolid()
+				) && (
+						dir == Direction.LEFT || dir == Direction.UP_LEFT || dir == Direction.DOWN_LEFT
+								|| levels[z].getTile(getTileX() - 1, getTileY()).isSolid()
+				) && (
+						dir == Direction.RIGHT || dir == Direction.UP_RIGHT || dir == Direction.DOWN_RIGHT
+								|| levels[z].getTile(getTileX() + 1, getTileY()).isSolid()
+				) && (
+						levels[z].getTile(getTileX(), getTileY()).isSolid()
+								|| levels[z].getTile(getTileX() + 1, getTileY() + 1).isSolid()
+				)
 		);
 	}
 
 	// DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()! DO NOT USE!
 	protected void moveTo(int x, int y) {
-		int xmov = Integer.compare((int) (x*Tile.SIZE), (int) this.location.x);
-		int ymov = Integer.compare((int) (y*Tile.SIZE), (int) this.location.y);
-		move(xmov*3, ymov*3);
+		int xmov = Integer.compare((int) (x * Tile.SIZE), (int) this.location.x);
+		int ymov = Integer.compare((int) (y * Tile.SIZE), (int) this.location.y);
+		move(xmov * 3, ymov * 3);
 	}
 
 }

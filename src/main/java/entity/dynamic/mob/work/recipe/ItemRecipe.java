@@ -3,7 +3,7 @@ package entity.dynamic.mob.work.recipe;
 import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
 import entity.dynamic.item.weapon.WeaponMaterial;
-import entity.nonDynamic.building.container.Workstation;
+import entity.non_dynamic.building.container.Workstation;
 
 public class ItemRecipe extends Recipe<Item> {
 	//TODO Maybe put these in a hashtable or file too
@@ -60,11 +60,13 @@ public class ItemRecipe extends Recipe<Item> {
 
 	public static ItemRecipe[] smithingRecipesFromWeaponMaterial(WeaponMaterial type) {
 		return switch (type) {
-			case COPPER -> new ItemRecipe[]{COPPER_SWORD, COPPER_SPEAR, COPPER_HALBERT, COPPER_AXE, COPPER_DAGGER, COPPER_SCIMITAR};
+			case COPPER ->
+					new ItemRecipe[]{COPPER_SWORD, COPPER_SPEAR, COPPER_HALBERT, COPPER_AXE, COPPER_DAGGER, COPPER_SCIMITAR};
 			case IRON -> new ItemRecipe[]{IRON_SWORD, IRON_SPEAR, IRON_HALBERT, IRON_AXE, IRON_DAGGER, IRON_SCIMITAR};
 			case GOLD -> new ItemRecipe[]{GOLD_SWORD, GOLD_SPEAR, GOLD_HALBERT, GOLD_AXE, GOLD_DAGGER, GOLD_SCIMITAR};
 			case WOOD -> new ItemRecipe[]{WOOD_SWORD, WOOD_SPEAR, WOOD_HALBERT, WOOD_AXE, WOOD_DAGGER, WOOD_SCIMITAR};
-			case CRYSTAL -> new ItemRecipe[]{CRYSTAL_SWORD, CRYSTAL_SPEAR, CRYSTAL_HALBERT, CRYSTAL_AXE, CRYSTAL_DAGGER, CRYSTAL_SCIMITAR};
+			case CRYSTAL ->
+					new ItemRecipe[]{CRYSTAL_SWORD, CRYSTAL_SPEAR, CRYSTAL_HALBERT, CRYSTAL_AXE, CRYSTAL_DAGGER, CRYSTAL_SCIMITAR};
 		};
 	}
 

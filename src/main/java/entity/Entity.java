@@ -1,18 +1,18 @@
 package entity;
 
-import java.util.Random;
-
 import graphics.Sprite;
 import input.PointerInput;
 import map.Tile;
 import util.vectors.Vec3f;
 
+import java.util.Random;
+
 public abstract class Entity {
 
-	protected Vec3f location = new Vec3f(-1, -1,0.8f);
+	protected Vec3f location = new Vec3f(-1, -1, 0.8f);
 	protected int z; // The level number the entity is on
 	public static final Random RANDOM = new Random(); // random needed for various chance calculations
-	public Sprite sprite; // the entity's sprite
+	protected Sprite sprite; // the entity's sprite
 	private boolean visible; // is the entity visible or not
 	private boolean transparent = true; // non transparent entities will stop the Tile sprite under them from rendering unnecessarily
 	private boolean selected = false;
@@ -23,7 +23,9 @@ public abstract class Entity {
 		this.visible = visible;
 	}
 
-	public void setTransparent(boolean transparent) { this.transparent = transparent; }
+	public void setTransparent(boolean transparent) {
+		this.transparent = transparent;
+	}
 
 	public void setSelected(boolean selected) {
 		this.selected = selected;
@@ -43,7 +45,7 @@ public abstract class Entity {
 		this.z = z;
 	}
 
-	public Entity() {
+	protected Entity() {
 		setVisible(true);
 	}
 
@@ -69,7 +71,7 @@ public abstract class Entity {
 	}
 
 	public int getTileX() {
-		return (int) (location.x/ Tile.SIZE);
+		return (int) (location.x / Tile.SIZE);
 	}
 
 	public int getTileY() {
@@ -80,16 +82,18 @@ public abstract class Entity {
 		return selected;
 	}
 
-	public boolean isTransparent() { return transparent; }
+	public boolean isTransparent() {
+		return transparent;
+	}
 
 	// basic constructor
-	public Entity(float x, float y, int z) {
+	protected Entity(float x, float y, int z) {
 		this();
 		location = new Vec3f(-1);
 		setLocation(x, y, z);
 	}
 
-	public Entity(String name, Sprite sprite) {
+	protected Entity(String name, Sprite sprite) {
 		this();
 		setName(name);
 		this.sprite = sprite;
@@ -102,9 +106,9 @@ public abstract class Entity {
 
 	// render method
 	public void render() {
-	   if (isVisible()) {
-		   sprite.draw(location);
-	   }
+		if (isVisible()) {
+			sprite.draw(location);
+		}
 	}
 
 	public void renderIf(boolean ifCondition) {
@@ -113,4 +117,7 @@ public abstract class Entity {
 		}
 	}
 
+	public Sprite getSprite() {
+		return sprite;
+	}
 }

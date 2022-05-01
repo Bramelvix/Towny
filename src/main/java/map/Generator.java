@@ -4,6 +4,10 @@ import entity.Entity;
 
 class Generator {
 
+	private Generator() {
+
+	}
+
 	private static final int[] perm = new int[512];
 
 	static {
@@ -18,7 +22,7 @@ class Generator {
 	}
 
 	static float[] generateSimplexNoise(int width, int height, int freq, int offset, boolean xOry) {
-		float[] simplexnoise = new float[(width+offset) * (height + offset)];
+		float[] simplexnoise = new float[(width + offset) * (height + offset)];
 		float frequency = freq / (float) width;
 
 		for (int x = 0; x < width; x++) {
@@ -36,15 +40,17 @@ class Generator {
 		return simplexnoise;
 	}
 
-	private static final int[][] grad3 = { { 1, 1, 0 }, { -1, 1, 0 }, { 1, -1, 0 }, { -1, -1, 0 }, { 1, 0, 1 }, { -1, 0, 1 },
-			{ 1, 0, -1 }, { -1, 0, -1 }, { 0, 1, 1 }, { 0, -1, 1 }, { 0, 1, -1 }, { 0, -1, -1 } };
+	private static final int[][] grad3 = {{1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0}, {1, 0, 1}, {-1, 0, 1},
+			{1, 0, -1}, {-1, 0, -1}, {0, 1, 1}, {0, -1, 1}, {0, 1, -1}, {0, -1, -1}};
 
 	private static double dot(int[] g, double x, double y) {
 		return g[0] * x + g[1] * y;
 	}
 
 	private static double noise(double xin, double yin) {
-		double n0, n1, n2;
+		double n0;
+		double n1;
+		double n2;
 		final double F2 = 0.5 * (Math.sqrt(3.0) - 1.0);
 		double s = (xin + yin) * F2;
 		int i = fastfloor(xin + s);
@@ -55,7 +61,8 @@ class Generator {
 		double Y0 = j - t;
 		double x0 = xin - X0;
 		double y0 = yin - Y0;
-		int i1, j1;
+		int i1;
+		int j1;
 		if (x0 > y0) {
 			i1 = 1;
 			j1 = 0;

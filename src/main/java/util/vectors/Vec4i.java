@@ -17,7 +17,7 @@ public class Vec4i extends Vec3i {
 	}
 
 	public Vec4i add(Vec4i v) {
-		return new Vec4i(x+v.x, y+v.y, z+v.z, w+v.w);
+		return new Vec4i(x + v.x, y + v.y, z + v.z, w + v.w);
 	}
 
 	public Vec4i sub(int n) {
@@ -25,7 +25,7 @@ public class Vec4i extends Vec3i {
 	}
 
 	public Vec4i sub(Vec4i v) {
-		return new Vec4i(x-v.x, y-v.y, z-v.z, w-v.w);
+		return new Vec4i(x - v.x, y - v.y, z - v.z, w - v.w);
 	}
 
 	public Vec4i mul(int n) {
@@ -33,7 +33,7 @@ public class Vec4i extends Vec3i {
 	}
 
 	public Vec4i mul(Vec4i v) {
-		return new Vec4i(x*v.x, y*v.y, z*v.z, w*v.w);
+		return new Vec4i(x * v.x, y * v.y, z * v.z, w * v.w);
 	}
 
 	@Override

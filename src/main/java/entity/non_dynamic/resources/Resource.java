@@ -1,9 +1,9 @@
-package entity.nonDynamic.resources;
+package entity.non_dynamic.resources;
 
-import entity.nonDynamic.StaticEntity;
-import entity.nonDynamic.Workable;
-import graphics.opengl.OpenGLUtils;
+import entity.non_dynamic.StaticEntity;
+import entity.non_dynamic.Workable;
 import graphics.Sprite;
+import graphics.opengl.OpenGLUtils;
 import map.Level;
 import util.vectors.Vec2f;
 

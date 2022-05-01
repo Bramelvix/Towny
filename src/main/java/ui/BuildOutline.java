@@ -1,10 +1,10 @@
 package ui;
 
+import events.PointerClickEvent;
+import events.PointerMoveEvent;
 import events.Subscription;
 import graphics.opengl.OpenGLUtils;
-import events.PointerClickEvent;
 import input.PointerInput;
-import events.PointerMoveEvent;
 import map.Level;
 import map.Tile;
 import util.vectors.Vec2f;
@@ -26,7 +26,7 @@ public class BuildOutline {
 	private float buildSquareYSDraw; // y coord of the start on the screen
 	private float buildSquareXE; // x coord of the end in the game world
 	private float buildSquareYE; // y coord of the end in the game world
-	private final float WIDTH = Tile.SIZE; // width of a square
+	private static final float WIDTH = Tile.SIZE; // width of a square
 	private int squarewidth; // width of the outline in squares
 	private int squareheight; // height of the outline in squares
 	private boolean visible; // is the outline visible
@@ -39,89 +39,98 @@ public class BuildOutline {
 
 	// rendering the outline
 	public void render() {
-		if (visible) {
-			if (lockedSize || buildSquareXE == 0 && buildSquareYE == 0) {
-				OpenGLUtils.buildOutlineDraw(new Vec2f(buildSquareXSDraw, buildSquareYSDraw), WIDTH,
+		if (!visible) {
+			return;
+		}
+
+		if (lockedSize || buildSquareXE == 0 && buildSquareYE == 0) {
+			OpenGLUtils.buildOutlineDraw(new Vec2f(buildSquareXSDraw, buildSquareYSDraw), WIDTH,
 					notBuildable(buildSquareXS, buildSquareYS, z) ? notbuildable : buildable
-				);
+			);
+			return;
+		}
+		if (squarewidth > squareheight) {
+			if (buildSquareXSDraw < buildSquareXE) { // START LEFT OF END == DRAG TO RIGHT
+				for (int i = 0; i < squarewidth; i++) {
+					OpenGLUtils.buildOutlineDraw(new Vec2f(buildSquareXSDraw + i, buildSquareYSDraw), WIDTH,
+							notBuildable(buildSquareXS + i, buildSquareYS, z) ? notbuildable : buildable
+					);
+				}
 				return;
 			}
-			if (squarewidth > squareheight) {
-				if (buildSquareXSDraw < buildSquareXE) { // START LEFT OF END == DRAG TO RIGHT
-					for (int i = 0; i < squarewidth; i++) {
-						OpenGLUtils.buildOutlineDraw(new Vec2f(buildSquareXSDraw + i, buildSquareYSDraw), WIDTH,
-							notBuildable(buildSquareXS + i, buildSquareYS, z) ? notbuildable : buildable
-						);
-					}
-				} else { // START RIGHT OF END == DRAG TO LEFT
-					for (int i = 0; i < squarewidth; i++) {
-						OpenGLUtils.buildOutlineDraw(new Vec2f(buildSquareXSDraw - squarewidth - 1 + i, buildSquareYSDraw), WIDTH,
-							notBuildable(buildSquareXS - squarewidth - 1 + i, buildSquareYS, z) ? notbuildable : buildable
-						);
-					}
-				}
-			} else {
-				if (buildSquareYSDraw < buildSquareYE) { // START ABOVE END == DRAG DOWN
-					for (int i = 0; i < squareheight; i++) {
-						OpenGLUtils.buildOutlineDraw(new Vec2f(buildSquareXSDraw, buildSquareYSDraw + i), squareheight - i,
-							notBuildable(buildSquareXS, buildSquareYS + i, z) ? notbuildable : buildable
-						);
-					}
-				} else { // START BELOW END == DRAG UP
-					for (int i = 0; i < squareheight; i++) {
-						OpenGLUtils.buildOutlineDraw(new Vec2f(buildSquareXSDraw, buildSquareYSDraw - squareheight - 1 + i), WIDTH,
-							notBuildable(buildSquareXS, buildSquareYS - squareheight - 1 + i, z) ? notbuildable : buildable
-						);
-					}
-				}
-
+			// START RIGHT OF END == DRAG TO LEFT
+			for (int i = 0; i < squarewidth; i++) {
+				OpenGLUtils.buildOutlineDraw(new Vec2f(buildSquareXSDraw - squarewidth - 1 + i, buildSquareYSDraw), WIDTH,
+						notBuildable(buildSquareXS - squarewidth - 1 + i, buildSquareYS, z) ? notbuildable : buildable
+				);
 			}
+			return;
+		}
+
+		if (buildSquareYSDraw < buildSquareYE) { // START ABOVE END == DRAG DOWN
+			for (int i = 0; i < squareheight; i++) {
+				OpenGLUtils.buildOutlineDraw(new Vec2f(buildSquareXSDraw, buildSquareYSDraw + i), squareheight - i,
+						notBuildable(buildSquareXS, buildSquareYS + i, z) ? notbuildable : buildable
+				);
+			}
+			return;
+		}
+		// START BELOW END == DRAG UP
+		for (int i = 0; i < squareheight; i++) {
+			OpenGLUtils.buildOutlineDraw(new Vec2f(buildSquareXSDraw, buildSquareYSDraw - squareheight - 1 + i), WIDTH,
+					notBuildable(buildSquareXS, buildSquareYS - squareheight - 1 + i, z) ? notbuildable : buildable
+			);
 		}
 	}
 
 	// is the tile empty
 	private boolean notBuildable(float x, float y, int z) {
-		return !levels[z].tileIsEmpty((int) (x/Tile.SIZE), (int) (y/Tile.SIZE));
+		return !levels[z].tileIsEmpty((int) (x / Tile.SIZE), (int) (y / Tile.SIZE));
 
 	}
 
 	// getters
-	 float[][] getSquareCoords() {
-		 float[][] coords;
+	float[][] getSquareCoords() {
+		float[][] coords;
 		if (buildSquareXE == 0 && buildSquareYE == 0) {
 			coords = new float[1][2];
 			coords[0][0] = buildSquareXS;
 			coords[0][1] = buildSquareYS;
-		} else {
-			if (squarewidth > squareheight) {
-				if (buildSquareXSDraw < buildSquareXE) { // START LEFT OF END == DRAG RIGHT
-					coords = new float[squarewidth][2];
-					for (int i = 0; i < squarewidth; i++) {
-						coords[i][0] = buildSquareXS + (i * Tile.SIZE);
-						coords[i][1] = buildSquareYS;
-					}
-				} else { // START RIGHT OF END == DRAG LEFT
-					coords = new float[squarewidth][2];
-					for (int i = 0; i < squarewidth; i++) {
-						coords[i][0] = (((buildSquareXS - (WIDTH * (squarewidth - 1))))) + (i * Tile.SIZE);
-						coords[i][1] = buildSquareYS;
-					}
+			return coords;
+		}
+
+		if (squarewidth > squareheight) {
+			if (buildSquareXSDraw < buildSquareXE) { // START LEFT OF END == DRAG RIGHT
+				coords = new float[squarewidth][2];
+				for (int i = 0; i < squarewidth; i++) {
+					coords[i][0] = buildSquareXS + (i * Tile.SIZE);
+					coords[i][1] = buildSquareYS;
 				}
-			} else {
-				if (buildSquareYSDraw < buildSquareYE) { // START ABOVE END == DRAG DOWN
-					coords = new float[squareheight][2];
-					for (int i = 0; i < squareheight; i++) {
-						coords[i][0] = buildSquareXS;
-						coords[i][1] = buildSquareYS + (i * Tile.SIZE);
-					}
-				} else { // START BELOW END == DRAG UP
-					coords = new float[squareheight][2];
-					for (int i = 0; i < squareheight; i++) {
-						coords[i][0] = buildSquareXS;
-						coords[i][1] = buildSquareYS - (WIDTH * (squareheight - 1)) + (i * Tile.SIZE);
-					}
-				}
+				return coords;
 			}
+			// START RIGHT OF END == DRAG LEFT
+			coords = new float[squarewidth][2];
+			for (int i = 0; i < squarewidth; i++) {
+				coords[i][0] = (buildSquareXS - (WIDTH * (squarewidth - 1))) + (i * Tile.SIZE);
+				coords[i][1] = buildSquareYS;
+			}
+			return coords;
+		}
+
+		if (buildSquareYSDraw < buildSquareYE) { // START ABOVE END == DRAG DOWN
+			coords = new float[squareheight][2];
+			for (int i = 0; i < squareheight; i++) {
+				coords[i][0] = buildSquareXS;
+				coords[i][1] = buildSquareYS + (i * Tile.SIZE);
+			}
+			return coords;
+		}
+
+		// START BELOW END == DRAG UP
+		coords = new float[squareheight][2];
+		for (int i = 0; i < squareheight; i++) {
+			coords[i][0] = buildSquareXS;
+			coords[i][1] = buildSquareYS - (WIDTH * (squareheight - 1)) + (i * Tile.SIZE);
 		}
 		return coords;
 
@@ -132,9 +141,9 @@ public class BuildOutline {
 	}
 
 	private void update(PointerMoveEvent e) {
-		buildSquareXS = (float) ((int)(e.x + xScroll) / (int) Tile.SIZE * (int) Tile.SIZE); //this is on purpose ;)))
+		buildSquareXS = (float) ((int) (e.x + xScroll) / (int) Tile.SIZE * (int) Tile.SIZE); //this is on purpose ;)))
 		buildSquareXSDraw = buildSquareXS - xScroll;
-		buildSquareYS = (float) ((int)(e.y + yScroll) / (int) Tile.SIZE * (int) Tile.SIZE);
+		buildSquareYS = (float) ((int) (e.y + yScroll) / (int) Tile.SIZE * (int) Tile.SIZE);
 		buildSquareYSDraw = buildSquareYS - yScroll;
 
 		if (visible) {
@@ -157,6 +166,7 @@ public class BuildOutline {
 		this.levels = levels;
 		pointer.on(PointerInput.EType.MOVE, this::update);
 	}
+
 	// show the outline
 	void show(int z, float xScroll, float yScroll, boolean lockedSize, PointerInput pointer, Consumer<float[][]> consumer, Predicate<PointerClickEvent> preReq) {
 		if (!visible) {

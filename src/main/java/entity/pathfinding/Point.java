@@ -2,7 +2,8 @@ package entity.pathfinding;
 
 public class Point {
 
-	public int x, y;
+	public final int x;
+	public final int y;
 	float cost;
 	private Point parent;
 
@@ -15,10 +16,12 @@ public class Point {
 
 	// rewritten the equals method to return true if the X and Y are the same,
 	// because points are not unique
+	@Override
 	public boolean equals(Object o) {
-		return o instanceof Point && this.x == ((Point) o).x && this.y == ((Point) o).y;
+		return o instanceof Point point && this.x == point.x && this.y == point.y;
 	}
 
+	@Override
 	public int hashCode() {
 		return x * y;
 	}

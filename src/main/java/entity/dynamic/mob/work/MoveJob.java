@@ -1,7 +1,7 @@
 package entity.dynamic.mob.work;
 
 import entity.dynamic.mob.Villager;
-import entity.nonDynamic.building.Stairs;
+import entity.non_dynamic.building.Stairs;
 import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
 
@@ -14,12 +14,12 @@ public class MoveJob extends Job {
 	private int counter = 0;
 	private final boolean exactLocation;
 
-	public MoveJob(int xloc, int yloc, int zloc, Villager worker) { //movejob to move to this exact tile
-		this(xloc, yloc, zloc, worker, true);
+	public MoveJob(Villager worker, int xloc, int yloc, int zloc) { //movejob to move to this exact tile
+		this(worker, xloc, yloc, zloc, true);
 	}
 
-	MoveJob(int xloc, int yloc, int zloc, Villager worker, boolean exactLocation) { //movejob to move to a tile or around this tile
-		super(xloc, yloc, zloc, worker);
+	MoveJob(Villager worker, int xloc, int yloc, int zloc, boolean exactLocation) { //movejob to move to a tile or around this tile
+		super(worker, xloc, yloc, zloc);
 		this.exactLocation = exactLocation;
 	}
 
@@ -60,8 +60,8 @@ public class MoveJob extends Job {
 				startx = stairsX;
 				starty = stairsY;
 			}
-			Optional<Path> path = exactLocation ? PathFinder.findPath(startx, starty, xloc, yloc, worker.levels[zloc]) : PathFinder.findPathAround(startx , starty ,  xloc, yloc , worker.levels[zloc]);
-			if (!((exactLocation && xloc == startx && yloc == starty) || (!exactLocation && (startx <= ((xloc + 1))) && (startx >= ((xloc - 1)) && ((starty >= ((yloc - 1))) && (starty <= ((yloc + 1)))))))) {
+			Optional<Path> path = exactLocation ? PathFinder.findPath(startx, starty, xloc, yloc, worker.levels[zloc]) : PathFinder.findPathAround(startx, starty, xloc, yloc, worker.levels[zloc]);
+			if (!((exactLocation && xloc == startx && yloc == starty) || (!exactLocation && (startx <= (xloc + 1)) && (startx >= (xloc - 1) && ((starty >= (yloc - 1)) && (starty <= (yloc + 1))))))) {
 				if (path.isEmpty()) { //no path
 					completed = true;
 					return;
@@ -72,25 +72,28 @@ public class MoveJob extends Job {
 		worker.setPath(paths.get(counter));
 	}
 
+	@Override
 	public void execute() {
-		if (!completed && started) {
-			if (worker.onSpot(paths.get(counter).getXdest(), paths.get(counter).getYdest(), worker.getZ())) {
-				if (counter == paths.size() - 1) {
-					completed = true;
-					if (zloc != worker.getZ()) {
-						goOnStairs();
-					}
-					return;
-				}
-				goOnStairs();
-				counter++;
-				worker.setPath(paths.get(counter));
-			} else {
-				worker.move();
-			}
-		} else {
+		if (completed || !started) {
 			start();
+			return;
 		}
+
+		if (!worker.onSpot(paths.get(counter).getXdest(), paths.get(counter).getYdest(), worker.getZ())) {
+			worker.move();
+			return;
+		}
+
+		if (counter == paths.size() - 1) {
+			completed = true;
+			if (zloc != worker.getZ()) {
+				goOnStairs();
+			}
+			return;
+		}
+		goOnStairs();
+		counter++;
+		worker.setPath(paths.get(counter));
 	}
 
 	private void goOnStairs() {

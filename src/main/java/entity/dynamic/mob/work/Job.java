@@ -14,16 +14,21 @@ public abstract class Job {
 	protected BooleanSupplier work;
 
 	// constructors
-	Job(int xloc, int yloc, int zloc, Villager worker) {
+	Job(Villager worker, int xloc, int yloc, int zloc) {
 		this(worker);
-		completed = false;
 		this.xloc = xloc;
 		this.yloc = yloc;
 		this.zloc = zloc;
 	}
 
+	Job(Villager worker, int xloc, int yloc, int zloc, BooleanSupplier work) {
+		this(worker, xloc, yloc, zloc);
+		this.work = work;
+	}
+
 	Job(Villager worker) {
 		this.worker = worker;
+		completed = false;
 	}
 
 	public boolean isCompleted() {
@@ -31,15 +36,17 @@ public abstract class Job {
 	}
 
 	protected void start() {
-		worker.prependJobToChain(new MoveJob(xloc, yloc, zloc, worker,false));
+		worker.prependJobToChain(new MoveJob(worker, xloc, yloc, zloc, false));
 		started = true;
 	}
 
 	public void execute() {
 		if (!completed && started) {
 			if (!worker.aroundTile(xloc, yloc, zloc)) {
-				worker.prependJobToChain(new MoveJob(xloc, yloc, zloc, worker,false));
-			} else if (work.getAsBoolean()) { completed = true; }
+				worker.prependJobToChain(new MoveJob(worker, xloc, yloc, zloc, false));
+			} else if (work.getAsBoolean()) {
+				completed = true;
+			}
 		} else {
 			start();
 		}

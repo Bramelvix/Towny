@@ -1,6 +1,6 @@
 package util.vectors;
 
-public class Vec3i extends Vec2i{
+public class Vec3i extends Vec2i {
 	public int z;
 
 	public Vec3i(int x, int y, int z) {
@@ -17,7 +17,7 @@ public class Vec3i extends Vec2i{
 	}
 
 	public Vec3i add(Vec3i v) {
-		return new Vec3i(x+v.x, y+v.y, z+v.z);
+		return new Vec3i(x + v.x, y + v.y, z + v.z);
 	}
 
 	public Vec3i sub(int n) {
@@ -25,7 +25,7 @@ public class Vec3i extends Vec2i{
 	}
 
 	public Vec3i sub(Vec3i v) {
-		return new Vec3i(x-v.x, y-v.y, z-v.z);
+		return new Vec3i(x - v.x, y - v.y, z - v.z);
 	}
 
 	public Vec3i mul(int n) {
@@ -33,7 +33,7 @@ public class Vec3i extends Vec2i{
 	}
 
 	public Vec3i mul(Vec3i v) {
-		return new Vec3i(x*v.x, y*v.y, z*v.z);
+		return new Vec3i(x * v.x, y * v.y, z * v.z);
 	}
 
 	@Override

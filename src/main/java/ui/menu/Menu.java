@@ -1,14 +1,14 @@
 package ui.menu;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import events.PointerMoveEvent;
 import events.Subscription;
 import graphics.opengl.OpenGLUtils;
-import ui.UiElement;
 import input.PointerInput;
-import events.PointerMoveEvent;
+import ui.UiElement;
 import util.vectors.Vec2f;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Menu extends UiElement { // the menu is the little options menu that shows up when you right click
 
@@ -29,6 +29,7 @@ public class Menu extends UiElement { // the menu is the little options menu tha
 			items.forEach(MenuItem::render);
 		}
 	}
+
 	public void setVisible(boolean visible) {
 		this.visible = visible;
 	}
@@ -53,12 +54,12 @@ public class Menu extends UiElement { // the menu is the little options menu tha
 		}
 	}
 
-	public void update (PointerMoveEvent event) {
+	public void update(PointerMoveEvent event) {
 		if (visible && (
-			event.x <= getX() - 10
-			|| event.x >= getX() + getWidth() + 10
-			|| event.y <= getY() - 10
-			|| event.y >= getY() + getHeight() + 10
+				event.x <= getX() - 10
+						|| event.x >= getX() + getWidth() + 10
+						|| event.y <= getY() - 10
+						|| event.y >= getY() + getHeight() + 10
 		)) {
 			hide();
 		}
@@ -87,7 +88,9 @@ public class Menu extends UiElement { // the menu is the little options menu tha
 
 	// adding an item to the menu
 	private void addItem(MenuItem o) {
-		if (o == null || items.contains(o)) { return; }
+		if (o == null || items.contains(o)) {
+			return;
+		}
 		o.init(this);
 		items.add(o);
 		if (o.getText().length() > size.x / 10) {

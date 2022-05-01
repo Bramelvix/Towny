@@ -1,16 +1,19 @@
 package graphics;
 
 import entity.Entity;
+import entity.non_dynamic.resources.OreType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 
 public final class SpriteHashtable {
-	private SpriteHashtable() {}
+	private SpriteHashtable() {
+	}
+
 	private static final Logger logger = LoggerFactory.getLogger(SpriteHashtable.class);
 
-	private static final Hashtable<Integer, Sprite> table = new Hashtable<>();
+	private static final HashMap<Integer, Sprite> table = new HashMap<>();
 
 	// return random grass sprite
 	public static Sprite getGrass() {
@@ -30,12 +33,12 @@ public final class SpriteHashtable {
 	// returns random skin color sprite
 	public static Sprite getPerson() {
 		byte n = (byte) Entity.RANDOM.nextInt(3);
-		return n == 0 ? get(48) : n == 1 ? get(49) : get(50);
+		return get(48 + n);
 	}
 
 	public static Sprite getHair(boolean male) {
 		return get(male ? maleHairNrs[Entity.RANDOM.nextInt(maleHairNrs.length)]
-			: femaleHairNrs[Entity.RANDOM.nextInt(femaleHairNrs.length)]
+				: femaleHairNrs[Entity.RANDOM.nextInt(femaleHairNrs.length)]
 		);
 	}
 
@@ -44,29 +47,29 @@ public final class SpriteHashtable {
 		return Entity.RANDOM.nextBoolean() ? get(10) : get(11);
 	}
 
-	public static void registerSprite(int key, Sprite sprite) throws Exception {
+	public static void registerSprite(int key, Sprite sprite) throws IllegalArgumentException {
 		if (table.put(key, sprite) != null) {
-			throw new Exception("Duplicate key while registering sprite: " + key);
+			throw new IllegalArgumentException("Duplicate key while registering sprite: " + key);
 		}
 	}
 
-	public static int[] maleHairNrs = { 211, 213, 214, 215, 217, 218, 219, 223, 227, 228, 229, 230, 231, 232, 233, 234,
-		235, 237, 238, 239, 241, 242, 243, 247, 251, 252, 253, 254, 255, 256, 257, 258, 259, 261, 262, 263, 267, 268,
-		269, 270
+	private static final int[] maleHairNrs = {211, 213, 214, 215, 217, 218, 219, 223, 227, 228, 229, 230, 231, 232, 233, 234,
+			235, 237, 238, 239, 241, 242, 243, 247, 251, 252, 253, 254, 255, 256, 257, 258, 259, 261, 262, 263, 267, 268,
+			269, 270
 	};
 
-	public static int[] femaleHairNrs = { 212, 216, 220, 221, 222, 224, 225, 226, 236, 240, 244, 245, 246, 248, 249,
-		250, 260, 264, 265, 266
+	private static final int[] femaleHairNrs = {212, 216, 220, 221, 222, 224, 225, 226, 236, 240, 244, 245, 246, 248, 249,
+			250, 260, 264, 265, 266
 	};
 
 	public static Sprite get(int key) {
 		if (!table.containsKey(key)) {
-			logger.warn("NullPointer imminent! Trying to get Sprite with id: " + key + ", but no sprite with this key is present!");
+			logger.warn("NullPointer imminent! Trying to get Sprite with id: {}, but no sprite with this key is present!", key);
 		}
 		return table.get(key);
 	}
 
-	public static void registerSprites() throws Exception { //registers all sprites by id
+	public static void registerSprites() throws IllegalArgumentException { //registers all sprites by id
 		registerSprite(1, new StaticSprite(0, 0, 1)); //water
 		registerSprite(2, new StaticSprite(5, 0, 1)); //grass
 		registerSprite(3, new StaticSprite(0, 8, 1)); //void tile
@@ -104,8 +107,8 @@ public final class SpriteHashtable {
 		registerSprite(39, new StaticSprite(38, 10, 1));//chest
 		registerSprite(40, new StaticSprite(36, 18, 1)); //stairs Top
 		registerSprite(41, new StaticSprite(34, 18, 1)); //stairs bottom
-		registerSprite(42,new StaticSprite(3,6,2)); //turquoise trousers long
-		registerSprite(43,new StaticSprite(13,0,2)); //blacksmith apron turquoise
+		registerSprite(42, new StaticSprite(3, 6, 2)); //turquoise trousers long
+		registerSprite(43, new StaticSprite(13, 0, 2)); //blacksmith apron turquoise
 		registerSprite(44, new StaticSprite(32, 1, 1)); //woodenDoorHorizontal
 		registerSprite(45, new StaticSprite(37, 1, 1)); //woodenDoorVertical
 		registerSprite(46, new StaticSprite(32, 2, 1));//stoneDoorHorizontal
@@ -115,11 +118,11 @@ public final class SpriteHashtable {
 		registerSprite(50, new StaticSprite(1, 2, 2));//villager3
 		registerSprite(51, new StaticSprite(0, 3, 2));//zombie
 		registerSprite(52, new StaticSprite(1, 3, 2));//zombiehit
-		registerSprite(53, new StaticSprite(0, 23, 1));//coalOre
-		registerSprite(54, new StaticSprite(0, 24, 1));//ironOre
-		registerSprite(55, new StaticSprite(0, 26, 1));//copperOre
-		registerSprite(56, new StaticSprite(1, 25, 1));//goldOre
-		registerSprite(57, new StaticSprite(0, 25, 1));//crystalOre
+		registerSprite(OreType.COAL.getSpriteId(), new StaticSprite(0, 23, 1));//coalOre
+		registerSprite(OreType.IRON.getSpriteId(), new StaticSprite(0, 24, 1));//ironOre
+		registerSprite(OreType.COPPER.getSpriteId(), new StaticSprite(0, 26, 1));//copperOre
+		registerSprite(OreType.GOLD.getSpriteId(), new StaticSprite(1, 25, 1));//goldOre
+		registerSprite(OreType.CRYSTAL.getSpriteId(), new StaticSprite(0, 25, 1));//crystalOre
 		registerSprite(58, new StaticSprite(53, 22, 1));//logs
 		registerSprite(59, new StaticSprite(42, 10, 1));//ironBar
 		registerSprite(60, new StaticSprite(43, 10, 1));//goldBar
@@ -203,7 +206,7 @@ public final class SpriteHashtable {
 		registerSprite(142, new StaticSprite(6, 6, 1));
 		//GAP
 
-		registerSprite(161, new StaticSprite(9, 0, 1)); //HardStoneNoSides
+		registerSprite(OreType.STONE.getSpriteId(), new StaticSprite(9, 0, 1)); //HardStoneNoSides
 		registerSprite(162, new StaticSprite(10, 0, 1));
 		registerSprite(163, new StaticSprite(11, 0, 1));
 		registerSprite(164, new StaticSprite(10, 1, 1));
@@ -308,7 +311,7 @@ public final class SpriteHashtable {
 		registerSprite(268, new StaticSprite(20, 10, 2)); // whiteHair7
 		registerSprite(269, new StaticSprite(21, 10, 2)); // whiteHair8
 		registerSprite(270, new StaticSprite(22, 10, 2)); // whiteHair9
-		registerSprite(271, new AnimationSprite(new Sprite[] { get(83), get(84) }, new int[] { 30, 30 }));
+		registerSprite(271, new AnimationSprite(new Sprite[]{get(83), get(84)}, new int[]{30, 30}));
 	}
 
 }

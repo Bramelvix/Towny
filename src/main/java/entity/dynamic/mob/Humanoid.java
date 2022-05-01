@@ -43,7 +43,7 @@ public abstract class Humanoid extends Mob {
 	@Override
 	protected final void moveTo(int x, int y) {
 		super.moveTo(x, y);
-		if (!(holding == null)) {
+		if (holding != null) {
 			holding.setLocation(this.location.x, this.location.y, this.z);
 		}
 	}

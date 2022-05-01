@@ -15,14 +15,22 @@ public class TrueTypeFont {
 	public final int fontSize;
 	private int fontHeight;
 	public final int fontTextureID;
-	private final int textureWidth = 512;
-	private final int textureHeight = 512;
+	private static final int TEXTURE_WIDTH = 512;
+	private static final int TEXTURE_HEIGHT = 512;
 
 	static class IntObject {
-		public int width;
-		public int height;
+		private int width;
+		private int height;
 		int storedX;
 		int storedY;
+
+		public int getWidth() {
+			return width;
+		}
+
+		public int getHeight() {
+			return height;
+		}
 	}
 
 	public int getHeight() {
@@ -31,11 +39,11 @@ public class TrueTypeFont {
 
 	public TrueTypeFont(Font font, Color colour) {
 		this.fontSize = font.getSize() + 3;
-		BufferedImage imgTemp = new BufferedImage(textureWidth, textureHeight, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage imgTemp = new BufferedImage(TEXTURE_WIDTH, TEXTURE_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = (Graphics2D) imgTemp.getGraphics();
 
 		g.setColor(new Color(0, 0, 0, 1));
-		g.fillRect(0, 0, textureWidth, textureHeight);
+		g.fillRect(0, 0, TEXTURE_WIDTH, TEXTURE_HEIGHT);
 
 		int rowHeight = 0;
 		int positionX = 0;
@@ -48,7 +56,7 @@ public class TrueTypeFont {
 			newIntObject.width = fontImage.getWidth();
 			newIntObject.height = fontImage.getHeight();
 
-			if (positionX + newIntObject.width >= textureWidth) {
+			if (positionX + newIntObject.width >= TEXTURE_WIDTH) {
 				positionX = 0;
 				positionY += rowHeight;
 				rowHeight = 0;
@@ -106,14 +114,14 @@ public class TrueTypeFont {
 
 	void drawQuad(float x, float y, float drawX2, float drawY2, float srcX, float srcY, float srcX2, float srcY2) {
 		Vec2f glyphSize = new Vec2f(drawX2 - x, drawY2 - y);
-		float u = srcX / textureWidth;
-		float v = srcY / textureHeight;
-		float SrcWidth = srcX2 - srcX;
-		float SrcHeight = srcY2 - srcY;
-		float texWidth = (SrcWidth / textureWidth);
-		float texHeight = (SrcHeight / textureHeight);
+		float u = srcX / TEXTURE_WIDTH;
+		float v = srcY / TEXTURE_HEIGHT;
+		float srcWidth = srcX2 - srcX;
+		float srcHeight = srcY2 - srcY;
+		float texWidth = (srcWidth / TEXTURE_WIDTH);
+		float texHeight = (srcHeight / TEXTURE_HEIGHT);
 
-		OpenGLUtils.drawTexturedQuad(new Vec2f(x,y), glyphSize, new Vec2f(0,0), new Vec2f(u, v+texHeight), new Vec2f(texWidth, -texHeight), fontTextureID);
+		OpenGLUtils.drawTexturedQuad(new Vec2f(x, y), glyphSize, new Vec2f(0, 0), new Vec2f(u, v + texHeight), new Vec2f(texWidth, -texHeight), fontTextureID);
 	}
 
 	public void destroy() {

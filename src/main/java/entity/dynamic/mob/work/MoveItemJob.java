@@ -2,7 +2,7 @@ package entity.dynamic.mob.work;
 
 import entity.dynamic.item.Item;
 import entity.dynamic.mob.Villager;
-import entity.nonDynamic.building.container.Container;
+import entity.non_dynamic.building.container.Container;
 
 import java.util.Optional;
 
@@ -12,7 +12,7 @@ public class MoveItemJob extends Job {
 	private Container container;
 	private Item material;
 
-	public MoveItemJob(Item material, Villager worker) {
+	public MoveItemJob(Villager worker, Item material) {
 		this(worker, true);
 		this.material = material;
 		if (this.worker.isHolding(this.material) || !this.material.isReserved(this.worker)) {
@@ -30,7 +30,7 @@ public class MoveItemJob extends Job {
 		this.pickUpJob = pickUpJob;
 	}
 
-	public MoveItemJob(int xloc, int yloc, int zloc, Villager worker) {
+	public MoveItemJob(Villager worker, int xloc, int yloc, int zloc) {
 		this(worker, false);
 		this.xloc = xloc; //locations are in tile numbers
 		this.yloc = yloc;
@@ -44,57 +44,61 @@ public class MoveItemJob extends Job {
 			completed = true;
 			return;
 		}
-		Optional<Container> possibleContainer = worker.levels[zloc].getEntityOn( xloc, yloc, Container.class);
+		Optional<Container> possibleContainer = worker.levels[zloc].getEntityOn(xloc, yloc, Container.class);
 		possibleContainer.ifPresent(value -> container = value);
-		worker.prependJobToChain(new MoveJob(xloc, yloc, zloc, worker, container == null));
+		worker.prependJobToChain(new MoveJob(worker, xloc, yloc, zloc, container == null));
 	}
 
+	@Override
 	public void execute() {
-		if (!completed && started) {
-			if (pickUpJob) {
-				if (worker.isHolding(material)) {
-					completed = true;
-				} else {
-					if (container != null) {
-						if (worker.aroundTile(material.getTileX(), material.getTileY(), material.getZ())) {
-							if (worker.pickUp(material, container)) {
-								completed = true;
-							}
-							return;
-						}
-					} else if (worker.onSpot(material.getTileX(), material.getTileY(), material.getZ())) {
-						if (worker.pickUp(material)) {
-							completed = true;
-						}
-						return;
-					}
+		if (completed || !started) {
+			start();
+			return;
+		}
 
-					if (worker.isMovementNull()) {
+		if (pickUpJob) {
+			if (worker.isHolding(material)) {
+				completed = true;
+				return;
+			}
+
+			if (container != null) {
+				if (worker.aroundTile(material.getTileX(), material.getTileY(), material.getZ())) {
+					if (worker.pickUp(material, container)) {
 						completed = true;
-						material.removeReserved();
 					}
-					worker.move();
-				}
-			} else {
-				if (container != null) {
-					if (worker.aroundTile(xloc, yloc, zloc)) {
-						worker.drop(container);
-						completed = true;
-						return;
-					}
-				} else if (worker.onSpot(xloc, yloc, zloc)) {
-					worker.drop();
-					completed = true;
 					return;
 				}
-				if (worker.isMovementNull()) {
+			} else if (worker.onSpot(material.getTileX(), material.getTileY(), material.getZ())) {
+				if (worker.pickUp(material)) {
 					completed = true;
 				}
-				worker.move();
+				return;
 			}
-		} else {
-			start();
+
+			if (worker.isMovementNull()) {
+				completed = true;
+				material.removeReserved();
+			}
+			worker.move();
+			return;
 		}
+
+		if (container != null) {
+			if (worker.aroundTile(xloc, yloc, zloc)) {
+				worker.drop(container);
+				completed = true;
+				return;
+			}
+		} else if (worker.onSpot(xloc, yloc, zloc)) {
+			worker.drop();
+			completed = true;
+			return;
+		}
+		if (worker.isMovementNull()) {
+			completed = true;
+		}
+		worker.move();
 	}
 
 }

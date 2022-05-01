@@ -8,19 +8,20 @@ import org.slf4j.LoggerFactory;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Hashtable;
+import java.util.HashMap;
 
-public final class SpritesheetHashtable  {
-	private SpritesheetHashtable() {}
+public final class SpritesheetHashtable {
+	private SpritesheetHashtable() {
+	}
 
 	private static Spritesheet combined;
-	private static final Hashtable<Integer, BufferedImage> table = new Hashtable<>();
+	private static final HashMap<Integer, BufferedImage> table = new HashMap<>();
 	private static final Logger logger = LoggerFactory.getLogger(SpritesheetHashtable.class);
 
-	public static void registerSpritesheet(int key, BufferedImage sheet) throws Exception {
+	public static void registerSpritesheet(int key, BufferedImage sheet) throws IllegalArgumentException {
 		if (table.put(key, sheet) != null) {
-			logger.warn("Duplicate key while registering spritesheet: " + key);
-			throw new Exception("Duplicate key while registering spritesheet: " + key);
+			logger.warn("Duplicate key while registering spritesheet: {}", key);
+			throw new IllegalArgumentException("Duplicate key while registering spritesheet: " + key);
 		}
 	}
 
@@ -49,8 +50,8 @@ public final class SpritesheetHashtable  {
 	private static void combineSpriteSheets() {
 		int heightTotal = 0;
 		int biggestWidth = 0;
-		for (int i = 1; i < table.size()+1; i++) {
-			heightTotal+=get(i).getHeight();
+		for (int i = 1; i < table.size() + 1; i++) {
+			heightTotal += get(i).getHeight();
 			if (get(i).getWidth() > biggestWidth) {
 				biggestWidth = get(i).getWidth();
 			}
@@ -58,7 +59,7 @@ public final class SpritesheetHashtable  {
 		BufferedImage image = new BufferedImage(biggestWidth, heightTotal, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = image.createGraphics();
 		int height = 0;
-		for (int i = 1; i< table.size()+1; i++) {
+		for (int i = 1; i < table.size() + 1; i++) {
 			g2d.drawImage(get(i), 0, height, null);
 			height += get(i).getHeight();
 		}
@@ -66,10 +67,10 @@ public final class SpritesheetHashtable  {
 		combined = new Spritesheet(image);
 	}
 
-	public static int getBaselineY (int originalY, int spritesheetIndex) {
+	public static int getBaselineY(int originalY, int spritesheetIndex) {
 		int y = originalY;
 		for (int i = 1; i < spritesheetIndex; i++) {
-			y+= get(i).getHeight()/ Tile.SIZE;
+			y += get(i).getHeight() / Tile.SIZE;
 		}
 		return y;
 	}

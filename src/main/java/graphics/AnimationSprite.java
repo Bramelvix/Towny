@@ -3,7 +3,7 @@ package graphics;
 import util.vectors.Vec2f;
 import util.vectors.Vec3f;
 
-public class AnimationSprite implements Sprite{
+public class AnimationSprite implements Sprite {
 	private final Sprite[] sprites;
 	private final int[] counters;
 	private int current = 0;

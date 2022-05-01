@@ -1,16 +1,17 @@
 package map;
 
-import entity.nonDynamic.building.Stairs;
-import entity.nonDynamic.building.container.Chest;
+import entity.non_dynamic.building.Stairs;
+import entity.non_dynamic.building.container.Chest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.vectors.Vec2i;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class LevelTests {
+class LevelTests {
 
 	private Level level;
 

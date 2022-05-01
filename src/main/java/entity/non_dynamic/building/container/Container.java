@@ -1,7 +1,7 @@
-package entity.nonDynamic.building.container;
+package entity.non_dynamic.building.container;
 
-import entity.nonDynamic.building.BuildAbleObject;
 import entity.dynamic.item.Item;
+import entity.non_dynamic.building.BuildAbleObject;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -27,10 +27,6 @@ public abstract class Container extends BuildAbleObject {
 		Optional<Item> result = items.stream().filter(item -> item.isSameType(e)).findAny();
 		result.ifPresent(items::remove);
 		return result;
-	}
-
-	public Item[] getItemArray() {
-		return getItemList().toArray(new Item[0]);
 	}
 
 	public ArrayList<Item> getItemList() {

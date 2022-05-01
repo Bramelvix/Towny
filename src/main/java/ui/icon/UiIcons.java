@@ -7,7 +7,7 @@ public class UiIcons {
 	private final Icon[] icons; // array of the 4 icons
 
 	// initialising the icons
-	public UiIcons (float scale, PointerInput pointer) {
+	public UiIcons(float scale, PointerInput pointer) {
 
 		icons = new Icon[7];
 		icons[0] = new Icon(15, 660, "/icons/tools/wood-axe.png", scale, pointer, this::deSelect);

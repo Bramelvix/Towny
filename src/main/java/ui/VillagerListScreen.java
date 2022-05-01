@@ -1,22 +1,16 @@
 package ui;
 
 
-import java.awt.Color;
-import java.awt.Graphics;
+import graphics.opengl.OpenGLUtils;
+import util.vectors.Vec2f;
 
-public class VillagerListScreen {
-	
-	private int x, y;
-	private int width = 500;
-	private int height = 500;
-	private boolean visible;
-	private final Color colour = new Color(91, 94, 99, 230);
-	
-	public void render(Graphics g) {
-		if (visible) {
-			g.setColor(colour);
-			g.fillRect(x, y, width, height);
-		}
+public class VillagerListScreen extends UiElement {
+	protected VillagerListScreen(Vec2f position, Vec2f size) {
+		super(position, size);
 	}
 
+	@Override
+	public void render() {
+		OpenGLUtils.drawFilledSquare(position, size, new Vec2f(0, 0), colour);
+	}
 }
