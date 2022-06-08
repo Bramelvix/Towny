@@ -182,7 +182,9 @@ public class BuildOutline {
 	// hide the outline
 	void remove() {
 		visible = false;
-		onClick.unsubscribe();
+		if (onClick != null) {
+			onClick.unsubscribe();
+		}
 	}
 
 }
