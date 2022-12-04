@@ -35,7 +35,6 @@ class Minimap extends UiElement {
 		for (int x = 0; x < size.x; x += 2) {
 			for (int y = 0; y < size.y; y += 2) {
 				int colour = map.getTile(x / 2, y / 2).getAvgColour();
-				Color color = Sprite.toColor(colour);
 				pixels[x + y * (int) size.x] = colour;
 				pixels[(x + 1) + y * (int) size.x] = colour;
 				pixels[x + (y + 1) * (int) size.x] = colour;
