@@ -35,22 +35,22 @@ public class Ui {
 		top.render(); //colShader + texShader + fontShader
 	}
 
-	public Ui(Level[] levels, PointerInput pointer) throws IOException {
-		icons = new UiIcons(0.176056338028169f, pointer);
-		menu = new Menu(pointer);
-		selection = new SelectionSquare(pointer);
+	public Ui(Level[] levels) throws IOException {
+		icons = new UiIcons(0.176056338028169f);
+		menu = new Menu();
+		selection = new SelectionSquare();
 		minimap = new Minimap(1290, 8, levels[0]);
-		top = new TopBar((Game.WIDTH - 270) / 2f, 5, 270, 85, pointer);
-		outline = new BuildOutline(levels, pointer);
-		layerLevelChanger = new LayerLevelChanger(1320, 210, 140, 40, pointer);
+		top = new TopBar((Game.WIDTH - 270) / 2f, 5, 270, 85);
+		outline = new BuildOutline(levels);
+		layerLevelChanger = new LayerLevelChanger(1320, 210, 140, 40);
 	}
 
-	public void initLayerLevelChangerActions(PointerInput pointer, Runnable actionup, Runnable actionDown) {
-		layerLevelChanger.init(pointer, actionup, actionDown);
+	public void initLayerLevelChangerActions(Runnable actionup, Runnable actionDown) {
+		layerLevelChanger.init(actionup, actionDown);
 	}
 
-	public void initTopBarActions(PointerInput pointer, Runnable toggle, Runnable upSpeed, Runnable downSpeed) {
-		top.init(pointer, toggle, upSpeed, downSpeed);
+	public void initTopBarActions(Runnable toggle, Runnable upSpeed, Runnable downSpeed) {
+		top.init(toggle, upSpeed, downSpeed);
 	}
 
 	public boolean outlineIsVisible() {
@@ -69,14 +69,10 @@ public class Ui {
 		icons.deSelect();
 	}
 
-	public void showMenu(PointerInput pointer, MenuItem... items) {
-		showMenu(pointer);
+	public void showMenu(MenuItem... items) {
+		menu = new Menu();
 		menu.addItems(items);
 		menu.setVisible(true);
-	}
-
-	private void showMenu(PointerInput pointer) {
-		menu = new Menu(pointer);
 	}
 
 	public boolean menuInvisible() {
@@ -111,8 +107,8 @@ public class Ui {
 		return selection.getHeight();
 	}
 
-	public void showBuildSquare(boolean lockedSize, int z, float xScroll, float yScroll, PointerInput pointer, Consumer<float[][]> consumer) {
-		outline.show(z, xScroll, yScroll, lockedSize, pointer, consumer, event -> icons.hoverOnNoIcons());
+	public void showBuildSquare(boolean lockedSize, int z, float xScroll, float yScroll, Consumer<float[][]> consumer) {
+		outline.show(z, xScroll, yScroll, lockedSize, consumer, event -> icons.hoverOnNoIcons());
 	}
 
 	public void removeBuildSquare() {

@@ -210,6 +210,10 @@ public abstract class OpenGLUtils {
 		instanceData.mapBuffer(accessBits);
 	}
 
+	public static void drawTexturedQuadScaled(Vec2f pos, Vec2f size, int texture) {
+		drawTexturedQuadScaled(pos, size, new Vec2f(0), texture);
+	}
+
 	public static void drawTexturedQuadScaled(Vec2f pos, Vec2f size, Vec2f offset, int texture) {
 		//TODO Move this out of here, shader.use() is very bad for fps
 		texShader.use();
@@ -223,12 +227,8 @@ public abstract class OpenGLUtils {
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
-	public static void drawOutline(Vec2f pos, Vec2f size, Vec2f offset, Vec4f color) {
-		colShader.use();
-		colShader.setUniform(OFFSET, pToGL(pos.x - offset.x, 'w'), pToGL(pos.y - offset.y, 'h'));
-		colShader.setUniform(SCALE, size.x / Tile.SIZE, size.y / Tile.SIZE);
-		colShader.setUniform("i_color", color);
-		glBindVertexArray(vao);
+	public static void drawOutline(Vec2f pos, Vec2f size, Vec2f offset, Vec4f colour) {
+		initSquareDraw(pos, size, offset, colour);
 		glDrawArrays(GL_LINE_LOOP, 0, 6);
 	}
 
@@ -237,7 +237,7 @@ public abstract class OpenGLUtils {
 	}
 
 	public static void iconDraw(int id, Vec2f pos, Vec2f size, boolean drawSelectionSquare) { //drawTexturedQuadScaled ui which does not need to be scaled up
-		drawTexturedQuadScaled(pos, size, new Vec2f(0, 0), id);
+		drawTexturedQuadScaled(pos, size, id);
 		if (drawSelectionSquare) {
 			drawOutline(pos, size, new Vec2f(0, 0), new Vec4f(1, 0, 0, 1));
 		}
@@ -247,12 +247,20 @@ public abstract class OpenGLUtils {
 		drawFilledSquare(pos, size, new Vec2f(0, 0), new Vec4f(0.3568f, 0.3686f, 0.8235f, 0.5f));
 	}
 
-	public static void drawFilledSquare(Vec2f pos, Vec2f size, Vec2f offset, Vec4f color) {
+	public static void drawFilledSquare(Vec2f pos, Vec2f size, Vec4f colour) {
+		drawFilledSquare(pos, size, new Vec2f(0), colour);
+	}
+
+	private static void initSquareDraw(Vec2f pos, Vec2f size, Vec2f offset, Vec4f colour) {
 		colShader.use();
 		colShader.setUniform(OFFSET, pToGL(pos.x - offset.x, 'w'), pToGL(pos.y - offset.y, 'h'));
 		colShader.setUniform(SCALE, size.x / Tile.SIZE, size.y / Tile.SIZE);
-		colShader.setUniform("i_color", color);
+		colShader.setUniform("i_color", colour);
 		glBindVertexArray(vao);
+	}
+
+	public static void drawFilledSquare(Vec2f pos, Vec2f size, Vec2f offset, Vec4f colour) {
+		initSquareDraw(pos, size, offset, colour);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
@@ -262,7 +270,7 @@ public abstract class OpenGLUtils {
 	}
 
 	public static void buildOutlineDraw(Vec2f pos, float size, Vec4f color) {
-		drawFilledSquare(pos, new Vec2f(size), new Vec2f(0), color);
+		drawFilledSquare(pos, new Vec2f(size), color);
 	}
 
 	public static void drawText(String text, float x, float y) {

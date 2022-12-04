@@ -11,16 +11,16 @@ public class SelectionSquare extends UiElement {
 	private final Vec2f ingame = new Vec2f(0); // INGAME
 	private final Vec2f offset = new Vec2f(0);
 
-	public SelectionSquare(PointerInput input) {
+	public SelectionSquare() {
 		super(new Vec2f(0), new Vec2f(0), false);
-		input.on(PointerInput.EType.DRAG, onlyWhen(
+		PointerInput.getInstance().on(PointerInput.EType.DRAG, onlyWhen(
 				event -> visible && event.button == GLFW_MOUSE_BUTTON_LEFT,
 				event -> {
 					size.x = (float) event.x - position.x;
 					size.y = (float) event.y - position.y;
 				}
 		));
-		input.on(PointerInput.EType.DRAG_START, onlyWhen(
+		PointerInput.getInstance().on(PointerInput.EType.DRAG_START, onlyWhen(
 				event -> event.button == GLFW_MOUSE_BUTTON_LEFT,
 				event -> {
 					position.x = (float) event.x;
@@ -52,7 +52,7 @@ public class SelectionSquare extends UiElement {
 
 	public void render() {
 		if (visible) {
-			OpenGLUtils.drawFilledSquare(position, size, new Vec2f(0), colour);
+			OpenGLUtils.drawFilledSquare(position, size, colour);
 		}
 	}
 

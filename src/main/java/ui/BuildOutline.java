@@ -162,20 +162,20 @@ public class BuildOutline {
 	}
 
 	// constructor
-	BuildOutline(Level[] levels, PointerInput pointer) {
+	BuildOutline(Level[] levels) {
 		this.levels = levels;
-		pointer.on(PointerInput.EType.MOVE, this::update);
+		PointerInput.getInstance().on(PointerInput.EType.MOVE, this::update);
 	}
 
 	// show the outline
-	void show(int z, float xScroll, float yScroll, boolean lockedSize, PointerInput pointer, Consumer<float[][]> consumer, Predicate<PointerClickEvent> preReq) {
+	void show(int z, float xScroll, float yScroll, boolean lockedSize, Consumer<float[][]> consumer, Predicate<PointerClickEvent> preReq) {
 		if (!visible) {
 			visible = true;
 			update(z, xScroll, yScroll);
 			squarewidth = 1;
 			squareheight = 1;
 			this.lockedSize = lockedSize;
-			onClick = pointer.on(PointerInput.EType.PRESSED, onlyWhen(preReq, event -> consumer.accept(getSquareCoords())));
+			onClick = PointerInput.getInstance().on(PointerInput.EType.PRESSED, onlyWhen(preReq, event -> consumer.accept(getSquareCoords())));
 		}
 	}
 

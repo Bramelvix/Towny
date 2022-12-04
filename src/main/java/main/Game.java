@@ -32,8 +32,7 @@ import input.Keyboard;
 import input.PointerInput;
 import map.Level;
 import map.Tile;
-import org.lwjgl.glfw.GLFWImage;
-import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +73,11 @@ public class Game {
 	private long window;
 	private PointerInput pointer;
 
+	private GLFWKeyCallback keyCallback;
+	private GLFWMouseButtonCallback mouseButtonCallback;
+	private GLFWCursorPosCallback cursorPosCallback;
+	private GLFWScrollCallback scrollCallback;
+
 	private final Keyboard keyboard = new Keyboard();
 
 	public static void main(String[] args) {
@@ -87,6 +91,7 @@ public class Game {
 	private Game() throws Exception {
 		init();
 		loop();
+		destroy();
 	}
 
 	private void init() throws Exception {
@@ -119,12 +124,12 @@ public class Game {
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glfwSwapInterval(0); //0 = VSYNC OFF, 1= VSYNC ON
 		setIcon();
-		glfwSetKeyCallback(window, keyboard);
+		keyCallback = glfwSetKeyCallback(window, keyboard);
 		PointerInput.configure(this);
 		this.pointer = PointerInput.getInstance();
-		glfwSetMouseButtonCallback(window, pointer.buttonsCallback());
-		glfwSetCursorPosCallback(window, pointer.positionCallback());
-		glfwSetScrollCallback(window, this::scroll);
+		mouseButtonCallback = glfwSetMouseButtonCallback(window, pointer.buttonsCallback());
+		cursorPosCallback = glfwSetCursorPosCallback(window, pointer.positionCallback());
+		scrollCallback = glfwSetScrollCallback(window, this::scroll);
 
 
 		SpritesheetHashtable.registerSpritesheets();
@@ -245,13 +250,32 @@ public class Game {
 
 			draw();
 		}
-		glfwFreeCallbacks(window);
+	}
+
+	private void destroy() {
+		destroyCallbacks();
 		glfwDestroyWindow(window);
-		FontUtils.release();
+		FontUtils.destroy();
 		SpritesheetHashtable.destroy();
 		ui.destroy();
 		OpenGLUtils.destroy();
 		glfwTerminate();
+	}
+
+	private void destroyCallbacks() {
+		if (mouseButtonCallback != null) {
+			mouseButtonCallback.free();
+		}
+		if (scrollCallback != null) {
+			scrollCallback.free();
+		}
+		if (keyCallback != null) {
+			keyCallback.free();
+		}
+		if (cursorPosCallback != null) {
+			cursorPosCallback.free();
+		}
+		glfwFreeCallbacks(window);
 	}
 
 	private void draw() {
@@ -279,12 +303,12 @@ public class Game {
 	}
 
 	private void initUi() throws IOException {
-		ui = new Ui(map, pointer);
-		ui.initLayerLevelChangerActions(pointer, this::onClickLayerUp, this::onClickLayerDown);
-		ui.initTopBarActions(pointer, this::onClickPause, this::onClickupSpeed, this::onClickdownSpeed);
-		ui.getIcons().setShovelOnClick(pointer, this::onClickShovel);
-		ui.getIcons().setPlowOnclick(pointer, this::onClickPlow);
-		ui.getIcons().setSawOnClick(pointer, this::onClickSaw);
+		ui = new Ui(map);
+		ui.initLayerLevelChangerActions(this::onClickLayerUp, this::onClickLayerDown);
+		ui.initTopBarActions(this::onClickPause, this::onClickupSpeed, this::onClickdownSpeed);
+		ui.getIcons().setShovelOnClick(this::onClickShovel);
+		ui.getIcons().setPlowOnclick(this::onClickPlow);
+		ui.getIcons().setSawOnClick(this::onClickSaw);
 		ui.updateSpeed(speed);
 	}
 
@@ -334,7 +358,7 @@ public class Game {
 		if (ui.menuInvisible()) {
 			deselectAllVills();
 			ui.showBuildSquare(
-					true, currentLayerNumber, xScroll, yScroll, pointer,
+					true, currentLayerNumber, xScroll, yScroll,
 					pos -> onClickBuildOutline(pos, BuildingRecipe.STAIRSDOWN)
 			);
 		}
@@ -343,7 +367,7 @@ public class Game {
 	private void onClickPlow() {
 		if (ui.menuInvisible()) {
 			ui.showBuildSquare(
-					false, currentLayerNumber, xScroll, yScroll, pointer,
+					false, currentLayerNumber, xScroll, yScroll,
 					pos -> onClickBuildOutline(pos, BuildingRecipe.TILLED_SOIL)
 			);
 		}
@@ -351,7 +375,7 @@ public class Game {
 
 	private void onClickBuild(MenuItem item) {
 		ui.showBuildSquare(
-				false, currentLayerNumber, xScroll, yScroll, pointer,
+				false, currentLayerNumber, xScroll, yScroll,
 				pos -> onClickBuildOutline(pos, item.getRecipe())
 		);
 		ui.getMenu().hide();
@@ -362,10 +386,10 @@ public class Game {
 			deselectAllVills();
 			MenuItem[] items = new MenuItem[BuildingRecipe.RECIPES.length + 1];
 			for (int i = 0; i < BuildingRecipe.RECIPES.length; i++) {
-				items[i] = new MenuItem(BuildingRecipe.RECIPES[i], this::onClickBuild, pointer);
+				items[i] = new MenuItem(BuildingRecipe.RECIPES[i], this::onClickBuild);
 			}
-			items[items.length - 1] = new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer);
-			ui.showMenu(pointer, items);
+			items[items.length - 1] = new MenuItem(MenuItem.CANCEL, this::onClickCancel);
+			ui.showMenu(items);
 		}
 	}
 
@@ -406,10 +430,10 @@ public class Game {
 	private void onClickSmelt() {
 		MenuItem[] craftingOptions = new MenuItem[ItemRecipe.FURNACE_RECIPES.length + 1];
 		for (int i = 0; i < ItemRecipe.FURNACE_RECIPES.length; i++) {
-			craftingOptions[i] = new MenuItem(ItemRecipe.FURNACE_RECIPES[i], this::onClickCraft, pointer);
+			craftingOptions[i] = new MenuItem(ItemRecipe.FURNACE_RECIPES[i], this::onClickCraft);
 		}
-		craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer);
-		ui.showMenu(pointer, craftingOptions);
+		craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL, this::onClickCancel);
+		ui.showMenu(craftingOptions);
 
 	}
 
@@ -432,20 +456,20 @@ public class Game {
 	private void onClickSmith() {
 		MenuItem[] craftingOptions = new MenuItem[WeaponMaterial.values().length + 1];
 		for (int i = 0; i < WeaponMaterial.values().length; i++) {
-			craftingOptions[i] = new MenuItem(StringUtils.capitalise(WeaponMaterial.values()[i].toString().toLowerCase()), this::showMaterials, pointer);
+			craftingOptions[i] = new MenuItem(StringUtils.capitalise(WeaponMaterial.values()[i].toString().toLowerCase()), this::showMaterials);
 		}
-		craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer);
-		ui.showMenu(pointer, craftingOptions);
+		craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL, this::onClickCancel);
+		ui.showMenu(craftingOptions);
 	}
 
 	private void showMaterials(MenuItem item) {
 		ItemRecipe[] recipes = ItemRecipe.smithingRecipesFromWeaponMaterial(WeaponMaterial.valueOf(item.getText().toUpperCase()));
 		MenuItem[] craftingOptions = new MenuItem[recipes.length + 1];
 		for (int i = 0; i < WeaponMaterial.values().length; i++) {
-			craftingOptions[i] = new MenuItem(recipes[i], this::onClickCraft, pointer);
+			craftingOptions[i] = new MenuItem(recipes[i], this::onClickCraft);
 		}
-		craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer);
-		ui.showMenu(pointer, craftingOptions);
+		craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL, this::onClickCancel);
+		ui.showMenu(craftingOptions);
 
 	}
 
@@ -593,64 +617,62 @@ public class Game {
 			if (selectedvill != null) {
 				List<MenuItem> options = new ArrayList<>();
 				if (selectedvill.getHolding() != null && (map[currentLayerNumber].tileIsEmpty(pointer.getTileX(), pointer.getTileY()) || map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY(), Chest.class).isPresent())) {
-					options.add(new MenuItem(MenuItem.defaultText(MenuItem.DROP, selectedvill.getHolding()), in -> onClickDrop(), pointer));
+					options.add(new MenuItem(MenuItem.defaultText(MenuItem.DROP, selectedvill.getHolding()), this::onClickDrop));
 				}
 
 				map[currentLayerNumber].selectTree(pointer.getTileX(), pointer.getTileY()).ifPresent(
-						tree -> options.add(new MenuItem(MenuItem.defaultText(MenuItem.CHOP, tree), tree, this::onClickChop, pointer))
+						tree -> options.add(new MenuItem(MenuItem.defaultText(MenuItem.CHOP, tree), tree, this::onClickChop))
 				);
 
 				map[currentLayerNumber].selectTilledSoil(pointer.getTileX(), pointer.getTileY()).ifPresent(
 						plot -> {
 							if (!plot.isPlanted()) {
-								options.add(new MenuItem((MenuItem.SOW), plot, this::onClickFarm, pointer));
+								options.add(new MenuItem((MenuItem.SOW), plot, this::onClickFarm));
 							} else if (plot.isReadyToHarvest()) {
-								options.add(new MenuItem((MenuItem.HARVEST), plot, this::onClickFarm, pointer));
+								options.add(new MenuItem((MenuItem.HARVEST), plot, this::onClickFarm));
 							}
 						}
 				);
 
 				map[currentLayerNumber].selectOre(pointer.getTileX(), pointer.getTileY()).ifPresent(
-						ore -> options.add(new MenuItem(MenuItem.defaultText(MenuItem.MINE, ore), ore, this::onClickMine, pointer))
+						ore -> options.add(new MenuItem(MenuItem.defaultText(MenuItem.MINE, ore), ore, this::onClickMine))
 				);
 
-				anyMobHoverOn().ifPresent(mob -> options.add(new MenuItem(MenuItem.defaultText(MenuItem.FIGHT, mob), mob, this::onClickFight, pointer)));
+				anyMobHoverOn().ifPresent(mob -> options.add(new MenuItem(MenuItem.defaultText(MenuItem.FIGHT, mob), mob, this::onClickFight)));
 
 				map[currentLayerNumber].getItemOn(pointer.getTileX(), pointer.getTileY()).ifPresent(item -> {
 					if (item instanceof Weapon) {
-						options.add(new MenuItem(MenuItem.defaultText(MenuItem.EQUIP, item), item, this::onClickPickup, pointer));
+						options.add(new MenuItem(MenuItem.defaultText(MenuItem.EQUIP, item), item, this::onClickPickup));
 					} else if (item instanceof Clothing) {
-						options.add(new MenuItem(MenuItem.defaultText(MenuItem.WEAR, item), item, this::onClickPickup, pointer));
+						options.add(new MenuItem(MenuItem.defaultText(MenuItem.WEAR, item), item, this::onClickPickup));
 					} else {
-						options.add(new MenuItem(MenuItem.defaultText(MenuItem.PICKUP, item), item, this::onClickPickup, pointer));
+						options.add(new MenuItem(MenuItem.defaultText(MenuItem.PICKUP, item), item, this::onClickPickup));
 					}
 				});
 
 				Optional<Container> container = map[currentLayerNumber].getEntityOn(pointer.getTileX(), pointer.getTileY(), Container.class);
 				if (container.isPresent()) {
 					container.get().getItemList().forEach(item ->
-							options.add(new MenuItem(MenuItem.defaultText(MenuItem.PICKUP, item), item, this::onClickPickup, pointer))
+							options.add(new MenuItem(MenuItem.defaultText(MenuItem.PICKUP, item), item, this::onClickPickup))
 					);
 				} else {
-					options.add(new MenuItem(MenuItem.MOVE, in -> onClickMove(), pointer));
+					options.add(new MenuItem(MenuItem.MOVE, this::onClickMove));
 				}
-				options.add(new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer));
-				ui.showMenu(pointer, options.toArray(new MenuItem[0]));
+				options.add(new MenuItem(MenuItem.CANCEL, this::onClickCancel));
+				ui.showMenu(options.toArray(new MenuItem[0]));
 			} else {
 				if (map[currentLayerNumber].getWorkstationOn(pointer.getTileX(), pointer.getTileY(), Workstation.Type.FURNACE).isPresent()) {
 					ui.showMenu(
-							pointer,
-							new MenuItem(MenuItem.SMELT, in -> onClickSmelt(), pointer),
-							new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer)
+							new MenuItem(MenuItem.SMELT, this::onClickSmelt),
+							new MenuItem(MenuItem.CANCEL, this::onClickCancel)
 					);
 				} else if (map[currentLayerNumber].getWorkstationOn(pointer.getTileX(), pointer.getTileY(), Workstation.Type.ANVIL).isPresent()) {
 					ui.showMenu(
-							pointer,
-							new MenuItem(MenuItem.SMITH, in -> onClickSmith(), pointer),
-							new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer)
+							new MenuItem(MenuItem.SMITH, this::onClickSmith),
+							new MenuItem(MenuItem.CANCEL, this::onClickCancel)
 					);
 				} else {
-					ui.showMenu(pointer, new MenuItem(MenuItem.CANCEL, in -> onClickCancel(), pointer));
+					ui.showMenu(new MenuItem(MenuItem.CANCEL, this::onClickCancel));
 				}
 			}
 		}

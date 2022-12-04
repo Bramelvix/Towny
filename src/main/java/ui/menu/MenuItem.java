@@ -50,29 +50,33 @@ public class MenuItem {
 	private final Subscription subscriptionClick;
 
 	// constructor
-	public MenuItem(String text, Consumer<MenuItem> onClick, PointerInput pointer) {
+	public MenuItem(String text, Consumer<MenuItem> onClick) {
 		this.text = text;
 		position = new Vec2f(0);
-		subscriptionClick = pointer.on(PointerInput.EType.PRESSED, onlyWhen(
+		subscriptionClick = PointerInput.getInstance().on(PointerInput.EType.PRESSED, onlyWhen(
 				event -> event.button == GLFW_MOUSE_BUTTON_LEFT && hover,
 				event -> onClick.accept(this)
 		));
-		subscriptionMove = pointer.on(PointerInput.EType.MOVE, this::update);
+		subscriptionMove = PointerInput.getInstance().on(PointerInput.EType.MOVE, this::update);
 	}
 
-	public MenuItem(String text, Entity e, Consumer<MenuItem> onClick, PointerInput pointer) {
-		this(text, onClick, pointer);
+	public MenuItem(String text, Runnable onClick) {
+		this(text, item -> onClick.run());
+	}
+
+	public MenuItem(String text, Entity e, Consumer<MenuItem> onClick) {
+		this(text, onClick);
 		this.entity = e;
 	}
 
 
-	public MenuItem(ItemRecipe recipe, Consumer<MenuItem> onClick, PointerInput pointer) {
-		this(CRAFT + " " + recipe.getRecipeName(), onClick, pointer);
+	public MenuItem(ItemRecipe recipe, Consumer<MenuItem> onClick) {
+		this(CRAFT + " " + recipe.getRecipeName(), onClick);
 		this.recipe = recipe;
 	}
 
-	public MenuItem(BuildingRecipe recipe, Consumer<MenuItem> onClick, PointerInput pointer) {
-		this(BUILD + " " + recipe.getRecipeName(), onClick, pointer);
+	public MenuItem(BuildingRecipe recipe, Consumer<MenuItem> onClick) {
+		this(BUILD + " " + recipe.getRecipeName(), onClick);
 		this.recipe = recipe;
 	}
 

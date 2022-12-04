@@ -101,7 +101,7 @@ public class FontUtils {
 		}
 	}
 
-	public static void release() {
+	public static void destroy() {
 		black.destroy();
 		red.destroy();
 	}

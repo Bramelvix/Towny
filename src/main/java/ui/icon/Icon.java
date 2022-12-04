@@ -19,29 +19,29 @@ public class Icon extends UiElement {
 	private final Runnable deselect;
 
 	// constructor
-	public Icon(float x, float y, String path, float scale, PointerInput pointer, Runnable deselect) {
-		this(x, y, OpenGLUtils.loadTexture(path), scale, pointer, deselect);
+	public Icon(float x, float y, String path, float scale, Runnable deselect) {
+		this(x, y, OpenGLUtils.loadTexture(path), scale, deselect);
 	}
 
-	public Icon(float x, float y, TextureInfo texture, float scale, PointerInput pointer, Runnable deselect) {
+	public Icon(float x, float y, TextureInfo texture, float scale, Runnable deselect) {
 		super(new Vec2f(x, y), new Vec2f(texture.width() * scale, texture.height() * scale));
 		setTexture(texture.id());
-		pointer.on(PointerInput.EType.MOVE, this::update); //TODO THIS SUCKS
+		PointerInput.getInstance().on(PointerInput.EType.MOVE, this::update); //TODO THIS SUCKS
 		this.deselect = deselect;
 		if (deselect != null) {
-			setOnClick(pointer, () -> {
+			setOnClick(() -> {
 				this.deselect.run();
 				setSelect(true);
 			});
 		}
 	}
 
-	public Icon(float x, float y, String path, float scale, PointerInput pointer) {
-		this(x, y, OpenGLUtils.loadTexture(path), scale, pointer, null);
+	public Icon(float x, float y, String path, float scale) {
+		this(x, y, OpenGLUtils.loadTexture(path), scale, null);
 	}
 
-	public Icon(float x, float y, TextureInfo texture, float scale, PointerInput pointer) {
-		this(x, y, texture, scale, pointer, null);
+	public Icon(float x, float y, TextureInfo texture, float scale) {
+		this(x, y, texture, scale, null);
 	}
 
 	// getters
@@ -91,8 +91,8 @@ public class Icon extends UiElement {
 		setHover(x >= getX() && (x <= getX() + getWidth()) && (y >= getY()) && (y <= getY() + getHeight()));
 	}
 
-	public void setOnClick(PointerInput pointer, Runnable action) {
-		pointer.on(PointerInput.EType.RELEASED, onlyWhen(
+	public void setOnClick(Runnable action) {
+		PointerInput.getInstance().on(PointerInput.EType.RELEASED, onlyWhen(
 				event -> event.button == GLFW_MOUSE_BUTTON_LEFT && hoverOn(),
 				event -> action.run())
 		);

@@ -2,7 +2,6 @@ package ui;
 
 import graphics.TextureInfo;
 import graphics.opengl.OpenGLUtils;
-import input.PointerInput;
 import ui.icon.Icon;
 import util.vectors.Vec2f;
 
@@ -23,15 +22,15 @@ public class TopBar extends UiElement {
 	private int speed;
 
 	// constructor
-	TopBar(float x, float y, float width, float height, PointerInput pointer) throws IOException {
+	TopBar(float x, float y, float width, float height) throws IOException {
 		super(new Vec2f(x, y), new Vec2f(width, height));
 		pauseTexture = OpenGLUtils.loadTexture(ImageIO.read(TopBar.class.getResource("/icons/pause-button.png")));
 		playTexture = OpenGLUtils.loadTexture(ImageIO.read(TopBar.class.getResource("/icons/play-button.png")));
-		pause = new Icon(x + 120, y + 25, pauseTexture, 0.060f, pointer);
-		fast = new Icon(x + 160, y + 30, "/icons/fast.png", 1.0f, pointer);
-		slow = new Icon(x + 75, y + 30, "/icons/slow.png", 1.0f, pointer);
-		sol = new Icon(x + 210, y + 17, "/icons/soldier.png", 1.0f, pointer);
-		vil = new Icon(x + 10, y + 17, "/icons/villager.png", 1.0f, pointer);
+		pause = new Icon(x + 120, y + 25, pauseTexture, 0.060f);
+		fast = new Icon(x + 160, y + 30, "/icons/fast.png", 1.0f);
+		slow = new Icon(x + 75, y + 30, "/icons/slow.png", 1.0f);
+		sol = new Icon(x + 210, y + 17, "/icons/soldier.png", 1.0f);
+		vil = new Icon(x + 10, y + 17, "/icons/villager.png", 1.0f);
 	}
 
 	// update the villager and soldier counts
@@ -44,19 +43,19 @@ public class TopBar extends UiElement {
 		this.speed = speed;
 	}
 
-	void init(PointerInput pointer, Runnable togglePause, Runnable upSpeed, Runnable downSpeed) {
-		this.pause.setOnClick(pointer, () -> {
+	void init(Runnable togglePause, Runnable upSpeed, Runnable downSpeed) {
+		this.pause.setOnClick(() -> {
 			pause.setTexture(pause.getTextureId() == pauseTexture.id() ? playTexture.id() : pauseTexture.id());
 			togglePause.run();
 		});
-		this.fast.setOnClick(pointer, upSpeed);
-		this.slow.setOnClick(pointer, downSpeed);
+		this.fast.setOnClick(upSpeed);
+		this.slow.setOnClick(downSpeed);
 	}
 
 	// render the topbar on the screen
 	@Override
 	public void render() {
-		OpenGLUtils.drawFilledSquare(position, size, new Vec2f(0, 0), colour);
+		OpenGLUtils.drawFilledSquare(position, size, colour);
 		vil.render();
 		sol.render();
 		slow.render();

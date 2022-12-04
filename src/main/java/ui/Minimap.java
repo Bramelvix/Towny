@@ -1,15 +1,11 @@
 package ui;
 
 
-import graphics.Sprite;
 import graphics.opengl.OpenGLUtils;
 import main.Game;
 import map.Level;
 import map.Tile;
 import util.vectors.Vec2f;
-
-import java.awt.*;
-import java.util.Collection;
 
 class Minimap extends UiElement {
 
@@ -57,8 +53,8 @@ class Minimap extends UiElement {
 	public void render() {
 		filledRectLoc.x = position.x + (xoff * (1f / (Game.WIDTH / filledRectSize.x)));
 		filledRectLoc.y = position.y + (yoff * (1f / (Game.HEIGHT / filledRectSize.y)));
-		OpenGLUtils.drawTexturedQuadScaled(position, new Vec2f(size.x, size.y), new Vec2f(0, 0), textureId);
-		OpenGLUtils.drawFilledSquare(filledRectLoc, filledRectSize, new Vec2f(0, 0), colour);
+		OpenGLUtils.drawTexturedQuadScaled(position, new Vec2f(size.x, size.y), textureId);
+		OpenGLUtils.drawFilledSquare(filledRectLoc, filledRectSize, colour);
 	}
 
 	// setter
@@ -70,5 +66,7 @@ class Minimap extends UiElement {
 	void destroy() {
 		OpenGLUtils.deleteTexture(textureId);
 	}
+
+
 
 }

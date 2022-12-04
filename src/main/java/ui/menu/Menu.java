@@ -16,10 +16,10 @@ public class Menu extends UiElement { // the menu is the little options menu tha
 	private final Subscription subscription;
 
 	// constructor
-	public Menu(PointerInput pointer) {
-		super(new Vec2f(pointer.getTrueX(), pointer.getTrueY()), new Vec2f(70, 0), false);
+	public Menu() {
+		super(new Vec2f(PointerInput.getInstance().getTrueX(), PointerInput.getInstance().getTrueY()), new Vec2f(70, 0), false);
 		items = new ArrayList<>();
-		subscription = pointer.on(PointerInput.EType.MOVE, this::update);
+		subscription = PointerInput.getInstance().on(PointerInput.EType.MOVE, this::update);
 	}
 
 	// render method

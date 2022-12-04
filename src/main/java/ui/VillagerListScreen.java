@@ -11,6 +11,6 @@ public class VillagerListScreen extends UiElement {
 
 	@Override
 	public void render() {
-		OpenGLUtils.drawFilledSquare(position, size, new Vec2f(0, 0), colour);
+		OpenGLUtils.drawFilledSquare(position, size, colour);
 	}
 }
