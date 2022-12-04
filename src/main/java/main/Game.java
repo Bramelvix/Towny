@@ -288,7 +288,7 @@ public class Game {
 		map[currentLayerNumber].render(scroll);
 		renderMobs();
 
-		OpenGLUtils.drawInstanced(OpenGLUtils.getInstanceData(), Sprite.SIZE, scroll);
+		OpenGLUtils.drawInstanced(OpenGLUtils.getInstanceData(), scroll);
 		OpenGLUtils.drawOutlines(scroll);
 		ui.render();
 		glfwSwapBuffers(window);

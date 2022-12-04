@@ -20,4 +20,31 @@ public abstract class UiElement {
 	}
 
 	public abstract void render();
+
+	public boolean mouseOver(double x, double y) {
+		return mouseOver(x, y, 0);
+	}
+
+	public boolean mouseOver(double x, double y, int margin) {
+		return x >= getX() - margin
+				&& x <= getX() + getWidth() + margin
+				&& y >= getY() - margin
+				&& y <= getY() + getHeight() + margin;
+	}
+
+	public float getX() {
+		return position.x;
+	}
+
+	public float getY() {
+		return position.y;
+	}
+
+	public float getWidth() {
+		return size.x;
+	}
+
+	public float getHeight() {
+		return size.y;
+	}
 }

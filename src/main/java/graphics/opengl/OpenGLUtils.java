@@ -182,16 +182,11 @@ public abstract class OpenGLUtils {
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
-
-	public static void drawInstanced(InstanceData instanceData, float tileSize, Vec2f offset) {
-		drawInstanced(instanceData, new Vec2f(tileSize), offset);
-	}
-
-	public static void drawInstanced(InstanceData instanceData, Vec2f tileSize, Vec2f offset) {
+	public static void drawInstanced(InstanceData instanceData, Vec2f offset) {
 		tileShader.use();
 		instanceData.bindTexture();
 
-		tileShader.setUniform(SCALE, tileSize.x / Tile.SIZE, tileSize.y / Tile.SIZE);
+		tileShader.setUniform(SCALE, 1f, 1f);
 
 		tileShader.setUniform(OFFSET, (2f * -offset.x) / Game.WIDTH, (2f * offset.y) / Game.HEIGHT);
 		Vec2f texScale = new Vec2f(Tile.SIZE / instanceData.getSpriteSheet().getWidth(), Tile.SIZE / instanceData.getSpriteSheet().getHeight());
@@ -232,14 +227,14 @@ public abstract class OpenGLUtils {
 		glDrawArrays(GL_LINE_LOOP, 0, 6);
 	}
 
-	public static void drawOutline(Vec2f pos, Vec2f size, Vec2f offset) {
-		drawOutline(pos, size, offset, outlineColour);
+	public static void drawOutline(Vec2f pos, Vec2f size, Vec4f colour) {
+		drawOutline(pos, size, new Vec2f(0), colour);
 	}
 
 	public static void iconDraw(int id, Vec2f pos, Vec2f size, boolean drawSelectionSquare) { //drawTexturedQuadScaled ui which does not need to be scaled up
 		drawTexturedQuadScaled(pos, size, id);
 		if (drawSelectionSquare) {
-			drawOutline(pos, size, new Vec2f(0, 0), new Vec4f(1, 0, 0, 1));
+			drawOutline(pos, size, new Vec4f(1, 0, 0, 1));
 		}
 	}
 

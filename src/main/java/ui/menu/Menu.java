@@ -55,35 +55,13 @@ public class Menu extends UiElement { // the menu is the little options menu tha
 	}
 
 	public void update(PointerMoveEvent event) {
-		if (visible && (
-				event.x <= getX() - 10
-						|| event.x >= getX() + getWidth() + 10
-						|| event.y <= getY() - 10
-						|| event.y >= getY() + getHeight() + 10
-		)) {
+		if (visible && !mouseOver(event.x, event.y, 10)) {
 			hide();
 		}
 	}
 
-	// getters
-	public float getWidth() {
-		return size.x;
-	}
-
-	public float getHeight() {
-		return size.y;
-	}
-
 	float getYLocForMenuItem() {
 		return position.y + (items.size() * 24);
-	}
-
-	public float getX() {
-		return position.x;
-	}
-
-	public float getY() {
-		return position.y;
 	}
 
 	// adding an item to the menu

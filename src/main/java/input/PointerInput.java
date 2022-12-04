@@ -113,12 +113,12 @@ public class PointerInput {
 		return (int) ((ypos + game.getyScroll()) / Tile.SIZE);
 	}
 
-	public int getTrueX() {
-		return (int) xpos;
+	public float getTrueX() {
+		return (float) xpos;
 	}
 
-	public int getTrueY() {
-		return (int) ypos;
+	public float getTrueY() {
+		return (float) ypos;
 	}
 
 	// x and y coord on the screen, in pixels , WITH OFFSET

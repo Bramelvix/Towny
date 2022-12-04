@@ -1,6 +1,7 @@
 package ui.icon;
 
 import events.PointerMoveEvent;
+import events.Subscription;
 import graphics.TextureInfo;
 import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
@@ -17,6 +18,7 @@ public class Icon extends UiElement {
 	private boolean selected; // is the icon selected
 	private int id; //OpenGL texture id
 	private final Runnable deselect;
+	private final Subscription subscription;
 
 	// constructor
 	public Icon(float x, float y, String path, float scale, Runnable deselect) {
@@ -26,7 +28,7 @@ public class Icon extends UiElement {
 	public Icon(float x, float y, TextureInfo texture, float scale, Runnable deselect) {
 		super(new Vec2f(x, y), new Vec2f(texture.width() * scale, texture.height() * scale));
 		setTexture(texture.id());
-		PointerInput.getInstance().on(PointerInput.EType.MOVE, this::update); //TODO THIS SUCKS
+		subscription = PointerInput.getInstance().on(PointerInput.EType.MOVE, this::update); //TODO THIS SUCKS
 		this.deselect = deselect;
 		if (deselect != null) {
 			setOnClick(() -> {
@@ -49,24 +51,8 @@ public class Icon extends UiElement {
 		return selected;
 	}
 
-	public float getX() {
-		return position.x;
-	}
-
-	public float getY() {
-		return position.y;
-	}
-
 	public boolean hoverOn() {
 		return hover;
-	}
-
-	public float getWidth() {
-		return size.x;
-	}
-
-	public float getHeight() {
-		return size.y;
 	}
 
 	// setters
@@ -88,7 +74,7 @@ public class Icon extends UiElement {
 	}
 
 	public void update(double x, double y) {
-		setHover(x >= getX() && (x <= getX() + getWidth()) && (y >= getY()) && (y <= getY() + getHeight()));
+		setHover(mouseOver(x, y));
 	}
 
 	public void setOnClick(Runnable action) {
@@ -108,6 +94,7 @@ public class Icon extends UiElement {
 
 	public void destroy() {
 		OpenGLUtils.deleteTexture(id);
+		subscription.unsubscribe();
 	}
 
 }

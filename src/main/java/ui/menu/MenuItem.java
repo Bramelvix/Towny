@@ -109,11 +109,6 @@ public class MenuItem {
 		hover = (event.x >= position.x && event.x <= position.x + width && event.y >= position.y && event.y <= position.y + 10);
 	}
 
-	// getter
-	public boolean clicked(PointerInput pointer) {
-		return hover && pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT);
-	}
-
 	public String getText() {
 		return text;
 	}
