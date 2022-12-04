@@ -8,6 +8,7 @@ public abstract class UiElement {
 	protected final Vec2f size; // width and height
 	protected boolean visible; // is the element visible
 	protected static final Vec4f colour = new Vec4f(0.3568f, 0.3686f, 0.3882f, 0.43137f);
+	protected static final Vec4f colour2 = new Vec4f(0.9568f, 0.3686f, 0.3882f, 0.83137f);
 
 	protected UiElement(Vec2f position, Vec2f size, boolean visible) {
 		this.position = position;

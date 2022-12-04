@@ -44,8 +44,7 @@ public abstract class OpenGLUtils {
 	private static final Logger logger = LoggerFactory.getLogger(OpenGLUtils.class);
 
 
-	//TODO how is this number decided? I literally added a 0 to it because the limit would sometimes be reached while changing layers.
-	private static final int MAX_INSTANCES = 6270; //maximum amount of instances that can be drawn in one frame (per buffer)
+	private static final int MAX_INSTANCES = 5000; //maximum amount of instances that can be drawn in one frame (per buffer)
 
 	private static InstanceData instanceData;
 
@@ -97,10 +96,6 @@ public abstract class OpenGLUtils {
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LEQUAL);
 
-		//TODO figure out what this shit even does
-		//glEnable(GL_MULTISAMPLE);
-		//glEnable(GL_SAMPLE_ALPHA_TO_COVERAGE);
-
 		vbo2 = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, vbo2);
 		glEnableVertexAttribArray(1);
@@ -127,7 +122,7 @@ public abstract class OpenGLUtils {
 		if (o != 'w') {
 			pixel = Game.HEIGHT - pixel;
 		}
-		return (2f * pixel + 1f) / orientation - 1f;
+		return (2f * pixel) / orientation - 1f;
 	}
 
 	public static TextureInfo loadTexture(int[] pixels, int width, int height) {
