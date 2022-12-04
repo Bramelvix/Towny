@@ -687,17 +687,21 @@ public class Game {
 	private void moveCamera() {
 		int yScroll = 0;
 		int xScroll = 0;
-		if (keyboard.isKeyDown(GLFW_KEY_UP) && this.yScroll > 1) {
-			yScroll -= 6;
+		if (keyboard.isKeyDown(GLFW_KEY_UP) && this.yScroll > 0) {
+			yScroll = Math.max(-6, -(int) this.yScroll);
 		}
-		if (keyboard.isKeyDown(GLFW_KEY_DOWN) && this.yScroll < ((map[currentLayerNumber].height * Tile.SIZE) - 1 - HEIGHT)) {
-			yScroll += 6;
+		float maxYScrollValue = ((map[currentLayerNumber].height * Tile.SIZE) - 1 - HEIGHT);
+		if (keyboard.isKeyDown(GLFW_KEY_DOWN) && this.yScroll < maxYScrollValue) {
+			yScroll = Math.min(6, (int) maxYScrollValue - (int) this.yScroll);
 		}
-		if (keyboard.isKeyDown(GLFW_KEY_LEFT) && this.xScroll > 1) {
-			xScroll -= 6;
+
+		if (keyboard.isKeyDown(GLFW_KEY_LEFT) && this.xScroll > 0) {
+			xScroll = Math.max(-6, -(int) this.xScroll);
 		}
-		if (keyboard.isKeyDown(GLFW_KEY_RIGHT) && this.xScroll < ((map[currentLayerNumber].width * Tile.SIZE) - WIDTH - 1)) {
-			xScroll += 6;
+
+		float maxXScrollValue = ((map[currentLayerNumber].width * Tile.SIZE) - WIDTH - 1);
+		if (keyboard.isKeyDown(GLFW_KEY_RIGHT) && this.xScroll < maxXScrollValue) {
+			xScroll = Math.min(6, (int) maxXScrollValue - (int) this.xScroll);
 		}
 		moveCamera(xScroll, yScroll);
 	}
