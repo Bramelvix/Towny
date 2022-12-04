@@ -240,10 +240,11 @@ public class Villager extends Humanoid {
 	private void drawVillager(Vec3f pos) {
 		if (isVisible()) {
 			sprite.draw(pos);
-			hair.draw(new Vec3f(pos.x, pos.y, pos.z - 0.1f));
+			//if graphical clipping happens, mess with these Z values
+			hair.draw(new Vec3f(pos.x, pos.y, pos.z));
 			inventory.render(pos.z);
 			if (getHolding() != null) {
-				getHolding().getSprite().draw(new Vec3f(pos.x, pos.y, pos.z - 0.1f));// renders the item the villager is holding
+				getHolding().getSprite().draw(new Vec3f(pos.x, pos.y, pos.z));// renders the item the villager is holding
 			}
 		}
 	}
