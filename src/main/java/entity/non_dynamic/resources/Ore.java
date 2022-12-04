@@ -5,6 +5,7 @@ import entity.dynamic.item.ItemHashtable;
 import graphics.MultiSprite;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
+import graphics.StaticSprite;
 import map.Level;
 import sound.Sound;
 
@@ -112,7 +113,7 @@ public class Ore extends Resource {
 		else if (!topHasOre) sprites.add(SpriteHashtable.get(175)); //14
 		else if (!topLeftHasOre) sprites.add(SpriteHashtable.get(180)); //19
 
-		sprite = new MultiSprite(sprites.toArray(new Sprite[0]), 1);
+		sprite = new MultiSprite(sprites.stream().map(StaticSprite.class::cast).toArray(StaticSprite[]::new));
 	}
 
 }

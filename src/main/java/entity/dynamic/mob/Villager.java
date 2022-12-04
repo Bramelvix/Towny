@@ -28,6 +28,8 @@ public class Villager extends Humanoid {
 	private final Sprite hair; // hair sprite
 	private final PriorityQueue<PriorityJob> jobs = new PriorityQueue<>(); // jobs the villager needs to do
 
+	private boolean isSoldier;
+
 	private static final int DEFAULT_DAMAGE = 10;
 
 	// basic constructors
@@ -252,4 +254,10 @@ public class Villager extends Humanoid {
 		inventory.dropAll();
 	}
 
+	public boolean isSoldier() {
+		return isSoldier;
+	}
+	public void setSoldier(boolean soldier) {
+		isSoldier = soldier;
+	}
 }

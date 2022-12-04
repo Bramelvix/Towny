@@ -311,7 +311,7 @@ public final class SpriteHashtable {
 		registerSprite(268, new StaticSprite(20, 10, 2)); // whiteHair7
 		registerSprite(269, new StaticSprite(21, 10, 2)); // whiteHair8
 		registerSprite(270, new StaticSprite(22, 10, 2)); // whiteHair9
-		registerSprite(271, new AnimationSprite(new Sprite[]{get(83), get(84)}, new int[]{30, 30}));
+		registerSprite(271, new AnimationSprite(new StaticSprite[]{(StaticSprite) get(83), (StaticSprite) get(84)}, new int[]{30, 30}));
 	}
 
 }

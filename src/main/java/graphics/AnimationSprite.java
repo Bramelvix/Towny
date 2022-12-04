@@ -4,12 +4,12 @@ import util.vectors.Vec2f;
 import util.vectors.Vec3f;
 
 public class AnimationSprite implements Sprite {
-	private final Sprite[] sprites;
+	private final StaticSprite[] sprites;
 	private final int[] counters;
 	private int current = 0;
 	private int frameCounter = 0;
 
-	public AnimationSprite(Sprite[] sprites, int[] counters) {
+	public AnimationSprite(StaticSprite[] sprites, int[] counters) {
 		this.sprites = sprites;
 		this.counters = counters;
 	}

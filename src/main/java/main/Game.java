@@ -60,7 +60,6 @@ public class Game {
 	public static final int HEIGHT = (int) (WIDTH / 16f * 9f); //864
 	private Level[] map;
 	private ArrayList<Villager> vills;
-	private ArrayList<Villager> sols;
 	private ArrayList<Mob> mobs;
 	private Ui ui;
 	private boolean paused = false;
@@ -139,7 +138,6 @@ public class Game {
 		generateLevel();
 		mobs = new ArrayList<>();
 		vills = new ArrayList<>();
-		sols = new ArrayList<>();
 		pointer.on(PointerInput.EType.DRAG_START, onlyWhen(
 				event -> event.button == GLFW_MOUSE_BUTTON_MIDDLE,
 				event -> {
@@ -215,20 +213,15 @@ public class Game {
 		if (vills.contains(vil)) {
 			return;
 		}
-		sols.remove(vil);
+		vil.setSoldier(false);
 		vills.add(vil);
-		ui.updateCounts(sols.size(), vills.size());
+		ui.updateCounts(vills);
 
 	}
 
 	private void addSoldier(Villager vil) {
-		if (sols.contains(vil)) {
-			return;
-		}
-		vills.remove(vil);
-		sols.add(vil);
-		ui.updateCounts(sols.size(), vills.size());
-
+		vil.setSoldier(true);
+		ui.updateCounts(vills);
 	}
 
 	private void loop() {
@@ -705,32 +698,19 @@ public class Game {
 		while (iVill.hasNext()) {
 			update(iVill);
 		}
-		Iterator<Villager> iSoll = sols.iterator();
-		while (iSoll.hasNext()) {
-			update(iSoll);
-		}
 	}
 
 	private void renderMobs() {
 		float x1 = (xScroll + WIDTH + Sprite.SIZE);
 		float y1 = (yScroll + HEIGHT + Sprite.SIZE);
 
-		mobs.forEach(mob -> mob.renderIf(
-				inBounds(mob.getX(), mob.getY(), mob.getZ(), currentLayerNumber, xScroll, x1, yScroll, y1)
-		));
+		mobs.forEach(mob -> mob.renderIf(inBounds(mob, x1, y1)));
 
-		vills.forEach(vil -> vil.renderIf(
-				inBounds(vil.getX(), vil.getY(), vil.getZ(), currentLayerNumber, xScroll, x1, yScroll, y1)
-		));
-
-		sols.forEach(sol -> sol.renderIf(
-				inBounds(sol.getX(), sol.getY(), sol.getZ(), currentLayerNumber, xScroll, x1, yScroll, y1)
-		));
-
+		vills.forEach(vil -> vil.renderIf(inBounds(vil, x1, y1)));
 	}
 
-	private boolean inBounds(float x, float y, int z, int layer, float xScroll, float x1, float yScroll, float y1) {
-		return z == layer && x + Tile.SIZE >= xScroll && x - Tile.SIZE <= x1 && y + Tile.SIZE >= yScroll && y - Tile.SIZE <= y1;
+	private boolean inBounds(Entity e, float x1, float y1) {
+		return e.getZ() == currentLayerNumber && e.getX() + Tile.SIZE >= xScroll && e.getX() - Tile.SIZE <= x1 && e.getY() + Tile.SIZE >= yScroll && e.getY() - Tile.SIZE <= y1;
 	}
 
 	public float getxScroll() {

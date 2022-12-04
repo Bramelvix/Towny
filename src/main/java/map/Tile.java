@@ -2,8 +2,8 @@ package map;
 
 import entity.Entity;
 import entity.dynamic.item.Item;
-import graphics.Sprite;
 import graphics.SpriteHashtable;
+import graphics.Sprite;
 import util.vectors.Vec3f;
 
 import java.util.Optional;
@@ -82,9 +82,7 @@ public class Tile {
 	}
 
 	public int getAvgColour() {
-		//TODO multisprites getavg is broken right now
 		return (entity != null && entity.getSprite() != null) ? entity.getSprite().getAvgColour() : sprite.getAvgColour();
-
 	}
 
 }

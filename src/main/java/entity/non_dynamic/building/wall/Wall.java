@@ -4,6 +4,7 @@ import entity.non_dynamic.building.BuildAbleObject;
 import graphics.MultiSprite;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
+import graphics.StaticSprite;
 import map.Level;
 
 import java.util.ArrayList;
@@ -125,7 +126,7 @@ public class Wall extends BuildAbleObject {
 			else if (!topLeftHasWall) sprites.add(SpriteHashtable.get(type == WallType.STONE ? 35 : 207));
 		}
 
-		sprite = new MultiSprite(sprites.toArray(new Sprite[0]), 1);
+		sprite = new MultiSprite(sprites.stream().map(StaticSprite.class::cast).toArray(StaticSprite[]::new));
 	}
 
 	@Override

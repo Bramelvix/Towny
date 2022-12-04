@@ -12,7 +12,7 @@ a runnable JAR.
 
 ### Mac OS
 
-Running the game on Mac requires you to put `-XstartOnFirstThread -Djava.awt.headless=true` in the VM options in your
+Running the game on Mac requires you to put `-XstartOnFirstThread -Djava.awt.headless=true` in the JVM options in your
 launch config.
 
 ## TODO

@@ -9,8 +9,7 @@ import java.nio.ByteOrder;
 
 public class StaticSprite implements Sprite {
 	private final Vec2f texCoords; //The location of the texture coordinates for this sprite in its spritesheet
-	protected int avgColor;
-	protected final Spritesheet spritesheet;
+	protected int avgColor = -1;
 	protected final Vec2i pos;
 
 	protected StaticSprite(int x, int y, int sheetIndex) {
@@ -20,10 +19,7 @@ public class StaticSprite implements Sprite {
 	protected StaticSprite(Vec2i pos, int sheetIndex) {
 		this.pos = pos;
 		pos.y = SpritesheetHashtable.getBaselineY(pos.y, sheetIndex);
-		spritesheet = SpritesheetHashtable.getCombined();
-		texCoords = new Vec2f((pos.x * SIZE) / spritesheet.getWidth(), (pos.y * SIZE) / spritesheet.getHeight());
-		avgColor = -1;
-
+		texCoords = new Vec2f((pos.x * SIZE) / SPRITESHEET.getWidth(), (pos.y * SIZE) / SPRITESHEET.getHeight());
 	}
 
 	@Override
@@ -39,7 +35,7 @@ public class StaticSprite implements Sprite {
 	@Override
 	public int getAvgColour() {
 		if (avgColor == -1) { // trying to optimise this by making it so the average colour is only calculated when its actually accessed.
-			avgColor = Sprite.getAverageRGB(spritesheet.getBuffer().order(ByteOrder.BIG_ENDIAN), pos.x, pos.y, spritesheet.getWidth());
+			avgColor = Sprite.getAverageRGB(SPRITESHEET.getBuffer().order(ByteOrder.BIG_ENDIAN), pos.x, pos.y, SPRITESHEET.getWidth());
 		}
 		return avgColor;
 	}

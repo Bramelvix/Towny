@@ -1,5 +1,6 @@
 package ui;
 
+import entity.dynamic.mob.Villager;
 import input.PointerInput;
 import main.Game;
 import map.Level;
@@ -8,6 +9,7 @@ import ui.menu.Menu;
 import ui.menu.MenuItem;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.function.Consumer;
 
 //main class used to manage the ui
@@ -125,6 +127,10 @@ public class Ui {
 
 	public void updateCounts(int solcount, int vilcount) {
 		top.updateCounts(solcount, vilcount);
+	}
+
+	public void updateCounts(Collection<Villager> villagers) {
+		updateCounts((int) villagers.stream().filter(Villager::isSoldier).count(), villagers.size());
 	}
 
 	public void updateMinimap(Level[] level, int z) {
