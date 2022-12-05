@@ -1,11 +1,17 @@
 package ui;
 
 
+import events.PointerClickEvent;
+import events.PointerDragEvent;
+import events.Subscription;
 import graphics.opengl.OpenGLUtils;
+import input.PointerInput;
 import main.Game;
 import map.Level;
 import map.Tile;
 import util.vectors.Vec2f;
+
+import static events.EventListener.onlyWhen;
 
 class Minimap extends UiElement {
 
@@ -15,14 +21,20 @@ class Minimap extends UiElement {
 	private int textureId;
 	private final Vec2f filledRectSize;
 	private final Vec2f filledRectLoc;
+	private final Game game;
+	private final Subscription mousePressedSubscription;
+	private final Subscription mouseDraggedSubscription;
 
 	// constructor
-	Minimap(int x, int y, Level map) {
+	Minimap(int x, int y, Level map, Game game) {
 		super(new Vec2f(x, y), new Vec2f(200, 200));
+		this.game = game;
+		this.z = 0;
 		filledRectSize = new Vec2f(Game.WIDTH / Tile.SIZE * 2f, Game.HEIGHT / Tile.SIZE * 2f);
 		filledRectLoc = new Vec2f(0, 0);
-		this.z = 0;
 		init(map);
+		mousePressedSubscription = PointerInput.getInstance().on(PointerInput.EType.PRESSED, onlyWhen(this::mouseOver, this::setScroll));
+		mouseDraggedSubscription = PointerInput.getInstance().on(PointerInput.EType.DRAG, onlyWhen(this::mouseOver, this::setScroll));
 	}
 
 	// initialise the image
@@ -58,12 +70,40 @@ class Minimap extends UiElement {
 	}
 
 	// setter
-	void setOffset(float x, float y) {
-		xoff = x;
-		yoff = y;
+	void update() {
+		xoff = game.getxScroll();
+		yoff = game.getyScroll();
 	}
 
 	void destroy() {
+		mousePressedSubscription.unsubscribe();
+		mouseDraggedSubscription.unsubscribe();
 		OpenGLUtils.deleteTexture(textureId);
+	}
+
+	private Vec2f minimapToIngameCoords(float x, float y) {
+		Vec2f coordsOnMinimap = new Vec2f(x - getX(), y - getY());
+		return new Vec2f(coordsOnMinimap.x / getWidth() * Game.LEVEL_SIZE * Tile.SIZE, coordsOnMinimap.y / getHeight() * Game.LEVEL_SIZE * Tile.SIZE);
+	}
+
+	private void setScrollFromIngameCoords(Vec2f coords) {
+		game.setXScroll(coords.x - Game.WIDTH/2f);
+		game.setYScroll(coords.y - Game.HEIGHT/2f);
+	}
+
+	private void setScroll(PointerClickEvent event) {
+		setScrollFromIngameCoords(minimapToIngameCoords((float) event.x, (float) event.y));
+	}
+
+	private void setScroll(PointerDragEvent event) {
+		setScrollFromIngameCoords(minimapToIngameCoords((float) event.x, (float) event.y));
+	}
+
+	private boolean mouseOver(PointerClickEvent event) {
+		return super.mouseOver(event.x, event.y);
+	}
+
+	private boolean mouseOver(PointerDragEvent event) {
+		return super.mouseOver(event.x, event.y);
 	}
 }

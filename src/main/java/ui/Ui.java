@@ -35,11 +35,11 @@ public class Ui {
 		top.render(); //colShader + texShader + fontShader
 	}
 
-	public Ui(Level[] levels) throws IOException {
+	public Ui(Level[] levels, Game game) throws IOException {
 		icons = new UiIcons(0.176056338028169f);
 		menu = new Menu();
 		selection = new SelectionSquare();
-		minimap = new Minimap(1290, 8, levels[0]);
+		minimap = new Minimap(1290, 8, levels[0], game);
 		top = new TopBar((Game.WIDTH - 270) / 2f, 5, 270, 85);
 		outline = new BuildOutline(levels);
 		layerLevelChanger = new LayerLevelChanger(1320, 210, 140, 40);
@@ -79,10 +79,6 @@ public class Ui {
 		return !menu.isVisible();
 	}
 
-	public void setOffset(float x, float y) {
-		minimap.setOffset(x, y);
-	}
-
 	public void showSelectionSquare() {
 		selection.show();
 	}
@@ -118,6 +114,7 @@ public class Ui {
 	public void update(int z, float xScroll, float yScroll) {
 		selection.update(xScroll, yScroll);
 		outline.update(z, xScroll, yScroll);
+		minimap.update();
 		layerLevelChanger.setZ(z);
 	}
 

@@ -54,9 +54,10 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Game {
 
-	private final Logger logger = LoggerFactory.getLogger(Game.class);
+	private final Logger LOGGER = LoggerFactory.getLogger(Game.class);
 	public static final int WIDTH = 1536;
 	public static final int HEIGHT = (int) (WIDTH / 16f * 9f); //864
+	public static final int LEVEL_SIZE = 100;
 	private Level[] map;
 	private ArrayList<Villager> vills;
 	private ArrayList<Mob> mobs;
@@ -96,7 +97,7 @@ public class Game {
 
 	private void init() throws Exception {
 		if (!glfwInit()) {
-			logger.error("GLFW failed to initialize");
+			LOGGER.error("GLFW failed to initialize");
 			return;
 		}
 
@@ -109,12 +110,12 @@ public class Game {
 		window = glfwCreateWindow(WIDTH, HEIGHT, "Towny by Bramelvix", 0, 0);
 
 		if (window == 0) {
-			logger.error("Window failed to be created");
+			LOGGER.error("Window failed to be created");
 			return;
 		}
 		GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		if (vidmode == null) {
-			logger.error("Vidmode is null");
+			LOGGER.error("Vidmode is null");
 			return;
 		}
 		glfwSetWindowPos(window, (vidmode.width() - (WIDTH)) / 2, (vidmode.height() - (HEIGHT)) / 2);
@@ -165,7 +166,7 @@ public class Game {
 
 		initUi();
 
-		PathFinder.init(100, 100);
+		PathFinder.init(LEVEL_SIZE, LEVEL_SIZE);
 		spawnvills();
 		spawnZombies();
 	}
@@ -185,7 +186,7 @@ public class Game {
 	private void generateLevel() {
 		map = new Level[20];
 		for (int i = 0; i < map.length; i++) {
-			map[i] = new Level(100, 100, i);
+			map[i] = new Level(LEVEL_SIZE, LEVEL_SIZE, i);
 		}
 	}
 
@@ -303,7 +304,7 @@ public class Game {
 	}
 
 	private void initUi() throws IOException {
-		ui = new Ui(map);
+		ui = new Ui(map, this);
 		ui.initLayerLevelChangerActions(this::onClickLayerUp, this::onClickLayerDown);
 		ui.initTopBarActions(this::onClickPause, this::onClickupSpeed, this::onClickdownSpeed);
 		ui.getIcons().setShovelOnClick(this::onClickShovel);
@@ -681,7 +682,14 @@ public class Game {
 	private void moveCamera(int xScroll, int yScroll) {
 		this.xScroll += xScroll;
 		this.yScroll += yScroll;
-		ui.setOffset(this.xScroll, this.yScroll);
+	}
+
+	private float getMaxYScrolLValue() {
+		return ((LEVEL_SIZE * Tile.SIZE) - 1 - HEIGHT);
+	}
+
+	private float getMaxXScrollValue() {
+		return ((LEVEL_SIZE * Tile.SIZE) - WIDTH - 1);
 	}
 
 	private void moveCamera() {
@@ -690,7 +698,7 @@ public class Game {
 		if (keyboard.isKeyDown(GLFW_KEY_UP) && this.yScroll > 0) {
 			yScroll = Math.max(-6, -(int) this.yScroll);
 		}
-		float maxYScrollValue = ((map[currentLayerNumber].height * Tile.SIZE) - 1 - HEIGHT);
+		float maxYScrollValue = getMaxYScrolLValue();
 		if (keyboard.isKeyDown(GLFW_KEY_DOWN) && this.yScroll < maxYScrollValue) {
 			yScroll = Math.min(6, (int) maxYScrollValue - (int) this.yScroll);
 		}
@@ -699,7 +707,7 @@ public class Game {
 			xScroll = Math.max(-6, -(int) this.xScroll);
 		}
 
-		float maxXScrollValue = ((map[currentLayerNumber].width * Tile.SIZE) - WIDTH - 1);
+		float maxXScrollValue = getMaxXScrollValue();
 		if (keyboard.isKeyDown(GLFW_KEY_RIGHT) && this.xScroll < maxXScrollValue) {
 			xScroll = Math.min(6, (int) maxXScrollValue - (int) this.xScroll);
 		}
@@ -745,5 +753,13 @@ public class Game {
 
 	public float getyScroll() {
 		return yScroll;
+	}
+
+	public void setXScroll(float value) {
+		xScroll = Math.max(Math.min(value, getMaxXScrollValue()), 0);
+	}
+
+	public void setYScroll(float value) {
+		yScroll = Math.max(Math.min(value, getMaxYScrolLValue()), 0);
 	}
 }
