@@ -69,10 +69,12 @@ public class Weapon extends Item {
 		return type == WeaponType.BUCKLER || type == WeaponType.HEATER;
 	}
 
+	@Override
 	public Weapon copy() {
 		return this.copy(this.location.x, this.location.y, this.z);
 	}
 
+	@Override
 	public Weapon copy(float x, float y, int z) {
 		Weapon copy = new Weapon(this.getName(), this.sprite, this.tooltip, this.type, this.mat, this.getId());
 		copy.setLocation(x, y, z);

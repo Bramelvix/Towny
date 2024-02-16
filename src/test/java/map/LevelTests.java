@@ -2,6 +2,7 @@ package map;
 
 import entity.non_dynamic.building.Stairs;
 import entity.non_dynamic.building.container.Chest;
+import entity.pathfinding.PathFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.vectors.Vec2i;
@@ -18,6 +19,7 @@ class LevelTests {
 	@BeforeEach
 	void setUp() {
 		level = new Level(10, 10, 1, false);
+		PathFinder.init(10, 10);
 	}
 
 	@Test
@@ -40,8 +42,8 @@ class LevelTests {
 	void shouldFindStairs() {
 		Stairs stairs = new Stairs(true);
 		stairs.setLocation(48, 48, 0);
-		level.addEntity(stairs, false);
-		Optional<Stairs> found = level.getNearestStairs(1, 1, true);
+		level.addStairs(stairs);
+		Optional<Stairs> found = level.getNearestStairs(5, 5, true);
 		assertTrue(found.isPresent());
 
 	}

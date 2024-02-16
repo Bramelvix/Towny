@@ -5,7 +5,7 @@ import graphics.Sprite;
 //villager clothing class
 public class Clothing extends Item {
 
-	private float defence; // defence rating for armour
+	private final float defence; // defence rating for armour
 	private final ClothingType type;
 
 	// basic constructor
@@ -15,6 +15,7 @@ public class Clothing extends Item {
 		this.type = type;
 	}
 
+	@Override
 	public Clothing copy() {
 		Clothing copy = new Clothing(getName(), sprite, getToolTip(), type, getDefence(), getId());
 		copy.setLocation(getX(), getY(), getZ());

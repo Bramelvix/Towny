@@ -19,11 +19,11 @@ public class BuildingRecipe extends Recipe<BuildAbleObject> {
 	private static final BuildingRecipe FURNACE = new BuildingRecipe(Workstation.furnace(), ItemHashtable.get(10));
 	private static final BuildingRecipe ANVIL = new BuildingRecipe(Workstation.anvil(), ItemHashtable.get(2));
 	private static final BuildingRecipe CHEST = new BuildingRecipe(new Chest(), ItemHashtable.get(1));
-	public static final BuildingRecipe STAIRSDOWN = new BuildingRecipe(new Stairs(true));
-	private static final BuildingRecipe STAIRSUP = new BuildingRecipe(new Stairs(false), ItemHashtable.get(1));
+	public static final BuildingRecipe STAIRS_DOWN = new BuildingRecipe(new Stairs(true));
+	private static final BuildingRecipe STAIRS_UP = new BuildingRecipe(new Stairs(false), ItemHashtable.get(1));
 	public static final BuildingRecipe TILLED_SOIL = new BuildingRecipe(new TilledSoil());
 
-	public static final BuildingRecipe[] RECIPES = {WOOD_WALL, STONE_WALL, WOOD_DOOR, STONE_DOOR, FURNACE, ANVIL, CHEST, STAIRSUP};
+	public static final BuildingRecipe[] RECIPES = {WOOD_WALL, STONE_WALL, WOOD_DOOR, STONE_DOOR, FURNACE, ANVIL, CHEST, STAIRS_UP};
 
 	private <T extends BuildAbleObject> BuildingRecipe(T product, Item... resources) {
 		super(product, resources);

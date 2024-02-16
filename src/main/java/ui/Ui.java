@@ -1,7 +1,6 @@
 package ui;
 
 import entity.dynamic.mob.Villager;
-import input.PointerInput;
 import main.Game;
 import map.Level;
 import ui.icon.UiIcons;

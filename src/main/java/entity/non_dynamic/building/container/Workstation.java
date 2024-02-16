@@ -4,7 +4,6 @@ import graphics.Sprite;
 import graphics.SpriteHashtable;
 
 public abstract class Workstation extends Container {
-
 	public enum Type {
 		ANVIL, FURNACE
 	}
@@ -20,6 +19,11 @@ public abstract class Workstation extends Container {
 		this.runningSprite = running;
 		setName(type.toString().toLowerCase());
 		sprite = passive;
+	}
+
+	@Override
+	protected void addEntity() {
+		level.addWorkstation(this);
 	}
 
 	public void setRunning(boolean running) {

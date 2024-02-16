@@ -26,8 +26,12 @@ public abstract class BuildAbleObject extends StaticEntity implements Workable {
 	public void initialise(int x, int y, Level[] levels, int depth) {
 		this.level = levels[depth];
 		setLocation(x * Tile.SIZE, y * Tile.SIZE, depth);
-		level.addEntity(this, !this.open);
+		addEntity();
 		initialised = true;
+	}
+
+	protected void addEntity() {
+		level.addEntity(this, !this.open);
 	}
 
 	// method called by villagers when building

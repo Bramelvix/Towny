@@ -4,6 +4,7 @@ import entity.dynamic.item.Item;
 import entity.non_dynamic.building.BuildAbleObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public abstract class Container extends BuildAbleObject {
@@ -29,7 +30,7 @@ public abstract class Container extends BuildAbleObject {
 		return result;
 	}
 
-	public ArrayList<Item> getItemList() {
+	public List<Item> getItemList() {
 		return items;
 	}
 

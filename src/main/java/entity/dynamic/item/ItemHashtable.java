@@ -106,10 +106,10 @@ public abstract class ItemHashtable {
 		registerItem(new Weapon("crystal spear", SpriteHashtable.get(109), "a crystal spear", WeaponType.SPEAR, WeaponMaterial.CRYSTAL, 59));
 		registerItem(new Weapon("crystal sword", SpriteHashtable.get(118), "a crystal sword", WeaponType.SWORD, WeaponMaterial.CRYSTAL, 60));
 
-		registerItem(new Clothing("Orange shirt", SpriteHashtable.get(70), "a brown shirt", ClothingType.SHIRT, 0.1f, 61));
-		registerItem(new Clothing("Orange shirt", SpriteHashtable.get(71), "a brown shirt", ClothingType.SHIRT, 0.1f, 62));
-		registerItem(new Clothing("Orange shirt", SpriteHashtable.get(72), "a brown shirt", ClothingType.SHIRT, 0.1f, 63));
-		registerItem(new Clothing("Orange shirt", SpriteHashtable.get(73), "a brown shirt", ClothingType.SHIRT, 0.1f, 64));
+		registerItem(new Clothing("Orange shirt", SpriteHashtable.get(70), "an orange shirt", ClothingType.SHIRT, 0.1f, 61));
+		registerItem(new Clothing("Orange shirt", SpriteHashtable.get(71), "an orange shirt", ClothingType.SHIRT, 0.1f, 62));
+		registerItem(new Clothing("Orange shirt", SpriteHashtable.get(72), "an orange shirt", ClothingType.SHIRT, 0.1f, 63));
+		registerItem(new Clothing("Orange shirt", SpriteHashtable.get(73), "an orange shirt", ClothingType.SHIRT, 0.1f, 64));
 		registerItem(new Clothing("Green shirt", SpriteHashtable.get(74), "a green shirt", ClothingType.SHIRT, 0.1f, 65));
 		registerItem(new Clothing("Green shirt", SpriteHashtable.get(75), "a green shirt", ClothingType.SHIRT, 0.1f, 66));
 		registerItem(new Clothing("Green shirt", SpriteHashtable.get(76), "a green shirt", ClothingType.SHIRT, 0.1f, 67));

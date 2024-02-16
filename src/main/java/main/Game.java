@@ -360,7 +360,7 @@ public class Game {
 			deselectAllVills();
 			ui.showBuildSquare(
 					true, currentLayerNumber, xScroll, yScroll,
-					pos -> onClickBuildOutline(pos, BuildingRecipe.STAIRSDOWN)
+					pos -> onClickBuildOutline(pos, BuildingRecipe.STAIRS_DOWN)
 			);
 		}
 	}
@@ -542,7 +542,7 @@ public class Game {
 	}
 
 	private Villager getIdlestVil() {
-		Villager lowest = vills.get(0);
+		Villager lowest = vills.getFirst();
 		for (Villager i : vills) {
 			if (i.getJobSize() < lowest.getJobSize()) {
 				lowest = i;

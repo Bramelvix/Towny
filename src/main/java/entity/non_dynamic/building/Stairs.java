@@ -29,15 +29,20 @@ public class Stairs extends BuildAbleObject {
 				levels[depth + 1].removeEntity(x, y);
 				Stairs otherPart = new Stairs(false);
 				otherPart.initialise(x, y, levels, depth + 1, false);
-				levels[depth + 1].addEntity(otherPart, false);
+				levels[depth + 1].addStairs(otherPart);
 			} else if (depth != 0) {
 				levels[depth - 1].removeEntity(x, y);
 				Stairs otherPart = new Stairs(true);
 				otherPart.initialise(x, y, levels, depth - 1, false);
-				levels[depth - 1].addEntity(otherPart, false);
+				levels[depth - 1].addStairs(otherPart);
 			}
 		}
 		setOpened(true);
+	}
+
+	@Override
+	protected void addEntity() {
+		level.addStairs(this);
 	}
 
 	public void goOnStairs(Villager villager) {

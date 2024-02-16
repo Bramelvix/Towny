@@ -9,6 +9,8 @@ import entity.non_dynamic.building.wall.Wall;
 import entity.non_dynamic.resources.Ore;
 import entity.non_dynamic.resources.OreType;
 import entity.non_dynamic.resources.Tree;
+import entity.pathfinding.Path;
+import entity.pathfinding.PathFinder;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import main.Game;
@@ -16,13 +18,13 @@ import util.BiPredicate;
 import util.vectors.Vec2f;
 import util.vectors.Vec2i;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class Level {
 
 	private final Tile[][] tiles; // array of tiles on the map
+	private final Set<Stairs> mapStairs = new HashSet<>();
+	private final Set<Workstation> mapWorkstations = new HashSet<>();
 	public final int width;
 	public final int height; // map with and height
 	private final int depth;
@@ -92,49 +94,49 @@ public class Level {
 	private Vec2i getNearestSpotThatHasX(int xloc, int yloc, BiPredicate<Integer, Integer> p) { //p is the function that you want to run on the tile (for instance isEmpty or hasFurnace or whatever)
 		if (p.test(xloc, yloc)) {
 			return new Vec2i(xloc, yloc);
-		} else {
-			for (int layer = 1; layer < 100; layer++) {
-				int x = layer - 1;
-				int y = 0;
-				int dx = 1;
-				int dy = 1;
-				int err = dx - (layer << 1);
-				while (x >= y) {
-					if (p.test(xloc + x, yloc + y)) {
-						return new Vec2i(xloc + x, yloc + y);
-					}
-					if (p.test(xloc + y, yloc + x)) {
-						return new Vec2i(xloc + y, yloc + x);
-					}
-					if (p.test(xloc - y, yloc + x)) {
-						return new Vec2i(xloc - y, yloc + x);
-					}
-					if (p.test(xloc - x, yloc + y)) {
-						return new Vec2i(xloc - x, yloc + y);
-					}
-					if (p.test(xloc - x, yloc - y)) {
-						return new Vec2i(xloc - x, yloc - y);
-					}
-					if (p.test(xloc - y, yloc - x)) {
-						return new Vec2i(xloc - y, yloc - x);
-					}
-					if (p.test(xloc + y, yloc - x)) {
-						return new Vec2i(xloc + y, yloc - x);
-					}
-					if (p.test(xloc + x, yloc - y)) {
-						return new Vec2i(xloc + x, yloc - y);
-					}
+		}
 
-					if (err <= 0) {
-						y++;
-						err += dy;
-						dy += 2;
-					}
-					if (err > 0) {
-						x--;
-						dx += 2;
-						err += dx - (layer << 1);
-					}
+		for (int layer = 1; layer < 100; layer++) {
+			int x = layer - 1;
+			int y = 0;
+			int dx = 1;
+			int dy = 1;
+			int err = dx - (layer << 1);
+			while (x >= y) {
+				if (p.test(xloc + x, yloc + y)) {
+					return new Vec2i(xloc + x, yloc + y);
+				}
+				if (p.test(xloc + y, yloc + x)) {
+					return new Vec2i(xloc + y, yloc + x);
+				}
+				if (p.test(xloc - y, yloc + x)) {
+					return new Vec2i(xloc - y, yloc + x);
+				}
+				if (p.test(xloc - x, yloc + y)) {
+					return new Vec2i(xloc - x, yloc + y);
+				}
+				if (p.test(xloc - x, yloc - y)) {
+					return new Vec2i(xloc - x, yloc - y);
+				}
+				if (p.test(xloc - y, yloc - x)) {
+					return new Vec2i(xloc - y, yloc - x);
+				}
+				if (p.test(xloc + y, yloc - x)) {
+					return new Vec2i(xloc + y, yloc - x);
+				}
+				if (p.test(xloc + x, yloc - y)) {
+					return new Vec2i(xloc + x, yloc - y);
+				}
+
+				if (err <= 0) {
+					y++;
+					err += dy;
+					dy += 2;
+				}
+				if (err > 0) {
+					x--;
+					dx += 2;
+					err += dx - (layer << 1);
 				}
 			}
 		}
@@ -145,30 +147,25 @@ public class Level {
 		return getEntityOn(x, y, Wall.class);
 	}
 
-	public Optional<Workstation> getNearestWorkstation(Workstation.Type type, int xloc, int yloc) {
-		Vec2i point = getNearestSpotThatHasX(xloc, yloc, (x, y) -> getWorkstationOn(x, y, type).isPresent());
-		return point != null ? tiles[point.x][point.y].getEntity(Workstation.class) : Optional.empty();
+	public Optional<Workstation> getNearestWorkstation(Workstation.Type type, int x, int y) {
+		return mapWorkstations.stream().filter(workstation -> workstation.getType() == type)
+			.filter(workstation -> PathFinder.findPath(x, y, workstation.getTileX(), workstation.getTileY(), this).isPresent())
+			.min((l, r) -> {
+				Optional<Path> lPath = PathFinder.findPath(x, y, l.getTileX(), l.getTileY(), this);
+				Optional<Path> rPath = PathFinder.findPath(x, y, r.getTileX(), r.getTileY(), this);
+				return lPath.map(value -> rPath.map(path -> Integer.compare(value.getLength(), path.getLength())).orElse(1)).orElseGet(() -> rPath.isEmpty() ? 0 : 1);
+		});
 	}
 
-	public Optional<Stairs> getNearestStairs(int x, int y, boolean top) { //gets the nearest stairs object on the map
-		Vec2i point = top ? getNearestSpotThatHasX(x, y, this::hasTopStairs) : getNearestSpotThatHasX(x, y, this::hasBottomStairs);
-		return point != null ? tiles[point.x][point.y].getEntity(Stairs.class) : Optional.empty();
-	}
-
-	private boolean hasBottomStairs(int x, int y) {
-		return hasStairs(x, y, false);
-	}
-
-	private boolean hasStairs(int x, int y, boolean top) {
-		if (!has(x, y, Stairs.class)) {
-			return false;
-		}
-		Optional<Stairs> stairs = tiles[x][y].getEntity(Stairs.class);
-		return stairs.isPresent() && top == stairs.get().isTop();
-	}
-
-	private boolean hasTopStairs(int x, int y) {
-		return hasStairs(x, y, true);
+	public Optional<Stairs> getNearestStairs(int x, int y, boolean top) {//gets the nearest stairs object on the map
+		return mapStairs.stream()
+			.filter(stairs -> top == stairs.isTop())
+			.filter(stairs -> PathFinder.findPath(x, y, stairs.getTileX(), stairs.getTileY(), this).isPresent())
+			.min((l, r) -> {
+				Optional<Path> lPath = PathFinder.findPath(x, y, l.getTileX(), l.getTileY(), this);
+				Optional<Path> rPath = PathFinder.findPath(x, y, r.getTileX(), r.getTileY(), this);
+				return lPath.map(value -> rPath.map(path -> Integer.compare(value.getLength(), path.getLength())).orElse(1)).orElseGet(() -> rPath.isEmpty() ? 0 : 1);
+			});
 	}
 
 	private <T extends Entity> boolean has(int x, int y, Class<T> clazz) {
@@ -235,7 +232,7 @@ public class Level {
 	}
 
 
-	public Optional<Tree> selectTree(int x, int y, boolean seperate) {
+	public Optional<Tree> selectTree(int x, int y, boolean separate) {
 		if (outOfMapBounds(x, y)) {
 			return Optional.empty();
 		}
@@ -244,7 +241,7 @@ public class Level {
 			return result;
 		} else {
 			Optional<Tree> entity = tiles[x][y + 1].getEntity(Tree.class);
-			return seperate ? entity : Optional.empty();
+			return separate ? entity : Optional.empty();
 		}
 	}
 
@@ -326,6 +323,16 @@ public class Level {
 		if (entity != null) {
 			tiles[entity.getTileX()][entity.getTileY()].setEntity(entity, solid);
 		}
+	}
+
+	public void addWorkstation(Workstation workstation) {
+		addEntity(workstation, true);
+		mapWorkstations.add(workstation);
+	}
+
+	public void addStairs(Stairs stairs) {
+		addEntity(stairs, false);
+		mapStairs.add(stairs);
 	}
 
 	public void removeEntity(int x, int y) {

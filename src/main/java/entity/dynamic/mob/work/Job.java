@@ -52,4 +52,12 @@ public abstract class Job {
 		}
 	}
 
+	public int getXloc() {
+		return xloc;
+	}
+
+	public int getYloc() {
+		return yloc;
+	}
+
 }

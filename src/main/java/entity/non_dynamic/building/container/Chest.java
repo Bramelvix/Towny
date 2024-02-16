@@ -15,5 +15,4 @@ public class Chest extends Container {
 		sprite = SpriteHashtable.get(39);
 		setName("chest");
 	}
-
 }

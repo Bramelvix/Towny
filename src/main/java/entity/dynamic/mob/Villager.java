@@ -15,6 +15,7 @@ import graphics.Sprite;
 import graphics.SpriteHashtable;
 import graphics.opengl.OpenGLUtils;
 import map.Level;
+import org.jetbrains.annotations.NotNull;
 import util.vectors.Vec2f;
 import util.vectors.Vec3f;
 
@@ -108,7 +109,7 @@ public class Villager extends Humanoid {
 		}
 	}
 
-	// pickup an item
+	// pick up an item
 	public <T extends Item> boolean pickUp(T e) {
 		if (!onSpot(e.getTileX(), e.getTileY(), e.getZ())) {
 			return false;
@@ -160,32 +161,24 @@ public class Villager extends Humanoid {
 	}
 
 	// add a job to the jobs list for the villager to do
-	public void addJob(Resource e) {
-		if (e != null) {
-			addJob(new GatherJob(this, e));
-		}
+	public void addJob(@NotNull Resource e) {
+		addJob(new GatherJob(this, e));
 	}
 
-	public void addJob(TilledSoil e) {
-		if (e != null) {
-			addJob(new FarmJob(this, e));
-		}
+	public void addJob(@NotNull TilledSoil e) {
+		addJob(new FarmJob(this, e));
 	}
 
-	public void addJob(Job e) {
-		if (e != null) {
-			addJob(e, 50);
-		}
+	public void addJob(@NotNull Job e) {
+		jobs.add(new PriorityJob(e, distanceToJob(e)));
 	}
 
-	public void addJob(Job e, int priority) {
-		if (e != null) {
-			jobs.add(new PriorityJob(e, priority));
-		}
+	private int distanceToJob(@NotNull Job job) {
+		return getPath(job.getXloc(), job.getYloc()).map(Path::getLength).orElse(-1);
 	}
 
-	public void prependJobToChain(Job e) {
-		if (e != null && !jobs.isEmpty()) {
+	public void prependJobToChain(@NotNull Job e) {
+		if (!jobs.isEmpty()) {
 			jobs.peek().addJob(e, 0);
 		}
 	}

@@ -56,18 +56,22 @@ public class SelectionSquare extends UiElement {
 		}
 	}
 
+	@Override
 	public float getX() {
 		return (size.x < 0) ? ingame.x + size.x : ingame.x;
 	}
 
+	@Override
 	public float getY() {
 		return (size.y < 0) ? ingame.y + size.y : ingame.y;
 	}
 
+	@Override
 	public float getWidth() {
 		return Math.abs(size.x);
 	}
 
+	@Override
 	public float getHeight() {
 		return Math.abs(size.y);
 	}

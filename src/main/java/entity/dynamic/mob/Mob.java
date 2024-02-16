@@ -1,7 +1,6 @@
 package entity.dynamic.mob;
 
 import entity.Entity;
-import entity.pathfinding.Direction;
 import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
 import entity.pathfinding.Point;
@@ -13,7 +12,7 @@ import java.util.Optional;
 //abstract mob class for villagers and monsters/animals to extend
 public abstract class Mob extends Entity {
 
-	public Level[] levels; // level in which the entity is placed
+	public final Level[] levels; // level in which the entity is placed
 	private int idletimer = getIdleTimer();// timer for the mob to idle
 	private int health = 100;
 	private int armour = 0;
@@ -25,28 +24,8 @@ public abstract class Mob extends Entity {
 
 	// move a mob with a combination of x direction and y direction (both between -1 and 1).
 	public void move(int xa, int ya) {
-		Direction dir;
-		if (xa > 0) {
-			if (ya > 0) {
-				dir = Direction.DOWN_RIGHT;
-			} else {
-				dir = (ya < 0) ? Direction.UP_RIGHT : Direction.RIGHT;
-			}
-		} else {
-			if (xa < 0) {
-				if (ya > 0) {
-					dir = Direction.DOWN_LEFT;
-				} else {
-					dir = (ya < 0) ? Direction.UP_LEFT : Direction.LEFT;
-				}
-			} else {
-				dir = (ya > 0) ? Direction.DOWN : Direction.UP;
-			}
-		}
-		if (!collision(dir)) {
-			location.x += xa;
-			location.y += ya;
-		}
+		location.x += xa;
+		location.y += ya;
 	}
 
 	void idle() {
@@ -162,30 +141,6 @@ public abstract class Mob extends Entity {
 
 	public void hit(float damage) {
 		health -= (damage - armour);
-	}
-
-	// calculates collision
-	private boolean collision(Direction dir) {
-		return (
-				(
-						dir == Direction.DOWN
-								|| dir == Direction.DOWN_LEFT
-								|| dir == Direction.DOWN_RIGHT
-								|| levels[z].getTile(getTileX(), getTileY() + 1).isSolid()
-				) && (
-						dir == Direction.UP || dir == Direction.UP_LEFT || dir == Direction.UP_RIGHT
-								|| levels[z].getTile(getTileY(), getTileY() - 1).isSolid()
-				) && (
-						dir == Direction.LEFT || dir == Direction.UP_LEFT || dir == Direction.DOWN_LEFT
-								|| levels[z].getTile(getTileX() - 1, getTileY()).isSolid()
-				) && (
-						dir == Direction.RIGHT || dir == Direction.UP_RIGHT || dir == Direction.DOWN_RIGHT
-								|| levels[z].getTile(getTileX() + 1, getTileY()).isSolid()
-				) && (
-						levels[z].getTile(getTileX(), getTileY()).isSolid()
-								|| levels[z].getTile(getTileX() + 1, getTileY() + 1).isSolid()
-				)
-		);
 	}
 
 	// DO NOT TOUCH THIS. SET THE MOVEMENT TO THE PATH OBJ USE move()! DO NOT USE!
