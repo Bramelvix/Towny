@@ -14,7 +14,7 @@ public abstract class Entity {
 	public static final Random RANDOM = new Random(); // random needed for various chance calculations
 	protected Sprite sprite; // the entity's sprite
 	private boolean visible; // is the entity visible or not
-	private boolean transparent = true; // non transparent entities will stop the Tile sprite under them from rendering unnecessarily
+	private boolean transparent = true; // non-transparent entities will stop the Tile sprite under them from rendering unnecessarily
 	private boolean selected = false;
 	private String displayName;
 
@@ -108,12 +108,6 @@ public abstract class Entity {
 	public void render() {
 		if (isVisible()) {
 			sprite.draw(location);
-		}
-	}
-
-	public void renderIf(boolean ifCondition) {
-		if (ifCondition) {
-			render();
 		}
 	}
 

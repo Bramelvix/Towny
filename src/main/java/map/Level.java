@@ -147,25 +147,25 @@ public class Level {
 		return getEntityOn(x, y, Wall.class);
 	}
 
+	private Comparator<Entity> getClosest(int startX, int startY) {
+		return (l, r) -> {
+			Optional<Path> lPath = PathFinder.findPath(startX, startY, l.getTileX(), l.getTileY(), this);
+			Optional<Path> rPath = PathFinder.findPath(startX, startY, r.getTileX(), r.getTileY(), this);
+			return lPath.map(value -> rPath.map(path -> Integer.compare(value.getLength(), path.getLength())).orElse(1)).orElseGet(() -> rPath.isEmpty() ? 0 : 1);
+		};
+	}
+
 	public Optional<Workstation> getNearestWorkstation(Workstation.Type type, int x, int y) {
 		return mapWorkstations.stream().filter(workstation -> workstation.getType() == type)
 			.filter(workstation -> PathFinder.findPath(x, y, workstation.getTileX(), workstation.getTileY(), this).isPresent())
-			.min((l, r) -> {
-				Optional<Path> lPath = PathFinder.findPath(x, y, l.getTileX(), l.getTileY(), this);
-				Optional<Path> rPath = PathFinder.findPath(x, y, r.getTileX(), r.getTileY(), this);
-				return lPath.map(value -> rPath.map(path -> Integer.compare(value.getLength(), path.getLength())).orElse(1)).orElseGet(() -> rPath.isEmpty() ? 0 : 1);
-		});
+			.min(getClosest(x, y));
 	}
 
 	public Optional<Stairs> getNearestStairs(int x, int y, boolean top) {//gets the nearest stairs object on the map
 		return mapStairs.stream()
 			.filter(stairs -> top == stairs.isTop())
 			.filter(stairs -> PathFinder.findPath(x, y, stairs.getTileX(), stairs.getTileY(), this).isPresent())
-			.min((l, r) -> {
-				Optional<Path> lPath = PathFinder.findPath(x, y, l.getTileX(), l.getTileY(), this);
-				Optional<Path> rPath = PathFinder.findPath(x, y, r.getTileX(), r.getTileY(), this);
-				return lPath.map(value -> rPath.map(path -> Integer.compare(value.getLength(), path.getLength())).orElse(1)).orElseGet(() -> rPath.isEmpty() ? 0 : 1);
-			});
+			.min(getClosest(x, y));
 	}
 
 	private <T extends Entity> boolean has(int x, int y, Class<T> clazz) {

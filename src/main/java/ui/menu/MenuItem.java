@@ -117,13 +117,8 @@ public class MenuItem {
 		return text + " " + e.getName();
 	}
 
-	@SuppressWarnings("unchecked") // again, shouldnt ever be a problem
-	public <T extends Recipe<?>> T getRecipe() {
-		return (T) recipe;
-	}
-
-	public <T extends Recipe<?>> Optional<T> getRecipe(Class<T> clazz) {
-		return clazz.isInstance(recipe) ? Optional.of(clazz.cast(recipe)) : Optional.empty();
+	public <T extends Recipe<?>> T getRecipe(Class<T> clazz) {
+		return clazz.cast(recipe);
 	}
 
 }

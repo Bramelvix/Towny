@@ -54,7 +54,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Game {
 
-	private final Logger LOGGER = LoggerFactory.getLogger(Game.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Game.class);
 	public static final int WIDTH = 1536;
 	public static final int HEIGHT = (int) (WIDTH / 16f * 9f); //864
 	public static final int LEVEL_SIZE = 100;
@@ -304,13 +304,15 @@ public class Game {
 	}
 
 	private void initUi() throws IOException {
-		ui = new Ui(map, this);
+		ui = new Ui(map, (xs, ys) -> map[currentLayerNumber].selectTree(xs, ys), (xs, ys) -> map[currentLayerNumber].selectOre(xs, ys), this);
 		ui.initLayerLevelChangerActions(this::onClickLayerUp, this::onClickLayerDown);
 		ui.initTopBarActions(this::onClickPause, this::onClickupSpeed, this::onClickdownSpeed);
 		ui.getIcons().setShovelOnClick(this::onClickShovel);
 		ui.getIcons().setPlowOnclick(this::onClickPlow);
 		ui.getIcons().setSawOnClick(this::onClickSaw);
 		ui.updateSpeed(speed);
+		ui.initSelectionSquareRelease(resource -> getIdlestVil().addJob(resource));
+		ui.getIcons().setSwordsOnMouseReleaseWhenSelected(this::onClickWhileSwordSelected);
 	}
 
 	private void onClickLayerUp() {
@@ -377,7 +379,7 @@ public class Game {
 	private void onClickBuild(MenuItem item) {
 		ui.showBuildSquare(
 				false, currentLayerNumber, xScroll, yScroll,
-				pos -> onClickBuildOutline(pos, item.getRecipe())
+				pos -> onClickBuildOutline(pos, item.getRecipe(BuildingRecipe.class))
 		);
 		ui.getMenu().hide();
 	}
@@ -392,6 +394,13 @@ public class Game {
 			items[items.length - 1] = new MenuItem(MenuItem.CANCEL, this::onClickCancel);
 			ui.showMenu(items);
 		}
+	}
+
+	private void onClickWhileSwordSelected() {
+		Villager idle = getIdlestVil();
+		deselectAllVills();
+		anyMobHoverOn().ifPresent(mob -> idle.addJob(new FightJob(idle, mob)));
+		ui.deSelectIcons();
 	}
 
 	private void onClickMove() {
@@ -440,18 +449,17 @@ public class Game {
 
 	private void onClickCraft(MenuItem item) {
 		Villager idle = getIdlestVil();
-		item.getRecipe(ItemRecipe.class).ifPresent(recipe -> {
-			idle.setPath(null);
-			Item[] res = new Item[recipe.getResources().length];
-			for (int i = 0; i < res.length; i++) {
-				res[i] = idle.getNearestItemOfType(recipe.getResources()[i]).orElse(null);
-			}
-			map[currentLayerNumber].getNearestWorkstation(
-					recipe.getWorkstationType(), idle.getTileX(), idle.getTileY()
-			).ifPresent(station -> idle.addJob(new CraftJob(idle, res, recipe.getProduct(), station)));
-			ui.deSelectIcons();
-			ui.getMenu().hide();
-		});
+		ItemRecipe recipe = item.getRecipe(ItemRecipe.class);
+		idle.setPath(null);
+		Item[] res = new Item[recipe.getResources().length];
+		for (int i = 0; i < res.length; i++) {
+			res[i] = idle.getNearestItemOfType(recipe.getResources()[i]).orElse(null);
+		}
+		map[currentLayerNumber].getNearestWorkstation(
+				recipe.getWorkstationType(), idle.getTileX(), idle.getTileY()
+		).ifPresent(station -> idle.addJob(new CraftJob(idle, res, recipe.getProduct(), station)));
+		ui.deSelectIcons();
+		ui.getMenu().hide();
 	}
 
 	private void onClickSmith() {
@@ -531,7 +539,7 @@ public class Game {
 
 	private void scroll(long window, double v, double v1) {
 		if ((currentLayerNumber <= map.length - 1 && v1 > 0) || (currentLayerNumber >= 0 && v1 < 0)) {
-			currentLayerNumber -= v1;
+			currentLayerNumber -= (int) v1;
 			if (currentLayerNumber < 0) {
 				currentLayerNumber = 0;
 			} else if (currentLayerNumber > map.length - 1) {
@@ -569,43 +577,7 @@ public class Game {
 	}
 
 	private void updateMouse() {
-		if ((ui.getIcons().isAxeSelected()) && ui.getIcons().hoverOnNoIcons()) {
-			if (pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
-				ui.showSelectionSquare();
-				return;
-			}
-			if (pointer.wasReleased(GLFW_MOUSE_BUTTON_LEFT)) {
-				int x = (int) (ui.getSelectionX() / Tile.SIZE);
-				int y = (int) (ui.getSelectionY() / Tile.SIZE);
-				int width = Math.round(ui.getSelectionWidth() / Tile.SIZE);
-				int height = Math.round(ui.getSelectionHeight() / Tile.SIZE);
-				for (int xs = x; xs < (x + width); xs++) {
-					for (int ys = y; ys < (y + height); ys++) {
-						map[currentLayerNumber].selectTree(xs, ys).ifPresent(tree -> getIdlestVil().addJob(tree));
-					}
-				}
-				ui.resetSelection();
-				ui.deSelectIcons();
-			}
-			return;
-		}
 		if (pointer.wasPressed(GLFW_MOUSE_BUTTON_LEFT)) {
-			if (ui.getIcons().isMiningSelected() && ui.getIcons().hoverOnNoIcons()) {
-				map[currentLayerNumber].selectOre(pointer.getTileX(), pointer.getTileY()).ifPresent(ore -> {
-					Villager idle = getIdlestVil();
-					deselectAllVills();
-					idle.addJob(ore);
-					ui.deSelectIcons();
-				});
-			}
-			if (((ui.getIcons().isSwordsSelected()) && ui.getIcons().hoverOnNoIcons())) {
-				Villager idle = getIdlestVil();
-				deselectAllVills();
-				anyMobHoverOn().ifPresent(mob -> idle.addJob(new FightJob(idle, mob)));
-				ui.deSelectIcons();
-				return;
-
-			}
 			if (!ui.outlineIsVisible()) {
 				anyVillHoverOn().ifPresent(villager -> {
 					deselectAllVills();
@@ -738,9 +710,8 @@ public class Game {
 		float x1 = (xScroll + WIDTH + Sprite.SIZE);
 		float y1 = (yScroll + HEIGHT + Sprite.SIZE);
 
-		mobs.forEach(mob -> mob.renderIf(inBounds(mob, x1, y1)));
-
-		vills.forEach(vil -> vil.renderIf(inBounds(vil, x1, y1)));
+		mobs.stream().filter(mob -> inBounds(mob, x1, y1)).forEach(Entity::render);
+		vills.stream().filter(mob -> inBounds(mob, x1, y1)).forEach(Entity::render);
 	}
 
 	private boolean inBounds(Entity e, float x1, float y1) {

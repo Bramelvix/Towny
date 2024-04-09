@@ -8,6 +8,10 @@ import input.PointerInput;
 import ui.UiElement;
 import util.vectors.Vec2f;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.BooleanSupplier;
+
 import static events.EventListener.onlyWhen;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
@@ -18,7 +22,7 @@ public class Icon extends UiElement {
 	private boolean selected; // is the icon selected
 	private int id; //OpenGL texture id
 	private final Runnable deselect;
-	private final Subscription subscription;
+	private final Set<Subscription> listeners = new HashSet<>();
 
 	// constructor
 	public Icon(float x, float y, String path, float scale, Runnable deselect) {
@@ -28,7 +32,7 @@ public class Icon extends UiElement {
 	public Icon(float x, float y, TextureInfo texture, float scale, Runnable deselect) {
 		super(new Vec2f(x, y), new Vec2f(texture.width() * scale, texture.height() * scale));
 		setTexture(texture.id());
-		subscription = PointerInput.getInstance().on(PointerInput.EType.MOVE, this::update); //TODO THIS SUCKS
+		listeners.add(PointerInput.getInstance().on(PointerInput.EType.MOVE, this::update)); //TODO THIS SUCKS
 		this.deselect = deselect;
 		if (deselect != null) {
 			setOnClick(() -> {
@@ -78,10 +82,17 @@ public class Icon extends UiElement {
 	}
 
 	public void setOnClick(Runnable action) {
-		PointerInput.getInstance().on(PointerInput.EType.RELEASED, onlyWhen(
+		listeners.add(PointerInput.getInstance().on(PointerInput.EType.RELEASED, onlyWhen(
 				event -> event.button == GLFW_MOUSE_BUTTON_LEFT && hoverOn(),
 				event -> action.run())
-		);
+		));
+	}
+
+	public void setOnMouseReleaseWhenSelected(Runnable action, BooleanSupplier noIconsHover) {
+		listeners.add(PointerInput.getInstance().on(PointerInput.EType.RELEASED, onlyWhen(
+				event -> selected && noIconsHover.getAsBoolean() && event.button == GLFW_MOUSE_BUTTON_LEFT,
+				event -> action.run())
+		));
 	}
 
 	public void setTexture(int textureId) {
@@ -94,7 +105,7 @@ public class Icon extends UiElement {
 
 	public void destroy() {
 		OpenGLUtils.deleteTexture(id);
-		subscription.unsubscribe();
+		listeners.forEach(Subscription::unsubscribe);
 	}
 
 }

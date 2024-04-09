@@ -24,7 +24,6 @@ launch config.
 
 **Planned improvements**
 
-- Selectionsquare for mining orders
 - Better building and crafting UI
 - Villager management UI
 - World generator rework

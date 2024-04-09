@@ -4,6 +4,8 @@ import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
 import util.vectors.Vec2f;
 
+import java.util.function.BooleanSupplier;
+
 import static events.EventListener.onlyWhen;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
@@ -54,6 +56,13 @@ public class SelectionSquare extends UiElement {
 		if (visible) {
 			OpenGLUtils.drawFilledSquare(position, size, colour);
 		}
+	}
+
+	public void setOnMouseRelease(Runnable action, BooleanSupplier noIconsHover) {
+		PointerInput.getInstance().on(PointerInput.EType.RELEASED, onlyWhen(
+				event -> visible && noIconsHover.getAsBoolean() && event.button == GLFW_MOUSE_BUTTON_LEFT,
+				event -> action.run())
+		);
 	}
 
 	@Override

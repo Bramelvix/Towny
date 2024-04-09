@@ -46,16 +46,16 @@ public class UiIcons {
 		icons[3].setOnClick(action);
 	}
 
-	public boolean isAxeSelected() {
-		return icons[0].isSelected();
+	public void setAxeOnClick(Runnable action) {
+		icons[0].setOnClick(action);
 	}
 
-	public boolean isMiningSelected() {
-		return icons[1].isSelected();
+	public void setMiningOnClick(Runnable action) {
+		icons[1].setOnClick(action);
 	}
 
-	public boolean isSwordsSelected() {
-		return icons[4].isSelected();
+	public void setSwordsOnMouseReleaseWhenSelected(Runnable action) {
+		icons[4].setOnMouseReleaseWhenSelected(action, this::hoverOnNoIcons);
 	}
 
 	// deseleting all icons
