@@ -1,5 +1,7 @@
 package graphics.opengl;
 
+import util.vectors.Vec4i;
+
 import java.awt.*;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
@@ -32,7 +34,7 @@ public class FontUtils {
 	}
 
 	private static void drawString(TrueTypeFont font, float x, float y, String whatchars, int endIndex, float scaleX, float scaleY, int format) {
-		TrueTypeFont.IntObject intObject;
+		Vec4i intObject;
 		int charCurrent;
 		int totalwidth = 0;
 		int i = 0;
@@ -57,7 +59,7 @@ public class FontUtils {
 						break;
 					}
 					intObject = font.charArray[charCurrent];
-					totalwidth += intObject.getWidth() - 9;
+					totalwidth += intObject.x - 9;
 				}
 				totalwidth /= -2;
 				break;
@@ -78,22 +80,22 @@ public class FontUtils {
 							if (charCurrent == '\n')
 								break;
 							intObject = font.charArray[charCurrent];
-							totalwidth += intObject.getWidth() - 9;
+							totalwidth += intObject.x - 9;
 						}
 						totalwidth /= -2;
 					}
 					// if center get next lines total width/2;
 				} else {
-					font.drawQuad((totalwidth + intObject.getWidth()) * scaleX + x,
+					font.drawQuad((totalwidth + intObject.x) * scaleX + x,
 							startY * scaleY + y,
 							totalwidth * scaleX + x,
-							(startY + intObject.getHeight()) * scaleY + y,
-							intObject.storedX + intObject.getWidth(),
-							intObject.storedY + intObject.getHeight(),
-							intObject.storedX,
-							intObject.storedY
+							(startY + intObject.y) * scaleY + y,
+							intObject.z + intObject.x,
+							intObject.w + intObject.y,
+							intObject.z,
+							intObject.w
 					);
-					totalwidth += (intObject.getWidth() - c) * d;
+					totalwidth += (intObject.x - c) * d;
 				}
 				i += d;
 

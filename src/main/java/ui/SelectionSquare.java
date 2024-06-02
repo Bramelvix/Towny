@@ -60,7 +60,7 @@ public class SelectionSquare extends UiElement {
 
 	public void setOnMouseRelease(Runnable action, BooleanSupplier noIconsHover) {
 		PointerInput.getInstance().on(PointerInput.EType.RELEASED, onlyWhen(
-				event -> visible && noIconsHover.getAsBoolean() && event.button == GLFW_MOUSE_BUTTON_LEFT,
+				event -> visible && noIconsHover.getAsBoolean() && event.button() == GLFW_MOUSE_BUTTON_LEFT,
 				event -> action.run())
 		);
 	}

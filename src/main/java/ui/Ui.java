@@ -10,13 +10,12 @@ import map.Tile;
 import ui.icon.UiIcons;
 import ui.menu.Menu;
 import ui.menu.MenuItem;
+import util.TriFunction;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 //main class used to manage the ui
 public class Ui {
@@ -27,9 +26,10 @@ public class Ui {
 	private final Minimap minimap;
 	private final BuildOutline outline;
 	private final SelectionSquare selection;
-	private BiFunction<Integer, Integer, Optional<? extends Resource>> activeResourceSelector;
+	private TriFunction<Integer, Integer, Integer, Optional<? extends Resource>> activeResourceSelector;
 	private final LayerLevelChanger layerLevelChanger;
 	private final UiIcons icons;
+	private int z;
 
 	// rendering the ui
 	public void render() {
@@ -42,7 +42,8 @@ public class Ui {
 		top.render(); //colShader + texShader + fontShader
 	}
 
-	public Ui(Level[] levels, BiFunction<Integer, Integer, Optional<Tree>> treeSelector, BiFunction<Integer, Integer, Optional<Ore>> oreSelector, Game game) throws IOException {
+	public Ui(Level[] levels, TriFunction<Integer, Integer, Integer, Optional<Tree>> treeSelector, TriFunction<Integer, Integer, Integer, Optional<Ore>> oreSelector, Game game) throws IOException {
+		z = 0;
 		icons = new UiIcons(0.176056338028169f);
 		menu = new Menu();
 		selection = new SelectionSquare();
@@ -70,7 +71,7 @@ public class Ui {
 			int height = Math.round(getSelectionHeight() / Tile.SIZE);
 			for (int xs = x; xs < (x + width); xs++) {
 				for (int ys = y; ys < (y + height); ys++) {
-					activeResourceSelector.apply(xs, ys).ifPresent(resourceTaker);
+					activeResourceSelector.apply(xs, ys, z).ifPresent(resourceTaker);
 				}
 			}
 			resetSelection();
@@ -145,6 +146,7 @@ public class Ui {
 	}
 
 	public void update(int z, float xScroll, float yScroll) {
+		this.z = z;
 		selection.update(xScroll, yScroll);
 		outline.update(z, xScroll, yScroll);
 		minimap.update();

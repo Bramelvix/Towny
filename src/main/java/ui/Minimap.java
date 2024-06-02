@@ -92,7 +92,7 @@ class Minimap extends UiElement {
 	}
 
 	private void setScroll(PointerClickEvent event) {
-		setScrollFromIngameCoords(minimapToIngameCoords((float) event.x, (float) event.y));
+		setScrollFromIngameCoords(minimapToIngameCoords((float) event.x(), (float) event.y()));
 	}
 
 	private void setScroll(PointerDragEvent event) {
@@ -100,7 +100,7 @@ class Minimap extends UiElement {
 	}
 
 	private boolean mouseOver(PointerClickEvent event) {
-		return super.mouseOver(event.x, event.y);
+		return super.mouseOver(event.x(), event.y());
 	}
 
 	private boolean mouseOver(PointerDragEvent event) {

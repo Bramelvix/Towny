@@ -95,7 +95,7 @@ public class Game {
 		destroy();
 	}
 
-	private void init() throws Exception {
+	private void init() throws IOException {
 		if (!glfwInit()) {
 			LOGGER.error("GLFW failed to initialize");
 			return;
@@ -304,7 +304,7 @@ public class Game {
 	}
 
 	private void initUi() throws IOException {
-		ui = new Ui(map, (xs, ys) -> map[currentLayerNumber].selectTree(xs, ys), (xs, ys) -> map[currentLayerNumber].selectOre(xs, ys), this);
+		ui = new Ui(map, (xs, ys, z) -> map[z].selectTree(xs, ys), (xs, ys, z) -> map[z].selectOre(xs, ys), this);
 		ui.initLayerLevelChangerActions(this::onClickLayerUp, this::onClickLayerDown);
 		ui.initTopBarActions(this::onClickPause, this::onClickupSpeed, this::onClickdownSpeed);
 		ui.getIcons().setShovelOnClick(this::onClickShovel);
@@ -727,10 +727,10 @@ public class Game {
 	}
 
 	public void setXScroll(float value) {
-		xScroll = Math.max(Math.min(value, getMaxXScrollValue()), 0);
+		xScroll = Math.clamp(value, 0, getMaxXScrollValue());
 	}
 
 	public void setYScroll(float value) {
-		yScroll = Math.max(Math.min(value, getMaxYScrolLValue()), 0);
+		yScroll = Math.clamp(value, 0, getMaxYScrolLValue());
 	}
 }

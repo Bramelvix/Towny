@@ -10,7 +10,6 @@ import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
 import util.vectors.Vec2f;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 
 import static events.EventListener.onlyWhen;
@@ -54,7 +53,7 @@ public class MenuItem {
 		this.text = text;
 		position = new Vec2f(0);
 		subscriptionClick = PointerInput.getInstance().on(PointerInput.EType.PRESSED, onlyWhen(
-				event -> event.button == GLFW_MOUSE_BUTTON_LEFT && hover,
+				event -> event.button() == GLFW_MOUSE_BUTTON_LEFT && hover,
 				event -> onClick.accept(this)
 		));
 		subscriptionMove = PointerInput.getInstance().on(PointerInput.EType.MOVE, this::update);

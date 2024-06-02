@@ -12,6 +12,7 @@ public class Vec4i extends Vec3i {
 		this(n, n, n, n);
 	}
 
+	@Override
 	public Vec4i add(int n) {
 		return add(new Vec4i(n));
 	}
@@ -20,6 +21,7 @@ public class Vec4i extends Vec3i {
 		return new Vec4i(x + v.x, y + v.y, z + v.z, w + v.w);
 	}
 
+	@Override
 	public Vec4i sub(int n) {
 		return sub(new Vec4i(n));
 	}
@@ -28,6 +30,7 @@ public class Vec4i extends Vec3i {
 		return new Vec4i(x - v.x, y - v.y, z - v.z, w - v.w);
 	}
 
+	@Override
 	public Vec4i mul(int n) {
 		return mul(new Vec4i(n));
 	}

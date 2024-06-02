@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashMap;
 
 public final class SpritesheetHashtable {
@@ -25,7 +26,7 @@ public final class SpritesheetHashtable {
 		}
 	}
 
-	public static void registerSpritesheet(int key, String path) throws Exception {
+	public static void registerSpritesheet(int key, String path) throws IOException {
 		registerSpritesheet(key, ImageIO.read(Spritesheet.class.getResource(path)));
 	}
 
@@ -40,7 +41,7 @@ public final class SpritesheetHashtable {
 		return combined;
 	}
 
-	public static void registerSpritesheets() throws Exception { //registers all spritesheets by id
+	public static void registerSpritesheets() throws IOException { //registers all spritesheets by id
 		registerSpritesheet(1, "/tiles.png");
 		registerSpritesheet(2, "/characters.png");
 		registerSpritesheet(3, "/indoor.png");

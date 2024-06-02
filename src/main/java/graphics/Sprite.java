@@ -26,40 +26,33 @@ public interface Sprite {
 	}
 
 	static int getAverageRGB(ByteBuffer buffer, int x, int y, int width) {
-		double r = 0;
-		double g = 0;
-		double b = 0;
-		double a = 0;
 		int totalCount = (int) (SIZE * SIZE);
+		Vec4i[] pixels = new Vec4i[totalCount];
 		for (int i = 0; i < SIZE; i++) {
 			for (int j = 0; j < SIZE; j++) {
-				Vec4i pixel = getARGB(buffer, (int) (x * SIZE) + i, (int) (y * SIZE) + j, width);
-				if (pixel.x == 0) { // Do not count fully transparent pixels in the average colour
-					totalCount--;
-					continue;
-				}
-				a += pixel.x;
-				r += pixel.y;
-				g += pixel.z;
-				b += pixel.w;
+				pixels[i + j * (int) SIZE] = getARGB(buffer, (int) (x * SIZE) + i, (int) (y * SIZE) + j, width);
 			}
 		}
-		return new Color(
-				(int) r / totalCount,
-				(int) g / totalCount,
-				(int) b / totalCount,
-				(int) a / totalCount
-		).getRGB();
+
+		return getAverageRGB(pixels);
 	}
 
 	static int getAverageRGB(int[] colours) {
+		Vec4i[] pixels = new Vec4i[colours.length];
+		for (int i = 0; i < colours.length; i++) {
+			pixels[i] = getARGB(colours[i]);
+		}
+
+		return getAverageRGB(pixels);
+	}
+
+	private static int getAverageRGB(Vec4i[] pixels) {
 		double a = 0;
 		double r = 0;
 		double g = 0;
 		double b = 0;
-		int totalCount = colours.length;
-		for (int colour : colours) {
-			Vec4i pixel = getARGB(colour);
+		int totalCount = pixels.length;
+		for (Vec4i pixel : pixels) {
 			if (pixel.x == 0) { // Do not count fully transparent pixels in the average colour
 				totalCount--;
 				continue;
@@ -69,13 +62,12 @@ public interface Sprite {
 			g += pixel.z;
 			b += pixel.w;
 		}
-		Color colour = new Color(
+		return new Color(
 				(int) r / totalCount,
 				(int) g / totalCount,
 				(int) b / totalCount,
 				(int) a / totalCount
-		);
-		return colour.getRGB();
+		).getRGB();
 	}
 
 	void draw(Vec3f pos);

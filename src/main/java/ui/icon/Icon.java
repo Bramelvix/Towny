@@ -83,14 +83,14 @@ public class Icon extends UiElement {
 
 	public void setOnClick(Runnable action) {
 		listeners.add(PointerInput.getInstance().on(PointerInput.EType.RELEASED, onlyWhen(
-				event -> event.button == GLFW_MOUSE_BUTTON_LEFT && hoverOn(),
+				event -> event.button() == GLFW_MOUSE_BUTTON_LEFT && hoverOn(),
 				event -> action.run())
 		));
 	}
 
 	public void setOnMouseReleaseWhenSelected(Runnable action, BooleanSupplier noIconsHover) {
 		listeners.add(PointerInput.getInstance().on(PointerInput.EType.RELEASED, onlyWhen(
-				event -> selected && noIconsHover.getAsBoolean() && event.button == GLFW_MOUSE_BUTTON_LEFT,
+				event -> selected && noIconsHover.getAsBoolean() && event.button() == GLFW_MOUSE_BUTTON_LEFT,
 				event -> action.run())
 		));
 	}

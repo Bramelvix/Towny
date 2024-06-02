@@ -4,6 +4,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import util.BufferedImageUtil;
 import util.vectors.Vec2f;
+import util.vectors.Vec4i;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,27 +12,12 @@ import java.nio.IntBuffer;
 
 public class TrueTypeFont {
 
-	public final IntObject[] charArray = new IntObject[256];
+	public final Vec4i[] charArray = new Vec4i[256];
 	public final int fontSize;
 	private int fontHeight;
 	public final int fontTextureID;
 	private static final int TEXTURE_WIDTH = 512;
 	private static final int TEXTURE_HEIGHT = 512;
-
-	static class IntObject {
-		private int width;
-		private int height;
-		int storedX;
-		int storedY;
-
-		public int getWidth() {
-			return width;
-		}
-
-		public int getHeight() {
-			return height;
-		}
-	}
 
 	public int getHeight() {
 		return fontHeight;
@@ -52,31 +38,32 @@ public class TrueTypeFont {
 		for (int i = 0; i < 256; i++) {
 			char ch = (char) i;
 			BufferedImage fontImage = getFontImage(font, ch, colour);
-			IntObject newIntObject = new IntObject();
-			newIntObject.width = fontImage.getWidth();
-			newIntObject.height = fontImage.getHeight();
+			Vec4i newIntObject = new Vec4i(0);
+			newIntObject.x = fontImage.getWidth();
+			newIntObject.y = fontImage.getHeight();
 
-			if (positionX + newIntObject.width >= TEXTURE_WIDTH) {
+
+			if (positionX + newIntObject.x >= TEXTURE_WIDTH) {
 				positionX = 0;
 				positionY += rowHeight;
 				rowHeight = 0;
 			}
 
-			newIntObject.storedX = positionX;
-			newIntObject.storedY = positionY;
+			newIntObject.z = positionX;
+			newIntObject.w = positionY;
 
-			if (newIntObject.height > fontHeight) {
-				fontHeight = newIntObject.height;
+			if (newIntObject.y > fontHeight) {
+				fontHeight = newIntObject.y;
 			}
 
-			if (newIntObject.height > rowHeight) {
-				rowHeight = newIntObject.height;
+			if (newIntObject.y > rowHeight) {
+				rowHeight = newIntObject.y;
 			}
 
 			// Draw it here
 			g.drawImage(fontImage, positionX, positionY, null);
 
-			positionX += newIntObject.width;
+			positionX += newIntObject.x;
 			charArray[i] = newIntObject;
 		}
 

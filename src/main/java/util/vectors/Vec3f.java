@@ -12,6 +12,7 @@ public class Vec3f extends Vec2f {
 		this(n, n, n);
 	}
 
+	@Override
 	public Vec3f add(float n) {
 		return add(new Vec3f(n));
 	}
@@ -20,6 +21,7 @@ public class Vec3f extends Vec2f {
 		return new Vec3f(x + v.x, y + v.y, z + v.z);
 	}
 
+	@Override
 	public Vec3f sub(float n) {
 		return sub(new Vec3f(n));
 	}
@@ -28,6 +30,7 @@ public class Vec3f extends Vec2f {
 		return new Vec3f(x - v.x, y - v.y, z - v.z);
 	}
 
+	@Override
 	public Vec3f mul(float n) {
 		return mul(new Vec3f(n));
 	}
