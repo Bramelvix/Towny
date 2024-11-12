@@ -32,7 +32,7 @@ public class BuildJob extends Job {
 
 	private void goPickupItem() {
 		if (!goingToPickUpItem) {
-			worker.prependJobToChain(new MoveItemJob(worker, material));
+			worker.prependJobToChain(new PickUpItemJob(worker, material));
 			goingToPickUpItem = true;
 		}
 	}

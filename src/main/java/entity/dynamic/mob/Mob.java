@@ -129,6 +129,10 @@ public abstract class Mob extends Entity {
 		return PathFinder.findPath(getTileX(), getTileY(), tx, ty, levels[z]);
 	}
 
+	public Optional<Path> getPath(Entity entity) {
+		return PathFinder.findPath(getTileX(), getTileY(), entity.getTileX(), entity.getTileY(), levels[z]);
+	}
+
 	public int getHealth() {
 		return health;
 	}

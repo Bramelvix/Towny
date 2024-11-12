@@ -77,8 +77,8 @@ public class CraftJob extends Job {
 				completed = true;
 				return;
 			}
-			worker.prependJobToChain(new MoveItemJob(worker, item));
-			worker.prependJobToChain(new MoveItemJob(worker, station.getTileX(), station.getTileY(), worker.getZ()));
+			worker.prependJobToChain(new PickUpItemJob(worker, item));
+			worker.prependJobToChain(new DropItemJob(worker, station.getTileX(), station.getTileY(), worker.getZ()));
 		}
 		prereqsDone = true;
 	}

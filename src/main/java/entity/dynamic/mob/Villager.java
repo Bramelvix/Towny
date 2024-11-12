@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import util.vectors.Vec2f;
 import util.vectors.Vec3f;
 
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.PriorityQueue;
 
@@ -71,28 +72,13 @@ public class Villager extends Humanoid {
 	}
 
 	// gets the item nearest to the villager(of the same kind and unreserved)
-	public Optional<Item> getNearestItemOfType(Item item) {
-		if (getHolding() != null && getHolding().isSameType(item)) {
+	public Optional<Item> getNearestItemOfType(Item itemToSearch) {
+		if (getHolding() != null && getHolding().isSameType(itemToSearch)) {
 			return Optional.of(getHolding());
 		}
-		Item closest = null;
-		Optional<Path> path = Optional.empty();
-		for (Item level_item : levels[z].getItems()) {
-			if (item.isSameType(level_item) && level_item.isReserved(this)) {
-				Optional<Path> foundPath = getPath(level_item.getTileX(), level_item.getTileY());
-				if (closest == null
-						|| path.isEmpty()
-						|| (foundPath.isPresent() && path.get().getStepsSize() > foundPath.get().getStepsSize())
-				) {
-					closest = level_item;
-					path = getPath(closest.getTileX(), closest.getTileY());
-				}
-			}
-		}
-		if (closest == null || path.isEmpty()) {
-			return Optional.empty();
-		}
-		return Optional.of(closest);
+
+		return levels[z].getItems().stream().filter(item -> item.isSameType(itemToSearch) && item.isReserved(this)
+				&& getPath(item).isPresent()).min(Comparator.comparingInt(item -> getPath(item).get().getLength()));
 	}
 
 	// work method for the villager to execute his jobs
@@ -251,6 +237,7 @@ public class Villager extends Humanoid {
 	public boolean isSoldier() {
 		return isSoldier;
 	}
+
 	public void setSoldier(boolean soldier) {
 		isSoldier = soldier;
 	}

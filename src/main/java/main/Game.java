@@ -9,10 +9,7 @@ import entity.dynamic.item.weapon.WeaponMaterial;
 import entity.dynamic.mob.Mob;
 import entity.dynamic.mob.Villager;
 import entity.dynamic.mob.Zombie;
-import entity.dynamic.mob.work.CraftJob;
-import entity.dynamic.mob.work.FightJob;
-import entity.dynamic.mob.work.MoveItemJob;
-import entity.dynamic.mob.work.MoveJob;
+import entity.dynamic.mob.work.*;
 import entity.dynamic.mob.work.recipe.BuildingRecipe;
 import entity.dynamic.mob.work.recipe.ItemRecipe;
 import entity.non_dynamic.building.container.Chest;
@@ -414,7 +411,7 @@ public class Game {
 	private void onClickPickup(MenuItem item) {
 		selectedvill.setPath(null);
 		Item e = item.getEntity(Item.class);
-		selectedvill.addJob(new MoveItemJob(selectedvill, e));
+		selectedvill.addJob(new PickUpItemJob(selectedvill, e));
 		ui.deSelectIcons();
 		deselect(selectedvill);
 		ui.getMenu().hide();
@@ -492,7 +489,7 @@ public class Game {
 
 	private void onClickDrop() {
 		selectedvill.setPath(null);
-		selectedvill.addJob(new MoveItemJob(selectedvill,
+		selectedvill.addJob(new DropItemJob(selectedvill,
 				(int) ((ui.getMenu().getX() + xScroll) / Tile.SIZE),
 				(int) ((ui.getMenu().getY() + yScroll) / Tile.SIZE),
 				currentLayerNumber

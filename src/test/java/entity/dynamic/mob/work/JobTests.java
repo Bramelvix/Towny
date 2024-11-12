@@ -36,7 +36,7 @@ class JobTests {
 		item.setLocation(96, 96, 0);
 		level[0].addItem(item);
 		assertTrue(villager.getNearestItemOfType(item).isPresent());
-		villager.addJob(new MoveItemJob(villager, item));
+		villager.addJob(new PickUpItemJob(villager, item));
 		for (int i = 0; i < 50; i++) {
 			villager.update();
 		}
@@ -48,7 +48,7 @@ class JobTests {
 		Item item = ItemHashtable.getTestItem();
 		villager.setHolding(item);
 		assertTrue(villager.isHolding(item));
-		villager.addJob(new MoveItemJob(villager, 2, 2, 0));
+		villager.addJob(new DropItemJob(villager, 2, 2, 0));
 		for (int i = 0; i < 50; i++) {
 			villager.update();
 		}
