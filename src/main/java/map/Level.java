@@ -157,7 +157,7 @@ public class Level {
 
 	public Optional<Workstation> getNearestWorkstation(Workstation.Type type, int x, int y) {
 		return mapWorkstations.stream().filter(workstation -> workstation.getType() == type)
-			.filter(workstation -> PathFinder.findPath(x, y, workstation.getTileX(), workstation.getTileY(), this).isPresent())
+			.filter(workstation -> PathFinder.findPathAround(x, y, workstation.getTileX(), workstation.getTileY(), this).isPresent())
 			.min(getClosest(x, y));
 	}
 

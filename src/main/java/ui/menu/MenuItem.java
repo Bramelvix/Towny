@@ -9,6 +9,7 @@ import events.Subscription;
 import graphics.opengl.OpenGLUtils;
 import input.PointerInput;
 import util.vectors.Vec2f;
+import util.vectors.Vec4f;
 
 import java.util.function.Consumer;
 
@@ -105,7 +106,7 @@ public class MenuItem {
 
 	// updating the mouse hover
 	public void update(PointerMoveEvent event) {
-		hover = (event.x >= position.x && event.x <= position.x + width && event.y >= position.y && event.y <= position.y + 10);
+		hover = (event.x >= position.x && event.x <= position.x + width && event.y >= position.y && event.y <= position.y + 20);
 	}
 
 	public String getText() {

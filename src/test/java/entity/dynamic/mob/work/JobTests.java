@@ -141,6 +141,6 @@ class JobTests {
 			villager.update();
 		}
 		assertEquals(0, villager.getJobSize());
-		assertEquals("This item was crafted", level[0].getItems().get(0).getName());
+		assertEquals("This item was crafted", level[0].getItems().getFirst().getName());
 	}
 }
