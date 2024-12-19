@@ -21,22 +21,20 @@ public class Wall extends BuildAbleObject {
 		this(type, false);
 	}
 
-	private void decideSprites(boolean door) {
+	private static String determineName(boolean door, WallType type) {
 		StringBuilder name = new StringBuilder();
 		switch (type) {
 			case WOOD -> name.append("wooden ");
 			case STONE -> name.append("stone ");
 		}
 		name.append(door ? "door" : "wall");
-		setName(name.toString());
+		return name.toString();
 	}
 
 	public Wall(WallType type, boolean door) {
-		super();
+		super(door, determineName(door, type));
 		this.type = type;
-		setTransparent(door);
 		this.door = door;
-		decideSprites(door);
 	}
 
 	// checks the 4 sides of this wall to see if there are walls next to it. The sprite is decided based on this.

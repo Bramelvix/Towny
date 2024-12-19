@@ -114,8 +114,8 @@ public abstract class Mob extends Entity {
 	}
 
 	// constructor
-	Mob(Level[] levels) {
-		super();
+	Mob(String displayName, Level[] levels) {
+		super(displayName);
 		this.levels = levels;
 	}
 

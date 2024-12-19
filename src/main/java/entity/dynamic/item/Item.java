@@ -5,14 +5,13 @@ import entity.dynamic.mob.Villager;
 import graphics.Sprite;
 
 public class Item extends Entity {
-
 	private final int id; //item id
 	protected String tooltip; // the item's tooltip
 	private Villager reservedVil; // the villager that plans to pick the item up, or is already holding it
 
 	// basic constructor
 	protected Item(String name, Sprite sprite, String tooltip, int id) {
-		super(name, sprite);
+		super(name, sprite, true);
 		this.tooltip = tooltip;
 		this.id = id;
 	}

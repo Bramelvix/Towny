@@ -12,8 +12,13 @@ public abstract class BuildAbleObject extends StaticEntity implements Workable {
 	private boolean initialised = false; // has the building been initialised
 	private byte condition = 0; // condition of the building (0=not built ,100= done)
 
-	protected BuildAbleObject() {
+	protected BuildAbleObject(String name) {
+		super(name);
 		setVisible(false);
+	}
+
+	protected BuildAbleObject(boolean transparent, String name) {
+		super(transparent, name);
 	}
 
 	protected void setOpened(boolean open) { //the open value has to be changeable for certain objects like doors

@@ -9,9 +9,8 @@ public class Zombie extends Humanoid {
 	private byte animationtimer = 0;
 
 	public Zombie(Level[] levels, float x, float y, int z) {
-		super(levels, x, y, z);
+		super("zombie", levels, x, y, z);
 		sprite = SpriteHashtable.get(51);
-		setName("zombie");
 		setHolding(ItemHashtable.getRandomWeapon());
 	}
 

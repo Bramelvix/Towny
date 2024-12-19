@@ -14,17 +14,13 @@ public abstract class Entity {
 	public static final Random RANDOM = new Random(); // random needed for various chance calculations
 	protected Sprite sprite; // the entity's sprite
 	private boolean visible; // is the entity visible or not
-	private boolean transparent = true; // non-transparent entities will stop the Tile sprite under them from rendering unnecessarily
+	private final boolean transparent; // non-transparent entities will stop the Tile sprite under them from rendering unnecessarily
 	private boolean selected = false;
-	private String displayName;
+	private final String displayName;
 
 	// setters
 	public void setVisible(boolean visible) {
 		this.visible = visible;
-	}
-
-	public void setTransparent(boolean transparent) {
-		this.transparent = transparent;
 	}
 
 	public void setSelected(boolean selected) {
@@ -35,18 +31,20 @@ public abstract class Entity {
 		return displayName;
 	}
 
-	public void setName(String name) {
-		displayName = name;
-	}
-
 	public void setLocation(float x, float y, int z) {
 		location.x = x;
 		location.y = y;
 		this.z = z;
 	}
 
-	protected Entity() {
+	protected Entity(boolean transparent, String displayName) {
+		this.displayName = displayName;
+		this.transparent = transparent;
 		setVisible(true);
+	}
+
+	protected Entity(String displayName) {
+		this(true, displayName);
 	}
 
 	// getters
@@ -87,15 +85,18 @@ public abstract class Entity {
 	}
 
 	// basic constructor
-	protected Entity(float x, float y, int z) {
-		this();
+	protected Entity(float x, float y, int z, boolean transparent, String displayName) {
+		this(transparent, displayName);
 		location = new Vec3f(-1);
 		setLocation(x, y, z);
 	}
 
-	protected Entity(String name, Sprite sprite) {
-		this();
-		setName(name);
+	protected Entity(float x, float y, int z) {
+		this(x, y, z, true, null);
+	}
+
+	protected Entity(String name, Sprite sprite, boolean transparent) {
+		this(transparent, name);
 		this.sprite = sprite;
 	}
 

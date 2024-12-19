@@ -9,12 +9,10 @@ public class Stairs extends BuildAbleObject {
 	private final boolean top;
 
 	public Stairs(boolean top) {
-		super();
+		super(!top, "stairs");
 		setVisible(true);
 		this.top = top;
-		setTransparent(!this.top);
 		sprite = SpriteHashtable.get(top ? 40 : 41);
-		setName("stairs");
 	}
 
 	@Override

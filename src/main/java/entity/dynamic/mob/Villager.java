@@ -44,12 +44,11 @@ public class Villager extends Humanoid {
 	}
 
 	public Villager(float x, float y, int z, Level[] levels, boolean male, Sprite body, Sprite hair) {
-		super(levels, x, y, z);
+		super("villager", levels, x, y, z);
 		sprite = body;
 		inventory = new VillagerInventory(this);
 		this.male = male;
 		this.hair = hair;
-		setName("villager");
 		location.z = 0.1f;
 	}
 

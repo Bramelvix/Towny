@@ -13,11 +13,10 @@ public abstract class Workstation extends Container {
 	private final Type type;
 
 	Workstation(Type type, Sprite passive, Sprite running) {
-		super(4);
+		super(4, type.toString().toLowerCase());
 		this.type = type;
 		this.passiveSprite = passive;
 		this.runningSprite = running;
-		setName(type.toString().toLowerCase());
 		sprite = passive;
 	}
 

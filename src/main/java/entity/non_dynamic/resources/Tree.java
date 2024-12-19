@@ -1,5 +1,6 @@
 package entity.non_dynamic.resources;
 
+import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
@@ -11,17 +12,14 @@ import util.vectors.Vec3f;
 
 public class Tree extends Resource {
 
-	private byte chopped = 100;
 	private final Sprite topsprite;
 
 	// basic constructor
 	public Tree(float x, float y, int z, Level level) {
-		super(x, y, z, level);
+		super(x, y, z, level, true, "tree");
 		sprite = SpriteHashtable.get(12);
 		topsprite = SpriteHashtable.get(13);
 		setVisible(true);
-		setTransparent(true);
-		setName("tree");
 		location.z = -0.8f;
 	}
 
@@ -32,20 +30,9 @@ public class Tree extends Resource {
 		topsprite.draw(new Vec3f(location.x, location.y - Sprite.SIZE, location.z));
 	}
 
-	// work method (same as in the Ore class)
 	@Override
-	public boolean work() {
-		if (chopped > 0) {
-			if (chopped % 20 == 0) {
-				Sound.playSound(Sound.woodChopping);
-			}
-			chopped--;
-			return false;
-		}
-		level.removeEntity(this);
-		level.addItem(ItemHashtable.get(1, location.x, location.y, this.z));
-		return true;
-
+	protected Item getDroppedResource() {
+		return ItemHashtable.get(1);
 	}
 
 	@Override

@@ -11,9 +11,8 @@ public class TilledSoil extends BuildAbleObject {
 	private long growTimeSeconds;
 
 	public TilledSoil() {
-		super();
+		super("fertile soil");
 		this.setOpened(true);
-		this.setName("fertile soil");
 		sprite = SpriteHashtable.get(141);
 	}
 

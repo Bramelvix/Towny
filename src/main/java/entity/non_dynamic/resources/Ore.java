@@ -11,48 +11,44 @@ import sound.Sound;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class Ore extends Resource {
 
-	private byte mined = 100; // mined percentage (100 = unfinished / 0 = finished)
-	private Item minedItem; // Item dropped when the ore is mined
+	private Supplier<Item> minedItemSupplier; // Item dropped when the ore is mined
 	private Sprite originalSprite;
 
 	// basic constructor
 	public Ore(float x, float y, int z, Level level, OreType type) {
-		super(x, y, z, level);
+		super(x, y, z, level, false, type == OreType.STONE ? type.toString().toLowerCase() : type.toString().toLowerCase() + " ore");
 		decideSprite(type);
-		setTransparent(false);
 		setVisible(true);
 	}
 
 	// decide the sprite for the ore
 	private void decideSprite(OreType type) {
-		String name = type == OreType.STONE ? type.toString().toLowerCase() : type.toString().toLowerCase() + " ore";
-		setOre(name, SpriteHashtable.get(type.getSpriteId()), ItemHashtable.get(type.getItemId(), getX(), getY(), this.z));
+		setOre(SpriteHashtable.get(type.getSpriteId()), () -> ItemHashtable.get(type.getItemId(), getX(), getY(), this.z));
 	}
 
-	private void setOre(String name, Sprite oreSprite, Item item) {
-		setName(name);
+	private void setOre(Sprite oreSprite, Supplier<Item> minedItemSupplier) {
 		this.originalSprite = oreSprite;
-		this.minedItem = item;
+		this.minedItemSupplier = minedItemSupplier;
 	}
 
 	// work method executed by the villager when mining
 	@Override
 	public boolean work() {
-		if (mined > 0) {
-			if (mined % 20 == 0) {
-				Sound.playSound(Sound.stoneMining);
-			}
-			mined--;
-			return false;
+		if (super.work()) {
+			resetSpritesAroundThis();
+			return true;
 		}
-		level.removeEntity(this);
-		resetSpritesAroundThis();
-		level.addItem(minedItem.copy());
-		return true;
 
+		return false;
+	}
+
+	@Override
+	protected Item getDroppedResource() {
+		return minedItemSupplier.get();
 	}
 
 	private void resetSpritesAroundThis() {

@@ -12,7 +12,8 @@ public abstract class Container extends BuildAbleObject {
 	private final ArrayList<Item> items;
 	private final int containerSize;
 
-	protected Container(int containerSize) {
+	protected Container(int containerSize, String displayName) {
+		super(displayName);
 		items = new ArrayList<>();
 		this.containerSize = containerSize;
 	}
