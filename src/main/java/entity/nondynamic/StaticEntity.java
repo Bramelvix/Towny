@@ -1,4 +1,4 @@
-package entity.non_dynamic;
+package entity.nondynamic;
 
 import entity.Entity;
 import map.Level;

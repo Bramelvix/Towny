@@ -1,22 +1,21 @@
-package entity.non_dynamic.resources;
+package entity.nondynamic.resources;
 
 import entity.dynamic.item.Item;
-import entity.dynamic.item.ItemHashtable;
-import entity.non_dynamic.StaticEntity;
-import entity.non_dynamic.Workable;
+import entity.nondynamic.StaticEntity;
+import entity.nondynamic.Workable;
 import graphics.Sprite;
 import graphics.opengl.OpenGLUtils;
 import map.Level;
-import sound.Sound;
 import util.vectors.Vec2f;
 
 //superclass of gatherable resources such as trees and ore
 public abstract class Resource extends StaticEntity implements Workable {
-
+	private final Item droppedResource;
 	private byte gatheredPercentage = 0;
 
-	Resource(float x, float y, int z, Level level, boolean transparent, String displayName) {
+	Resource(float x, float y, int z, Level level, boolean transparent, String displayName, Item droppedResource) {
 		super(x, y, z, level, transparent, displayName);
+		this.droppedResource = droppedResource;
 	}
 
 	@Override
@@ -37,13 +36,10 @@ public abstract class Resource extends StaticEntity implements Workable {
 			gatheredPercentage++;
 			return false;
 		}
+
 		level.removeEntity(this);
-		Item droppedResource = getDroppedResource();
 		droppedResource.setLocation(location.x, location.y, this.z);
 		level.addItem(droppedResource);
 		return true;
 	}
-
-	protected abstract Item getDroppedResource();
-
 }

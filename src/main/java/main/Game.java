@@ -12,12 +12,12 @@ import entity.dynamic.mob.Zombie;
 import entity.dynamic.mob.work.*;
 import entity.dynamic.mob.work.recipe.BuildingRecipe;
 import entity.dynamic.mob.work.recipe.ItemRecipe;
-import entity.non_dynamic.building.container.Chest;
-import entity.non_dynamic.building.container.Container;
-import entity.non_dynamic.building.container.Workstation;
-import entity.non_dynamic.building.farming.TilledSoil;
-import entity.non_dynamic.resources.Ore;
-import entity.non_dynamic.resources.Tree;
+import entity.nondynamic.building.container.Chest;
+import entity.nondynamic.building.container.Container;
+import entity.nondynamic.building.container.Workstation;
+import entity.nondynamic.building.farming.TilledSoil;
+import entity.nondynamic.resources.Ore;
+import entity.nondynamic.resources.Tree;
 import entity.pathfinding.PathFinder;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
@@ -189,16 +189,16 @@ public class Game {
 
 	private void spawnvills() {
 		Villager vill = new Villager(432, 432, 0, map);
-		vill.addClothing((Clothing) ItemHashtable.get(61));
-		vill.addClothing((Clothing) ItemHashtable.get(75));
+		vill.addClothing((Clothing) ItemHashtable.get(61).createInstance());
+		vill.addClothing((Clothing) ItemHashtable.get(75).createInstance());
 		addVillager(vill);
 		Villager vil2 = new Villager(432, 480, 0, map);
-		vil2.addClothing((Clothing) ItemHashtable.get(65));
-		vil2.addClothing((Clothing) ItemHashtable.get(74));
+		vil2.addClothing((Clothing) ItemHashtable.get(65).createInstance());
+		vil2.addClothing((Clothing) ItemHashtable.get(74).createInstance());
 		addVillager(vil2);
 		Villager vil3 = new Villager(480, 480, 0, map);
-		vil3.addClothing((Clothing) ItemHashtable.get(70));
-		vil3.addClothing((Clothing) ItemHashtable.get(73));
+		vil3.addClothing((Clothing) ItemHashtable.get(70).createInstance());
+		vil3.addClothing((Clothing) ItemHashtable.get(73).createInstance());
 		addVillager(vil3);
 	}
 
@@ -435,9 +435,9 @@ public class Game {
 	}
 
 	private void onClickSmelt() {
-		MenuItem[] craftingOptions = new MenuItem[ItemRecipe.FURNACE_RECIPES.length + 1];
-		for (int i = 0; i < ItemRecipe.FURNACE_RECIPES.length; i++) {
-			craftingOptions[i] = new MenuItem(ItemRecipe.FURNACE_RECIPES[i], this::onClickCraft);
+		MenuItem[] craftingOptions = new MenuItem[ItemRecipe.FURNACE_RECIPES.size() + 1];
+		for (int i = 0; i < ItemRecipe.FURNACE_RECIPES.size(); i++) {
+			craftingOptions[i] = new MenuItem(ItemRecipe.FURNACE_RECIPES.get(i), this::onClickCraft);
 		}
 		craftingOptions[craftingOptions.length - 1] = new MenuItem(MenuItem.CANCEL, this::onClickCancel);
 		ui.showMenu(craftingOptions);
@@ -448,9 +448,9 @@ public class Game {
 		Villager idle = getIdlestVil();
 		ItemRecipe recipe = item.getRecipe(ItemRecipe.class);
 		idle.setPath(null);
-		Item[] res = new Item[recipe.getResources().length];
+		Item[] res = new Item[recipe.getResources().size()];
 		for (int i = 0; i < res.length; i++) {
-			res[i] = idle.getNearestItemOfType(recipe.getResources()[i]).orElse(null);
+			res[i] = idle.getNearestItemOfType(recipe.getResources().get(i)).orElse(null);
 		}
 		map[currentLayerNumber].getNearestWorkstation(
 				recipe.getWorkstationType(), idle.getTileX(), idle.getTileY()
@@ -525,7 +525,7 @@ public class Game {
 						(int) (blok[1] / Tile.SIZE),
 						currentLayerNumber,
 						recipe.getProduct(),
-						recipe.getResources()[0]
+						recipe.getResources().getFirst()
 				);
 			}
 		}

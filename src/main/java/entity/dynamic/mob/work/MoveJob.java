@@ -1,7 +1,7 @@
 package entity.dynamic.mob.work;
 
 import entity.dynamic.mob.Villager;
-import entity.non_dynamic.building.Stairs;
+import entity.nondynamic.building.Stairs;
 import entity.pathfinding.Path;
 import entity.pathfinding.PathFinder;
 

@@ -1,4 +1,4 @@
-package entity.non_dynamic.building.container;
+package entity.nondynamic.building.container;
 
 import graphics.Sprite;
 import graphics.SpriteHashtable;

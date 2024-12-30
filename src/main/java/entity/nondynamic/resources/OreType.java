@@ -1,4 +1,4 @@
-package entity.non_dynamic.resources;
+package entity.nondynamic.resources;
 
 //the types of ore in the game
 public enum OreType {

@@ -1,7 +1,7 @@
 package map;
 
-import entity.non_dynamic.building.Stairs;
-import entity.non_dynamic.building.container.Chest;
+import entity.nondynamic.building.Stairs;
+import entity.nondynamic.building.container.Chest;
 import entity.pathfinding.PathFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

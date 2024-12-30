@@ -2,13 +2,14 @@ package entity.dynamic.mob.work;
 
 import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
+import entity.dynamic.item.ItemInfo;
 import entity.dynamic.mob.Villager;
-import entity.non_dynamic.building.container.Chest;
-import entity.non_dynamic.building.container.Workstation;
-import entity.non_dynamic.building.farming.TilledSoil;
-import entity.non_dynamic.resources.Ore;
-import entity.non_dynamic.resources.OreType;
-import entity.non_dynamic.resources.Tree;
+import entity.nondynamic.building.container.Chest;
+import entity.nondynamic.building.container.Workstation;
+import entity.nondynamic.building.farming.TilledSoil;
+import entity.nondynamic.resources.Ore;
+import entity.nondynamic.resources.OreType;
+import entity.nondynamic.resources.Tree;
 import entity.pathfinding.PathFinder;
 import map.Level;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,10 +33,11 @@ class JobTests {
 
 	@Test
 	void shouldPickupItemJob() {
-		Item item = ItemHashtable.getTestItem();
+		ItemInfo<Item> itemInfo = ItemHashtable.getTestItemInfo();
+		Item item = itemInfo.createInstance();
 		item.setLocation(96, 96, 0);
 		level[0].addItem(item);
-		assertTrue(villager.getNearestItemOfType(item).isPresent());
+		assertTrue(villager.getNearestItemOfType(itemInfo).isPresent());
 		villager.addJob(new PickUpItemJob(villager, item));
 		for (int i = 0; i < 50; i++) {
 			villager.update();
@@ -45,7 +47,7 @@ class JobTests {
 
 	@Test
 	void shouldDropItemJob() {
-		Item item = ItemHashtable.getTestItem();
+		Item item = ItemHashtable.getTestItemInfo().createInstance();
 		villager.setHolding(item);
 		assertTrue(villager.isHolding(item));
 		villager.addJob(new DropItemJob(villager, 2, 2, 0));
@@ -85,10 +87,11 @@ class JobTests {
 
 	@Test
 	void shouldBuildObject() {
-		Item item = ItemHashtable.getTestItem();
+		ItemInfo<Item> itemInfo = ItemHashtable.getTestItemInfo();
+		Item item = itemInfo.createInstance();
 		item.setLocation(96, 96, 0);
 		level[0].addItem(item);
-		villager.addBuildJob(4, 2, 0, new Chest(), item);
+		villager.addBuildJob(4, 2, 0, new Chest(), itemInfo);
 		for (int i = 0; i < 75; i++) {
 			villager.update();
 		}
@@ -133,14 +136,14 @@ class JobTests {
 		Workstation anvil = Workstation.anvil();
 		anvil.setLocation(48, 96, 0);
 		level[0].addEntity(anvil, true);
-		Item[] resources = new Item[]{ItemHashtable.getTestItem()};
-		Item result = ItemHashtable.getTestItem();
-		result.setName("This item was crafted");
+		Item[] resources = new Item[]{ItemHashtable.getTestItemInfo().createInstance()};
+		Item result = ItemHashtable.getTestItemInfo().createInstance();
+		String name = result.getName();
 		villager.addJob(new CraftJob(villager, resources, result, anvil));
 		for (int i = 0; i < 150; i++) {
 			villager.update();
 		}
 		assertEquals(0, villager.getJobSize());
-		assertEquals("This item was crafted", level[0].getItems().getFirst().getName());
+		assertEquals(name, level[0].getItems().getFirst().getName());
 	}
 }

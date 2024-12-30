@@ -44,7 +44,7 @@ public class MenuItem {
 	public static final String WOOD = "Wood";
 	public static final String SOW = "Sow seeds";
 	public static final String HARVEST = "Harvest";
-	private Recipe<?> recipe;
+	private Recipe recipe;
 	private Entity entity;
 	private final Subscription subscriptionMove;
 	private final Subscription subscriptionClick;
@@ -117,7 +117,7 @@ public class MenuItem {
 		return text + " " + e.getName();
 	}
 
-	public <T extends Recipe<?>> T getRecipe(Class<T> clazz) {
+	public <T extends Recipe> T getRecipe(Class<T> clazz) {
 		return clazz.cast(recipe);
 	}
 

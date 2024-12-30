@@ -1,4 +1,4 @@
-package entity.non_dynamic;
+package entity.nondynamic;
 
 public interface Workable {
 	boolean work();

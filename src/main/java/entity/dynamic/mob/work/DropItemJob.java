@@ -1,7 +1,7 @@
 package entity.dynamic.mob.work;
 
 import entity.dynamic.mob.Villager;
-import entity.non_dynamic.building.container.Container;
+import entity.nondynamic.building.container.Container;
 
 public class DropItemJob extends Job {
 	private final Container container;

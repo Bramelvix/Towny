@@ -1,38 +1,23 @@
-package entity.non_dynamic.resources;
+package entity.nondynamic.resources;
 
-import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
 import graphics.MultiSprite;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import graphics.StaticSprite;
 import map.Level;
-import sound.Sound;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 public class Ore extends Resource {
-
-	private Supplier<Item> minedItemSupplier; // Item dropped when the ore is mined
-	private Sprite originalSprite;
+	private final Sprite originalSprite;
 
 	// basic constructor
 	public Ore(float x, float y, int z, Level level, OreType type) {
-		super(x, y, z, level, false, type == OreType.STONE ? type.toString().toLowerCase() : type.toString().toLowerCase() + " ore");
-		decideSprite(type);
+		super(x, y, z, level, false, type == OreType.STONE ? type.toString().toLowerCase() : type.toString().toLowerCase() + " ore", ItemHashtable.get(type.getItemId()).createInstance());
+		this.originalSprite = SpriteHashtable.get(type.getSpriteId());
 		setVisible(true);
-	}
-
-	// decide the sprite for the ore
-	private void decideSprite(OreType type) {
-		setOre(SpriteHashtable.get(type.getSpriteId()), () -> ItemHashtable.get(type.getItemId(), getX(), getY(), this.z));
-	}
-
-	private void setOre(Sprite oreSprite, Supplier<Item> minedItemSupplier) {
-		this.originalSprite = oreSprite;
-		this.minedItemSupplier = minedItemSupplier;
 	}
 
 	// work method executed by the villager when mining
@@ -44,11 +29,6 @@ public class Ore extends Resource {
 		}
 
 		return false;
-	}
-
-	@Override
-	protected Item getDroppedResource() {
-		return minedItemSupplier.get();
 	}
 
 	private void resetSpritesAroundThis() {
@@ -72,10 +52,10 @@ public class Ore extends Resource {
 		boolean bottomRightHasOre = level.selectOre(getTileX() + 1, getTileY() + 1).isPresent();
 		boolean bottomLeftHasOre = level.selectOre(getTileX() - 1, getTileY() + 1).isPresent();
 		boolean topLeftHasOre = level.selectOre(getTileX() - 1, getTileY() - 1).isPresent();
-		decideSprite(leftHasOre, rightHasOre, topHasOre, bottomHasOre, topRightHasOre, bottomRightHasOre, bottomLeftHasOre, topLeftHasOre);
+		setOreSprite(leftHasOre, rightHasOre, topHasOre, bottomHasOre, topRightHasOre, bottomRightHasOre, bottomLeftHasOre, topLeftHasOre);
 	}
 
-	private void decideSprite(boolean leftHasOre, boolean rightHasOre, boolean topHasOre, boolean bottomHasOre, boolean topRightHasOre, boolean bottomRightHasOre, boolean bottomLeftHasOre, boolean topLeftHasOre) {
+	private void setOreSprite(boolean leftHasOre, boolean rightHasOre, boolean topHasOre, boolean bottomHasOre, boolean topRightHasOre, boolean bottomRightHasOre, boolean bottomLeftHasOre, boolean topLeftHasOre) {
 		List<Sprite> sprites = new ArrayList<>();
 		sprites.add(originalSprite);
 

@@ -16,9 +16,14 @@ public class Clothing extends Item {
 	}
 
 	@Override
-	public Clothing copy() {
+	protected Clothing copy() {
+		return copy(getX(), getY(), getZ());
+	}
+
+	@Override
+	protected Clothing copy(float x, float y, int z) {
 		Clothing copy = new Clothing(getName(), sprite, getToolTip(), type, getDefence(), getId());
-		copy.setLocation(getX(), getY(), getZ());
+		copy.setLocation(x, y, z);
 		return copy;
 	}
 

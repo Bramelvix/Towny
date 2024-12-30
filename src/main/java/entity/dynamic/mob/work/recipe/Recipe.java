@@ -1,27 +1,25 @@
 package entity.dynamic.mob.work.recipe;
 
-import entity.Entity;
-import entity.dynamic.item.Item;
+import entity.dynamic.item.ItemInfo;
 
-public class Recipe<T extends Entity> {
+import java.util.Collections;
+import java.util.List;
 
-	private final Item[] resources;
-	final T product;
+public abstract class Recipe {
 
-	Recipe(T product, Item[] res) {
-		this.product = product;
-		this.resources = res;
+	private final List<ItemInfo<?>> resources;
+
+	Recipe(List<ItemInfo<?>> resources) {
+		this.resources = resources;
 	}
 
-	Recipe(T product) {
-		this(product, new Item[1]);
+	Recipe() {
+		this(Collections.emptyList());
 	}
 
-	public String getRecipeName() {
-		return product.getName();
-	}
+	public abstract String getRecipeName();
 
-	public Item[] getResources() {
+	public List<ItemInfo<?>> getResources() {
 		return resources;
 	}
 

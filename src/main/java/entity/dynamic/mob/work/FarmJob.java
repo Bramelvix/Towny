@@ -1,7 +1,7 @@
 package entity.dynamic.mob.work;
 
 import entity.dynamic.mob.Villager;
-import entity.non_dynamic.building.farming.TilledSoil;
+import entity.nondynamic.building.farming.TilledSoil;
 
 public class FarmJob extends Job {
 	public FarmJob(Villager worker, TilledSoil plot) {

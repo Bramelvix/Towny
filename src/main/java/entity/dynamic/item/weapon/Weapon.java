@@ -70,12 +70,12 @@ public class Weapon extends Item {
 	}
 
 	@Override
-	public Weapon copy() {
-		return this.copy(this.location.x, this.location.y, this.z);
+	protected Weapon copy() {
+		return this.copy(getX(), getY(), getZ());
 	}
 
 	@Override
-	public Weapon copy(float x, float y, int z) {
+	protected Weapon copy(float x, float y, int z) {
 		Weapon copy = new Weapon(this.getName(), this.sprite, this.tooltip, this.type, this.mat, this.getId());
 		copy.setLocation(x, y, z);
 		return copy;

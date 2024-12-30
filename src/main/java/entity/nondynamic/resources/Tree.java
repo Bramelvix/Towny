@@ -1,12 +1,10 @@
-package entity.non_dynamic.resources;
+package entity.nondynamic.resources;
 
-import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
 import graphics.opengl.OpenGLUtils;
 import map.Level;
-import sound.Sound;
 import util.vectors.Vec2f;
 import util.vectors.Vec3f;
 
@@ -16,7 +14,7 @@ public class Tree extends Resource {
 
 	// basic constructor
 	public Tree(float x, float y, int z, Level level) {
-		super(x, y, z, level, true, "tree");
+		super(x, y, z, level, true, "tree", ItemHashtable.get(1).createInstance());
 		sprite = SpriteHashtable.get(12);
 		topsprite = SpriteHashtable.get(13);
 		setVisible(true);
@@ -28,11 +26,6 @@ public class Tree extends Resource {
 	public void render() {
 		super.render();
 		topsprite.draw(new Vec3f(location.x, location.y - Sprite.SIZE, location.z));
-	}
-
-	@Override
-	protected Item getDroppedResource() {
-		return ItemHashtable.get(1);
 	}
 
 	@Override

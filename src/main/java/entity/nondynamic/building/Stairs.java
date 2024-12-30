@@ -1,4 +1,4 @@
-package entity.non_dynamic.building;
+package entity.nondynamic.building;
 
 import entity.dynamic.mob.Villager;
 import graphics.SpriteHashtable;

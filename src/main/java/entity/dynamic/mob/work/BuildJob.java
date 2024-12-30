@@ -2,7 +2,7 @@ package entity.dynamic.mob.work;
 
 import entity.dynamic.item.Item;
 import entity.dynamic.mob.Villager;
-import entity.non_dynamic.building.BuildAbleObject;
+import entity.nondynamic.building.BuildAbleObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,6 @@
-package entity.non_dynamic.building.container;
+package entity.nondynamic.building.container;
 
-import entity.non_dynamic.building.BuildAbleObject;
+import entity.nondynamic.building.BuildAbleObject;
 import graphics.SpriteHashtable;
 
 public class Chest extends Container {

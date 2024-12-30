@@ -2,7 +2,7 @@ package entity.dynamic.mob.work;
 
 import entity.dynamic.item.Item;
 import entity.dynamic.mob.Villager;
-import entity.non_dynamic.building.container.Workstation;
+import entity.nondynamic.building.container.Workstation;
 
 public class CraftJob extends Job {
 

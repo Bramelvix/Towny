@@ -1,9 +1,9 @@
 package ui;
 
 import entity.dynamic.mob.Villager;
-import entity.non_dynamic.resources.Ore;
-import entity.non_dynamic.resources.Resource;
-import entity.non_dynamic.resources.Tree;
+import entity.nondynamic.resources.Ore;
+import entity.nondynamic.resources.Resource;
+import entity.nondynamic.resources.Tree;
 import main.Game;
 import map.Level;
 import map.Tile;

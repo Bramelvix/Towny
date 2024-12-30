@@ -3,6 +3,7 @@ package entity.dynamic.item;
 import entity.Entity;
 import entity.dynamic.mob.Villager;
 import graphics.Sprite;
+import org.jetbrains.annotations.NotNull;
 
 public class Item extends Entity {
 	private final int id; //item id
@@ -16,18 +17,18 @@ public class Item extends Entity {
 		this.id = id;
 	}
 
-	public Item copy() {
+	protected Item copy() {
 		return this.copy(this.location.x, this.location.y, this.z);
 	}
 
-	public Item copy(float x, float y, int z) {
+	protected Item copy(float x, float y, int z) {
 		Item copy = new Item(this.getName(), this.sprite, this.getToolTip(), this.getId());
 		copy.setLocation(x, y, z);
 		return copy;
 	}
 
-	public boolean isSameType(Item item) {
-		return item != null && item.getId() == getId();
+	public boolean isSameType(@NotNull ItemInfo<?> itemInfo) {
+		return itemInfo.getId() == getId();
 	}
 
 	// getters and setters

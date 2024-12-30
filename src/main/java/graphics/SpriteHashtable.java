@@ -1,7 +1,7 @@
 package graphics;
 
 import entity.Entity;
-import entity.non_dynamic.resources.OreType;
+import entity.nondynamic.resources.OreType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

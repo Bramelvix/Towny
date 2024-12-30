@@ -1,6 +1,6 @@
-package entity.non_dynamic.building.farming;
+package entity.nondynamic.building.farming;
 
-import entity.non_dynamic.building.BuildAbleObject;
+import entity.nondynamic.building.BuildAbleObject;
 import graphics.SpriteHashtable;
 
 import java.time.Instant;

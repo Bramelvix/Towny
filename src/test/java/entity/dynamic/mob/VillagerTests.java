@@ -2,7 +2,8 @@ package entity.dynamic.mob;
 
 import entity.dynamic.item.Item;
 import entity.dynamic.item.ItemHashtable;
-import entity.non_dynamic.resources.Tree;
+import entity.dynamic.item.ItemInfo;
+import entity.nondynamic.resources.Tree;
 import entity.pathfinding.PathFinder;
 import map.Level;
 import map.Tile;
@@ -57,7 +58,7 @@ class VillagerTests {
 
 	@Test
 	void shouldPickUpItem() {
-		Item item = ItemHashtable.getTestItem();
+		Item item = ItemHashtable.getTestItemInfo().createInstance();
 		item.setLocation(48, 48, 0);
 		level[0].addItem(item);
 		villager = new Villager(48, 48, 0, level);
@@ -68,7 +69,7 @@ class VillagerTests {
 
 	@Test
 	void shouldDropItem() {
-		Item item = ItemHashtable.getTestItem();
+		Item item = ItemHashtable.getTestItemInfo().createInstance();
 		item.setLocation(48, 48, 0);
 		level[0].addItem(item);
 		villager = new Villager(48, 48, 0, level);
@@ -83,10 +84,11 @@ class VillagerTests {
 	@Test
 	void shouldFindNearbyItem() {
 		villager = new Villager(48, 48, 0, level);
-		Item item = ItemHashtable.getTestItem();
+		ItemInfo<Item> itemInfo = ItemHashtable.getTestItemInfo();
+		Item item = itemInfo.createInstance();
 		item.setLocation(96, 96, 0);
 		level[0].addItem(item);
-		assertTrue(villager.getNearestItemOfType(item).isPresent());
+		assertTrue(villager.getNearestItemOfType(itemInfo).isPresent());
 	}
 
 

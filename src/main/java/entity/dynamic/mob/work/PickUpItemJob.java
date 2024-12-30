@@ -2,7 +2,7 @@ package entity.dynamic.mob.work;
 
 import entity.dynamic.item.Item;
 import entity.dynamic.mob.Villager;
-import entity.non_dynamic.building.container.Container;
+import entity.nondynamic.building.container.Container;
 
 public class PickUpItemJob extends Job {
 	private final Item item;
@@ -11,6 +11,9 @@ public class PickUpItemJob extends Job {
 	public PickUpItemJob(Villager worker, Item item) {
 		super(worker);
 		this.item = item;
+		xloc = item.getTileX();
+		yloc = item.getTileY();
+		zloc = item.getZ();
 		container = worker.levels[zloc].getEntityOn(xloc, yloc, Container.class).orElse(null);
 
 		if (worker.isHolding(item) || !item.isReserved(worker)) {
@@ -19,9 +22,6 @@ public class PickUpItemJob extends Job {
 		}
 
 		item.setReserved(worker);
-		xloc = item.getTileX();
-		yloc = item.getTileY();
-		zloc = item.getZ();
 	}
 
 	@Override

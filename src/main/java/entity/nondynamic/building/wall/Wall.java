@@ -1,6 +1,6 @@
-package entity.non_dynamic.building.wall;
+package entity.nondynamic.building.wall;
 
-import entity.non_dynamic.building.BuildAbleObject;
+import entity.nondynamic.building.BuildAbleObject;
 import graphics.MultiSprite;
 import graphics.Sprite;
 import graphics.SpriteHashtable;

@@ -1,7 +1,7 @@
-package entity.non_dynamic.building;
+package entity.nondynamic.building;
 
-import entity.non_dynamic.StaticEntity;
-import entity.non_dynamic.Workable;
+import entity.nondynamic.StaticEntity;
+import entity.nondynamic.Workable;
 import map.Level;
 import map.Tile;
 import sound.Sound;

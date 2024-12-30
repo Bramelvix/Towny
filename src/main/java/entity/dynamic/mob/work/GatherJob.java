@@ -1,7 +1,7 @@
 package entity.dynamic.mob.work;
 
 import entity.dynamic.mob.Villager;
-import entity.non_dynamic.resources.Resource;
+import entity.nondynamic.resources.Resource;
 
 public class GatherJob extends Job {
 	public GatherJob(Villager worker, Resource jobObj) {

@@ -3,13 +3,14 @@ package entity.dynamic.mob;
 import entity.Entity;
 import entity.dynamic.item.Clothing;
 import entity.dynamic.item.Item;
+import entity.dynamic.item.ItemInfo;
 import entity.dynamic.item.VillagerInventory;
 import entity.dynamic.item.weapon.Weapon;
 import entity.dynamic.mob.work.*;
-import entity.non_dynamic.building.BuildAbleObject;
-import entity.non_dynamic.building.container.Container;
-import entity.non_dynamic.building.farming.TilledSoil;
-import entity.non_dynamic.resources.Resource;
+import entity.nondynamic.building.BuildAbleObject;
+import entity.nondynamic.building.container.Container;
+import entity.nondynamic.building.farming.TilledSoil;
+import entity.nondynamic.resources.Resource;
 import entity.pathfinding.Path;
 import graphics.Sprite;
 import graphics.SpriteHashtable;
@@ -71,7 +72,7 @@ public class Villager extends Humanoid {
 	}
 
 	// gets the item nearest to the villager(of the same kind and unreserved)
-	public Optional<Item> getNearestItemOfType(Item itemToSearch) {
+	public Optional<Item> getNearestItemOfType(ItemInfo<?> itemToSearch) {
 		if (getHolding() != null && getHolding().isSameType(itemToSearch)) {
 			return Optional.of(getHolding());
 		}
@@ -169,7 +170,7 @@ public class Villager extends Humanoid {
 	}
 
 	// add a buildjob
-	public void addBuildJob(int x, int y, int z, BuildAbleObject object, Item resource) {
+	public void addBuildJob(int x, int y, int z, BuildAbleObject object, ItemInfo<?> resource) {
 		if (resource == null) {
 			addJob(new BuildJob(this, x, y, z, object));
 		} else {
