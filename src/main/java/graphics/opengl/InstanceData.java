@@ -57,25 +57,15 @@ public class InstanceData {
 	}
 
 	public void mapBuffer(int accessBits) {
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		buffer = glMapBufferRange(GL_ARRAY_BUFFER, 0, bufferSize, accessBits, buffer);
 		instances = 0;
 	}
 
 	public void unmapBuffer() {
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		boolean success = glUnmapBuffer(GL_ARRAY_BUFFER);
 		if (!success) {
 			logger.error("FAILED TO UNMAP BUFFER");
 		}
-	}
-
-	public int getVbo() {
-		return vbo;
-	}
-
-	public int getBufferSize() {
-		return bufferSize;
 	}
 
 	public void setSpritesheet(Spritesheet spritesheet) {

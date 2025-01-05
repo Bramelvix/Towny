@@ -31,6 +31,7 @@ import map.Level;
 import map.Tile;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GLUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ui.Ui;
@@ -48,6 +49,8 @@ import static events.EventListener.onlyWhen;
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.GL_MAP_INVALIDATE_BUFFER_BIT;
+import static org.lwjgl.opengl.GL30.GL_MAP_WRITE_BIT;
 
 public class Game {
 
@@ -119,6 +122,7 @@ public class Game {
 		glfwMakeContextCurrent(window);
 		glfwShowWindow(window);
 		GL.createCapabilities();
+		GLUtil.setupDebugMessageCallback();
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glfwSwapInterval(0); //0 = VSYNC OFF, 1= VSYNC ON
 		setIcon();
@@ -286,9 +290,15 @@ public class Game {
 		map[currentLayerNumber].render(scroll);
 		renderMobs();
 
-		OpenGLUtils.drawInstanced(OpenGLUtils.getInstanceData(), scroll);
+
+		OpenGLUtils.getInstanceData().unmapBuffer();
+		OpenGLUtils.drawInstanced(scroll);
+
 		OpenGLUtils.drawOutlines(scroll);
 		ui.render();
+
+		int accessBits = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT;
+		OpenGLUtils.getInstanceData().mapBuffer(accessBits);
 		glfwSwapBuffers(window);
 		OpenGLUtils.checkGLError();
 	}

@@ -16,6 +16,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 import static org.lwjgl.opengl.ARBImaging.GL_TABLE_TOO_LARGE;
+import static org.lwjgl.opengl.GL11.glGetError;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
@@ -88,6 +89,7 @@ public abstract class OpenGLUtils {
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+		//If we need an extra VBO this all needs to be different.
 		vbo = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glEnableVertexAttribArray(0);
@@ -173,11 +175,10 @@ public abstract class OpenGLUtils {
 		fontShader.setUniform("tex_offset", texPos);
 		fontShader.setUniform("tex_scale", texSize);
 
-		glBindVertexArray(vao);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
-	public static void drawInstanced(InstanceData instanceData, Vec2f offset) {
+	public static void drawInstanced(Vec2f offset) {
 		tileShader.use();
 		instanceData.bindTexture();
 
@@ -187,17 +188,11 @@ public abstract class OpenGLUtils {
 		Vec2f texScale = new Vec2f(Tile.SIZE / instanceData.getSpriteSheet().getWidth(), Tile.SIZE / instanceData.getSpriteSheet().getHeight());
 		tileShader.setUniform("tex_scale", texScale);
 
-		instanceData.unmapBuffer();
-
 		//I don't like this
 		glVertexAttribPointer(2, 3, GL_FLOAT, false, 5 * 4, 0);
-		glVertexAttribPointer(3, 2, GL_FLOAT, false, 5 * 4, 3 * 4);
+		glVertexAttribPointer(3, 2, GL_FLOAT, false, 5 * 4, 12);
 
 		glDrawArraysInstanced(GL_TRIANGLES, 0, 6, instanceData.getInstances());
-
-		//GL_MAP_UNSYNCHRONIZED may break something at some point
-		int accessBits = GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT | GL_MAP_UNSYNCHRONIZED_BIT;
-		instanceData.mapBuffer(accessBits);
 	}
 
 	public static void drawTexturedQuadScaled(Vec2f pos, Vec2f size, int texture) {
@@ -213,7 +208,6 @@ public abstract class OpenGLUtils {
 		texShader.setUniform(OFFSET, pToGL(pos.x - offset.x, 'w'), pToGL(pos.y - offset.y, 'h'));
 		texShader.setUniform(SCALE, size.x / Tile.SIZE, size.y / Tile.SIZE);
 
-		glBindVertexArray(vao);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
 
@@ -246,7 +240,6 @@ public abstract class OpenGLUtils {
 		colShader.setUniform(OFFSET, pToGL(pos.x - offset.x, 'w'), pToGL(pos.y - offset.y, 'h'));
 		colShader.setUniform(SCALE, size.x / Tile.SIZE, size.y / Tile.SIZE);
 		colShader.setUniform("i_color", colour);
-		glBindVertexArray(vao);
 	}
 
 	public static void drawFilledSquare(Vec2f pos, Vec2f size, Vec2f offset, Vec4f colour) {
