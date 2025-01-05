@@ -456,7 +456,7 @@ public class Game {
 
 	private void onClickCraft(MenuItem item) {
 		Villager idle = getIdlestVil();
-		ItemRecipe recipe = item.getRecipe(ItemRecipe.class);
+		ItemRecipe<?> recipe = item.getRecipe(ItemRecipe.class);
 		idle.setPath(null);
 		Item[] res = new Item[recipe.getResources().size()];
 		for (int i = 0; i < res.length; i++) {
@@ -479,7 +479,7 @@ public class Game {
 	}
 
 	private void showMaterials(MenuItem item) {
-		ItemRecipe[] recipes = ItemRecipe.smithingRecipesFromWeaponMaterial(WeaponMaterial.valueOf(item.getText().toUpperCase()));
+		ItemRecipe<?>[] recipes = ItemRecipe.smithingRecipesFromWeaponMaterial(WeaponMaterial.valueOf(item.getText().toUpperCase()));
 		MenuItem[] craftingOptions = new MenuItem[recipes.length + 1];
 		for (int i = 0; i < WeaponMaterial.values().length; i++) {
 			craftingOptions[i] = new MenuItem(recipes[i], this::onClickCraft);
