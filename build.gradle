@@ -1,4 +1,16 @@
-apply plugin: 'java'
+plugins {
+    id 'java'
+    id 'edu.sc.seis.launch4j' version '3.0.6'
+}
+
+launch4j {
+    outfile = 'Towny.exe'
+    mainClassName = 'main.Game'
+    icon = "${projectDir}/src/main/resources/icons/soldier.ico"
+    jarTask = project.tasks.jar
+    productName = 'Towny'
+    copyConfigurable = []
+}
 
 import org.gradle.internal.os.OperatingSystem
 
