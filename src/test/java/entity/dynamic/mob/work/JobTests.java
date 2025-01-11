@@ -61,7 +61,7 @@ class JobTests {
 
 	@Test
 	void shouldChopTree() {
-		level[0].addEntity(new Tree(192, 48, 0, level[0]), true);
+		level[0].addEntity(new Tree(192, 48, 0, level[0], false, false), true);
 		Optional<Tree> tree = level[0].getEntityOn(4, 1, Tree.class);
 		assertTrue(tree.isPresent());
 		villager.addJob(tree.get());
