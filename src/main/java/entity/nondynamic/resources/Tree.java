@@ -20,11 +20,14 @@ public class Tree extends Resource {
 
 	// basic constructor
 	public Tree(float x, float y, int z, Level level) {
-		super(x, y, z, level, true, "tree", ItemHashtable.get(1).createInstance());
-		boolean isPine = RANDOM.nextBoolean();
+		this(x, y, z, level, RANDOM.nextBoolean(), RANDOM.nextInt(4) == 0);
+	}
 
-		if(!isPine && RANDOM.nextInt(4) == 0) {
-			hasFruit = true;
+	public Tree(float x, float y, int z, Level level, boolean isPine, boolean hasFruit) {
+		super(x, y, z, level, true, "tree", ItemHashtable.get(1).createInstance());
+		this.hasFruit = hasFruit;
+
+		if(!isPine && hasFruit) {
 			sprite = SpriteHashtable.get(101);
 			topsprite = SpriteHashtable.get(102);
 		} else {

@@ -146,4 +146,30 @@ class JobTests {
 		assertEquals(0, villager.getJobSize());
 		assertEquals(name, level[0].getItems().getFirst().getName());
 	}
+
+	@Test
+	void shouldHarvestTree() {
+		level[0].addEntity(new Tree(192, 48, 0, level[0], false, true), true);
+		Optional<Tree> tree = level[0].getEntityOn(4, 1, Tree.class);
+
+		assertTrue(tree.isPresent());
+		assertTrue(tree.get().hasFruit());
+
+		villager.addJob(tree.get());
+
+		for (int i = 0; i < 150; i++) {
+			villager.update();
+		}
+
+		assertFalse(tree.get().hasFruit());
+
+		assertTrue(level[0].getItemOn(5, 1).isPresent()
+				|| level[0].getItemOn(5, 2).isPresent()
+				|| level[0].getItemOn(5, 0).isPresent()
+				|| level[0].getItemOn(4, 0).isPresent()
+				|| level[0].getItemOn(4, 2).isPresent()
+				|| level[0].getItemOn(3, 1).isPresent()
+				|| level[0].getItemOn(3, 2).isPresent()
+				|| level[0].getItemOn(3, 0).isPresent());
+	}
 }
