@@ -78,6 +78,10 @@ public class Level {
 		return isWalkAbleTile(x, y) && isClearTile(x, y) && tiles[x][y].entityIsNull();
 	}
 
+	public Vec2i getNearestEmptyTile(int x, int y) {
+		return getNearestSpotThatHasX(x, y, this::tileIsEmpty);
+	}
+
 	public <T extends Entity> Optional<T> getEntityOn(int x, int y, Class<T> type) {
 		return x <= width - 1 && x >= 0 && y <= height - 1 && y >= 0 ? tiles[x][y].getEntity(type) : Optional.empty();
 	}
@@ -232,22 +236,24 @@ public class Level {
 	}
 
 
-	public Optional<Tree> selectTree(int x, int y, boolean separate) {
+	public Optional<Tree> selectTree(int x, int y, boolean separate, boolean isFruitTree) {
 		if (outOfMapBounds(x, y)) {
 			return Optional.empty();
 		}
 		Optional<Tree> result = tiles[x][y].getEntity(Tree.class);
 		if (result.isPresent()) {
-			return result;
+			if (isFruitTree == result.get().hasFruit()) {
+				return result;
+			}
+			return Optional.empty();
 		} else {
-			Optional<Tree> entity = tiles[x][y + 1].getEntity(Tree.class);
-			return separate ? entity : Optional.empty();
+			return separate ? selectTree(x, y+1, false, isFruitTree) : Optional.empty();
 		}
 	}
 
 	// if there is a tree on X and Y (IN TILES), return it
-	public Optional<Tree> selectTree(int x, int y) {
-		return selectTree(x, y, true);
+	public Optional<Tree> selectTree(int x, int y, boolean isFruitTree) {
+		return selectTree(x, y, true, isFruitTree);
 	}
 
 	public Optional<TilledSoil> selectTilledSoil(int x, int y) {

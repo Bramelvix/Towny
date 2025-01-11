@@ -157,7 +157,8 @@ public final class SpriteHashtable {
 		registerSprite(89, new StaticSprite(3, 5, 2));//orangetrousers
 		registerSprite(90, new StaticSprite(46, 0, 2));//copperhalbert
 		registerSprite(91, new StaticSprite(42, 5, 2));//woodaxe
-		//GAP
+		registerSprite(92, new StaticSprite(16, 11, 1));//pinebottom
+		registerSprite(93, new StaticSprite(16, 10, 1));//pinetop
 		registerSprite(94, new StaticSprite(46, 5, 2));//woodhalbert
 		registerSprite(95, new StaticSprite(52, 0, 2));//woodbow
 		registerSprite(96, new StaticSprite(49, 4, 2));//ironspear
@@ -165,7 +166,8 @@ public final class SpriteHashtable {
 		registerSprite(98, new StaticSprite(53, 1, 2));//ironbow
 		registerSprite(99, new StaticSprite(52, 2, 2));//goldbow
 		registerSprite(100, new StaticSprite(52, 4, 2));//crystalbow
-		//GAP
+		registerSprite(101, new StaticSprite(23, 11, 1));//cherrybottom
+		registerSprite(102, new StaticSprite(23, 10, 1));//cherrytop
 		registerSprite(103, new StaticSprite(51, 5, 2));//ironhalbert
 		registerSprite(104, new StaticSprite(49, 6, 2));//goldspear
 		registerSprite(105, new StaticSprite(47, 7, 2));//goldaxe
@@ -204,6 +206,7 @@ public final class SpriteHashtable {
 		registerSprite(140, new StaticSprite(1, 5, 1)); //darkStone
 		registerSprite(141, new StaticSprite(5, 6, 1));
 		registerSprite(142, new StaticSprite(6, 6, 1));
+		registerSprite(143, new StaticSprite(7, 6, 1)); //cherries
 		//GAP
 
 		registerSprite(OreType.STONE.getSpriteId(), new StaticSprite(9, 0, 1)); //HardStoneNoSides

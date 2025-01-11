@@ -65,6 +65,7 @@ public abstract class ItemHashtable {
 		registerItem(new ItemInfo<>(Item.class, new Item("uncut crystal", SpriteHashtable.get(67), "an uncut crystal", OreType.CRYSTAL.getItemId()))); // uncut crystal
 		registerItem(new ItemInfo<>(Item.class, new Item("stone", SpriteHashtable.get(64), "some stones", OreType.STONE.getItemId()))); // stone
 		registerItem(new ItemInfo<>(Item.class, new Item("cut crystal", SpriteHashtable.get(68), "a cut crystal", 11))); // cut crystal
+		registerItem(new ItemInfo<>(Item.class, new Item("cherries", SpriteHashtable.get(143), "a few cherries", 12))); //cherries
 
 		registerItem(new ItemInfo<>(Weapon.class, new Weapon("wooden axe", SpriteHashtable.get(91), "a wooden axe", WeaponType.AXE, WeaponMaterial.WOOD, 20)));
 		registerItem(new ItemInfo<>(Weapon.class, new Weapon("wooden bow", SpriteHashtable.get(95), "a wooden bow", WeaponType.BOW, WeaponMaterial.WOOD, 21)));

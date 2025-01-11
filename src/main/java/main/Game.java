@@ -311,7 +311,13 @@ public class Game {
 	}
 
 	private void initUi() throws IOException {
-		ui = new Ui(map, (xs, ys, z) -> map[z].selectTree(xs, ys), (xs, ys, z) -> map[z].selectOre(xs, ys), this);
+		ui = new Ui(map,
+				(xs, ys, z) -> map[z].selectTree(xs, ys, false, false),
+				(xs, ys, z) -> map[z].selectOre(xs, ys),
+				(xs, ys, z) -> map[z].selectTree(xs, ys, false ,true),
+				this
+		);
+
 		ui.initLayerLevelChangerActions(this::onClickLayerUp, this::onClickLayerDown);
 		ui.initTopBarActions(this::onClickPause, this::onClickupSpeed, this::onClickdownSpeed);
 		ui.getIcons().setShovelOnClick(this::onClickShovel);
@@ -600,8 +606,12 @@ public class Game {
 					options.add(new MenuItem(MenuItem.defaultText(MenuItem.DROP, selectedvill.getHolding()), this::onClickDrop));
 				}
 
-				map[currentLayerNumber].selectTree(pointer.getTileX(), pointer.getTileY()).ifPresent(
+				map[currentLayerNumber].selectTree(pointer.getTileX(), pointer.getTileY(), false).ifPresent(
 						tree -> options.add(new MenuItem(MenuItem.defaultText(MenuItem.CHOP, tree), tree, this::onClickChop))
+				);
+
+				map[currentLayerNumber].selectTree(pointer.getTileX(), pointer.getTileY(), true).ifPresent(
+						tree -> options.add(new MenuItem(MenuItem.defaultText(MenuItem.HARVEST, tree), tree, this::onClickChop))
 				);
 
 				map[currentLayerNumber].selectTilledSoil(pointer.getTileX(), pointer.getTileY()).ifPresent(

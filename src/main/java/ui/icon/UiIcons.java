@@ -50,6 +50,10 @@ public class UiIcons {
 		icons[0].setOnClick(action);
 	}
 
+	public void setSickleOnClick(Runnable action) {
+		icons[2].setOnClick(action);
+	}
+
 	public void setMiningOnClick(Runnable action) {
 		icons[1].setOnClick(action);
 	}

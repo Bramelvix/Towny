@@ -42,7 +42,7 @@ public class Ui {
 		top.render(); //colShader + texShader + fontShader
 	}
 
-	public Ui(Level[] levels, TriFunction<Integer, Integer, Integer, Optional<Tree>> treeSelector, TriFunction<Integer, Integer, Integer, Optional<Ore>> oreSelector, Game game) throws IOException {
+	public Ui(Level[] levels, TriFunction<Integer, Integer, Integer, Optional<Tree>> treeSelector, TriFunction<Integer, Integer, Integer, Optional<Ore>> oreSelector, TriFunction<Integer, Integer, Integer, Optional<Tree>> fruitTreeSelector, Game game) throws IOException {
 		z = 0;
 		icons = new UiIcons(0.176056338028169f);
 		menu = new Menu();
@@ -60,6 +60,11 @@ public class Ui {
 		getIcons().setMiningOnClick(() -> {
 			showSelectionSquare();
 			activeResourceSelector = oreSelector::apply;
+		});
+
+		getIcons().setSickleOnClick(() -> {
+			showSelectionSquare();
+			activeResourceSelector = fruitTreeSelector::apply;
 		});
 	}
 
